@@ -94,7 +94,7 @@ interface axi4_master_monitor_bfm(input bit aclk, input bit aresetn,
   task axi4_write_address_sampling(output axi4_write_transfer_char_s req ,input axi4_transfer_cfg_s cfg);
 
     @(posedge aclk);
-    while(awvalid!==1 || awready!==1)begin
+    while(awvalid!==1 && awready!==1)begin
       @(posedge aclk);
       `uvm_info("FROM MASTER MON BFM",$sformatf("Inside while loop......"),UVM_HIGH)
     end    
@@ -123,7 +123,7 @@ interface axi4_master_monitor_bfm(input bit aclk, input bit aresetn,
       // Wait for valid and ready to be high
       do begin
         @(posedge aclk);
-      end while((wvalid!==1 || wready!==1));
+      end while((wvalid!==1 && wready!==1));
       `uvm_info("FROM MASTER MON BFM",$sformatf("After while loop write data......"),UVM_HIGH)
   
       req.wdata[i] = wdata;
@@ -151,7 +151,7 @@ interface axi4_master_monitor_bfm(input bit aclk, input bit aresetn,
    
     do begin
       @(posedge aclk);
-    end while((bvalid!==1 || bready!==1));
+    end while((bvalid!==1 && bready!==1));
     req.bid      = bid;
     req.bresp    = bresp;
     `uvm_info("FROM MASTER MON BFM::WRITE RESPONSE",$sformatf("WRITE RESPONSE PACKET: \n %p",req),UVM_HIGH)
@@ -165,7 +165,7 @@ interface axi4_master_monitor_bfm(input bit aclk, input bit aresetn,
 
     do begin
       @(posedge aclk);
-    end while((arvalid!==1 || arready!==1));
+    end while((arvalid!==1 && arready!==1));
 
     req.arid    = arid;
     req.araddr  = araddr;
@@ -191,7 +191,7 @@ interface axi4_master_monitor_bfm(input bit aclk, input bit aresetn,
       // Wait for valid and ready to be high
       do begin
         @(posedge aclk);
-      end while((rvalid!==1 || rready!==1));
+      end while((rvalid!==1 && rready!==1));
   
       req.rid      = rid;
       req.rdata[i] = rdata;

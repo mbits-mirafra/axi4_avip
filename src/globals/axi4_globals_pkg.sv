@@ -46,6 +46,10 @@ package axi4_globals_pkg;
   //Sets the width it can store in each location
   parameter int MEMORY_WIDTH = 8;
 
+  //Parameter: STROBE_WIDTH
+  //Used to define the width of the strobes
+  parameter int STROBE_WIDTH = (DATA_WIDTH/8);
+
   //Variable: MEM_ID
   //Indicates Slave Memory Depth 
   parameter int MEM_ID = 2**ADDRESS_WIDTH;
@@ -289,6 +293,13 @@ package axi4_globals_pkg;
     NON_BLOCKING_READ   = 2'b11 
   }transfer_type_e;
 
+  typedef enum bit[1:0] {
+    RANDOM_DATA_MODE = 2'b00,
+    SLAVE_MEM_MODE   = 2'b01,
+    USER_DATA_MODE   = 2'b10
+  } read_data_type_mode_e;
+  
+
   //-------------------------------------------------------
   // Structs used in axi_avip are given below
   //-------------------------------------------------------
@@ -369,6 +380,7 @@ package axi4_globals_pkg;
     int                     wait_count_read_data_channel;
     int                     outstanding_write_tx;
     int                     outstanding_read_tx;
+    bit                     out_of_oreder;
   } axi4_transfer_cfg_s;
 
 endpackage : axi4_globals_pkg

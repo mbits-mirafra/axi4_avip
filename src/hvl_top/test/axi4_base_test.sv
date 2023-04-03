@@ -133,11 +133,15 @@ function void axi4_base_test::setup_axi4_slave_agent_cfg();
                                                            master_min_addr_range_array[i];
     axi4_env_cfg_h.axi4_slave_agent_cfg_h[i].max_address = axi4_env_cfg_h.axi4_master_agent_cfg_h[i].
                                                            master_max_addr_range_array[i];
+    axi4_env_cfg_h.axi4_slave_agent_cfg_h[i].out_of_oreder = 0;
+    axi4_env_cfg_h.axi4_slave_agent_cfg_h[i].maximum_transactions = 3;
+    axi4_env_cfg_h.axi4_slave_agent_cfg_h[i].read_data_mode = SLAVE_MEM_MODE;
+
     if(SLAVE_AGENT_ACTIVE === 1) begin
-    axi4_env_cfg_h.axi4_slave_agent_cfg_h[i].is_active = uvm_active_passive_enum'(UVM_ACTIVE);
+      axi4_env_cfg_h.axi4_slave_agent_cfg_h[i].is_active = uvm_active_passive_enum'(UVM_ACTIVE);
     end
     else begin
-    axi4_env_cfg_h.axi4_slave_agent_cfg_h[i].is_active = uvm_active_passive_enum'(UVM_PASSIVE);
+      axi4_env_cfg_h.axi4_slave_agent_cfg_h[i].is_active = uvm_active_passive_enum'(UVM_PASSIVE);
     end 
     axi4_env_cfg_h.axi4_slave_agent_cfg_h[i].has_coverage = 1; 
     

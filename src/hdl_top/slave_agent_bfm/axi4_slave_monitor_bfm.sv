@@ -104,7 +104,7 @@ interface axi4_slave_monitor_bfm(input aclk, input aresetn,
     @(posedge aclk);
     `uvm_info("FROM SLAVE MON BFM",$sformatf("from axi4_slave_write_address_sampling "),UVM_HIGH)
 
-    while(awvalid!==1 || awready!==1)begin
+    while(awvalid!==1 && awready!==1)begin
       @(posedge aclk);
       `uvm_info("FROM SLAVE MON BFM",$sformatf("Inside while loop from axi4_slave_write_address_sampling"),UVM_HIGH)
     end    
@@ -132,7 +132,7 @@ interface axi4_slave_monitor_bfm(input aclk, input aresetn,
    // wait for valid and ready to be high
    do begin
    @(posedge aclk);
-   end while(wvalid!==1 || wready!==1);
+   end while(wvalid!==1 && wready!==1);
 
    `uvm_info("FROM SLAVE MON BFM",$sformatf("Inside while loop......"),UVM_HIGH)
     req.wdata[i] = wdata;
@@ -158,7 +158,7 @@ interface axi4_slave_monitor_bfm(input aclk, input aresetn,
   //-------------------------------------------------------
   task axi4_write_response_sampling(output axi4_write_transfer_char_s req ,input axi4_transfer_cfg_s cfg);
   @(posedge aclk);
-    while(bvalid!==1 || bready!==1)begin
+    while(bvalid!==1 && bready!==1)begin
     `uvm_info("FROM SLAVE MON BFM",$sformatf("values :: bvalid=%d & bready=%d",bvalid,bready),UVM_HIGH)
       @(posedge aclk);
       `uvm_info("FROM SLAVE MON BFM",$sformatf("Inside while loop of write response sample"),UVM_HIGH)
@@ -178,7 +178,7 @@ interface axi4_slave_monitor_bfm(input aclk, input aresetn,
   task axi4_read_address_sampling(output axi4_read_transfer_char_s req ,input axi4_transfer_cfg_s cfg);
 
     @(posedge aclk);
-    while(arvalid!==1 || arready!==1)begin
+    while(arvalid!==1 && arready!==1)begin
       @(posedge aclk);
       `uvm_info("FROM SLAVE MON BFM READ ADDR",$sformatf("INSIDE WHILE LOOP OF READ ADDRESS"),UVM_HIGH)
     end    
@@ -211,7 +211,7 @@ interface axi4_slave_monitor_bfm(input aclk, input aresetn,
       // Wait for valid and ready to be high
       do begin
         @(posedge aclk);
-      end while((rvalid!==1 || rready!==1));
+      end while((rvalid!==1 && rready!==1));
   
       `uvm_info("FROM SLAVE MON BFM",$sformatf("after do_while loop of read data sample"),UVM_HIGH)
 

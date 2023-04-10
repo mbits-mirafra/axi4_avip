@@ -293,12 +293,22 @@ package axi4_globals_pkg;
     NON_BLOCKING_READ   = 2'b11 
   }transfer_type_e;
 
+  //Enum : read_data_type_mode_e
+  //Used to the determine the type of the read data
   typedef enum bit[1:0] {
     RANDOM_DATA_MODE = 2'b00,
     SLAVE_MEM_MODE   = 2'b01,
     USER_DATA_MODE   = 2'b10,
     SLAVE_ERR_RESP_MODE = 2'b11
   } read_data_type_mode_e;
+
+  //Enum : transfer_type_e  //Used to checl
+  //Used to determine the mode for score board check 
+  typedef enum bit[1:0] {
+    ONLY_WRITE_DATA  = 2'b00,
+    ONLY_READ_DATA   = 2'b01,
+    WRITE_READ_DATA  = 2'b10
+  } write_read_data_mode_e;
   
 
   //-------------------------------------------------------

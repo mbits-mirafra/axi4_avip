@@ -75,6 +75,8 @@ class axi4_master_driver_proxy extends uvm_driver#(axi4_master_tx);
   int address,length,size;
 
   bit wait_for_wr_addr;
+
+  write_read_data_mode_e write_read_mode_h;
   
   //-------------------------------------------------------
   // Externally defined Tasks and Functions
@@ -389,7 +391,7 @@ task axi4_master_driver_proxy::axi4_read_task();
     axi_read_seq_item_port.get_next_item(req_rd);
     `uvm_info(get_type_name(),$sformatf("READ_TASK:: Before Sending_req_read_packet = \n %s",req_rd.sprint()),UVM_NONE); 
 
-    if(axi4_master_agent_cfg_h.read_data_mode == SLAVE_MEM_MODE) begin 
+    if(axi4_master_agent_cfg_h.read_data_mode == SLAVE_MEM_MODE && write_read_mode_h != ONLY_READ_DATA) begin 
       wait(wait_for_wr_addr);
       req_rd.araddr = address;
       req_rd.arlen  = length;
@@ -398,6 +400,7 @@ task axi4_master_driver_proxy::axi4_read_task();
 
     //Converting configurations into struct config type
     axi4_master_cfg_converter::from_class(axi4_master_agent_cfg_h,struct_cfg);
+
 
     //Return the fifo size that it is capable to hold
     //A return value of 0 indicates the FIFO capacity has no limit

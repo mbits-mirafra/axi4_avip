@@ -78,6 +78,8 @@ function void axi4_base_test:: setup_axi4_env_cfg();
   // Setup the axi4_slave agent cfg 
   setup_axi4_slave_agent_cfg();
 
+  axi4_env_cfg_h.write_read_mode_h = WRITE_READ_DATA;
+
   // set method for axi4_env_cfg
   uvm_config_db #(axi4_env_config)::set(this,"*","axi4_env_config",axi4_env_cfg_h);
   `uvm_info(get_type_name(),$sformatf("\nAXI4_ENV_CONFIG\n%s",axi4_env_cfg_h.sprint()),UVM_LOW);

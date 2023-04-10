@@ -49,6 +49,8 @@ class axi4_slave_driver_proxy extends uvm_driver#(axi4_slave_tx);
   semaphore semaphore_rsp_write_key;
   semaphore semaphore_read_key;
 
+  write_read_data_mode_e write_read_mode_h;
+
   bit[3:0] wr_addr_cnt;
   bit[3:0] wr_resp_cnt;
   bit[3:0] response_id_queue[$];
@@ -211,7 +213,6 @@ task axi4_slave_driver_proxy::axi4_write_task();
      end
      else begin
        axi4_slave_write_addr_fifo_h.put(local_slave_addr_tx);
-       $display("NNN:%s",local_slave_addr_tx.sprint());
      end
      wr_addr_cnt++;
    
@@ -402,6 +403,7 @@ task axi4_slave_driver_proxy::axi4_read_task();
     process rd_data;
 
     axi_read_seq_item_port.get_next_item(req_rd);
+    
 
     //putting the data into read data fifo
     axi4_slave_read_data_in_fifo_h.put(req_rd);
@@ -457,7 +459,7 @@ task axi4_slave_driver_proxy::axi4_read_task();
      //Getting the data from read data fifo
      axi4_slave_read_data_in_fifo_h.get(local_slave_rdata_tx);
 
-     if(axi4_slave_agent_cfg_h.read_data_mode == RANDOM_DATA_MODE) begin
+     if(axi4_slave_agent_cfg_h.read_data_mode == RANDOM_DATA_MODE || write_read_mode_h == ONLY_READ_DATA) begin
        
        //Getting the key from semaphore
        semaphore_read_key.get(1);
@@ -474,7 +476,7 @@ task axi4_slave_driver_proxy::axi4_read_task();
        axi4_slave_drv_bfm_h.axi4_read_data_phase(struct_read_packet,struct_cfg);
        `uvm_info("DEBUG_SLAVE_RDATA_PROXY", $sformatf("AFTER :: READ CHANNEL PACKET \n %p",struct_read_packet), UVM_HIGH);
      end
-     else if (axi4_slave_agent_cfg_h.read_data_mode == SLAVE_MEM_MODE || axi4_slave_agent_cfg_h.read_data_mode == SLAVE_ERR_RESP_MODE) begin
+     else if (axi4_slave_agent_cfg_h.read_data_mode == SLAVE_MEM_MODE || axi4_slave_agent_cfg_h.read_data_mode == SLAVE_ERR_RESP_MODE && write_read_mode_h != ONLY_READ_DATA) begin
 
        wait(completed_initial_txn==1);
        //Converting transactions into struct data type
@@ -527,7 +529,6 @@ task axi4_slave_driver_proxy::axi4_read_task();
             READ_4_BYTES)?32'hdead_beaf:{DATA_WIDTH{16'habcd}}));
             for(int i=0;i<local_slave_addr_chk_tx.arlen+1;i++) begin
               struct_read_packet.rdata[i] =  axi4_slave_agent_cfg_h.user_rdata;
-              $display("Veb:%0h,%0h,%0h",struct_read_packet.rdata[i],axi4_slave_agent_cfg_h.user_rdata,struct_read_packet.arlen);
             end
             //read data task
             axi4_slave_drv_bfm_h.axi4_read_data_phase(struct_read_packet,struct_cfg);

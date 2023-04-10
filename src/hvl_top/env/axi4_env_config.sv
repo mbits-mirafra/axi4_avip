@@ -33,6 +33,9 @@ class axi4_env_config extends uvm_object;
   // axi4 slave agent configuration handles
   axi4_slave_agent_config axi4_slave_agent_cfg_h[];
 
+  // Variable: write_read_mode_h
+  write_read_data_mode_e write_read_mode_h;
+
 //-------------------------------------------------------
 // Externally defined Tasks and Functions
 //-------------------------------------------------------
@@ -50,6 +53,7 @@ endclass : axi4_env_config
 function axi4_env_config::new(string name = "axi4_env_config");
   super.new(name);
 endfunction : new
+
 
 //--------------------------------------------------------------------------------------------
 // Function: do_print method

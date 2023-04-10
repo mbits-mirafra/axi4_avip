@@ -296,7 +296,8 @@ package axi4_globals_pkg;
   typedef enum bit[1:0] {
     RANDOM_DATA_MODE = 2'b00,
     SLAVE_MEM_MODE   = 2'b01,
-    USER_DATA_MODE   = 2'b10
+    USER_DATA_MODE   = 2'b10,
+    SLAVE_ERR_RESP_MODE = 2'b11
   } read_data_type_mode_e;
   
 

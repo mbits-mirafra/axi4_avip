@@ -91,6 +91,10 @@ package axi4_virtual_seq_pkg;
 
   `include "axi4_virtual_nbk_write_read_rand_seq.sv"
 
+  `include "axi4_virtual_nbk_slave_mem_mode_wrap_burst_write_read_seq.sv"
+  `include "axi4_virtual_nbk_slave_mem_mode_fixed_burst_write_read_seq.sv"
+  `include "axi4_virtual_nbk_slave_mem_mode_incr_burst_write_read_seq.sv"
+
 endpackage : axi4_virtual_seq_pkg
 
 `endif

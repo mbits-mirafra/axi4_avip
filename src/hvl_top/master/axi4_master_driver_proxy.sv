@@ -71,6 +71,11 @@ class axi4_master_driver_proxy extends uvm_driver#(axi4_master_tx);
   //Used to block the process from happening until the key is put
   semaphore read_channel_key;
   
+
+  int address,length,size;
+
+  bit wait_for_wr_addr;
+  
   //-------------------------------------------------------
   // Externally defined Tasks and Functions
   //-------------------------------------------------------
@@ -162,6 +167,12 @@ task axi4_master_driver_proxy::axi4_write_task();
     axi_write_seq_item_port.get_next_item(req_wr);
     `uvm_info(get_type_name(),$sformatf("WRITE_TASK::Before Sending_req_write_packet = \n %s",req_wr.sprint()),UVM_NONE); 
 
+    if(axi4_master_agent_cfg_h.read_data_mode == SLAVE_MEM_MODE) begin 
+      address = req_wr.awaddr;
+      length = req_wr.awlen;
+      size = req_wr.awsize;
+    end
+
     //Converting configurations into struct config type
     axi4_master_cfg_converter::from_class(axi4_master_agent_cfg_h,struct_cfg);
 
@@ -210,6 +221,7 @@ task axi4_master_driver_proxy::axi4_write_task();
       //Variable : write_response_process
       //Used to control the fork_join process
       process write_response_process;
+
 
       fork
         begin : WRITE_ADDRESS_CHANNEL 
@@ -350,6 +362,8 @@ task axi4_master_driver_proxy::axi4_write_task();
       //As we don't have control on fork-join_any or fork-join_none processes,
       //the await method makes sure that it waits for the write address to complete
       write_address_process.await();
+      
+      wait_for_wr_addr = 1;
 
       //status returns whether the process is FINISHED or WAITING or RUNNING.
       `uvm_info(get_type_name(), $sformatf("WRITE_TASK :: Out of fork_join : After await write_address.status()=%s",
@@ -374,6 +388,13 @@ task axi4_master_driver_proxy::axi4_read_task();
 
     axi_read_seq_item_port.get_next_item(req_rd);
     `uvm_info(get_type_name(),$sformatf("READ_TASK:: Before Sending_req_read_packet = \n %s",req_rd.sprint()),UVM_NONE); 
+
+    if(axi4_master_agent_cfg_h.read_data_mode == SLAVE_MEM_MODE) begin 
+      wait(wait_for_wr_addr);
+      req_rd.araddr = address;
+      req_rd.arlen  = length;
+      req_rd.arsize = arsize_e'(size);
+    end
 
     //Converting configurations into struct config type
     axi4_master_cfg_converter::from_class(axi4_master_agent_cfg_h,struct_cfg);

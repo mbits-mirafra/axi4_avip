@@ -92,6 +92,10 @@ package axi4_test_pkg;
 
   `include "axi4_non_blocking_write_read_rand_test.sv"
   `include "axi4_blocking_write_read_rand_test.sv"
+
+  `include "axi4_non_blocking_slave_mem_mode_wrap_burst_write_read_test.sv"
+  `include "axi4_non_blocking_slave_mem_mode_fixed_burst_write_read_test.sv"
+  `include "axi4_non_blocking_slave_mem_mode_incr_burst_write_read_test.sv"
   
 
 endpackage : axi4_test_pkg

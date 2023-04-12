@@ -1,0 +1,423 @@
+table, th {
+	border-width:     1px;
+	border-style:     solid;
+}
+
+table td {
+    /* default td is invisible, so we should undo that for any other td class */
+    width:            20px;
+    border-width:     0;
+    border-style:     none;
+}
+
+th {
+	font-weight:      bold;
+	background-color: #90CCCC;
+}
+
+td.OddTd {
+    width:            auto;
+    border-width:     1px;
+    border-style:     solid;
+    
+    background-color: #EEEEEE;
+}
+
+td.ExclOddTd {
+    width:            auto;
+    border-width:     1px;
+    border-style:     solid;
+    
+    background-color: #EEEEEE;
+    color:gray;
+}
+
+td.ExclCntrOddTd {
+    width:            auto;
+    border-width:     1px;
+    border-style:     solid;
+    
+    background-color: #EEEEEE;
+	text-align:       center;
+    color:gray;
+}
+
+td.GrayRightOddTd {
+    width:            auto;
+    border-width:     1px;
+    border-style:     solid;
+    
+    background-color: #EEEEEE;
+	text-align:       right;
+    color:gray;
+}
+
+td.GrayCntrOddTd {
+    width:            auto;
+    border-width:     1px;
+    border-style:     solid;
+    
+    background-color: #EEEEEE;
+	text-align:       center;
+    color:gray;
+}
+
+td.GrayOddTd {
+    width:            auto;
+    border-width:     1px;
+    border-style:     solid;
+    
+    background-color: #EEEEEE;
+    color:gray;
+}
+
+td.GrayRightEvenTd {
+    width:            auto;
+    border-width:     1px;
+    border-style:     solid;
+    
+     background-color: #FAFAFA;
+	text-align:       right;
+    color:gray;
+}
+
+td.GrayCntrEvenTd {
+    width:            auto;
+    border-width:     1px;
+    border-style:     solid;
+    
+     background-color: #FAFAFA;
+	text-align:       center;
+    color:gray;
+}
+
+td.GrayEvenTd {
+    width:            auto;
+    border-width:     1px;
+    border-style:     solid;
+    
+    background-color: #FAFAFA;
+    color:gray;
+}
+td.GrayRightOddTgTd {
+	width: auto;
+	border: 2px solid #9ac1c9;
+	background: url(../images/linkbg_odd.gif);
+    
+	text-align:       right;
+    color:gray;
+}
+
+td.GrayCntrOddTgTd {
+   width: auto;
+	border: 2px solid #9ac1c9;
+	background: url(../images/linkbg_odd.gif);
+	text-align:       center;
+    color:gray;
+}
+
+td.GrayOddTgTd {
+    width: auto;
+	border: 2px solid #9ac1c9;
+	background: url(../images/linkbg_odd.gif);
+    color:gray;
+}
+
+td.GrayRightEvenTgTd {
+   width: auto;
+	border: 2px solid #9ac1c9;
+	background: url(../images/linkbg_even.gif);
+	text-align:       right;
+    color:gray;
+}
+
+td.GrayCntrEvenTgTd {
+    width: auto;
+	border: 2px solid #9ac1c9;
+	background: url(../images/linkbg_even.gif);
+	text-align:       center;
+    color:gray;
+}
+
+td.GrayEvenTgTd {
+    width: auto;
+	border: 2px solid #9ac1c9;
+	background: url(../images/linkbg_even.gif);
+    color:gray;
+}
+
+td.CntrOddTd { /* odd - center text alignment */
+    width:            auto;
+    border-width:     1px;
+    border-style:     solid;
+    
+    background-color: #EEEEEE;
+    text-align:       center;
+}
+
+
+td.RightOddTd { /* odd - right text alignment */
+    width:            auto;
+    border-width:     1px;
+    border-style:     solid;
+    
+    background-color: #EEEEEE;
+    text-align:       right;
+}
+
+
+td.ExclCntrOddTd { /* odd - center text alignment */
+    width:            auto;
+    border-width:     1px;
+    border-style:     solid;
+    
+    background-color: #EEEEEE;
+    text-align:       center;
+    color:gray;
+}
+
+td.EvenTd {
+    width:            auto;
+    border-width:     1px;
+    border-style:     solid;
+    
+    background-color: #FAFAFA;
+}
+
+td.ExclEvenTd {
+    width:            auto;
+    border-width:     1px;
+    border-style:     solid;
+    
+    background-color: #FAFAFA;
+    color: gray;
+}
+
+td.ExclCntrEvenTd {
+    width:            auto;
+    border-width:     1px;
+    border-style:     solid;
+    
+    background-color: #FAFAFA;
+	text-align:       center;
+    color: gray;
+}
+
+td.CntrEvenTd { /* even - center text alignment */
+    width:            auto;
+    border-width:     1px;
+    border-style:     solid;
+    
+    background-color: #FAFAFA;
+    text-align:       center;
+}
+
+td.RightEvenTd { /* even - right text alignment */
+    width:            auto;
+    border-width:     1px;
+    border-style:     solid;
+    
+    background-color: #FAFAFA;
+    text-align:       right;
+}
+
+td.ExclCntrEven { /* even - center text alignment */
+    width:            auto;
+    border-width:     1px;
+    border-style:     solid;
+    
+    background-color: #FAFAFA;
+    text-align:       center;
+    color:gray;
+}
+
+td.bgRed {
+    width:            auto;
+    border-width:     1px;
+    border-style:     solid;
+    
+	color:            white;
+	background-color: red;
+	font-weight:      bold;
+	text-align:       center;
+}
+
+td.bgYellow {
+    width:            auto;
+    border-width:     1px;
+    border-style:     solid;
+    
+	color:            black;
+	background-color: yellow;
+	font-weight:      bold;
+	text-align:       center;
+}
+
+td.bgGreen {
+    width:            auto;
+    border-width:     1px;
+    border-style:     solid;
+    
+	color:            white;
+	background-color: green;
+	font-weight:      bold;
+	text-align:       center;
+}
+
+table.noborder {
+    border-style:     none;
+}
+
+div.pageHeaderDiv {
+	position: fixed;
+	background-color: black;
+	width: 100%;
+	top: 0;
+	left: 0;
+}
+
+td.OddTgTd { /* tagged item td odd */
+    width: auto;
+	border: 2px solid #9ac1c9;
+	background: url(../images/linkbg_odd.gif);
+}
+
+td.ExclOddTgTd { /* excluded tagged item td odd */
+    width: auto;
+	border: 2px solid #9ac1c9;
+	background: url(../images/linkbg_odd.gif);
+	color: gray;
+}
+
+td.MissingOddTgTd { /* missing tagged item td odd */
+    width: auto;
+	border: 2px solid #9ac1c9;
+	background: url(../images/linkbg_odd.gif);
+	color: red;
+}
+
+td.EvenTgTd { /* tagged item td even */
+    width: auto;
+	border: 2px solid #9ac1c9;
+	background: url(../images/linkbg_even.gif);
+}
+
+td.ExclEvenTgTd { /* excluded tagged item td even */
+    width: auto;
+	border: 2px solid #9ac1c9;
+	background: url(../images/linkbg_even.gif);
+	color: gray;
+}
+
+td.MissingEvenTgTd { /* missing tagged item td even */
+    width: auto;
+	border: 2px solid #9ac1c9;
+	background: url(../images/linkbg_even.gif);
+	color: red;
+}
+
+td.CntrOddTgTd { /* tagged item td odd - Center text alignment */
+    width: auto;
+	border: 2px solid #9ac1c9;
+	background: url(../images/linkbg_odd.gif);
+	text-align: center;
+}
+
+td.ExclCntrOddTgTd { /* excluded tagged item td odd - Center text alignment */
+    width: auto;
+	border: 2px solid #9ac1c9;
+	background: url(../images/linkbg_odd.gif);
+	text-align: center;
+	color: gray;
+}
+
+td.MissingCntrOddTgTd { /* missing tagged item td odd - Center text alignment */
+    width: auto;
+	border: 2px solid #9ac1c9;
+	background: url(../images/linkbg_odd.gif);
+	text-align: center;
+	color: red;
+}
+
+td.CntrEvenTgTd { /* tagged item td even - Center text alignment */
+    width: auto;
+	border: 2px solid #9ac1c9;
+	background: url(../images/linkbg_even.gif);
+	text-align: center;
+}
+
+td.ExclCntrEvenTgTd { /* excluded tagged item td even - Center text alignment */
+    width: auto;
+	border: 2px solid #9ac1c9;
+	background: url(../images/linkbg_even.gif);
+	text-align: center;
+	color: gray;
+}
+
+td.MissingCntrEvenTgTd { /* missing tagged item td even - Center text alignment */
+    width: auto;
+	border: 2px solid #9ac1c9;
+	background: url(../images/linkbg_even.gif);
+	text-align: center;
+	color: red;
+}
+
+div.tpD { /* tpItem Div */
+	display:inline;
+}
+
+div.btnD { /* button Div */
+	cursor:pointer;
+	display:inline;
+	vertical-align:middle;
+}
+
+div.dimBtnD { /* dimmed button Div */
+	display:inline;
+	vertical-align:middle;
+}
+
+textarea.EvenTxtBox {
+	border:0;
+	background-color:#FAFAFA;
+	font-family:Serif;
+}
+
+textarea.ExclEvenTxtBox {
+	border:0;
+	background-color:#FAFAFA;
+	font-family:Serif;
+	color:gray;
+}
+
+textarea.GrayEvenTxtBox {
+	border:0;
+	background-color:#FAFAFA;
+	font-family:Serif;
+	color:gray;
+}
+
+textarea.OddTxtBox {
+	border:0;
+	background-color:#EEEEEE;
+	font-family:Serif;
+}
+
+
+textarea.ExclOddTxtBox {
+	border:0;
+	background-color:#EEEEEE;
+	font-family:Serif;
+	color:gray;
+}
+
+textarea.GrayOddTxtBox {
+	border:0;
+	background-color:#EEEEEE;
+	font-family:Serif;
+	color:gray;
+}
+
+tr.fpTr { /* full path tr */
+	display:none;
+}

@@ -1,0 +1,8 @@
+var g_oCONST = {};
+g_oCONST['genDetailsCovergroup'] = 1;
+g_assertDebug = 1;
+g_oCONST['prod'] = 'Questa';
+g_oCONST['gBinObjIdx'] = {type:0,name:1,cvps:2,cmnt:3,parentId:4,parentType:5,parentFileNum:6,parentName:7,hdlHash:8,hdlPath:9,binArr:10,autoBinArr:11};
+g_oCONST['gBinArrIdx'] = {type:0,atLeast:1,h:2,isRed:3,name:4};
+g_assertViews = 1;
+g_directViews = 0;

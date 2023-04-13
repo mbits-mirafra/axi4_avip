@@ -277,6 +277,7 @@ task axi4_master_driver_proxy::axi4_write_task();
           //It throws an error if peek is done into an empty fifo
           if(!axi4_master_write_fifo_h.is_empty()) begin
             axi4_master_write_fifo_h.peek(local_master_data_tx);
+            $display("wd: \n %s",local_master_data_tx.sprint());
           end
           else begin
             `uvm_error(get_type_name(),$sformatf("WRITE_DATA_THREAD::Cannot peek into FIFO as WRITE_FIFO IS EMPTY"));
@@ -316,6 +317,8 @@ task axi4_master_driver_proxy::axi4_write_task();
           //Getting the key from the write_response_channel so that 
           //the other transaction should start after completion of the previous transaction
           write_response_channel_key.get(1);
+
+          //write_data_process.await();
 
           `uvm_info(get_type_name(),$sformatf("WRITE_RESPONSE_THREAD::Checking fifo size used = %0d",
                                                axi4_master_write_fifo_h.used()),UVM_FULL); 
@@ -359,18 +362,18 @@ task axi4_master_driver_proxy::axi4_write_task();
       //fine-grain control
       //status returns whether the process is FINISHED or WAITING or RUNNING.
       `uvm_info(get_type_name(), $sformatf("WRITE_TASK :: Out of fork_join : Before await write_address.status()=%s",
-                                            write_address_process.status()), UVM_FULL); 
+                                            write_address_process.status()), UVM_NONE); 
       //Waiting for write address channel to complete 
       //As we don't have control on fork-join_any or fork-join_none processes,
       //the await method makes sure that it waits for the write address to complete
       write_address_process.await();
       
-      wait_for_wr_addr = 1;
-
       //status returns whether the process is FINISHED or WAITING or RUNNING.
       `uvm_info(get_type_name(), $sformatf("WRITE_TASK :: Out of fork_join : After await write_address.status()=%s",
-                                            write_address_process.status()), UVM_FULL); 
+                                            write_address_process.status()), UVM_NONE); 
     end
+
+    wait_for_wr_addr = 1;
 
     axi_write_seq_item_port.item_done();
   end
@@ -391,8 +394,11 @@ task axi4_master_driver_proxy::axi4_read_task();
     axi_read_seq_item_port.get_next_item(req_rd);
     `uvm_info(get_type_name(),$sformatf("READ_TASK:: Before Sending_req_read_packet = \n %s",req_rd.sprint()),UVM_NONE); 
 
+    $display("mod:%s",write_read_mode_h.name);
     if(axi4_master_agent_cfg_h.read_data_mode == SLAVE_MEM_MODE && write_read_mode_h != ONLY_READ_DATA) begin 
+      $display("venkat:%0d",wait_for_wr_addr);
       wait(wait_for_wr_addr);
+      $display("venkat_1");
       req_rd.araddr = address;
       req_rd.arlen  = length;
       req_rd.arsize = arsize_e'(size);

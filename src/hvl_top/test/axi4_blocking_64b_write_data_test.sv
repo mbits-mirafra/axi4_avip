@@ -16,6 +16,8 @@ class axi4_blocking_64b_write_data_test extends axi4_base_test;
   // Externally defined Tasks and Functions
   //-------------------------------------------------------
   extern function new(string name = "axi4_blocking_64b_write_data_test", uvm_component parent = null);
+
+  extern function void setup_axi4_env_cfg();
   extern virtual task run_phase(uvm_phase phase);
 
 endclass : axi4_blocking_64b_write_data_test
@@ -32,6 +34,12 @@ function axi4_blocking_64b_write_data_test::new(string name = "axi4_blocking_64b
   super.new(name, parent);
 endfunction : new
 
+
+
+function void axi4_blocking_64b_write_data_test::setup_axi4_env_cfg();
+  super.setup_axi4_env_cfg();
+  axi4_env_cfg_h.write_read_mode_h = ONLY_WRITE_DATA;
+endfunction:setup_axi4_env_cfg
 //--------------------------------------------------------------------------------------------
 // Task: run_phase
 // Creates the axi4_virtual_64b_write_data_seq sequence and starts the write virtual sequences

@@ -66,6 +66,7 @@ function void axi4_env_config::do_print(uvm_printer printer);
   printer.print_field ("has_virtual_sqr",has_virtual_seqr,1, UVM_DEC);
   printer.print_field ("no_of_masters",no_of_masters,$bits(no_of_masters), UVM_HEX);
   printer.print_field ("no_of_slaves",no_of_slaves,$bits(no_of_slaves), UVM_HEX);
+  printer.print_string ("transfer_type",   write_read_mode_h.name());
 
 endfunction : do_print
 

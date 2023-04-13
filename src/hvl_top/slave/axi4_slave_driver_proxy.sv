@@ -49,6 +49,7 @@ class axi4_slave_driver_proxy extends uvm_driver#(axi4_slave_tx);
   semaphore semaphore_rsp_write_key;
   semaphore semaphore_read_key;
 
+  //write_read_mode_h used to get the transfer type
   write_read_data_mode_e write_read_mode_h;
 
   bit[3:0] wr_addr_cnt;
@@ -275,9 +276,9 @@ task axi4_slave_driver_proxy::axi4_write_task();
       //returns status of response thread
       response_tx=process::self();
 
-      //getting the key from semaphore 
       addr_tx.await();
       
+      //getting the key from semaphore 
       semaphore_rsp_write_key.get(1);
 
       //getting the data from response fifo

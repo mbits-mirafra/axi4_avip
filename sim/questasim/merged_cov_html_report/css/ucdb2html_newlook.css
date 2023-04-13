@@ -1,0 +1,39 @@
+/* Customize look */
+/*background color for odd cells*/
+td.odd, td.odd_r, td.odd_rGrey, td.oddGrey {
+	/*background-color: #A0CFEC;*/
+}
+
+/*background color for even cells*/
+td.even, td.even_r, td.even_rGrey, td.evenGrey {
+	/*background-color: #87AFC7;*/
+}
+
+/*text color for odd and even cells*/
+td.odd, td.even, td.odd_r, td.even_r, td.odd_rGrey, td.even_rGrey {
+	/*color: #000000;*/
+}
+/**************************************************************************************/
+/*text color and background color for excluded cells*/
+td.grey {
+	/*color:            white;*/
+	/*background-color: dimGrey;*/
+}
+
+/*text color and background color for missed cells*/
+td.bgRed, td.bgRed_r {
+	/*color:            red;*/
+	/*background-color:  	rgb(255,247,247);*/
+}
+
+/*text color and background color for yellow cells*/
+td.bgYellow, td.bgYellow_r {
+	/*color:            black;*/
+	/*background-color: rgb(253,255,231);*/
+}
+
+/*text color and background color for covered cells*/
+td.bgGreen, td.bgGreen_r {
+	/*color:            black;*/
+	/*background-color: rgb(231,255,235);*/
+}

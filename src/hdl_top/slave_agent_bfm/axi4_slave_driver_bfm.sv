@@ -364,14 +364,13 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
       
       if((mem_rlen[j1]) == i1)begin
         rlast <= 1'b1;
-        @(posedge aclk);
-        rlast <= 1'b0;
-        rvalid <= 1'b0;
       end
       
       do begin
         @(posedge aclk);
       end while(rready===0);
+      rlast <= 1'b0;
+      rvalid <= 1'b0;
     end
     j1++;
     

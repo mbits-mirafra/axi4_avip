@@ -94,7 +94,7 @@ function axi4_slave_driver_proxy::new(string name = "axi4_slave_driver_proxy",
   axi4_slave_read_addr_fifo_h               = new("axi4_slave_read_addr_fifo_h",this,16);
   axi4_slave_read_data_in_fifo_h            = new("axi4_slave_read_data_in_fifo_h",this,16);
   semaphore_write_key                       = new(1);
-  semaphore_rsp_write_key                       = new(1);
+  semaphore_rsp_write_key                   = new(1);
   semaphore_read_key                        = new(1);
 endfunction : new
 
@@ -276,9 +276,9 @@ task axi4_slave_driver_proxy::axi4_write_task();
       response_tx=process::self();
 
       //getting the key from semaphore 
-      data_tx.await();
+      addr_tx.await();
       
-      //semaphore_rsp_write_key.get(1);
+      semaphore_rsp_write_key.get(1);
 
       //getting the data from response fifo
       axi4_slave_write_response_fifo_h.get(local_slave_response_tx);
@@ -375,6 +375,8 @@ task axi4_slave_driver_proxy::axi4_write_task();
      if(wr_addr_cnt == wr_resp_cnt) begin
        completed_initial_txn=1;
      end
+     
+     semaphore_rsp_write_key.put(1);
    end
  
   join_any

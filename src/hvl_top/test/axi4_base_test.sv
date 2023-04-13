@@ -139,6 +139,7 @@ function void axi4_base_test::setup_axi4_slave_agent_cfg();
     axi4_env_cfg_h.axi4_slave_agent_cfg_h[i].maximum_transactions = 3;
     axi4_env_cfg_h.axi4_slave_agent_cfg_h[i].read_data_mode = RANDOM_DATA_MODE;
 
+    
     if(SLAVE_AGENT_ACTIVE === 1) begin
       axi4_env_cfg_h.axi4_slave_agent_cfg_h[i].is_active = uvm_active_passive_enum'(UVM_ACTIVE);
     end

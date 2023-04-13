@@ -34,7 +34,7 @@ function axi4_blocking_exokay_response_read_test::new(string name = "axi4_blocki
 endfunction : new
 
 
-function void axi4_blocking_exokay_response__read_test::setup_axi4_env_cfg();
+function void axi4_blocking_exokay_response_read_test::setup_axi4_env_cfg();
   super.setup_axi4_env_cfg();
   axi4_env_cfg_h.write_read_mode_h = ONLY_READ_DATA;
 endfunction:setup_axi4_env_cfg

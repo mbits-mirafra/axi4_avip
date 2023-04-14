@@ -391,7 +391,7 @@ package axi4_globals_pkg;
     int                     wait_count_read_data_channel;
     int                     outstanding_write_tx;
     int                     outstanding_read_tx;
-    bit                     out_of_oreder;
+    bit                     out_of_order;
   } axi4_transfer_cfg_s;
 
 endpackage : axi4_globals_pkg

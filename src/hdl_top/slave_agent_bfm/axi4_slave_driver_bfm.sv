@@ -189,9 +189,9 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
   task axi4_write_data_phase (inout axi4_write_transfer_char_s data_write_packet, input axi4_transfer_cfg_s cfg_packet);
     `uvm_info(name,$sformatf("data_write_packet=\n%p",data_write_packet),UVM_HIGH)
     `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_HIGH)
-    `uvm_info(name,$sformatf("INSIDE WRITE DATA CHANNEL"),UVM_HIGH)
+    `uvm_info(name,$sformatf("INSIDE WRITE DATA CHANNEL"),UVM_NONE)
     
-    wready = 0;
+    wready <= 0;
     
     do begin
       @(posedge aclk);
@@ -204,10 +204,10 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
     repeat(data_write_packet.no_of_wait_states)begin
       `uvm_info(name,$sformatf("DRIVING_WRITE_DATA_WAIT_STATES :: %0d",data_write_packet.no_of_wait_states),UVM_HIGH);
       @(posedge aclk);
-      wready=0;
+      wready<=0;
     end
 
-    wready = 1 ;
+    wready <= 1 ;
     
     for(int s = 0;s<(mem_wlen[a]+1);s = s+1)begin
       @(posedge aclk);
@@ -225,18 +225,18 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
           data_write_packet.wlast = wlast;
           if(!data_write_packet.wlast)begin
             @(posedge aclk);
-            wready=0;
+            wready<=0;
             break;
           end
-          `uvm_info("slave_wlast",$sformatf("slave_wlast = %0b",wlast),UVM_NONE);
+          `uvm_info("slave_wlast",$sformatf("slave_wlast = %0b ,a=%0d",wlast,a),UVM_NONE);
           `uvm_info("slave_wlast",$sformatf("sampled_slave_wlast = %0b",data_write_packet.wlast),UVM_HIGH);
         end
       end
-      `uvm_info(name,$sformatf("OUTSIDE WRITE DATA CHANNEL"),UVM_HIGH)
+      `uvm_info(name,$sformatf("OUTSIDE WRITE DATA CHANNEL"),UVM_NONE)
       a++;
 
       @(posedge aclk);
-      wready = 0;
+      wready <= 0;
 
   endtask : axi4_write_data_phase
 
@@ -251,7 +251,7 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
     int j;
     @(posedge aclk);
 
-    if(struct_cfg.out_of_oreder) begin 
+    if(struct_cfg.out_of_order) begin 
       bid <= bid_local; 
       data_write_packet.bid <= bid_local; 
       bresp <= data_write_packet.bresp;
@@ -265,7 +265,7 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
 
      bid  <= mem_awid[j];
      `uvm_info("DEBUG_BRESP",$sformatf("MEM_BID[%0d] = %0d",j,mem_awid[j]),UVM_HIGH)
-     `uvm_info("DEBUG_BRESP_WLAST",$sformatf("wlast = %0d",mem_wlast[j]),UVM_NONE)
+     `uvm_info("DEBUG_BRESP_WLAST",$sformatf("wlast = %0d,j=%0d",mem_wlast[j],j),UVM_NONE)
      while(mem_wlast[j]!=1) begin
        @(posedge aclk);
      end
@@ -319,7 +319,7 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
 	  mem_rlen 	[j]	  = arlen	  ;	
 	  mem_rsize	[j] 	= arsize	;	
 	  mem_rburst[j] 	= arburst ;	
-    arready         = 1       ;
+    arready         <= 1       ;
 
     data_read_packet.arid    = mem_arid[j]     ;
     data_read_packet.araddr  = mem_raddr[j]    ;
@@ -373,7 +373,6 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
       rvalid <= 1'b0;
     end
     j1++;
-    
        
   endtask : axi4_read_data_phase
 

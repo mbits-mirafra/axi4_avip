@@ -185,7 +185,7 @@ task axi4_slave_driver_proxy::axi4_write_task();
      //write address_task
      axi4_slave_drv_bfm_h.axi4_write_address_phase(struct_write_packet);
 
-     if(axi4_slave_agent_cfg_h.out_of_oreder) begin
+     if(axi4_slave_agent_cfg_h.out_of_order) begin
        if(response_id_queue.size() == 0) begin
          response_id_queue.push_back(struct_write_packet.awid);
        end
@@ -276,7 +276,7 @@ task axi4_slave_driver_proxy::axi4_write_task();
       //returns status of response thread
       response_tx=process::self();
 
-      addr_tx.await();
+      data_tx.await();
       
       //getting the key from semaphore 
       semaphore_rsp_write_key.get(1);
@@ -315,7 +315,7 @@ task axi4_slave_driver_proxy::axi4_write_task();
       `uvm_info("get_type_name",$sformatf("end_addr=%0h",end_wrap_addr),UVM_HIGH);
 
       `uvm_info("slave_driver_proxy",$sformatf("min_tx=%0d",axi4_slave_agent_cfg_h.get_minimum_transactions),UVM_HIGH)
-      if(axi4_slave_agent_cfg_h.out_of_oreder) begin
+      if(axi4_slave_agent_cfg_h.out_of_order) begin
         wait(axi4_slave_write_data_out_fifo_h.size > axi4_slave_agent_cfg_h.get_minimum_transactions); //begin
           `uvm_info("slave_driver_proxy",$sformatf("fifo_size = %0d",axi4_slave_write_data_out_fifo_h.used()),UVM_HIGH)
           if(drive_id_cont == 1) begin

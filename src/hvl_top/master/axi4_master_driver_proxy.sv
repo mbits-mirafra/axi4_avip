@@ -32,6 +32,10 @@ class axi4_master_driver_proxy extends uvm_driver#(axi4_master_tx);
   //Variable: axi4_master_write_fifo_h
   //Declaring handle for uvm_tlm_analysis_fifo for write task
   uvm_tlm_analysis_fifo #(axi4_master_tx) axi4_master_write_fifo_h;
+
+  //Variable: axi4_master_write_resp_fifo_h
+  //Declaring handle for uvm_tlm_analysis_fifo for write task
+  uvm_tlm_analysis_fifo #(axi4_master_tx) axi4_master_write_resp_fifo_h;
   
   //Variable: axi4_master_read_fifo_h
   //Declaring handle for uvm_tlm_analysis_fifo for read task
@@ -104,6 +108,7 @@ function axi4_master_driver_proxy::new(string name = "axi4_master_driver_proxy",
   axi_write_rsp_port         = new("axi_write_rsp_port",this);
   axi_read_rsp_port          = new("axi_read_rsp_port",this);
   axi4_master_write_fifo_h   = new("axi4_master_write_fifo_h",this);
+  axi4_master_write_resp_fifo_h   = new("axi4_master_write_resp_fifo_h",this);
   axi4_master_read_fifo_h    = new("axi4_master_read_fifo_h",this);
   read_channel_key           = new(1);
   write_data_channel_key     = new(1);
@@ -183,9 +188,18 @@ task axi4_master_driver_proxy::axi4_write_task();
     //Throws the error if the write fifo reaches the limit
     if(!axi4_master_write_fifo_h.is_full()) begin
       axi4_master_write_fifo_h.write(req_wr);
+      $display("@%0t:data_wr:\n%s",$time(),req_wr.sprint());
     end
     else begin
       `uvm_error(get_type_name(),$sformatf("WRITE_TASK::Cannot write into FIFO as WRITE_FIFO IS FULL"));
+    end
+
+    if(!axi4_master_write_resp_fifo_h.is_full()) begin
+      axi4_master_write_resp_fifo_h.write(req_wr);
+      $display("@%0t:data_rsp:\n%s",$time(),req_wr.sprint());
+    end
+    else begin
+      `uvm_error(get_type_name(),$sformatf("WRITE_TASK::Cannot write into FIFO as WRITE_RESP_FIFO IS FULL"));
     end
 
     `uvm_info(get_type_name(),$sformatf("WRITE_TASK::Checking transfer type outside if = %s",req_wr.transfer_type),UVM_FULL); 
@@ -276,7 +290,9 @@ task axi4_master_driver_proxy::axi4_write_task();
           //Peek method gets the packet from the fifo but the fifo doesn't discard the packet
           //It throws an error if peek is done into an empty fifo
           if(!axi4_master_write_fifo_h.is_empty()) begin
-            axi4_master_write_fifo_h.peek(local_master_data_tx);
+            $display("@%0t:data_peek",$time());
+            axi4_master_write_fifo_h.get(local_master_data_tx);
+            $display("@%0t:data_peek_1:\n%s",$time(),local_master_data_tx.sprint());
           end
           else begin
             `uvm_error(get_type_name(),$sformatf("WRITE_DATA_THREAD::Cannot peek into FIFO as WRITE_FIFO IS EMPTY"));
@@ -317,18 +333,19 @@ task axi4_master_driver_proxy::axi4_write_task();
           //the other transaction should start after completion of the previous transaction
           write_response_channel_key.get(1);
 
-          //write_data_process.await();
+          //write_address_process.await();
 
           `uvm_info(get_type_name(),$sformatf("WRITE_RESPONSE_THREAD::Checking fifo size used = %0d",
-                                               axi4_master_write_fifo_h.used()),UVM_FULL); 
+                                               axi4_master_write_resp_fifo_h.used()),UVM_FULL); 
          
           //Get method gets the packet and discards the packet from fifo
           //It throws an error if get is done into an empty fifo
-          if(!axi4_master_write_fifo_h.is_empty()) begin
-            axi4_master_write_fifo_h.get(local_master_response_tx);
+          if(!axi4_master_write_resp_fifo_h.is_empty()) begin
+            axi4_master_write_resp_fifo_h.get(local_master_response_tx);
+            $display("@%0t:data_get /n %s",$time(),local_master_response_tx.sprint());
           end
           else begin
-            `uvm_error(get_type_name(),$sformatf("WRITE_RESPONSE_THREAD::Cannot peek into FIFO as WRITE_FIFO IS EMPTY"));
+            `uvm_error(get_type_name(),$sformatf("WRITE_RESPONSE_THREAD::Cannot peek into FIFO as WRITE_RESP_FIFO IS EMPTY"));
           end
           
           //Converts the received req_packet to struct packet
@@ -347,7 +364,7 @@ task axi4_master_driver_proxy::axi4_write_task();
                                                local_master_response_tx.sprint()),UVM_MEDIUM);
 
           `uvm_info(get_type_name(),$sformatf("WRITE_RESPONSE_THREAD::Checking fifo size used= %0d",
-                                               axi4_master_write_fifo_h.used()),UVM_FULL); 
+                                               axi4_master_write_resp_fifo_h.used()),UVM_FULL); 
 
           `uvm_info(get_type_name(), $sformatf("WRITE_RESPONSE_THREAD :: Out of response task"), UVM_FULL); 
           
@@ -406,7 +423,8 @@ task axi4_master_driver_proxy::axi4_read_task();
 
     //Return the fifo size that it is capable to hold
     //A return value of 0 indicates the FIFO capacity has no limit
-    `uvm_info(get_type_name(),$sformatf("READ_TASK::Checking fifo size = %0d",axi4_master_write_fifo_h.size()),UVM_FULL); 
+    `uvm_info(get_type_name(),$sformatf("READ_TASK::Checking fifo_size = %0d",axi4_master_write_fifo_h.size()),UVM_FULL); 
+    `uvm_info(get_type_name(),$sformatf("READ_TASK::Checking fifo_resp_size = %0d",axi4_master_write_resp_fifo_h.size()),UVM_FULL); 
 
     //Keeping the req packet into the read fifo 
     //This fifo is used if the transfer_type is NON_BLOCKING_READ

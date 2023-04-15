@@ -216,6 +216,9 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
        `uvm_info("slave_wdata",$sformatf("sampled_slave_wdata[%0d] = %0h",s,data_write_packet.wdata[s]),UVM_HIGH);
        data_write_packet.wstrb[s]=wstrb;
        `uvm_info("slave_wstrb",$sformatf("sampled_slave_wstrb[%0d] = %0d",s,data_write_packet.wstrb[s]),UVM_HIGH);
+       while(wvalid==0) begin
+        @(posedge aclk);
+       end 
        
        // Used to sample the wlast at the end of transfer
        // and come out of the loop if wlast == 1
@@ -354,7 +357,6 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
       //LHS: Is used to shift the location for each Byte
       for(int l1=0; l1<(2**mem_rsize[j1]); l1++) begin
         rdata[8*k1+7 -: 8]<=data_read_packet.rdata[i1][8*l1+7 -: 8];
-        $display("RD_DATA=%0h,LHS_intf:%0h,l1:%0d,i1=%0d,k1=%0d",data_read_packet.rdata[i1][8*l1+7 -: 8],rdata[8*k1+7-: 8],l1,i1,k1);
         k1++;
       end
       rresp<=data_read_packet.rresp[i1];

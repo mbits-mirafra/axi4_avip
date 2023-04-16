@@ -302,7 +302,7 @@ package axi4_globals_pkg;
     SLAVE_ERR_RESP_MODE = 2'b11
   } read_data_type_mode_e;
 
-  //Enum : transfer_type_e  //Used to checl
+  //Enum : transfer_type_e  
   //Used to determine the mode for score board check 
   typedef enum bit[1:0] {
     ONLY_WRITE_DATA  = 2'b00,
@@ -310,6 +310,14 @@ package axi4_globals_pkg;
     WRITE_READ_DATA  = 2'b10
   } write_read_data_mode_e;
   
+  //Enum : Response_mode_e  
+  //Used to determine the mode of response to send
+  typedef enum bit[1:0] {
+    ONLY_WRITE_RESP_OUT_OF_ORDER  = 2'b00,
+    ONLY_READ_RESP_OUT_OF_ORDER   = 2'b01,
+    WRITE_READ_RESP_OUT_OF_ORDER  = 2'b10,
+    RESP_IN_ORDER                 = 2'b11
+  } response_mode_e;
 
   //-------------------------------------------------------
   // Structs used in axi_avip are given below
@@ -391,7 +399,7 @@ package axi4_globals_pkg;
     int                     wait_count_read_data_channel;
     int                     outstanding_write_tx;
     int                     outstanding_read_tx;
-    bit                     out_of_order;
+    response_mode_e         slave_response_mode;
   } axi4_transfer_cfg_s;
 
 endpackage : axi4_globals_pkg

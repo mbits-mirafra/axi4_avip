@@ -36,9 +36,9 @@ class axi4_slave_agent_config extends uvm_object;
   //Used to determine the number of wait states inserted for read data channel
   int wait_count_read_data_channel;
 
-  //Variable: out_of_order
-  //Used to enable the out_of_order txns
-  bit out_of_order;
+  //Variable: slave_response_mode
+  //Used to enable the out_of_order for writres and reads
+  response_mode_e slave_response_mode;
 
   //Variable: minimum_transactions
   //Used to set the minimum txns for out_of_order
@@ -98,7 +98,7 @@ function void axi4_slave_agent_config::do_print(uvm_printer printer);
   printer.print_field ("has_coverage", has_coverage, $bits(has_coverage), UVM_DEC);
   printer.print_field ("min_address",  min_address,  $bits(max_address),  UVM_HEX);
   printer.print_field ("max_address",  max_address,  $bits(max_address),  UVM_HEX);
-  printer.print_field ("out_of_order",  out_of_order,  $bits(out_of_order),  UVM_HEX);
+  printer.print_string ("slave_response_type",   slave_response_mode.name());
   printer.print_field ("minimum_transactions",  minimum_transactions,  $bits(minimum_transactions),  UVM_HEX);
   printer.print_field ("maximum_transactions",  maximum_transactions,  $bits(maximum_transactions),  UVM_HEX);
   printer.print_string ("read_data_mode", read_data_mode.name());  

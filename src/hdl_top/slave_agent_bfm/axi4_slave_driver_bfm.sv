@@ -254,7 +254,7 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
     int j;
     @(posedge aclk);
 
-    if(struct_cfg.out_of_order) begin 
+    if((struct_cfg.slave_response_mode == ONLY_WRITE_RESP_OUT_OF_ORDER) || (struct_cfg.slave_response_mode == WRITE_READ_RESP_OUT_OF_ORDER)) begin 
       bid <= bid_local; 
       data_write_packet.bid <= bid_local; 
       bresp <= data_write_packet.bresp;
@@ -344,36 +344,66 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
   // Task: axi4_read_data_channel_task
   // This task will drive the read data signals
   //-------------------------------------------------------
-  task axi4_read_data_phase (inout axi4_read_transfer_char_s data_read_packet, input axi4_transfer_cfg_s cfg_packet);
+  task axi4_read_data_phase (inout axi4_read_transfer_char_s data_read_packet, input axi4_transfer_cfg_s cfg_packet,response_mode_e out_of_order_enable);
     int j1;
     @(posedge aclk);
-    data_read_packet.rid <= mem_arid[j1];
-    
-    for(int i1=0, k1=0; i1<mem_rlen[j1] + 1; i1++) begin
-      if(k1 == DATA_WIDTH/8) k1 = 0;
-      rid  <= mem_arid[j1];
-      //Sending the rdata based on each byte lane
-      //RHS: Is used to send Byte by Byte
-      //LHS: Is used to shift the location for each Byte
-      for(int l1=0; l1<(2**mem_rsize[j1]); l1++) begin
-        rdata[8*k1+7 -: 8]<=data_read_packet.rdata[i1][8*l1+7 -: 8];
-        k1++;
-      end
-      rresp<=data_read_packet.rresp[i1];
-     
-      ruser<=data_read_packet.ruser;
-      rvalid<=1'b1;
+    if(out_of_order_enable == RESP_IN_ORDER || out_of_order_enable == ONLY_WRITE_RESP_OUT_OF_ORDER) begin
+      data_read_packet.rid <= mem_arid[j1];
       
-      if((mem_rlen[j1]) == i1)begin
-        rlast <= 1'b1;
+      for(int i1=0, k1=0; i1<mem_rlen[j1] + 1; i1++) begin
+        if(k1 == DATA_WIDTH/8) k1 = 0;
+        rid  <= mem_arid[j1];
+        //Sending the rdata based on each byte lane
+        //RHS: Is used to send Byte by Byte
+        //LHS: Is used to shift the location for each Byte
+        for(int l1=0; l1<(2**mem_rsize[j1]); l1++) begin
+          $display("RDATA_INDSDE:%0h",data_read_packet.rdata[i1][8*l1+7 -: 8]);
+          rdata[8*k1+7 -: 8]<=data_read_packet.rdata[i1][8*l1+7 -: 8];
+          k1++;
+        end
+        rresp<=data_read_packet.rresp[i1];
+       
+        ruser<=data_read_packet.ruser;
+        rvalid<=1'b1;
+        
+        if((mem_rlen[j1]) == i1)begin
+          rlast <= 1'b1;
+        end
+        
+        do begin
+          @(posedge aclk);
+        end while(rready===0);
+        rlast <= 1'b0;
+        rvalid <= 1'b0;
       end
-      
-      do begin
-        @(posedge aclk);
-      end while(rready===0);
-      rlast <= 1'b0;
-      rvalid <= 1'b0;
-    end
+     end
+     else begin
+      for(int i1=0, k1=0; i1<data_read_packet.arlen + 1; i1++) begin
+        if(k1 == DATA_WIDTH/8) k1 = 0;
+        rid  <= data_read_packet.arid;
+        //Sending the rdata based on each byte lane
+        //RHS: Is used to send Byte by Byte
+        //LHS: Is used to shift the location for each Byte
+        for(int l1=0; l1<(2**data_read_packet.arsize); l1++) begin
+          rdata[8*k1+7 -: 8]<=data_read_packet.rdata[i1][8*l1+7 -: 8];
+          k1++;
+        end
+        rresp<=data_read_packet.rresp[i1];
+       
+        ruser<=data_read_packet.ruser;
+        rvalid<=1'b1;
+        
+        if((data_read_packet.arlen) == i1)begin
+          rlast <= 1'b1;
+        end
+        
+        do begin
+          @(posedge aclk);
+        end while(rready===0);
+        rlast <= 1'b0;
+        rvalid <= 1'b0;
+      end
+     end
     j1++;
        
   endtask : axi4_read_data_phase

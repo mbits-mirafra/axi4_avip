@@ -211,6 +211,10 @@ class axi4_slave_tx extends uvm_sequence_item;
   //Adding constraint to select the type of read response
   constraint rresp_c1 {soft rresp == READ_OKAY;}
 
+  //Constraint : rresp_c1
+  //Adding constraint to select the type of read response
+  constraint bresp_c1 {soft bresp == WRITE_OKAY;}
+
   //Constraint : wait_states_c1             
   //To randomise the wait states in range of 0 to 3
   constraint wait_states_c1 {soft no_of_wait_states inside {[0:3]};}

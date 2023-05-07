@@ -94,7 +94,11 @@ package axi4_master_seq_pkg;
   `include "axi4_master_nbk_slave_mem_mode_read_fixed_burst_seq.sv"
   `include "axi4_master_nbk_slave_mem_mode_read_incr_burst_seq.sv"
   `include "axi4_master_nbk_slave_mem_mode_read_wrap_burst_seq.sv"
-  
+ 
+
+
+  `include "axi4_master_write_nbk_write_read_response_out_of_order_seq.sv"
+  `include "axi4_master_read_nbk_write_read_response_out_of_order_seq.sv"
 
 endpackage : axi4_master_seq_pkg
 

@@ -1,11 +1,9 @@
-
-`ifndef AXI4_MASTER_WRITE_NBK_ONLY_READ_RESPONSE_OUT_OF_ORDER_SEQ_INCLUDED
+`ifndef AXI4_MASTER_WRITE_NBK_ONLY_READ_RESPONSE_OUT_OF_ORDER_SEQ_INCLUDED_
 `define AXI4_MASTER_WRITE_NBK_ONLY_READ_RESPONSE_OUT_OF_ORDER_SEQ_INCLUDED_
-
 
 //--------------------------------------------------------------------------------------------
 // Class: axi4_master_write_nbk_only_read_response_out_of_order_seq
-// Extends the axi4_master_nbk_base_seq and randomises the req item
+// Extends the axi4_master_base_seq and randomises the req item
 //--------------------------------------------------------------------------------------------
 class axi4_master_write_nbk_only_read_response_out_of_order_seq extends axi4_master_nbk_base_seq;
   `uvm_object_utils(axi4_master_write_nbk_only_read_response_out_of_order_seq)
@@ -30,21 +28,24 @@ endfunction : new
 
 //--------------------------------------------------------------------------------------------
 // Task: body
-// Creates the req of type master_nbk transaction and randomises the req
+// Creates the req of type master transaction and randomises the req
 //--------------------------------------------------------------------------------------------
 task axi4_master_write_nbk_only_read_response_out_of_order_seq::body();
   super.body();
-  
-  start_item(req);
-  if(!req.randomize() with {req.tx_type == WRITE;
-                            req.transfer_type == NON_BLOCKING_READ;}) begin
 
+  start_item(req);
+  if(!req.randomize() with {
+                            
+                              req.awburst == WRITE_FIXED;
+                              req.transfer_type == NON_BLOCKING_WRITE;}) begin
     `uvm_fatal("axi4","Rand failed");
   end
-  req.print();
+  
+  `uvm_info(get_type_name(), $sformatf("master_seq \n%s",req.sprint()), UVM_NONE); 
   finish_item(req);
 
 endtask : body
 
 `endif
+
 

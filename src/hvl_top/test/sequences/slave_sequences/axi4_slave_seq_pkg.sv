@@ -102,6 +102,11 @@ package axi4_slave_seq_pkg;
 
   `include "axi4_slave_write_nbk_write_read_response_out_of_order_seq.sv"
   `include "axi4_slave_read_nbk_write_read_response_out_of_order_seq.sv"
+  `include "axi4_slave_write_nbk_only_write_response_out_of_order_seq.sv"
+  `include "axi4_slave_write_nbk_only_read_response_out_of_order_seq.sv"
+  `include "axi4_slave_read_nbk_only_write_response_out_of_order_seq.sv"
+  `include "axi4_slave_read_nbk_only_read_response_out_of_order_seq.sv"
+
 endpackage : axi4_slave_seq_pkg
 
 `endif

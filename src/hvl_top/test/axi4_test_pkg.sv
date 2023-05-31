@@ -98,6 +98,10 @@ package axi4_test_pkg;
   `include "axi4_non_blocking_slave_mem_mode_incr_burst_write_read_test.sv"
   
 
+  `include "axi4_non_blocking_write_read_response_out_of_order_test.sv"
+  `include "axi4_non_blocking_only_read_response_out_of_order_test.sv"
+  `include "axi4_non_blocking_only_write_response_out_of_order_test.sv"
+
 endpackage : axi4_test_pkg
 
 `endif

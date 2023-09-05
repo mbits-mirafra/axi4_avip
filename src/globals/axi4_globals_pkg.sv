@@ -313,11 +313,22 @@ package axi4_globals_pkg;
   //Enum : Response_mode_e  
   //Used to determine the mode of response to send
   typedef enum bit[1:0] {
-    ONLY_WRITE_RESP_OUT_OF_ORDER  = 2'b00,
+    RESP_IN_ORDER                 = 2'b00,
     ONLY_READ_RESP_OUT_OF_ORDER   = 2'b01,
     WRITE_READ_RESP_OUT_OF_ORDER  = 2'b10,
-    RESP_IN_ORDER                 = 2'b11
+    ONLY_WRITE_RESP_OUT_OF_ORDER  = 2'b11
   } response_mode_e;
+
+  //Enum : QoS_mode_e
+  typedef enum bit[1:0] {
+    QOS_MODE_DISABLE            = 2'b00,
+    ONLY_READ_QOS_MODE_ENABLE   = 2'b01,
+    WRITE_READ_QOS_MODE_ENABLE  = 2'b10,
+    ONLY_WRITE_QOS_MODE_ENABLE  = 2'b11
+  } qos_mode_e;
+
+  //Used to store the awid for Qos mode
+  awid_e awid_queue_for_qos[$];
 
   //-------------------------------------------------------
   // Structs used in axi_avip are given below
@@ -400,6 +411,7 @@ package axi4_globals_pkg;
     int                     outstanding_write_tx;
     int                     outstanding_read_tx;
     response_mode_e         slave_response_mode;
+    qos_mode_e              qos_mode_type;
   } axi4_transfer_cfg_s;
 
 endpackage : axi4_globals_pkg

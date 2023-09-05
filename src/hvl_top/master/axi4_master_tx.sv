@@ -134,7 +134,7 @@ class axi4_master_tx extends uvm_sequence_item;
 
   //Variable : arqos
   //Used to send the read address quality of service
-  rand bit arqos;
+  rand bit [3:0] arqos;
 
   //Variable : aruser
   //Used to send the read address user data

@@ -43,7 +43,7 @@ class axi4_slave_tx extends uvm_sequence_item;
 
   //Variable : awqos
   //Used to send the write address quality os service
-  bit awqos;
+  bit [3:0] awqos;
 
   //Variable : addr_write_prot
   //used for different access
@@ -128,7 +128,7 @@ class axi4_slave_tx extends uvm_sequence_item;
   
   //Variable : arqos
   //Used to send the read address quality of service
-  rand bit arqos;
+  bit [3:0] arqos;
 
   //-------------------------------------------------------
   // READ DATA CHANNEL SIGNALS

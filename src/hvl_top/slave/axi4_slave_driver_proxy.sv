@@ -65,6 +65,13 @@ class axi4_slave_driver_proxy extends uvm_driver#(axi4_slave_tx);
 
   bit      completed_initial_txn;
   int      crossed_read_addr=0;
+
+  //Qos mode signals
+  axi4_slave_tx  qos_queue[$];
+  axi4_slave_tx  qos_read_queue[$];
+  int            queue_index;
+  bit            qos_wait_enable = 1'b1;
+  int            read_queue_index;
   
   
   //-------------------------------------------------------
@@ -76,8 +83,8 @@ class axi4_slave_driver_proxy extends uvm_driver#(axi4_slave_tx);
   extern virtual task run_phase(uvm_phase phase);
   extern virtual task axi4_write_task();
   extern virtual task axi4_read_task();
-  extern virtual task task_memory_write(inout axi4_slave_tx struct_write_packet);
-  extern virtual task task_memory_read(input axi4_slave_tx read_pkt,output axi4_read_transfer_char_s struct_read_packet);
+  extern virtual task task_memory_write(input axi4_slave_tx struct_write_packet);
+  extern virtual task task_memory_read(input axi4_slave_tx read_pkt,ref axi4_read_transfer_char_s struct_read_packet);
   extern virtual task out_of_order_for_reads(output axi4_read_transfer_char_s oor_read_data_struct_read_packet);
 endclass : axi4_slave_driver_proxy
 
@@ -211,6 +218,10 @@ task axi4_slave_driver_proxy::axi4_write_task();
 
      //Converting struct into transaction data type
      axi4_slave_seq_item_converter::to_write_class(struct_write_packet,local_slave_addr_tx);
+
+     if((axi4_slave_agent_cfg_h.qos_mode_type == ONLY_WRITE_QOS_MODE_ENABLE) || (axi4_slave_agent_cfg_h.qos_mode_type == WRITE_READ_QOS_MODE_ENABLE)) begin
+        qos_queue.push_front(local_slave_addr_tx);
+      end
      
      `uvm_info("DEBUG_SLAVE_WRITE_ADDR_PROXY", $sformatf("AFTER :: Received req packet \n %s",local_slave_addr_tx.sprint()), UVM_NONE);
      
@@ -273,6 +284,7 @@ task axi4_slave_driver_proxy::axi4_write_task();
       axi4_slave_tx              local_slave_data_tx;
       axi4_slave_tx              local_slave_response_tx;
       axi4_slave_tx              packet;
+      axi4_slave_tx              qos_value_check_1;
       axi4_write_transfer_char_s struct_write_packet;
       axi4_transfer_cfg_s        struct_cfg;
       bit[3:0]                   bid_local;
@@ -287,8 +299,27 @@ task axi4_slave_driver_proxy::axi4_write_task();
       //getting the key from semaphore 
       semaphore_rsp_write_key.get(1);
 
-      //getting the data from response fifo
-      axi4_slave_write_response_fifo_h.get(local_slave_response_tx);
+      if((axi4_slave_agent_cfg_h.qos_mode_type == ONLY_WRITE_QOS_MODE_ENABLE) || (axi4_slave_agent_cfg_h.qos_mode_type == WRITE_READ_QOS_MODE_ENABLE)) begin
+        qos_value_check_1 = qos_queue[$];
+        for(int i=0;i<qos_queue.size();i++) begin
+          if(qos_queue[i].awqos >= qos_value_check_1.awqos) begin
+            qos_value_check_1 = qos_queue[i];
+            queue_index = i;
+          end
+        end
+        local_slave_response_tx = qos_queue[queue_index];
+        qos_queue.delete(queue_index);
+      end
+      else begin 
+        if(axi4_slave_write_response_fifo_h.is_empty) begin
+          `uvm_error(get_type_name(),$sformatf("WRITE_RESP_THREAD::Cannot get write resp data from FIFO as WRITE_RESP_FIFO is EMPTY"));
+        end
+        else begin
+          //getting the data from response fifo
+          axi4_slave_write_response_fifo_h.get(local_slave_response_tx);
+        end
+      end
+
       
       //Converting transactions into struct data type
       axi4_slave_seq_item_converter::from_write_class(local_slave_response_tx,struct_write_packet);
@@ -299,13 +330,20 @@ task axi4_slave_driver_proxy::axi4_write_task();
       `uvm_info(get_type_name(), $sformatf("from_write_class:: struct_cfg =  \n %0p",struct_cfg),UVM_HIGH);
 
       //check for fifo empty if not get the data 
-      if(axi4_slave_write_addr_fifo_h.is_empty) begin
-        `uvm_error(get_type_name(),$sformatf("WRITE_RESP_THREAD::Cannot get write addr data from FIFO as WRITE_ADDR_FIFO is EMPTY"));
+      if((axi4_slave_agent_cfg_h.qos_mode_type == ONLY_WRITE_QOS_MODE_ENABLE) || (axi4_slave_agent_cfg_h.qos_mode_type == WRITE_READ_QOS_MODE_ENABLE)) begin
+        local_slave_addr_tx = local_slave_response_tx;
+        struct_write_packet.bid = awid_queue_for_qos.pop_front();
       end
       else begin
-       axi4_slave_write_addr_fifo_h.get(local_slave_addr_tx);
-       `uvm_info("DEBUG_FIFO",$sformatf("fifo_size = %0d",axi4_slave_write_addr_fifo_h.size()),UVM_HIGH)
-       `uvm_info("DEBUG_FIFO",$sformatf("fifo_used =%0d",axi4_slave_write_addr_fifo_h.used()),UVM_NONE)
+        if(axi4_slave_write_addr_fifo_h.is_empty) begin
+          `uvm_info("DEBUG_FIFO",$sformatf("fifo_size = %0d",axi4_slave_write_addr_fifo_h.size()),UVM_HIGH)
+          `uvm_error(get_type_name(),$sformatf("WRITE_RESP_THREAD::Cannot get write addr data from FIFO as WRITE_ADDR_FIFO is EMPTY"));
+        end
+        else begin
+         axi4_slave_write_addr_fifo_h.get(local_slave_addr_tx);
+         `uvm_info("DEBUG_FIFO",$sformatf("fifo_size = %0d",axi4_slave_write_addr_fifo_h.size()),UVM_HIGH)
+         `uvm_info("DEBUG_FIFO",$sformatf("fifo_used =%0d",axi4_slave_write_addr_fifo_h.used()),UVM_HIGH)
+        end
       end
 
       if(local_slave_addr_tx.awburst == WRITE_FIXED) begin
@@ -439,6 +477,7 @@ task axi4_slave_driver_proxy::axi4_read_task();
       //read address_task
       axi4_slave_drv_bfm_h.axi4_read_address_phase(struct_read_packet,struct_cfg);
 
+
      // Storing data for enabling out_of_order feature
      if(axi4_slave_agent_cfg_h.slave_response_mode == WRITE_READ_RESP_OUT_OF_ORDER || axi4_slave_agent_cfg_h.slave_response_mode == ONLY_READ_RESP_OUT_OF_ORDER) begin
        if(rd_response_id_queue.size() == 0) begin
@@ -461,7 +500,11 @@ task axi4_slave_driver_proxy::axi4_read_task();
       
      //Converting struct into transaction data type
      axi4_slave_seq_item_converter::to_read_class(struct_read_packet,local_slave_tx);
-     `uvm_info("DEBUG_SLAVE_READ_ADDR_PROXY", $sformatf(" to_class_raddr_phase_slave_proxy  \n %p",struct_read_packet), UVM_NONE);
+     `uvm_info("DEBUG_SLAVE_READ_ADDR_PROXY", $sformatf(" to_class_raddr_phase_slave_proxy  \n %p",struct_read_packet), UVM_HIGH);
+
+     if((axi4_slave_agent_cfg_h.qos_mode_type == ONLY_READ_QOS_MODE_ENABLE) || (axi4_slave_agent_cfg_h.qos_mode_type == WRITE_READ_QOS_MODE_ENABLE)) begin
+        qos_read_queue.push_front(local_slave_tx);
+      end
      
      //Putting back the sampled read address data into fifo
      axi4_slave_read_addr_fifo_h.put(local_slave_tx);
@@ -474,10 +517,11 @@ task axi4_slave_driver_proxy::axi4_read_task();
      axi4_slave_tx              local_slave_rdata_tx;
      axi4_slave_tx              local_slave_raddr_tx;
      axi4_slave_tx              local_slave_addr_chk_tx;
+     axi4_slave_tx              qos_value_check_1;
      axi4_slave_tx              packet;
-     axi4_read_transfer_char_s struct_read_packet;
-     axi4_transfer_cfg_s       struct_cfg;
-     int                       total_bytes;
+     axi4_read_transfer_char_s  struct_read_packet;
+     axi4_transfer_cfg_s        struct_cfg;
+     int                        total_bytes;
 
      //returns status of data thread
      rd_data = process::self();
@@ -486,13 +530,37 @@ task axi4_slave_driver_proxy::axi4_read_task();
      //Waiting for the read address thread to complete
      rd_addr.await();
 
-     //Getting the data from read data fifo
-     axi4_slave_read_data_in_fifo_h.get(local_slave_rdata_tx);
+     //Getting the key from semaphore
+     semaphore_read_key.get(1);
 
-     if(axi4_slave_agent_cfg_h.read_data_mode == RANDOM_DATA_MODE || write_read_mode_h == ONLY_READ_DATA) begin
+     if((axi4_slave_agent_cfg_h.qos_mode_type == ONLY_READ_QOS_MODE_ENABLE) || (axi4_slave_agent_cfg_h.qos_mode_type == WRITE_READ_QOS_MODE_ENABLE)) begin
+       if(axi4_slave_agent_cfg_h.read_data_mode == SLAVE_MEM_MODE) begin 
+         wait(completed_initial_txn==1);
+       end
+       if(qos_wait_enable) begin
+         wait(qos_read_queue.size>=2);
+       end
+       qos_wait_enable = 1'b0;
+       qos_value_check_1 = qos_read_queue[$];
+       for(int i=0;i<qos_read_queue.size();i++) begin
+         if(qos_read_queue[i].arqos >= qos_value_check_1.arqos) begin
+           qos_value_check_1 = qos_read_queue[i];
+           read_queue_index = i;
+         end
+       end
+       //Getting the data from read data fifo
+       //axi4_slave_read_data_in_fifo_h.get(local_slave_rdata_tx);
+       //local_slave_rdata_tx.rid = rid_e'(qos_read_queue[read_queue_index].arid);
+       local_slave_rdata_tx =  qos_read_queue[read_queue_index];
+       qos_read_queue.delete(read_queue_index);
+     end
+     else begin
+       //Getting the data from read data fifo
+       axi4_slave_read_data_in_fifo_h.get(local_slave_rdata_tx);
+     end
+
+     if(((axi4_slave_agent_cfg_h.read_data_mode == RANDOM_DATA_MODE) || (write_read_mode_h == ONLY_READ_DATA)) && (axi4_slave_agent_cfg_h.read_data_mode !== SLAVE_MEM_MODE)) begin
        
-       //Getting the key from semaphore
-       semaphore_read_key.get(1);
 
        //Converting transactions into struct data type
        axi4_slave_seq_item_converter::from_read_class(local_slave_rdata_tx,struct_read_packet);
@@ -505,7 +573,7 @@ task axi4_slave_driver_proxy::axi4_read_task();
        //Task to check the out_of_order enable and updates the read structure 
        if((axi4_slave_agent_cfg_h.slave_response_mode == ONLY_READ_RESP_OUT_OF_ORDER) || (axi4_slave_agent_cfg_h.slave_response_mode == WRITE_READ_RESP_OUT_OF_ORDER) ) begin
          out_of_order_for_reads(struct_read_packet);
-         `uvm_info(get_type_name(), $sformatf("from_read_class:: struct_read_packet = \n %0p",struct_read_packet), UVM_NONE); 
+         `uvm_info(get_type_name(), $sformatf("from_read_class:: struct_read_packet = \n %0p",struct_read_packet), UVM_HIGH); 
        end
        
        //read data task
@@ -517,7 +585,7 @@ task axi4_slave_driver_proxy::axi4_read_task();
        wait(completed_initial_txn==1);
        //Converting transactions into struct data type
        axi4_slave_seq_item_converter::from_read_class(local_slave_rdata_tx,struct_read_packet);
-       `uvm_info(get_type_name(), $sformatf("from_read_class:: struct_read_packet = \n %0p",struct_read_packet), UVM_NONE); 
+       `uvm_info(get_type_name(), $sformatf("from_read_class:: struct_read_packet = \n %0p",struct_read_packet), UVM_HIGH); 
  
        //Converting configurations into struct config type
        axi4_slave_cfg_converter::from_class(axi4_slave_agent_cfg_h,struct_cfg);
@@ -525,11 +593,15 @@ task axi4_slave_driver_proxy::axi4_read_task();
 
        if((axi4_slave_agent_cfg_h.slave_response_mode == ONLY_READ_RESP_OUT_OF_ORDER) || (axi4_slave_agent_cfg_h.slave_response_mode == WRITE_READ_RESP_OUT_OF_ORDER) ) begin
          out_of_order_for_reads(struct_read_packet);
-         `uvm_info(get_type_name(), $sformatf("from_read_class:: struct_read_packet = \n %0p",struct_read_packet), UVM_NONE); 
+         `uvm_info(get_type_name(), $sformatf("from_read_class:: struct_read_packet = \n %0p",struct_read_packet), UVM_HIGH); 
        end
 
-      semaphore_read_key.get(1);
-      axi4_slave_read_addr_fifo_h.peek(local_slave_addr_chk_tx);
+     if((axi4_slave_agent_cfg_h.qos_mode_type == ONLY_READ_QOS_MODE_ENABLE) || (axi4_slave_agent_cfg_h.qos_mode_type == WRITE_READ_QOS_MODE_ENABLE)) begin
+        local_slave_addr_chk_tx = local_slave_rdata_tx;
+      end
+      else begin
+        axi4_slave_read_addr_fifo_h.peek(local_slave_addr_chk_tx);
+      end
       total_bytes = (local_slave_addr_chk_tx.arlen+1)*(2**(local_slave_addr_chk_tx.arsize));
       if(local_slave_addr_chk_tx.araddr inside {[axi4_slave_agent_cfg_h.min_address : axi4_slave_agent_cfg_h.max_address]}) begin : ADDR_INSIDE_SLAVE_MEM_RANGE
         if(local_slave_addr_chk_tx.arburst == READ_FIXED) begin
@@ -573,16 +645,18 @@ task axi4_slave_driver_proxy::axi4_read_task();
             end
             //read data task
             axi4_slave_drv_bfm_h.axi4_read_data_phase(struct_read_packet,struct_cfg,axi4_slave_agent_cfg_h.slave_response_mode);
-            `uvm_info("DEBUG_SLAVE_RDATA_PROXY", $sformatf("AFTER :: READ_CHANNEL_PACKET \n%p",struct_read_packet), UVM_NONE);
+            `uvm_info("DEBUG_SLAVE_RDATA_PROXY", $sformatf("AFTER :: READ_CHANNEL_PACKET \n%p",struct_read_packet), UVM_HIGH);
             `uvm_error("AXI4_SLAVE_DRIVER_PROXY",$sformatf("ADDRESS trying to read DOESN'T EXIST in the slave memory... READING DEFAULT VALUES...."));
           end
         end
       end
       else begin : ADDR_NOT_INSIDE_SLAVE_MEM_RANGE
-        for(int depth=0;depth<(((axi4_slave_agent_cfg_h.slave_response_mode == WRITE_READ_RESP_OUT_OF_ORDER) || (axi4_slave_agent_cfg_h.slave_response_mode == ONLY_READ_RESP_OUT_OF_ORDER))  ? (struct_read_packet.arlen+1) : (local_slave_addr_chk_tx.arlen+1));depth++) begin
+        for(int depth=0;depth<(((axi4_slave_agent_cfg_h.slave_response_mode == WRITE_READ_RESP_OUT_OF_ORDER)
+          || (axi4_slave_agent_cfg_h.slave_response_mode == ONLY_READ_RESP_OUT_OF_ORDER) ||
+          (axi4_slave_agent_cfg_h.qos_mode_type == ONLY_READ_QOS_MODE_ENABLE) ||
+          (axi4_slave_agent_cfg_h.qos_mode_type == WRITE_READ_QOS_MODE_ENABLE))  ? (struct_read_packet.arlen+1) : (local_slave_addr_chk_tx.arlen+1));depth++) begin
           struct_read_packet.rresp[depth] = READ_SLVERR; 
         end
-        $display("rspp:%0p,id:%0h,len:%0h",struct_read_packet.rdata,struct_read_packet.arid,struct_read_packet.arlen);
 
         //read data task
         axi4_slave_drv_bfm_h.axi4_read_data_phase(struct_read_packet,struct_cfg,axi4_slave_agent_cfg_h.slave_response_mode);
@@ -591,7 +665,7 @@ task axi4_slave_driver_proxy::axi4_read_task();
      end
      //Calling converter class for reads to convert struct to req
      axi4_slave_seq_item_converter::to_read_class(struct_read_packet,local_slave_rdata_tx);
-     `uvm_info("DEBUG_SLAVE_RDATA_PROXY", $sformatf("AFTER :: READ CHANNEL PACKET \n %s",local_slave_rdata_tx.sprint()), UVM_HIGH);
+     `uvm_info("DEBUG_SLAVE_RDATA_PROXY", $sformatf("AFTER :: READ CHANNEL PACKET \n %s",local_slave_rdata_tx.sprint()), UVM_NONE);
 
      //Getting teh sampled read address from read address fifo
      axi4_slave_read_addr_fifo_h.get(local_slave_raddr_tx);
@@ -622,7 +696,7 @@ endtask : axi4_read_task
 //  struct_packet   - axi4_write_transfer_char_s
 //--------------------------------------------------------------------------------------------
 
-task axi4_slave_driver_proxy::task_memory_write(inout axi4_slave_tx struct_write_packet);
+task axi4_slave_driver_proxy::task_memory_write(input axi4_slave_tx struct_write_packet);
   int lower_addr,end_addr,k_t;
   if(struct_write_packet.awburst == WRITE_FIXED) begin
     for(int j=0;j<(struct_write_packet.awlen+1);j++)begin
@@ -673,7 +747,7 @@ task axi4_slave_driver_proxy::task_memory_write(inout axi4_slave_tx struct_write
 
 endtask : task_memory_write
 
-task axi4_slave_driver_proxy::task_memory_read(input axi4_slave_tx read_pkt,output axi4_read_transfer_char_s struct_read_packet);
+task axi4_slave_driver_proxy::task_memory_read(input axi4_slave_tx read_pkt,ref axi4_read_transfer_char_s struct_read_packet);
   int lower_addr,end_addr,k_t;
   if(read_pkt.arburst == READ_FIXED) begin
     for(int j=0,int k=0;j<(read_pkt.arlen+1);j++)begin
@@ -728,9 +802,8 @@ endtask : task_memory_read
 
 
 task axi4_slave_driver_proxy::out_of_order_for_reads(output axi4_read_transfer_char_s oor_read_data_struct_read_packet);
- $display("Inside_read_OOR");
  wait(axi4_slave_read_addr_fifo_h.size > axi4_slave_agent_cfg_h.get_minimum_transactions); 
- `uvm_info("slave_driver_proxy",$sformatf("fifo_size = %0d",axi4_slave_read_addr_fifo_h.used()),UVM_NONE)
+ `uvm_info("slave_driver_proxy",$sformatf("fifo_size = %0d",axi4_slave_read_addr_fifo_h.used()),UVM_HIGH)
  if(drive_rd_id_cont == 1) begin
    oor_read_data_struct_read_packet = rd_response_id_cont_queue.pop_front(); 
    if(rd_response_id_cont_queue.size()==0) drive_rd_id_cont = 1'b0;

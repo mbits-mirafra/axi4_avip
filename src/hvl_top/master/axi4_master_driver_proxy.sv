@@ -291,8 +291,8 @@ task axi4_master_driver_proxy::axi4_write_task();
           int                        temp_queue_sz;
           int                        diff;
           bit                        modify_qos_index_bit;
+          bit                        disable_b2b_check;
           int                        awid_queue_q[$];
-          int                        temp_var;
 
           //Added the write_data_process to keep track of this write address channel thread
           //self is a static method which creates the write_data_process of type process
@@ -331,19 +331,30 @@ task axi4_master_driver_proxy::axi4_write_task();
                   queue_index = i;
                 end
               end
-              temp_awid = qos_queue[queue_index];
-              for(int j=0;j<qos_queue.size();j++) begin
-                if(temp_awid.awid == qos_queue[j].awid) begin
-                  queue_index = j;
+              if(qos_queue.size>1 && enable_qos_check_for_initial_txn == -1) begin
+                for(int k=0;k<qos_queue.size();k++) begin
+                  if(qos_queue[$].awid == qos_queue[k].awid) begin
+                    if(k==qos_queue.size-1) disable_b2b_check = 1;
+                  end
+                  else begin
+                    disable_b2b_check = 0;
+                  end
                 end
-                else begin
-                  break;
+              end
+              temp_awid = qos_queue[queue_index];
+              if(disable_b2b_check == 0) begin
+                for(int j=0;j<qos_queue.size();j++) begin
+                  if(temp_awid.awid == qos_queue[j].awid) begin
+                    queue_index = j;
+                  end
+                  else begin
+                    break;
+                  end
                 end
               end
             end
             if(enable_qos_check_for_initial_txn == 0) begin
-              if(qos_queue[$].awid == qos_queue[$-1].awid) begin
-                temp_var=qos_queue[$].awid;
+              if(qos_queue[$].awid == qos_queue[$-1].awid && awid_queue_for_qos[$] == qos_queue[$-1].awid) begin
                 awid_queue_q = qos_queue.find_last_index with (item.awid == qos_queue[$].awid);
                 queue_index = awid_queue_q[$]; 
                 enable_qos_check_for_initial_txn = -1;

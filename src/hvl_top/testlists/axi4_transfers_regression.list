@@ -82,3 +82,5 @@ axi4_non_blocking_only_write_response_out_of_order_test
 axi4_non_blocking_only_read_response_out_of_order_test
 axi4_non_blocking_write_read_response_out_of_order_test
 
+#QOS
+axi4_non_blocking_qos_write_read_test

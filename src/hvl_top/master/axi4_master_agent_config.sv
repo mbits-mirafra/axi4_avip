@@ -59,6 +59,9 @@ class axi4_master_agent_config extends uvm_object;
   //Used to store the read data type
   read_data_type_mode_e read_data_mode;
 
+  //Used to set the qos mode
+  qos_mode_e qos_mode_type;
+
 
   //-------------------------------------------------------
   // Externally defined Tasks and Functions
@@ -121,6 +124,7 @@ function void axi4_master_agent_config::do_print(uvm_printer printer);
     printer.print_field($sformatf("master_max_addr_range_array[%0d]",i),master_max_addr_range_array[i],
                                    $bits(master_max_addr_range_array[i]),UVM_HEX);
   end
+  printer.print_string ("QoS_mode",qos_mode_type.name());
 
   printer.print_field("wait_count_write_address_channel",wait_count_write_address_channel,
                        $bits(wait_count_write_address_channel),UVM_DEC);

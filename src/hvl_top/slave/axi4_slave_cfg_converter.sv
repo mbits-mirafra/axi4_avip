@@ -34,6 +34,8 @@ endfunction : new
 function void axi4_slave_cfg_converter::from_class(input axi4_slave_agent_config input_conv,output axi4_transfer_cfg_s output_conv);
   output_conv.min_address=input_conv.min_address;
   output_conv.max_address=input_conv.max_address;
+  output_conv.slave_response_mode = input_conv.slave_response_mode;
+  output_conv.qos_mode_type = input_conv.qos_mode_type;
 endfunction: from_class   
  
  //--------------------------------------------------------------------------------------------      

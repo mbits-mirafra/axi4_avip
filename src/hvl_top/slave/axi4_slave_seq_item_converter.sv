@@ -258,9 +258,11 @@ function void axi4_slave_seq_item_converter::to_read_class( input axi4_read_tran
   $cast(output_conv_h.arprot,input_conv_h.arprot);
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("After randomize arprot =  %b",output_conv_h.arprot),UVM_FULL);
 
-  $cast(output_conv_h.rresp,input_conv_h.rresp);
+  foreach(input_conv_h.rresp[i]) begin
+    $cast(output_conv_h.rresp,input_conv_h.rresp[i]);
+  end
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("After randomize rresp =  %b",output_conv_h.rresp),UVM_FULL);
-  
+
   output_conv_h.araddr = input_conv_h.araddr;
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("after reading araddr =  %0h",output_conv_h.araddr),UVM_FULL);
 

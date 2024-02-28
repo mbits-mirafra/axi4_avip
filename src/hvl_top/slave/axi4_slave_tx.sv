@@ -43,7 +43,7 @@ class axi4_slave_tx extends uvm_sequence_item;
 
   //Variable : awqos
   //Used to send the write address quality os service
-  bit awqos;
+  bit [3:0] awqos;
 
   //Variable : addr_write_prot
   //used for different access
@@ -128,7 +128,7 @@ class axi4_slave_tx extends uvm_sequence_item;
   
   //Variable : arqos
   //Used to send the read address quality of service
-  rand bit arqos;
+  bit [3:0] arqos;
 
   //-------------------------------------------------------
   // READ DATA CHANNEL SIGNALS
@@ -210,6 +210,10 @@ class axi4_slave_tx extends uvm_sequence_item;
   //Constraint : rresp_c1
   //Adding constraint to select the type of read response
   constraint rresp_c1 {soft rresp == READ_OKAY;}
+
+  //Constraint : rresp_c1
+  //Adding constraint to select the type of read response
+  constraint bresp_c1 {soft bresp == WRITE_OKAY;}
 
   //Constraint : wait_states_c1             
   //To randomise the wait states in range of 0 to 3

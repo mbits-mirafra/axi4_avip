@@ -142,6 +142,10 @@ class axi4_scoreboard extends uvm_scoreboard;
   semaphore read_address_key;
   semaphore read_data_key;
 
+  //Variable : axi4_env_cfg_h
+  //Declaring handle for axi4_env_config_object
+  axi4_env_config axi4_env_cfg_h;
+  
 
   //-------------------------------------------------------
   // Externally defined Tasks and Functions
@@ -747,333 +751,336 @@ function void axi4_scoreboard::check_phase(uvm_phase phase);
   //-------------------------------------------------------
   // Write_Address_Channel comparision
   //-------------------------------------------------------
-  if ((byte_data_cmp_verified_awid_count != 0) && (byte_data_cmp_failed_awid_count == 0)) begin
-	  `uvm_info (get_type_name(), $sformatf ("awid count comparisions are succesful"),UVM_HIGH);
-  end
-  else begin
-    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_awid_count :%0d",
-                                            byte_data_cmp_verified_awid_count),UVM_HIGH);
-	  `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_awid_count : %0d", 
-                                            byte_data_cmp_failed_awid_count),UVM_HIGH);
-    `uvm_error (get_type_name(), $sformatf ("awid count comparisions are failed"));
-  end
+  if(axi4_env_cfg_h.write_read_mode_h == ONLY_WRITE_DATA || axi4_env_cfg_h.write_read_mode_h == WRITE_READ_DATA) begin
+    if ((byte_data_cmp_verified_awid_count != 0) && (byte_data_cmp_failed_awid_count == 0)) begin
+	    `uvm_info (get_type_name(), $sformatf ("awid count comparisions are succesful"),UVM_HIGH);
+    end
+    else begin
+      `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_awid_count :%0d",
+                                              byte_data_cmp_verified_awid_count),UVM_HIGH);
+	    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_awid_count : %0d", 
+                                              byte_data_cmp_failed_awid_count),UVM_HIGH);
+      `uvm_error (get_type_name(), $sformatf ("awid count comparisions are failed"));
+    end
 
-  if ((byte_data_cmp_verified_awaddr_count != 0) && (byte_data_cmp_failed_awaddr_count == 0)) begin
-	  `uvm_info (get_type_name(), $sformatf ("awaddr count comparisions are succesful"),UVM_HIGH);
-  end
-  else begin
-    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_awaddr_count :%0d",
-                                            byte_data_cmp_verified_awaddr_count),UVM_HIGH);
-	  `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_awaddr_count : %0d", 
-                                            byte_data_cmp_failed_awaddr_count),UVM_HIGH);
-    `uvm_error (get_type_name(), $sformatf ("awaddr count comparisions are failed"));
-  end
+    if ((byte_data_cmp_verified_awaddr_count != 0) && (byte_data_cmp_failed_awaddr_count == 0)) begin
+	    `uvm_info (get_type_name(), $sformatf ("awaddr count comparisions are succesful"),UVM_HIGH);
+    end
+    else begin
+      `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_awaddr_count :%0d",
+                                              byte_data_cmp_verified_awaddr_count),UVM_HIGH);
+	    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_awaddr_count : %0d", 
+                                              byte_data_cmp_failed_awaddr_count),UVM_HIGH);
+      `uvm_error (get_type_name(), $sformatf ("awaddr count comparisions are failed"));
+    end
 
-  if ((byte_data_cmp_verified_awsize_count != 0) && (byte_data_cmp_failed_awsize_count == 0)) begin
-	  `uvm_info (get_type_name(), $sformatf ("awsize count comparisions are succesful"),UVM_HIGH);
-  end
-  else begin
-    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_awsize_count :%0d",
-                                            byte_data_cmp_verified_awsize_count),UVM_HIGH);
-	  `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_awsize_count : %0d", 
-                                            byte_data_cmp_failed_awsize_count),UVM_HIGH);
-    `uvm_error (get_type_name(), $sformatf ("awsize count comparisions are failed"));
-  end
+    if ((byte_data_cmp_verified_awsize_count != 0) && (byte_data_cmp_failed_awsize_count == 0)) begin
+	    `uvm_info (get_type_name(), $sformatf ("awsize count comparisions are succesful"),UVM_HIGH);
+    end
+    else begin
+      `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_awsize_count :%0d",
+                                              byte_data_cmp_verified_awsize_count),UVM_HIGH);
+	    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_awsize_count : %0d", 
+                                              byte_data_cmp_failed_awsize_count),UVM_HIGH);
+      `uvm_error (get_type_name(), $sformatf ("awsize count comparisions are failed"));
+    end
 
-  if ((byte_data_cmp_verified_awlen_count != 0) && (byte_data_cmp_failed_awlen_count == 0)) begin
-	  `uvm_info (get_type_name(), $sformatf ("awlen count comparisions are succesful"),UVM_HIGH);
-  end
-  else begin
-    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_awlen_count :%0d",
-                                            byte_data_cmp_verified_awlen_count),UVM_HIGH);
-	  `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_awlen_count : %0d", 
-                                            byte_data_cmp_failed_awlen_count),UVM_HIGH);
-    `uvm_error (get_type_name(), $sformatf ("awlen count comparisions are failed"));
-  end
-  
-  if ((byte_data_cmp_verified_awburst_count != 0) && (byte_data_cmp_failed_awburst_count == 0)) begin
-	  `uvm_info (get_type_name(), $sformatf ("awburst count comparisions are succesful"),UVM_HIGH);
-  end
-  else begin
-    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_awburst_count :%0d",
-                                            byte_data_cmp_verified_awburst_count),UVM_HIGH);
-	  `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_awburst_count : %0d", 
-                                            byte_data_cmp_failed_awburst_count),UVM_HIGH);
-    `uvm_error (get_type_name(), $sformatf ("awburst count comparisions are failed"));
-  end
-  
-  if ((byte_data_cmp_verified_awcache_count != 0) && (byte_data_cmp_failed_awcache_count == 0)) begin
-	  `uvm_info (get_type_name(), $sformatf ("awcache count comparisions are succesful"),UVM_HIGH);
-  end
-  else begin
-    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_awcache_count :%0d",
-                                            byte_data_cmp_verified_awcache_count),UVM_HIGH);
-	  `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_awcache_count : %0d", 
-                                            byte_data_cmp_failed_awcache_count),UVM_HIGH);
-    `uvm_error (get_type_name(), $sformatf ("awcache count comparisions are failed"));
-  end
-  
-  if ((byte_data_cmp_verified_awlock_count != 0) && (byte_data_cmp_failed_awlock_count == 0)) begin
-	  `uvm_info (get_type_name(), $sformatf ("awlock count comparisions are succesful"),UVM_HIGH);
-  end
-  else begin
-    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_awlock_count :%0d",
-                                            byte_data_cmp_verified_awlock_count),UVM_HIGH);
-	  `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_awlock_count : %0d", 
-                                            byte_data_cmp_failed_awlock_count),UVM_HIGH);
-    `uvm_error (get_type_name(), $sformatf ("awlock count comparisions are failed"));
-  end
-  
-  if ((byte_data_cmp_verified_awprot_count != 0) && (byte_data_cmp_failed_awprot_count == 0)) begin
-	  `uvm_info (get_type_name(), $sformatf ("awprot count comparisions are succesful"),UVM_HIGH);
-  end
-  else begin
-    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_awprot_count :%0d",
-                                            byte_data_cmp_verified_awprot_count),UVM_HIGH);
-	  `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_awprot_count : %0d", 
-                                            byte_data_cmp_failed_awprot_count),UVM_HIGH);
-    `uvm_error (get_type_name(), $sformatf ("awprot count comparisions are failed"));
-  end
-  
-  //-------------------------------------------------------
-  // Write_Data_Channel comparision
-  //-------------------------------------------------------
-  
-  if ((byte_data_cmp_verified_wdata_count != 0) && (byte_data_cmp_failed_wdata_count == 0)) begin
-	  `uvm_info (get_type_name(), $sformatf ("wdata count comparisions are succesful"),UVM_HIGH);
-  end
-  else begin
-    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_wdata_count :%0d",
-                                            byte_data_cmp_verified_wdata_count),UVM_HIGH);
-	  `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_wdata_count : %0d", 
-                                            byte_data_cmp_failed_wdata_count),UVM_HIGH);
-    `uvm_error (get_type_name(), $sformatf ("wdata count comparisions are failed"));
-  end 
-
-
-  if ((byte_data_cmp_verified_wstrb_count != 0) && (byte_data_cmp_failed_wstrb_count == 0)) begin
-	  `uvm_info (get_type_name(), $sformatf ("wstrb count comparisions are succesful"),UVM_HIGH);
-  end
-  else begin
-    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_wstrb_count :%0d",
-                                            byte_data_cmp_verified_wstrb_count),UVM_HIGH);
-	  `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_wstrb_count : %0d", 
-                                            byte_data_cmp_failed_wstrb_count),UVM_HIGH);
-    `uvm_error (get_type_name(), $sformatf ("wstrb count comparisions are failed"));
-  end 
+    if ((byte_data_cmp_verified_awlen_count != 0) && (byte_data_cmp_failed_awlen_count == 0)) begin
+	    `uvm_info (get_type_name(), $sformatf ("awlen count comparisions are succesful"),UVM_HIGH);
+    end
+    else begin
+      `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_awlen_count :%0d",
+                                              byte_data_cmp_verified_awlen_count),UVM_HIGH);
+	    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_awlen_count : %0d", 
+                                              byte_data_cmp_failed_awlen_count),UVM_HIGH);
+      `uvm_error (get_type_name(), $sformatf ("awlen count comparisions are failed"));
+    end
+    
+    if ((byte_data_cmp_verified_awburst_count != 0) && (byte_data_cmp_failed_awburst_count == 0)) begin
+	    `uvm_info (get_type_name(), $sformatf ("awburst count comparisions are succesful"),UVM_HIGH);
+    end
+    else begin
+      `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_awburst_count :%0d",
+                                              byte_data_cmp_verified_awburst_count),UVM_HIGH);
+	    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_awburst_count : %0d", 
+                                              byte_data_cmp_failed_awburst_count),UVM_HIGH);
+      `uvm_error (get_type_name(), $sformatf ("awburst count comparisions are failed"));
+    end
+    
+    if ((byte_data_cmp_verified_awcache_count != 0) && (byte_data_cmp_failed_awcache_count == 0)) begin
+	    `uvm_info (get_type_name(), $sformatf ("awcache count comparisions are succesful"),UVM_HIGH);
+    end
+    else begin
+      `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_awcache_count :%0d",
+                                              byte_data_cmp_verified_awcache_count),UVM_HIGH);
+	    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_awcache_count : %0d", 
+                                              byte_data_cmp_failed_awcache_count),UVM_HIGH);
+      `uvm_error (get_type_name(), $sformatf ("awcache count comparisions are failed"));
+    end
+    
+    if ((byte_data_cmp_verified_awlock_count != 0) && (byte_data_cmp_failed_awlock_count == 0)) begin
+	    `uvm_info (get_type_name(), $sformatf ("awlock count comparisions are succesful"),UVM_HIGH);
+    end
+    else begin
+      `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_awlock_count :%0d",
+                                              byte_data_cmp_verified_awlock_count),UVM_HIGH);
+	    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_awlock_count : %0d", 
+                                              byte_data_cmp_failed_awlock_count),UVM_HIGH);
+      `uvm_error (get_type_name(), $sformatf ("awlock count comparisions are failed"));
+    end
+    
+    if ((byte_data_cmp_verified_awprot_count != 0) && (byte_data_cmp_failed_awprot_count == 0)) begin
+	    `uvm_info (get_type_name(), $sformatf ("awprot count comparisions are succesful"),UVM_HIGH);
+    end
+    else begin
+      `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_awprot_count :%0d",
+                                              byte_data_cmp_verified_awprot_count),UVM_HIGH);
+	    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_awprot_count : %0d", 
+                                              byte_data_cmp_failed_awprot_count),UVM_HIGH);
+      `uvm_error (get_type_name(), $sformatf ("awprot count comparisions are failed"));
+    end
+    
+    //-------------------------------------------------------
+    // Write_Data_Channel comparision
+    //-------------------------------------------------------
+    
+    if ((byte_data_cmp_verified_wdata_count != 0) && (byte_data_cmp_failed_wdata_count == 0)) begin
+	    `uvm_info (get_type_name(), $sformatf ("wdata count comparisions are succesful"),UVM_HIGH);
+    end
+    else begin
+      `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_wdata_count :%0d",
+                                              byte_data_cmp_verified_wdata_count),UVM_HIGH);
+	    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_wdata_count : %0d", 
+                                              byte_data_cmp_failed_wdata_count),UVM_HIGH);
+      `uvm_error (get_type_name(), $sformatf ("wdata count comparisions are failed"));
+    end 
 
 
-  if ((byte_data_cmp_verified_wuser_count != 0) && (byte_data_cmp_failed_wuser_count == 0)) begin
-	  `uvm_info (get_type_name(), $sformatf ("wuser count comparisions are succesful"),UVM_HIGH);
+    if ((byte_data_cmp_verified_wstrb_count != 0) && (byte_data_cmp_failed_wstrb_count == 0)) begin
+	    `uvm_info (get_type_name(), $sformatf ("wstrb count comparisions are succesful"),UVM_HIGH);
+    end
+    else begin
+      `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_wstrb_count :%0d",
+                                              byte_data_cmp_verified_wstrb_count),UVM_HIGH);
+	    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_wstrb_count : %0d", 
+                                              byte_data_cmp_failed_wstrb_count),UVM_HIGH);
+      `uvm_error (get_type_name(), $sformatf ("wstrb count comparisions are failed"));
+    end 
+
+
+    if ((byte_data_cmp_verified_wuser_count != 0) && (byte_data_cmp_failed_wuser_count == 0)) begin
+	    `uvm_info (get_type_name(), $sformatf ("wuser count comparisions are succesful"),UVM_HIGH);
+    end
+    else begin
+      `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_wuser_count :%0d",
+                                              byte_data_cmp_verified_wuser_count),UVM_HIGH);
+	    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_wuser_count : %0d", 
+                                              byte_data_cmp_failed_wuser_count),UVM_HIGH);
+      `uvm_error (get_type_name(), $sformatf ("wuser count comparisions are failed"));
+    end 
+
+    //-------------------------------------------------------
+    // Write_Response_Channel comparision
+    //-------------------------------------------------------
+
+
+    if ((byte_data_cmp_verified_bid_count != 0) && (byte_data_cmp_failed_bid_count == 0)) begin
+	    `uvm_info (get_type_name(), $sformatf ("bid count comparisions are succesful"),UVM_HIGH);
+    end
+    else begin
+      `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_bid_count :%0d",
+                                              byte_data_cmp_verified_bid_count),UVM_HIGH);
+	    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_bid_count : %0d", 
+                                              byte_data_cmp_failed_bid_count),UVM_HIGH);
+      `uvm_error (get_type_name(), $sformatf ("bid count comparisions are failed"));
+    end 
+
+
+    if ((byte_data_cmp_verified_bresp_count != 0) && (byte_data_cmp_failed_bresp_count == 0)) begin
+	    `uvm_info (get_type_name(), $sformatf ("bresp count comparisions are succesful"),UVM_HIGH);
+    end
+    else begin
+      `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_bresp_count :%0d",
+                                              byte_data_cmp_verified_bresp_count),UVM_HIGH);
+	    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_bresp_count : %0d", 
+                                              byte_data_cmp_failed_bresp_count),UVM_HIGH);
+      `uvm_error (get_type_name(), $sformatf ("bresp count comparisions are failed"));
+    end 
+
+
+    if ((byte_data_cmp_verified_buser_count != 0) && (byte_data_cmp_failed_buser_count == 0)) begin
+	    `uvm_info (get_type_name(), $sformatf ("buser count comparisions are succesful"),UVM_HIGH);
+    end
+    else begin
+      `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_buser_count :%0d",
+                                              byte_data_cmp_verified_buser_count),UVM_HIGH);
+	    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_buser_count : %0d", 
+                                              byte_data_cmp_failed_buser_count),UVM_HIGH);
+      `uvm_error (get_type_name(), $sformatf ("buser count comparisions are failed"));
+    end 
   end
-  else begin
-    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_wuser_count :%0d",
-                                            byte_data_cmp_verified_wuser_count),UVM_HIGH);
-	  `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_wuser_count : %0d", 
-                                            byte_data_cmp_failed_wuser_count),UVM_HIGH);
-    `uvm_error (get_type_name(), $sformatf ("wuser count comparisions are failed"));
-  end 
-
-  //-------------------------------------------------------
-  // Write_Response_Channel comparision
-  //-------------------------------------------------------
-
-
-  if ((byte_data_cmp_verified_bid_count != 0) && (byte_data_cmp_failed_bid_count == 0)) begin
-	  `uvm_info (get_type_name(), $sformatf ("bid count comparisions are succesful"),UVM_HIGH);
-  end
-  else begin
-    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_bid_count :%0d",
-                                            byte_data_cmp_verified_bid_count),UVM_HIGH);
-	  `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_bid_count : %0d", 
-                                            byte_data_cmp_failed_bid_count),UVM_HIGH);
-    `uvm_error (get_type_name(), $sformatf ("bid count comparisions are failed"));
-  end 
-
-
-  if ((byte_data_cmp_verified_bresp_count != 0) && (byte_data_cmp_failed_bresp_count == 0)) begin
-	  `uvm_info (get_type_name(), $sformatf ("bresp count comparisions are succesful"),UVM_HIGH);
-  end
-  else begin
-    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_bresp_count :%0d",
-                                            byte_data_cmp_verified_bresp_count),UVM_HIGH);
-	  `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_bresp_count : %0d", 
-                                            byte_data_cmp_failed_bresp_count),UVM_HIGH);
-    `uvm_error (get_type_name(), $sformatf ("bresp count comparisions are failed"));
-  end 
-
-
-  if ((byte_data_cmp_verified_buser_count != 0) && (byte_data_cmp_failed_buser_count == 0)) begin
-	  `uvm_info (get_type_name(), $sformatf ("buser count comparisions are succesful"),UVM_HIGH);
-  end
-  else begin
-    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_buser_count :%0d",
-                                            byte_data_cmp_verified_buser_count),UVM_HIGH);
-	  `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_buser_count : %0d", 
-                                            byte_data_cmp_failed_buser_count),UVM_HIGH);
-    `uvm_error (get_type_name(), $sformatf ("buser count comparisions are failed"));
-  end 
 
   //-------------------------------------------------------
   // Read_Address_Channel comparision
   //-------------------------------------------------------
+  if(axi4_env_cfg_h.write_read_mode_h == ONLY_READ_DATA || axi4_env_cfg_h.write_read_mode_h == WRITE_READ_DATA) begin
+    if ((byte_data_cmp_verified_arid_count != 0) && (byte_data_cmp_failed_arid_count == 0)) begin
+	    `uvm_info (get_type_name(), $sformatf ("arid count comparisions are succesful"),UVM_HIGH);
+    end
+    else begin
+      `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_arid_count :%0d",
+                                              byte_data_cmp_verified_arid_count),UVM_HIGH);
+	    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_arid_count : %0d", 
+                                              byte_data_cmp_failed_arid_count),UVM_HIGH);
+      `uvm_error (get_type_name(), $sformatf ("arid count comparisions are failed"));
+    end
 
-  if ((byte_data_cmp_verified_arid_count != 0) && (byte_data_cmp_failed_arid_count == 0)) begin
-	  `uvm_info (get_type_name(), $sformatf ("arid count comparisions are succesful"),UVM_HIGH);
-  end
-  else begin
-    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_arid_count :%0d",
-                                            byte_data_cmp_verified_arid_count),UVM_HIGH);
-	  `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_arid_count : %0d", 
-                                            byte_data_cmp_failed_arid_count),UVM_HIGH);
-    `uvm_error (get_type_name(), $sformatf ("arid count comparisions are failed"));
-  end
+    if ((byte_data_cmp_verified_araddr_count != 0) && (byte_data_cmp_failed_araddr_count == 0)) begin
+	    `uvm_info (get_type_name(), $sformatf ("araddr count comparisions are succesful"),UVM_HIGH);
+    end
+    else begin
+      `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_araddr_count :%0d",
+                                              byte_data_cmp_verified_araddr_count),UVM_HIGH);
+	    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_araddr_count : %0d", 
+                                              byte_data_cmp_failed_araddr_count),UVM_HIGH);
+      `uvm_error (get_type_name(), $sformatf ("araddr count comparisions are failed"));
+    end
 
-  if ((byte_data_cmp_verified_araddr_count != 0) && (byte_data_cmp_failed_araddr_count == 0)) begin
-	  `uvm_info (get_type_name(), $sformatf ("araddr count comparisions are succesful"),UVM_HIGH);
-  end
-  else begin
-    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_araddr_count :%0d",
-                                            byte_data_cmp_verified_araddr_count),UVM_HIGH);
-	  `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_araddr_count : %0d", 
-                                            byte_data_cmp_failed_araddr_count),UVM_HIGH);
-    `uvm_error (get_type_name(), $sformatf ("araddr count comparisions are failed"));
-  end
+    if ((byte_data_cmp_verified_arsize_count != 0) && (byte_data_cmp_failed_arsize_count == 0)) begin
+	    `uvm_info (get_type_name(), $sformatf ("arsize count comparisions are succesful"),UVM_HIGH);
+    end
+    else begin
+      `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_arsize_count :%0d",
+                                              byte_data_cmp_verified_arsize_count),UVM_HIGH);
+	    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_arsize_count : %0d", 
+                                              byte_data_cmp_failed_arsize_count),UVM_HIGH);
+      `uvm_error (get_type_name(), $sformatf ("arsize count comparisions are failed"));
+    end
 
-  if ((byte_data_cmp_verified_arsize_count != 0) && (byte_data_cmp_failed_arsize_count == 0)) begin
-	  `uvm_info (get_type_name(), $sformatf ("arsize count comparisions are succesful"),UVM_HIGH);
-  end
-  else begin
-    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_arsize_count :%0d",
-                                            byte_data_cmp_verified_arsize_count),UVM_HIGH);
-	  `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_arsize_count : %0d", 
-                                            byte_data_cmp_failed_arsize_count),UVM_HIGH);
-    `uvm_error (get_type_name(), $sformatf ("arsize count comparisions are failed"));
-  end
-
-  if ((byte_data_cmp_verified_arlen_count != 0) && (byte_data_cmp_failed_arlen_count == 0)) begin
-	  `uvm_info (get_type_name(), $sformatf ("arlen count comparisions are succesful"),UVM_HIGH);
-  end
-  else begin
-    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_arlen_count :%0d",
-                                            byte_data_cmp_verified_arlen_count),UVM_HIGH);
-	  `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_arlen_count : %0d", 
-                                            byte_data_cmp_failed_arlen_count),UVM_HIGH);
-    `uvm_error (get_type_name(), $sformatf ("arlen count comparisions are failed"));
-  end
-  
-  if ((byte_data_cmp_verified_arburst_count != 0) && (byte_data_cmp_failed_arburst_count == 0)) begin
-	  `uvm_info (get_type_name(), $sformatf ("arburst count comparisions are succesful"),UVM_HIGH);
-  end
-  else begin
-    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_arburst_count :%0d",
-                                            byte_data_cmp_verified_arburst_count),UVM_HIGH);
-	  `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_arburst_count : %0d", 
-                                            byte_data_cmp_failed_arburst_count),UVM_HIGH);
-    `uvm_error (get_type_name(), $sformatf ("arburst count comparisions are failed"));
-  end
-  
-  if ((byte_data_cmp_verified_arcache_count != 0) && (byte_data_cmp_failed_arcache_count == 0)) begin
-	  `uvm_info (get_type_name(), $sformatf ("arcache count comparisions are succesful"),UVM_HIGH);
-  end
-  else begin
-    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_arcache_count :%0d",
-                                            byte_data_cmp_verified_arcache_count),UVM_HIGH);
-	  `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_arcache_count : %0d", 
-                                            byte_data_cmp_failed_arcache_count),UVM_HIGH);
-    `uvm_error (get_type_name(), $sformatf ("arcache count comparisions are failed"));
-  end
-  
-  if ((byte_data_cmp_verified_arlock_count != 0) && (byte_data_cmp_failed_arlock_count == 0)) begin
-	  `uvm_info (get_type_name(), $sformatf ("arlock count comparisions are succesful"),UVM_HIGH);
-  end
-  else begin
-    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_arlock_count :%0d",
-                                            byte_data_cmp_verified_arlock_count),UVM_HIGH);
-	  `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_arlock_count : %0d", 
-                                            byte_data_cmp_failed_arlock_count),UVM_HIGH);
-    `uvm_error (get_type_name(), $sformatf ("arlock count comparisions are failed"));
-  end
-  
-  if ((byte_data_cmp_verified_arprot_count != 0) && (byte_data_cmp_failed_arprot_count == 0)) begin
-	  `uvm_info (get_type_name(), $sformatf ("arprot count comparisions are succesful"),UVM_HIGH);
-  end
-  else begin
-    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_arprot_count :%0d",
-                                            byte_data_cmp_verified_arprot_count),UVM_HIGH);
-	  `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_arprot_count : %0d", 
-                                            byte_data_cmp_failed_arprot_count),UVM_HIGH);
-    `uvm_error (get_type_name(), $sformatf ("arprot count comparisions are failed"));
-  end
+    if ((byte_data_cmp_verified_arlen_count != 0) && (byte_data_cmp_failed_arlen_count == 0)) begin
+	    `uvm_info (get_type_name(), $sformatf ("arlen count comparisions are succesful"),UVM_HIGH);
+    end
+    else begin
+      `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_arlen_count :%0d",
+                                              byte_data_cmp_verified_arlen_count),UVM_HIGH);
+	    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_arlen_count : %0d", 
+                                              byte_data_cmp_failed_arlen_count),UVM_HIGH);
+      `uvm_error (get_type_name(), $sformatf ("arlen count comparisions are failed"));
+    end
+    
+    if ((byte_data_cmp_verified_arburst_count != 0) && (byte_data_cmp_failed_arburst_count == 0)) begin
+	    `uvm_info (get_type_name(), $sformatf ("arburst count comparisions are succesful"),UVM_HIGH);
+    end
+    else begin
+      `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_arburst_count :%0d",
+                                              byte_data_cmp_verified_arburst_count),UVM_HIGH);
+	    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_arburst_count : %0d", 
+                                              byte_data_cmp_failed_arburst_count),UVM_HIGH);
+      `uvm_error (get_type_name(), $sformatf ("arburst count comparisions are failed"));
+    end
+    
+    if ((byte_data_cmp_verified_arcache_count != 0) && (byte_data_cmp_failed_arcache_count == 0)) begin
+	    `uvm_info (get_type_name(), $sformatf ("arcache count comparisions are succesful"),UVM_HIGH);
+    end
+    else begin
+      `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_arcache_count :%0d",
+                                              byte_data_cmp_verified_arcache_count),UVM_HIGH);
+	    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_arcache_count : %0d", 
+                                              byte_data_cmp_failed_arcache_count),UVM_HIGH);
+      `uvm_error (get_type_name(), $sformatf ("arcache count comparisions are failed"));
+    end
+    
+    if ((byte_data_cmp_verified_arlock_count != 0) && (byte_data_cmp_failed_arlock_count == 0)) begin
+	    `uvm_info (get_type_name(), $sformatf ("arlock count comparisions are succesful"),UVM_HIGH);
+    end
+    else begin
+      `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_arlock_count :%0d",
+                                              byte_data_cmp_verified_arlock_count),UVM_HIGH);
+	    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_arlock_count : %0d", 
+                                              byte_data_cmp_failed_arlock_count),UVM_HIGH);
+      `uvm_error (get_type_name(), $sformatf ("arlock count comparisions are failed"));
+    end
+    
+    if ((byte_data_cmp_verified_arprot_count != 0) && (byte_data_cmp_failed_arprot_count == 0)) begin
+	    `uvm_info (get_type_name(), $sformatf ("arprot count comparisions are succesful"),UVM_HIGH);
+    end
+    else begin
+      `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_arprot_count :%0d",
+                                              byte_data_cmp_verified_arprot_count),UVM_HIGH);
+	    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_arprot_count : %0d", 
+                                              byte_data_cmp_failed_arprot_count),UVM_HIGH);
+      `uvm_error (get_type_name(), $sformatf ("arprot count comparisions are failed"));
+    end
  
-  if ((byte_data_cmp_verified_arregion_count != 0) && (byte_data_cmp_failed_arregion_count == 0)) begin
-	  `uvm_info (get_type_name(), $sformatf ("arregion count comparisions are succesful"),UVM_HIGH);
-  end
-  else begin
-    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_arregion_count :%0d",
-                                            byte_data_cmp_verified_arregion_count),UVM_HIGH);
-	  `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_arregion_count : %0d", 
-                                            byte_data_cmp_failed_arregion_count),UVM_HIGH);
-    `uvm_error (get_type_name(), $sformatf ("arregion count comparisions are failed"));
-  end
+    if ((byte_data_cmp_verified_arregion_count != 0) && (byte_data_cmp_failed_arregion_count == 0)) begin
+	    `uvm_info (get_type_name(), $sformatf ("arregion count comparisions are succesful"),UVM_HIGH);
+    end
+    else begin
+      `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_arregion_count :%0d",
+                                              byte_data_cmp_verified_arregion_count),UVM_HIGH);
+	    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_arregion_count : %0d", 
+                                              byte_data_cmp_failed_arregion_count),UVM_HIGH);
+      `uvm_error (get_type_name(), $sformatf ("arregion count comparisions are failed"));
+    end
 
-  if ((byte_data_cmp_verified_arqos_count != 0) && (byte_data_cmp_failed_arqos_count == 0)) begin
-	  `uvm_info (get_type_name(), $sformatf ("arqos count comparisions are succesful"),UVM_HIGH);
-  end
-  else begin
-    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_arqos_count :%0d",
-                                            byte_data_cmp_verified_arqos_count),UVM_HIGH);
-	  `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_arqos_count : %0d", 
-                                            byte_data_cmp_failed_arqos_count),UVM_HIGH);
-    `uvm_error (get_type_name(), $sformatf ("arqos count comparisions are failed"));
-  end 
+    if ((byte_data_cmp_verified_arqos_count != 0) && (byte_data_cmp_failed_arqos_count == 0)) begin
+	    `uvm_info (get_type_name(), $sformatf ("arqos count comparisions are succesful"),UVM_HIGH);
+    end
+    else begin
+      `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_arqos_count :%0d",
+                                              byte_data_cmp_verified_arqos_count),UVM_HIGH);
+	    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_arqos_count : %0d", 
+                                              byte_data_cmp_failed_arqos_count),UVM_HIGH);
+      `uvm_error (get_type_name(), $sformatf ("arqos count comparisions are failed"));
+    end 
 
-  //-------------------------------------------------------
-  // Read_Data_Channel comparision
-  //-------------------------------------------------------
-  if ((byte_data_cmp_verified_rid_count != 0) && (byte_data_cmp_failed_rid_count == 0)) begin
-	  `uvm_info (get_type_name(), $sformatf ("rid count comparisions are succesful"),UVM_HIGH);
-  end
-  else begin
-    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_rid_count :%0d",
-                                            byte_data_cmp_verified_rid_count),UVM_HIGH);
-	  `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_rid_count : %0d", 
-                                            byte_data_cmp_failed_rid_count),UVM_HIGH);
-    `uvm_error (get_type_name(), $sformatf ("rid count comparisions are failed"));
-  end
+    //-------------------------------------------------------
+    // Read_Data_Channel comparision
+    //-------------------------------------------------------
+    if ((byte_data_cmp_verified_rid_count != 0) && (byte_data_cmp_failed_rid_count == 0)) begin
+	    `uvm_info (get_type_name(), $sformatf ("rid count comparisions are succesful"),UVM_HIGH);
+    end
+    else begin
+      `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_rid_count :%0d",
+                                              byte_data_cmp_verified_rid_count),UVM_HIGH);
+	    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_rid_count : %0d", 
+                                              byte_data_cmp_failed_rid_count),UVM_HIGH);
+      `uvm_error (get_type_name(), $sformatf ("rid count comparisions are failed"));
+    end
 
-   if ((byte_data_cmp_verified_rdata_count != 0) && (byte_data_cmp_failed_rdata_count == 0)) begin
-	  `uvm_info (get_type_name(), $sformatf ("rdata count comparisions are succesful"),UVM_HIGH);
-  end
-  else begin
-    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_rdata_count :%0d",
-                                            byte_data_cmp_verified_rdata_count),UVM_HIGH);
-	  `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_rdata_count : %0d", 
-                                            byte_data_cmp_failed_rdata_count),UVM_HIGH);
-    `uvm_error (get_type_name(), $sformatf ("rdata count comparisions are failed"));
-  end
+     if ((byte_data_cmp_verified_rdata_count != 0) && (byte_data_cmp_failed_rdata_count == 0)) begin
+	    `uvm_info (get_type_name(), $sformatf ("rdata count comparisions are succesful"),UVM_HIGH);
+    end
+    else begin
+      `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_rdata_count :%0d",
+                                              byte_data_cmp_verified_rdata_count),UVM_HIGH);
+	    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_rdata_count : %0d", 
+                                              byte_data_cmp_failed_rdata_count),UVM_HIGH);
+      `uvm_error (get_type_name(), $sformatf ("rdata count comparisions are failed"));
+    end
 
 
-   if ((byte_data_cmp_verified_rresp_count != 0) && (byte_data_cmp_failed_rresp_count == 0)) begin
-	  `uvm_info (get_type_name(), $sformatf ("rresp count comparisions are succesful"),UVM_HIGH);
-  end
-  else begin
-    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_rresp_count :%0d",
-                                            byte_data_cmp_verified_rresp_count),UVM_HIGH);
-	  `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_rresp_count : %0d", 
-                                            byte_data_cmp_failed_rresp_count),UVM_HIGH);
-    `uvm_error (get_type_name(), $sformatf ("rresp count comparisions are failed"));
-  end
+     if ((byte_data_cmp_verified_rresp_count != 0) && (byte_data_cmp_failed_rresp_count == 0)) begin
+	    `uvm_info (get_type_name(), $sformatf ("rresp count comparisions are succesful"),UVM_HIGH);
+    end
+    else begin
+      `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_rresp_count :%0d",
+                                              byte_data_cmp_verified_rresp_count),UVM_HIGH);
+	    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_rresp_count : %0d", 
+                                              byte_data_cmp_failed_rresp_count),UVM_HIGH);
+      `uvm_error (get_type_name(), $sformatf ("rresp count comparisions are failed"));
+    end
 
-   if ((byte_data_cmp_verified_ruser_count != 0) && (byte_data_cmp_failed_ruser_count == 0)) begin
-	  `uvm_info (get_type_name(), $sformatf ("ruser count comparisions are succesful"),UVM_HIGH);
-  end
-  else begin
-    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_ruser_count :%0d",
-                                            byte_data_cmp_verified_ruser_count),UVM_HIGH);
-	  `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_ruser_count : %0d", 
-                                            byte_data_cmp_failed_ruser_count),UVM_HIGH);
-    `uvm_error (get_type_name(), $sformatf ("ruser count comparisions are failed"));
+     if ((byte_data_cmp_verified_ruser_count != 0) && (byte_data_cmp_failed_ruser_count == 0)) begin
+	    `uvm_info (get_type_name(), $sformatf ("ruser count comparisions are succesful"),UVM_HIGH);
+    end
+    else begin
+      `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_verified_ruser_count :%0d",
+                                              byte_data_cmp_verified_ruser_count),UVM_HIGH);
+	    `uvm_info (get_type_name(), $sformatf ("byte_data_cmp_failed_ruser_count : %0d", 
+                                              byte_data_cmp_failed_ruser_count),UVM_HIGH);
+      `uvm_error (get_type_name(), $sformatf ("ruser count comparisions are failed"));
+    end
   end
 
 

@@ -33,6 +33,9 @@ class axi4_env_config extends uvm_object;
   // axi4 slave agent configuration handles
   axi4_slave_agent_config axi4_slave_agent_cfg_h[];
 
+  // Variable: write_read_mode_h
+  write_read_data_mode_e write_read_mode_h;
+
 //-------------------------------------------------------
 // Externally defined Tasks and Functions
 //-------------------------------------------------------
@@ -51,6 +54,7 @@ function axi4_env_config::new(string name = "axi4_env_config");
   super.new(name);
 endfunction : new
 
+
 //--------------------------------------------------------------------------------------------
 // Function: do_print method
 // Print method can be added to display the data members values
@@ -62,6 +66,7 @@ function void axi4_env_config::do_print(uvm_printer printer);
   printer.print_field ("has_virtual_sqr",has_virtual_seqr,1, UVM_DEC);
   printer.print_field ("no_of_masters",no_of_masters,$bits(no_of_masters), UVM_HEX);
   printer.print_field ("no_of_slaves",no_of_slaves,$bits(no_of_slaves), UVM_HEX);
+  printer.print_string ("transfer_type",   write_read_mode_h.name());
 
 endfunction : do_print
 

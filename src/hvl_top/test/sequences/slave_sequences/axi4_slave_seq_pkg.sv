@@ -91,7 +91,24 @@ package axi4_slave_seq_pkg;
   `include "axi4_slave_nbk_read_slave_error_seq.sv"
   `include "axi4_slave_nbk_read_rand_seq.sv"
 
+  `include "axi4_slave_nbk_slave_mem_mode_write_fixed_burst_seq.sv"
+  `include "axi4_slave_nbk_slave_mem_mode_write_incr_burst_seq.sv"
+  `include "axi4_slave_nbk_slave_mem_mode_write_wrap_burst_seq.sv"
+  `include "axi4_slave_nbk_slave_mem_mode_read_fixed_burst_seq.sv"
+  `include "axi4_slave_nbk_slave_mem_mode_read_incr_burst_seq.sv"
+  `include "axi4_slave_nbk_slave_mem_mode_read_wrap_burst_seq.sv"
 
+
+
+  `include "axi4_slave_write_nbk_write_read_response_out_of_order_seq.sv"
+  `include "axi4_slave_read_nbk_write_read_response_out_of_order_seq.sv"
+  `include "axi4_slave_write_nbk_only_write_response_out_of_order_seq.sv"
+  `include "axi4_slave_write_nbk_only_read_response_out_of_order_seq.sv"
+  `include "axi4_slave_read_nbk_only_write_response_out_of_order_seq.sv"
+  `include "axi4_slave_read_nbk_only_read_response_out_of_order_seq.sv"
+
+  `include "axi4_slave_nbk_write_qos_seq.sv"
+  `include "axi4_slave_nbk_read_qos_seq.sv"
 
 endpackage : axi4_slave_seq_pkg
 

@@ -48,8 +48,13 @@ usage:
 	echo "";
 	echo "make target <options> <variable>=<value>";
 	echo "";
-	echo "To compile use:"
+	echo "To compile use:";
 	echo "make compile";
+	echo "";
+	echo "To provide compilation argument:";
+	echo "make compile args=+<macro_name>=<macro_value>";
+	echo "";
+	echo "make compile args=+DATA_WIDTH=64";
 	echo "";
 	echo "To simulate individual test:"
 	echo "make simulate test=<test_name> uvm_verbosity=<VERBOSITY_LEVEL>";
@@ -80,6 +85,7 @@ compile:
 	+acc \
 	+cover \
 	+fcover \
+	+define$(args) \
 	-l axi4_compile.log \
 	-f ../axi4_compile.f 
 
@@ -100,6 +106,9 @@ ifndef uvm_verbosity
 override uvm_verbosity = UVM_MEDIUM
 endif
 
+ifndef args
+override args = +DATA_WIDTH=32
+endif
 
 
 ## For randomized seed

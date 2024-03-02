@@ -1,21 +1,2 @@
-# axi4_avip
-Development of AXI4 Accelerated VIP
 
-# axi4_avip_protocol_specification
-http://www.gstitt.ece.ufl.edu/courses/fall15/eel4720_5721/labs/refs/AXI4_specification.pdf
-https://developer.arm.com/documentation/ihi0022/e/AMBA-AXI3-and-AXI4-Protocol-Specification
-
-To Get Links:
-
-For Example
-
-Step 1: [axi4_specifications](Add Link to specifications)
-
-Step 2: Change file extension to .md
-
-[axi4_specifications](http://www.gstitt.ece.ufl.edu/courses/fall15/eel4720_5721/labs/refs/AXI4_specification.pdf)
-
-[axi4_specifications](https://developer.arm.com/documentation/ihi0022/e/AMBA-AXI3-and-AXI4-Protocol-Specification)
-
-# Good information for AXI4 and AXI4-stream protocol
-https://caslab.csl.yale.edu/courses/EENG428/19-20a/slides/eeng428_lecture_007_axi_protocol.pdf
+<img width="910" alt="Screenshot 2024-03-02 at 11 36 46 PM" src="https://github.com/mbits-mirafra/axi4_avip/assets/15922511/cef03f6b-2ee6-4ea2-9b5b-b755fc8574ef">

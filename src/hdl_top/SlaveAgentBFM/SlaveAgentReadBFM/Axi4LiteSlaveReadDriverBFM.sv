@@ -1,20 +1,20 @@
-`ifndef AXI4_MASTER_DRIVER_BFM_INCLUDED_
-`define AXI4_MASTER_DRIVER_BFM_INCLUDED_
+`ifndef AXI4LITESLAVEREADDRIVERBFM_INCLUDED_
+`define AXI4LITESLAVEREADDRIVERBFM_INCLUDED_
 
 //-------------------------------------------------------
 // Importing global package
 //-------------------------------------------------------
-import axi4_globals_pkg::*;
+import Axi4LiteGlobalsPkg::*;
 
 //--------------------------------------------------------------------------------------------
-// Interface : axi4_master_driver_bfm
+// Interface : Axi4LiteSlaveReadDriverBFM
 //  Used as the HDL driver for axi4
 //  It connects with the HVL driver_proxy for driving the stimulus
 //--------------------------------------------------------------------------------------------
-interface axi4_master_driver_bfm(input bit                      aclk, 
+interface Axi4LiteSlaveReadDriverBFM(input bit                      aclk, 
                                  input bit                      aresetn,
                                  //Write Address Channel Signals
-                                 output reg               [3:0] awid,
+                                /* output reg               [3:0] awid,
                                  output reg [ADDRESS_WIDTH-1:0] awaddr,
                                  output reg               [3:0] awlen,
                                  output reg               [2:0] awsize,
@@ -39,7 +39,7 @@ interface axi4_master_driver_bfm(input bit                      aclk,
                                  input      [1:0] bresp,
                                  input      [3:0] buser,
                                  input            bvalid,
-                                 output	reg       bready,
+                                 output	reg       bready, */
                                  //Read Address Channel Signals
                                  output reg               [3:0] arid,
                                  output reg [ADDRESS_WIDTH-1:0] araddr,
@@ -73,36 +73,120 @@ interface axi4_master_driver_bfm(input bit                      aclk,
   //-------------------------------------------------------
   // Importing Global Package
   //-------------------------------------------------------
-  import axi4_master_pkg::axi4_master_driver_proxy;
+//TODO  import axi4_Slave_pkg::axi4LiteSlaveReadDriverProxy;
 
   //Variable: name
   //Used to store the name of the interface
-  string name = "AXI4_MASTER_DRIVER_BFM"; 
+  string name = "Axi4LiteSlaveReadDriverBFM"; 
 
-  //Variable: axi4_master_driver_proxy_h
-  //Creating the handle for master driver proxy
-  axi4_master_driver_proxy axi4_master_drv_proxy_h;
+  //Variable: axi4LiteSlaveReadDriverProxy
+  //Creating the handle for SlaveWriteDriverProxy
+  axi4LiteSlaveReadDriverProxy axi4LiteSlaveReadDriverProxy;
 
+  reg [7: 0] i = 0;
+  reg [7: 0] j = 0;
+  reg [7: 0] a = 0;
+
+  initial begin
+    `uvm_info("axi4 slave driver bfm",$sformatf("AXI4 SLAVE DRIVER BFM"),UVM_LOW);
+  end
+
+  string name = "AXI4_SLAVE_DRIVER_BFM";
+
+  // Creating Memories for each signal to store each transaction attributes
+
+  reg [	3 : 0] 	            mem_awid	  [2**LENGTH];
+  reg [	ADDRESS_WIDTH-1: 0]	mem_waddr	  [2**LENGTH];
+  reg [	7 : 0]	            mem_wlen	  [2**LENGTH];
+  reg [	2 : 0]	            mem_wsize	  [2**LENGTH];
+  reg [ 1	: 0]	            mem_wburst  [2**LENGTH];
+  bit                       mem_wlast   [2**LENGTH];
+  
+  reg [	3 : 0]	            mem_arid	  [2**LENGTH];
+  reg [	ADDRESS_WIDTH-1: 0]	mem_raddr	  [2**LENGTH];
+  reg [	7	: 0]	            mem_rlen	  [2**LENGTH];
+  reg [	2	: 0]	            mem_rsize	  [2**LENGTH];
+  reg [ 1	: 0]	            mem_rburst  [2**LENGTH];
+  
+  //-------------------------------------------------------
+  // Task: wait_for_system_reset
+  // Waiting for the system reset to be active low
+  //-------------------------------------------------------
+
+  task wait_for_system_reset();
+    @(negedge aresetn);
+    `uvm_info(name,$sformatf("SYSTEM RESET ACTIVATED"),UVM_NONE)
+    awready <= 0;
+    wready  <= 0;
+    rvalid  <= 0;
+    rlast   <= 0;
+    bvalid  <= 0;
+    arready <= 0;
+    bid     <= 'bx;
+    bresp   <= 'b0;
+    buser   <= 'b0;
+    rid     <= 'bx;
+    rdata   <= 'b0;
+    rresp   <= 'b0;
+    ruser   <= 'b0;
+    @(posedge aresetn);
+    `uvm_info(name,$sformatf("SYSTEM RESET DE-ACTIVATED"),UVM_NONE)
+  endtask 
+  reg [7: 0] i = 0;
+  reg [7: 0] j = 0;
+  reg [7: 0] a = 0;
+
+  initial begin
+    `uvm_info("axi4 slave driver bfm",$sformatf("AXI4 SLAVE DRIVER BFM"),UVM_LOW);
+  end
+
+  string name = "AXI4_SLAVE_DRIVER_BFM";
+
+  // Creating Memories for each signal to store each transaction attributes
+
+  reg [	3 : 0] 	            mem_awid	  [2**LENGTH];
+  reg [	ADDRESS_WIDTH-1: 0]	mem_waddr	  [2**LENGTH];
+  reg [	7 : 0]	            mem_wlen	  [2**LENGTH];
+  reg [	2 : 0]	            mem_wsize	  [2**LENGTH];
+  reg [ 1	: 0]	            mem_wburst  [2**LENGTH];
+  bit                       mem_wlast   [2**LENGTH];
+  
+  reg [	3 : 0]	            mem_arid	  [2**LENGTH];
+  reg [	ADDRESS_WIDTH-1: 0]	mem_raddr	  [2**LENGTH];
+  reg [	7	: 0]	            mem_rlen	  [2**LENGTH];
+  reg [	2	: 0]	            mem_rsize	  [2**LENGTH];
+  reg [ 1	: 0]	            mem_rburst  [2**LENGTH];
+  
+  //-------------------------------------------------------
+  // Task: wait_for_system_reset
+  // Waiting for the system reset to be active low
+  //-------------------------------------------------------
+
+  task wait_for_system_reset();
+    @(negedge aresetn);
+    `uvm_info(name,$sformatf("SYSTEM RESET ACTIVATED"),UVM_NONE)
+    awready <= 0;
+    wready  <= 0;
+    rvalid  <= 0;
+    rlast   <= 0;
+    bvalid  <= 0;
+    arready <= 0;
+    bid     <= 'bx;
+    bresp   <= 'b0;
+    buser   <= 'b0;
+    rid     <= 'bx;
+    rdata   <= 'b0;
+    rresp   <= 'b0;
+    ruser   <= 'b0;
+    @(posedge aresetn);
+    `uvm_info(name,$sformatf("SYSTEM RESET DE-ACTIVATED"),UVM_NONE)
+  endtask 
+ 
   initial begin
     `uvm_info(name,$sformatf(name),UVM_LOW)
   end
 
-  //-------------------------------------------------------
-  // Task: wait_for_aresetn
-  // Waiting for the system reset to be active low
-  //-------------------------------------------------------
-  task wait_for_aresetn();
-    @(negedge aresetn);
-    `uvm_info(name,$sformatf("SYSTEM RESET DETECTED"),UVM_HIGH)
-    awvalid <= 1'b0;
-    wvalid  <= 1'b0;
-    bready  <= 1'b0;
-    arvalid <= 1'b0;
-    rready  <= 1'b0;
-    @(posedge aresetn);
-    `uvm_info(name,$sformatf("SYSTEM RESET DEACTIVATED"),UVM_HIGH)
-  endtask : wait_for_aresetn
-
+  /*
   //--------------------------------------------------------------------------------------------
   // Tasks written for all 5 channels in BFM are given below
   //--------------------------------------------------------------------------------------------
@@ -210,92 +294,126 @@ task axi4_write_address_channel_task (inout axi4_write_transfer_char_s data_writ
     bready <= 1'b0;
 
   endtask : axi4_write_response_channel_task
-
+*/
+ //-------------------------------------------------------
+  // Task: axi4_read_address_phase
+  // This task will sample the read address signals
   //-------------------------------------------------------
-  // Task: axi4_read_address_channel_task
-  // This task will drive the read address signals
-  //-------------------------------------------------------
-  task axi4_read_address_channel_task (inout axi4_read_transfer_char_s data_read_packet, input axi4_transfer_cfg_s cfg_packet);
+  task axi4_read_address_phase (inout axi4_read_transfer_char_s data_read_packet, input axi4_transfer_cfg_s cfg_packet);
     @(posedge aclk);
+    `uvm_info(name,$sformatf("data_read_packet=\n%p",data_read_packet),UVM_HIGH);
+    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_HIGH);
+    `uvm_info(name,$sformatf("INSIDE READ ADDRESS CHANNEL"),UVM_HIGH);
     
-    `uvm_info(name,$sformatf("data_read_packet=\n%p",data_read_packet),UVM_HIGH)
-    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_HIGH)
-    `uvm_info(name,$sformatf("DRIVE TO READ ADDRESS CHANNEL"),UVM_HIGH)
+    // Ready can be HIGH even before we start to check 
+    // based on wait_cycles variable
+    // Can make arready to zero 
+     arready <= 0;
 
-    arid     <= data_read_packet.arid;
-    araddr   <= data_read_packet.araddr;
-    arlen    <= data_read_packet.arlen;
-    arsize   <= data_read_packet.arsize;
-    arburst  <= data_read_packet.arburst;
-    arlock   <= data_read_packet.arlock;
-    arcache  <= data_read_packet.arcache;
-    arprot   <= data_read_packet.arprot;
-    arqos    <= data_read_packet.arqos;
-    aruser   <= data_read_packet.aruser;
-    arregion <= data_read_packet.arregion;
-    arvalid  <= 1'b1;
-
-    `uvm_info(name,$sformatf("detect_awready = %0d",arready),UVM_HIGH)
-    do begin
+    while(arvalid === 0) begin
       @(posedge aclk);
-      data_read_packet.wait_count_read_address_channel++;
     end
-    while(arready !== 1);
+   
+    repeat(data_read_packet.no_of_wait_states)begin
+      `uvm_info(name,$sformatf("DRIVING_READ_ADDRS_WAIT_STATES :: %0d",data_read_packet.no_of_wait_states),UVM_HIGH);
+      @(posedge aclk);
+      arready<=0;
+    end
 
-    `uvm_info(name,$sformatf("After_loop_of_Detecting_awready = %0d, awvalid = %0d",awready,awvalid),UVM_HIGH)
-    arvalid <= 1'b0;
-  endtask : axi4_read_address_channel_task
+    `uvm_info("SLAVE_DRIVER_RADDR_PHASE", $sformatf("outside of arvalid"), UVM_NONE); 
+    
+    // Sample the values
+    mem_arid 	[j]	  = arid  	;	
+	  mem_raddr	[j] 	= araddr	;
+	  mem_rlen 	[j]	  = arlen	  ;	
+	  mem_rsize	[j] 	= arsize	;	
+	  mem_rburst[j] 	= arburst ;	
+    arready         = 1       ;
 
+    data_read_packet.arid    = mem_arid[j]     ;
+    data_read_packet.araddr  = mem_raddr[j]    ;
+    data_read_packet.arlen   = mem_rlen[j]     ;
+    data_read_packet.arsize  = mem_rsize[j]    ;
+    data_read_packet.arburst = mem_rburst[j]   ;
+	  j = j+1                                    ;
+
+    `uvm_info("mem_arid",$sformatf("mem_arid[%0d]=%0d",j,mem_arid[j]),UVM_HIGH)
+    `uvm_info("mem_arid",$sformatf("arid=%0d",arid),UVM_HIGH)
+    `uvm_info(name,$sformatf("struct_pkt_rd_addr_phase = \n %0p",data_read_packet),UVM_HIGH)
+    
+    @(posedge aclk);
+    arready <= 0;
+  
+  endtask: axi4_read_address_phase
+    
   //-------------------------------------------------------
   // Task: axi4_read_data_channel_task
   // This task will drive the read data signals
   //-------------------------------------------------------
-  task axi4_read_data_channel_task (inout axi4_read_transfer_char_s data_read_packet, input axi4_transfer_cfg_s cfg_packet);
+  task axi4_read_data_phase (inout axi4_read_transfer_char_s data_read_packet, input axi4_transfer_cfg_s cfg_packet);
+    int j1;
+    @(posedge aclk);
+    data_read_packet.rid <= mem_arid[j1];
+    `uvm_info("RDATA_DEBUG",$sformatf("data_packet_rid= %0d",data_read_packet.rid),UVM_HIGH);
+    `uvm_info("RDATA_DEBUG",$sformatf("data_packet_rid= %0d",mem_arid[j1]),UVM_HIGH);
+    `uvm_info(name,$sformatf("INSIDE READ DATA CHANNEL"),UVM_LOW);
     
-    static reg [7:0]i =0;
-    `uvm_info(name,$sformatf("data_read_packet in read data Channel=\n%p",data_read_packet),UVM_HIGH)
-    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_HIGH)
-    `uvm_info(name,$sformatf("DRIVE TO READ DATA CHANNEL"),UVM_HIGH)
-    
-    do begin
-      @(posedge aclk);
-      //Driving rready as low initially
-      rready  <= 0;
-    end while(rvalid === 1'b0);
-    
-    repeat(data_read_packet.no_of_wait_states)begin
-      `uvm_info(name,$sformatf("DRIVING WAIT STATES in read data channel :: %0d",data_read_packet.no_of_wait_states),UVM_HIGH);
-      @(posedge aclk);
-    end
+    for(int i1=0, k1=0; i1<mem_rlen[j1] + 1; i1++) begin
+      `uvm_info("RDATA_DEBUG",$sformatf("rid= %0d",rid),UVM_HIGH);
+      `uvm_info("RDATA_DEBUG",$sformatf("arlen= %0d",mem_rlen[j1]),UVM_HIGH);
+      `uvm_info("RDATA_DEBUG",$sformatf("i1_arlen= %0d",i1),UVM_HIGH);
 
-    //Driving ready as high
-    rready <= 1'b1;
+      if(mem_rsize[j1] == DATA_WIDTH/OUTSTANDING_FIFO_DEPTH) begin
+        k1 = 0;
+      end
+       if(mem_rsize[j1] == 0 || mem_rsize[j1] == DATA_WIDTH/DATA_WIDTH) begin
+        if(k1 == DATA_WIDTH/LENGTH) begin
+          k1 = 0;
+        end
+      end
+      
+      rid  <= mem_arid[j1];
+      for(int l1=0; l1<(2**mem_rsize[j1]); l1++) begin
+        `uvm_info("RSIZE_DEBUG",$sformatf("mem_rsize= %0d",mem_rsize[j1]),UVM_HIGH);
+        `uvm_info("RSIZE_DEBUG",$sformatf("mem_rsize_l1= %0d",l1),UVM_HIGH);
+        
+        //Sending the rdata based on each byte lane
+        //RHS: Is used to send Byte by Byte
+        //LHS: Is used to shift the location for each Byte
+        rdata[8*k1+7 -: 8]<=data_read_packet.rdata[l1*8+i1];
+        `uvm_info("RDATA_DEBUG",$sformatf("RDATA[%0d]=%0h",i1,data_read_packet.rdata[l1*8+i1]),UVM_HIGH)
+        `uvm_info("RDATA_DEBUG",$sformatf("RDATA=%0h",rdata[8*k1+7 -: 8]),UVM_HIGH)
+        k1++;
+      end
+     
+     if(mem_rsize[j1]<=DATA_WIDTH/OUTSTANDING_FIFO_DEPTH) begin
+       rresp<=data_read_packet.rresp;
+     end
+     else begin
+       rresp <= READ_SLVERR;
+       data_read_packet.rresp <= READ_SLVERR;
+     end
 
-    forever begin
+      ruser<=data_read_packet.ruser;
+      rvalid<=1'b1;
+      
+      if((mem_rlen[j1]) == i1)begin
+        rlast  <= 1'b1;
+        @(posedge aclk);
+        rlast <= 1'b0;
+        rvalid <= 1'b0;
+      end
+      
       do begin
         @(posedge aclk);
-      end while(rvalid === 1'b0);
-
-      data_read_packet.rid      = rid;
-      data_read_packet.rdata[i] = rdata;
-      data_read_packet.ruser    = ruser;
-      data_read_packet.rresp    = rresp;
-      `uvm_info(name,$sformatf("DEBUG_NA:RDATA[%0d]=%0h",i,data_read_packet.rdata[i]),UVM_HIGH)
-      
-      i++;  
-
-      if(rlast === 1'b1)begin
-        i=0;
-        break;
-      end
+      end while(rready===0);
     end
-   
-    @(posedge aclk);
-    rready <= 1'b0;
+    j1++;
+    
+       
+  endtask : axi4_read_data_phase
 
-  endtask : axi4_read_data_channel_task
-
-endinterface : axi4_master_driver_bfm
+endinterface : Axi4LiteSlaveReadDriverBFM
 
 `endif
 

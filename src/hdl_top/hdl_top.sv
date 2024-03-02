@@ -9,7 +9,7 @@
 module hdl_top;
 
   import uvm_pkg::*;
-  import axi4_globals_pkg::*;
+  import Axi4LiteGlobalsPkg::*;
   `include "uvm_macros.svh"
 
   //-------------------------------------------------------
@@ -49,7 +49,7 @@ module hdl_top;
 
   // Variable : intf
   // axi4 Interface Instantiation
-  axi4_if intf(.aclk(aclk),
+//TODO  axi4_if intf(.aclk(aclk),
                .aresetn(aresetn));
 
   //-------------------------------------------------------

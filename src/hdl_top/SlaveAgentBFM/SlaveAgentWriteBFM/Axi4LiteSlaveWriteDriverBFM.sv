@@ -1,66 +1,69 @@
-`ifndef AXI4_SLAVE_DRIVER_BFM_INCLUDED_
-`define AXI4_SLAVE_DRIVER_BFM_INCLUDED_
+`ifndef AXI4LITESLAVEWRITEDRIVERBFM_INCLUDED_
+`define AXI4LITESLAVEWRITEDRIVERBFM_INCLUDED_
+
+//-------------------------------------------------------
+// Importing global package
+//-------------------------------------------------------
+import Axi4LiteGlobalsPkg::*;
 
 //--------------------------------------------------------------------------------------------
-//Interface : axi4_slave_driver_bfm
-//Used as the HDL driver for axi4
-//It connects with the HVL driver_proxy for driving the stimulus
+// Interface : Axi4LiteSlaveWriteDriverBFM
+//  Used as the HDL driver for axi4
+//  It connects with the HVL driver_proxy for driving the stimulus
 //--------------------------------------------------------------------------------------------
-import axi4_globals_pkg::*;
-interface axi4_slave_driver_bfm(input                     aclk    , 
-                                input                     aresetn ,
-                                //Write_address_channel
-                                input [3:0]               awid    ,
-                                input [ADDRESS_WIDTH-1:0] awaddr  ,
-                                input [3: 0]              awlen   ,
-                                input [2: 0]              awsize  ,
-                                input [1: 0]              awburst ,
-                                input [1: 0]              awlock  ,
-                                input [3: 0]              awcache ,
-                                input [2: 0]              awprot  ,
-                                input                     awvalid ,
-                                output reg	              awready ,
-
-                                //Write_data_channel
-                                input [DATA_WIDTH-1: 0]     wdata  ,
-                                input [(DATA_WIDTH/8)-1: 0] wstrb  ,
-                                input                       wlast  ,
-                                input [3: 0]                wuser  ,
-                                input                       wvalid ,
-                                output reg	                wready ,
-
-                                //Write Response Channel
-                                output reg [3:0]            bid    ,
-                                output reg [1:0]            bresp  ,
-                                output reg [3:0]            buser  ,
-                                output reg                  bvalid ,
-                                input		                    bready ,
-
-                                //Read Address Channel
-                                input [3: 0]                arid    ,
-                                input [ADDRESS_WIDTH-1: 0]  araddr  ,
-                                input [7:0]                 arlen   ,
-                                input [2:0]                 arsize  ,
-                                input [1:0]                 arburst ,
-                                input [1:0]                 arlock  ,
-                                input [3:0]                 arcache ,
-                                input [2:0]                 arprot  ,
-                                input [3:0]                 arqos   ,
-                                input [3:0]                 arregion,
-                                input [3:0]                 aruser  ,
-                                input                       arvalid ,
-                                output reg                  arready ,
-
-                                //Read Data Channel
-                                output reg [3:0]                rid    ,
-                                output reg [DATA_WIDTH-1: 0]    rdata  ,
-                                output reg [1:0]                rresp  ,
-                                output reg                      rlast  ,
-                                output reg [3:0]                ruser  ,
-                                output reg                      rvalid ,
-                                input		                        rready  
-                              ); 
-                              
+interface Axi4LiteSlaveWriteDriverBFM(input bit                      aclk, 
+                                 input bit                      aresetn,
+                                 //Write Address Channel Signals
+                                 output reg               [3:0] awid,
+                                 output reg [ADDRESS_WIDTH-1:0] awaddr,
+                                 output reg               [3:0] awlen,
+                                 output reg               [2:0] awsize,
+                                 output reg               [1:0] awburst,
+                                 output reg               [1:0] awlock,
+                                 output reg               [3:0] awcache,
+                                 output reg               [2:0] awprot,
+                                 output reg               [3:0] awqos,
+                                 output reg               [3:0] awregion,
+                                 output reg                     awuser,
+                                 output reg                     awvalid,
+                                 input    	                    awready,
+                                 //Write Data Channel Signals
+                                 output reg    [DATA_WIDTH-1: 0] wdata,
+                                 output reg [(DATA_WIDTH/8)-1:0] wstrb,
+                                 output reg                      wlast,
+                                 output reg                [3:0] wuser,
+                                 output reg                      wvalid,
+                                 input                           wready,
+                                 //Write Response Channel Signals
+                                 input      [3:0] bid,
+                                 input      [1:0] bresp,
+                                 input      [3:0] buser,
+                                 input            bvalid,
+                                 output	reg       bready,
+                                /* //Read Address Channel Signals
+                                 output reg               [3:0] arid,
+                                 output reg [ADDRESS_WIDTH-1:0] araddr,
+                                 output reg               [7:0] arlen,
+                                 output reg               [2:0] arsize,
+                                 output reg               [1:0] arburst,
+                                 output reg               [1:0] arlock,
+                                 output reg               [3:0] arcache,
+                                 output reg               [2:0] arprot,
+                                 output reg               [3:0] arqos,
+                                 output reg               [3:0] arregion,
+                                 output reg               [3:0] aruser,
+                                 output reg                     arvalid,
+                                 input                          arready,
+                                 //Read Data Channel Signals
+                                 input                  [3:0] rid,
+                                 input      [DATA_WIDTH-1: 0] rdata,
+                                 input                  [1:0] rresp,
+                                 input                        rlast,
+                                 input                  [3:0] ruser,
+                                 input                        rvalid,
+                                 output	reg                   rready  */
+                                );  
+  
   //-------------------------------------------------------
   // Importing UVM Package 
   //-------------------------------------------------------
@@ -68,15 +71,19 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
   `include "uvm_macros.svh" 
 
   //-------------------------------------------------------
-  // Importing axi4 slave driver proxy
+  // Importing Global Package
   //-------------------------------------------------------
-  import axi4_slave_pkg::axi4_slave_driver_proxy;
+//TODO  import axi4_slave_pkg::Axi4LiteSlaveWriteDriverProxy;
 
-  //Variable : axi4_slave_driver_proxy_h
-  //Creating the handle for proxy driver
-  axi4_slave_driver_proxy axi4_slave_drv_proxy_h;
-  
-  reg [7: 0] i = 0;
+  //Variable: name
+  //Used to store the name of the interface
+  string name = "Axi4LiteSlaveWriteDriverBFM"; 
+
+  //Variable: axi4LiteSlaveWriteDriverProxy
+  //Creating the handle for MasterWriteDriverProxy
+  Axi4LiteSlaveWriteDriverProxy axi4LiteSlaveWriteDriverProxy;
+
+ reg [7: 0] i = 0;
   reg [7: 0] j = 0;
   reg [7: 0] a = 0;
 
@@ -285,124 +292,96 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
   
   endtask : axi4_write_response_phase
 
+ initial begin
+    `uvm_info(name,$sformatf(name),UVM_LOW)
+  end
+
+ /*
   //-------------------------------------------------------
-  // Task: axi4_read_address_phase
-  // This task will sample the read address signals
+  // Task: axi4_read_address_channel_task
+  // This task will drive the read address signals
   //-------------------------------------------------------
-  task axi4_read_address_phase (inout axi4_read_transfer_char_s data_read_packet, input axi4_transfer_cfg_s cfg_packet);
+  task axi4_read_address_channel_task (inout axi4_read_transfer_char_s data_read_packet, input axi4_transfer_cfg_s cfg_packet);
     @(posedge aclk);
-    `uvm_info(name,$sformatf("data_read_packet=\n%p",data_read_packet),UVM_HIGH);
-    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_HIGH);
-    `uvm_info(name,$sformatf("INSIDE READ ADDRESS CHANNEL"),UVM_HIGH);
     
-    // Ready can be HIGH even before we start to check 
-    // based on wait_cycles variable
-    // Can make arready to zero 
-     arready <= 0;
+    `uvm_info(name,$sformatf("data_read_packet=\n%p",data_read_packet),UVM_HIGH)
+    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_HIGH)
+    `uvm_info(name,$sformatf("DRIVE TO READ ADDRESS CHANNEL"),UVM_HIGH)
 
-    while(arvalid === 0) begin
+    arid     <= data_read_packet.arid;
+    araddr   <= data_read_packet.araddr;
+    arlen    <= data_read_packet.arlen;
+    arsize   <= data_read_packet.arsize;
+    arburst  <= data_read_packet.arburst;
+    arlock   <= data_read_packet.arlock;
+    arcache  <= data_read_packet.arcache;
+    arprot   <= data_read_packet.arprot;
+    arqos    <= data_read_packet.arqos;
+    aruser   <= data_read_packet.aruser;
+    arregion <= data_read_packet.arregion;
+    arvalid  <= 1'b1;
+
+    `uvm_info(name,$sformatf("detect_awready = %0d",arready),UVM_HIGH)
+    do begin
       @(posedge aclk);
+      data_read_packet.wait_count_read_address_channel++;
     end
-   
-    repeat(data_read_packet.no_of_wait_states)begin
-      `uvm_info(name,$sformatf("DRIVING_READ_ADDRS_WAIT_STATES :: %0d",data_read_packet.no_of_wait_states),UVM_HIGH);
-      @(posedge aclk);
-      arready<=0;
-    end
+    while(arready !== 1);
 
-    `uvm_info("SLAVE_DRIVER_RADDR_PHASE", $sformatf("outside of arvalid"), UVM_NONE); 
-    
-    // Sample the values
-    mem_arid 	[j]	  = arid  	;	
-	  mem_raddr	[j] 	= araddr	;
-	  mem_rlen 	[j]	  = arlen	  ;	
-	  mem_rsize	[j] 	= arsize	;	
-	  mem_rburst[j] 	= arburst ;	
-    arready         = 1       ;
+    `uvm_info(name,$sformatf("After_loop_of_Detecting_awready = %0d, awvalid = %0d",awready,awvalid),UVM_HIGH)
+    arvalid <= 1'b0;
+  endtask : axi4_read_address_channel_task
 
-    data_read_packet.arid    = mem_arid[j]     ;
-    data_read_packet.araddr  = mem_raddr[j]    ;
-    data_read_packet.arlen   = mem_rlen[j]     ;
-    data_read_packet.arsize  = mem_rsize[j]    ;
-    data_read_packet.arburst = mem_rburst[j]   ;
-	  j = j+1                                    ;
-
-    `uvm_info("mem_arid",$sformatf("mem_arid[%0d]=%0d",j,mem_arid[j]),UVM_HIGH)
-    `uvm_info("mem_arid",$sformatf("arid=%0d",arid),UVM_HIGH)
-    `uvm_info(name,$sformatf("struct_pkt_rd_addr_phase = \n %0p",data_read_packet),UVM_HIGH)
-    
-    @(posedge aclk);
-    arready <= 0;
-  
-  endtask: axi4_read_address_phase
-    
   //-------------------------------------------------------
   // Task: axi4_read_data_channel_task
   // This task will drive the read data signals
   //-------------------------------------------------------
-  task axi4_read_data_phase (inout axi4_read_transfer_char_s data_read_packet, input axi4_transfer_cfg_s cfg_packet);
-    int j1;
-    @(posedge aclk);
-    data_read_packet.rid <= mem_arid[j1];
-    `uvm_info("RDATA_DEBUG",$sformatf("data_packet_rid= %0d",data_read_packet.rid),UVM_HIGH);
-    `uvm_info("RDATA_DEBUG",$sformatf("data_packet_rid= %0d",mem_arid[j1]),UVM_HIGH);
-    `uvm_info(name,$sformatf("INSIDE READ DATA CHANNEL"),UVM_LOW);
+  task axi4_read_data_channel_task (inout axi4_read_transfer_char_s data_read_packet, input axi4_transfer_cfg_s cfg_packet);
     
-    for(int i1=0, k1=0; i1<mem_rlen[j1] + 1; i1++) begin
-      `uvm_info("RDATA_DEBUG",$sformatf("rid= %0d",rid),UVM_HIGH);
-      `uvm_info("RDATA_DEBUG",$sformatf("arlen= %0d",mem_rlen[j1]),UVM_HIGH);
-      `uvm_info("RDATA_DEBUG",$sformatf("i1_arlen= %0d",i1),UVM_HIGH);
+    static reg [7:0]i =0;
+    `uvm_info(name,$sformatf("data_read_packet in read data Channel=\n%p",data_read_packet),UVM_HIGH)
+    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_HIGH)
+    `uvm_info(name,$sformatf("DRIVE TO READ DATA CHANNEL"),UVM_HIGH)
+    
+    do begin
+      @(posedge aclk);
+      //Driving rready as low initially
+      rready  <= 0;
+    end while(rvalid === 1'b0);
+    
+    repeat(data_read_packet.no_of_wait_states)begin
+      `uvm_info(name,$sformatf("DRIVING WAIT STATES in read data channel :: %0d",data_read_packet.no_of_wait_states),UVM_HIGH);
+      @(posedge aclk);
+    end
 
-      if(mem_rsize[j1] == DATA_WIDTH/OUTSTANDING_FIFO_DEPTH) begin
-        k1 = 0;
-      end
-       if(mem_rsize[j1] == 0 || mem_rsize[j1] == DATA_WIDTH/DATA_WIDTH) begin
-        if(k1 == DATA_WIDTH/LENGTH) begin
-          k1 = 0;
-        end
-      end
-      
-      rid  <= mem_arid[j1];
-      for(int l1=0; l1<(2**mem_rsize[j1]); l1++) begin
-        `uvm_info("RSIZE_DEBUG",$sformatf("mem_rsize= %0d",mem_rsize[j1]),UVM_HIGH);
-        `uvm_info("RSIZE_DEBUG",$sformatf("mem_rsize_l1= %0d",l1),UVM_HIGH);
-        
-        //Sending the rdata based on each byte lane
-        //RHS: Is used to send Byte by Byte
-        //LHS: Is used to shift the location for each Byte
-        rdata[8*k1+7 -: 8]<=data_read_packet.rdata[l1*8+i1];
-        `uvm_info("RDATA_DEBUG",$sformatf("RDATA[%0d]=%0h",i1,data_read_packet.rdata[l1*8+i1]),UVM_HIGH)
-        `uvm_info("RDATA_DEBUG",$sformatf("RDATA=%0h",rdata[8*k1+7 -: 8]),UVM_HIGH)
-        k1++;
-      end
-     
-     if(mem_rsize[j1]<=DATA_WIDTH/OUTSTANDING_FIFO_DEPTH) begin
-       rresp<=data_read_packet.rresp;
-     end
-     else begin
-       rresp <= READ_SLVERR;
-       data_read_packet.rresp <= READ_SLVERR;
-     end
+    //Driving ready as high
+    rready <= 1'b1;
 
-      ruser<=data_read_packet.ruser;
-      rvalid<=1'b1;
-      
-      if((mem_rlen[j1]) == i1)begin
-        rlast  <= 1'b1;
-        @(posedge aclk);
-        rlast <= 1'b0;
-        rvalid <= 1'b0;
-      end
-      
+    forever begin
       do begin
         @(posedge aclk);
-      end while(rready===0);
-    end
-    j1++;
-    
-       
-  endtask : axi4_read_data_phase
+      end while(rvalid === 1'b0);
 
-endinterface : axi4_slave_driver_bfm
+      data_read_packet.rid      = rid;
+      data_read_packet.rdata[i] = rdata;
+      data_read_packet.ruser    = ruser;
+      data_read_packet.rresp    = rresp;
+      `uvm_info(name,$sformatf("DEBUG_NA:RDATA[%0d]=%0h",i,data_read_packet.rdata[i]),UVM_HIGH)
+      
+      i++;  
+
+      if(rlast === 1'b1)begin
+        i=0;
+        break;
+      end
+    end
+   
+    @(posedge aclk);
+    rready <= 1'b0;
+
+  endtask : axi4_read_data_channel_task
+*/
+endinterface : Axi4LiteSlaveWriteDriverBFM
 
 `endif
+

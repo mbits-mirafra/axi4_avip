@@ -1,15 +1,16 @@
-`ifndef AXI4_IF_INCLUDED_
-`define AXI4_IF_INCLUDED_
+`ifndef AXI4LITEMASTERWRITEINTERFACE_INCLUDED_
+`define AXI4LITEMASTERWRITEINTERFACE_INCLUDED_
 
-// Import axi4_globals_pkg 
-import axi4_globals_pkg::*;
+// Import Axi4LiteGlobalsPkg 
+import Axi4LiteGlobalsPkg::*;
 
 //--------------------------------------------------------------------------------------------
-// Interface : axi4_if
+// Interface : Axi4LiteMasterWriteInterface
 // Declaration of pin level signals for axi4 interface
 //--------------------------------------------------------------------------------------------
-interface axi4_if(input aclk, input aresetn);
+interface Axi4LiteMasterWriteInterface(input aclk, input aresetn);
 
+  
   //Write_address_channel
   logic     [3: 0] awid     ;
   logic     [ADDRESS_WIDTH-1: 0] awaddr ;
@@ -24,7 +25,8 @@ interface axi4_if(input aclk, input aresetn);
   logic           awuser     ;
   logic            awvalid   ;
   logic		         awready   ;
-  //Write_data_channel
+
+    //Write_data_channel
   logic     [DATA_WIDTH-1: 0] wdata     ;
   logic     [(DATA_WIDTH/8)-1: 0] wstrb ;
   logic            wlast     ;
@@ -37,7 +39,8 @@ interface axi4_if(input aclk, input aresetn);
   logic     [3: 0] buser     ;
   logic            bvalid    ;
   logic            bready    ;
-  //Read Address Channel
+ 
+/* //Read Address Channel
   logic     [3: 0] arid     ;
   logic     [ADDRESS_WIDTH-1:0] araddr  ;
   logic     [7:0] arlen      ;
@@ -59,8 +62,8 @@ interface axi4_if(input aclk, input aresetn);
   logic     [3:0] ruser      ;
   logic           rvalid     ;
   logic  	        rready     ;
-  
+  */
 
-endinterface: axi4_if 
+endinterface: Axi4LiteMasterWriteInterface 
 
 `endif

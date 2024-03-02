@@ -1,16 +1,16 @@
-`ifndef AXI4_MASTER_MONITOR_BFM_INCLUDED_
-`define AXI4_MASTER_MONITOR_BFM_INCLUDED_
+`ifndef AXI4LITEMASTERREADMONITORBFM_INCLUDED_
+`define AXI4LITEMASTERREADMONITORBFM_INCLUDED_
 
 //--------------------------------------------------------------------------------------------
-//Interface : axi4_master_monitor_bfm
+//Interface : Axi4LiteMasterReadMonitorBFM
 //Used as the HDL monitor for axi4
 //It connects with the HVL monitor_proxy for driving the stimulus
 //--------------------------------------------------------------------------------------------
 import axi4_globals_pkg::*;
 
-interface axi4_master_monitor_bfm(input bit aclk, input bit aresetn,
+interface Axi4LiteMasterReadMonitorBFM(input bit aclk, input bit aresetn,
                                  //Write Address Channel Signals
-                                 input  [3:0]awid,
+                               /* input  [3:0]awid,
                                  input  [ADDRESS_WIDTH-1:0]awaddr,
                                  input  [3:0]awlen,
                                  input  [2:0]awsize,
@@ -35,7 +35,7 @@ interface axi4_master_monitor_bfm(input bit aclk, input bit aresetn,
                                  input  [3:0]buser,
                                  input  bvalid,
                                  input  bready,
-
+                                */
                                  //Read Address Channel Signals
                                  input  [3:0]arid,
                                  input  [ADDRESS_WIDTH-1: 0]araddr,
@@ -49,7 +49,7 @@ interface axi4_master_monitor_bfm(input bit aclk, input bit aresetn,
                                  input  [3:0]arregion,
                                  input  [3:0]aruser,
                                  input  arvalid,
-                                 input  arready,
+                                 input  arready, 
                                  //Read Data Channel Signals
                                  input  [3:0]rid,
                                  input  [DATA_WIDTH-1: 0]rdata,
@@ -69,12 +69,12 @@ interface axi4_master_monitor_bfm(input bit aclk, input bit aresetn,
   //-------------------------------------------------------
   // Importing axi4 Global Package master package
   //-------------------------------------------------------
-  import axi4_master_pkg::axi4_master_monitor_proxy;
+//TODO  import axi4_master_pkg::Axi4LiteMasterReadMonitorProxy;
  
-  //Variable : axi4_master_monitor_proxy_h
+  //Variable : Axi4LiteMasterReadMonitorProxy
   //Creating the handle for proxy monitor
  
-  axi4_master_monitor_proxy axi4_master_mon_proxy_h;
+  Axi4LiteMasterReadMonitorProxy axi4LiteMasterReadMonitorProxy;
   
   //-------------------------------------------------------
   // Task: wait_for_aresetn
@@ -82,11 +82,11 @@ interface axi4_master_monitor_bfm(input bit aclk, input bit aresetn,
   //-------------------------------------------------------
   task wait_for_aresetn();
     @(negedge aresetn);
-    `uvm_info("FROM MASTER MON BFM",$sformatf("SYSTEM RESET DETECTED"),UVM_HIGH) 
+    `uvm_info("axi4LiteMasterReadMonitorProxy",$sformatf("SYSTEM RESET DETECTED"),UVM_HIGH) 
     @(posedge aresetn);
     `uvm_info("FROM MASTER MON BFM",$sformatf("SYSTEM RESET DEACTIVATED"),UVM_HIGH)
   endtask : wait_for_aresetn
-
+/*
   //-------------------------------------------------------
   // Task: axi4_write_address_sampling
   // Used for sample the write address channel signals
@@ -156,7 +156,7 @@ interface axi4_master_monitor_bfm(input bit aclk, input bit aresetn,
     req.bresp    = bresp;
     `uvm_info("FROM MASTER MON BFM::WRITE RESPONSE",$sformatf("WRITE RESPONSE PACKET: \n %p",req),UVM_HIGH)
   endtask
-  
+  */
   //-------------------------------------------------------
   // Task: axi4_read_address_sampling
   // Used for sample the read address channel signals
@@ -208,6 +208,6 @@ interface axi4_master_monitor_bfm(input bit aclk, input bit aresetn,
       `uvm_info("FROM MASTER MON BFM READ DATA",$sformatf("Read data packet: %p",req),UVM_HIGH)
     end
   endtask
-endinterface : axi4_master_monitor_bfm
+endinterface : Axi4LiteMasterReadMonitorBFM
 
 `endif

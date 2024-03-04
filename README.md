@@ -2,21 +2,28 @@
 
 The idea of using Accelerated VIP is to push the synthesizable part of the testbench into the separate top module along with the interface and it is named as HDL TOP and the unsynthesizable part is pushed into the HVL TOP. This setup provides the ability to run the longer tests quickly. This particular testbench can be used for the simulation as well as the emulation based on mode of operation.
 
-# Key Features  
-1. Supports write and read in parallel
-2. Blocking and Non Blocking Transfers
-3. Separate address/control and data phases
-4. Support for unaligned data transfers, using byte strobes
-5. Uses burst-based transactions with only the start address issued
-6. Support for issuing multiple outstanding addresses
-7. Support for narrow transfers
+
+# Features:
+1. Support read and write Independent channels
+2. Separate address/control and data phases
+3. Blocking and Non Blocking Transfers
+4. Parallel write and read transfer
+5. Support outstanding transfer
+6. No strict timing relationship between address and data operations
+7. Support different types of Burst based transactions (fixed, incr, wrap)
+8. Support okay and slave error response
+9. Support for Out-of-order transaction
+10. Support for Quality of service(QOS)
+11. Support for Unaligned address transfers
+12. Support for Custom Slave memory 
+13. Support for Narrow transfers 
 
 # Architecture Diagram  
 ![AXI4](https://user-images.githubusercontent.com/15922511/183240262-b28b57cd-bda3-4cd8-ae2b-620d07f7a92b.jpg)
 
 # Developers, Welcome
 We believe in growing together and if you'd like to contribute, please do check out the contributing guide below:  
-https://github.com/mbits-mirafra/axi4_avip/blob/phase1_development_branch/contribution_guidelines.md
+https://github.com/mbits-mirafra/axi4_avip/blob/production/contribution_guidelines.md
 
 # Installation - Get the VIP collateral from the GitHub repository
 
@@ -64,6 +71,9 @@ ex: make regression testlist_name=axi4_transfers_regression.list
  firefox merged_cov_html_report/index.html &
 
 ```
+### Latest regression coverage report link
+
+https://github.com/mbits-mirafra/axi4_avip/issues/108
 
 ### Using Cadence's Xcelium simulator 
 
@@ -93,10 +103,10 @@ imc -load cov_work/scope/test/ &
 ```
 
 ## Technical Document 
- 
+https://github.com/mbits-mirafra/axi4_avip/blob/production/doc/axi4_avip_architecture_document.pdf 
 
 ## User Guide  
-  
+https://github.com/mbits-mirafra/axi4_avip/blob/production/doc/axi4_avip_user_guide.pdf
 
 ## Contact Mirafra Team  
 You can reach out to us over mbits@mirafra.com

@@ -1,5 +1,5 @@
-`ifndef TB_MASTER_ASSERTIONS_INCLUDED_
-`define TB_MASTER_ASSERTIONS_INCLUDED_
+`ifndef TBMASTERASSERTIONS_INCLUDED_
+`define TBMASTERASSERTIONS_INCLUDED_
 
 //-------------------------------------------------------
 // Importing global package
@@ -13,10 +13,10 @@ import axi4_globals_pkg::*;
 import uvm_pkg::*;
 
 //--------------------------------------------------------------------------------------------
-// Module : tb_master_assertions
+// Module : TbMasterAssertions
 // Used to write the assertion checks testbench required for the master assertion
 //--------------------------------------------------------------------------------------------
-module tb_master_assertions;
+module TbMasterAssertions;
   bit aclk;
   bit aresetn;
   //Write Address Channel Signals
@@ -1267,7 +1267,7 @@ module tb_master_assertions;
     end
   endtask : if_rd_channel_valid_stable_negative_case
 
-endmodule : tb_master_assertions
+endmodule : TbMasterAssertions
 
 `endif
 

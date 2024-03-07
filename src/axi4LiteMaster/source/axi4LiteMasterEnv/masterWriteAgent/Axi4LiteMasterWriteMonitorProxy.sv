@@ -1,5 +1,5 @@
-`ifndef Axi4LiteMasterWriteMonitorProxy_INCLUDED_
-`define Axi4LiteMasterWriteMonitorProxy_INCLUDED_
+`ifndef AXI4LITEMASTERWRITEMONITORPROXY_INCLUDED_
+`define AXI4LITEMASTERWRITEMONITORPROXY_INCLUDED_
 
 //--------------------------------------------------------------------------------------------
 //  Class: Axi4LiteMasterWriteMonitorProxy

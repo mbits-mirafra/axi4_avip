@@ -10,9 +10,8 @@ package Axi4LiteMasterEnvPkg;
   import Axi4LiteMasterWritePkg::*;
   import Axi4LiteMasterReadPkg::*;
 
-  `include "axi4LiteMasterEnvConfig.sv"
-  `include "axi4LiteMasterVirtualSequencer.sv"
-  `include "axi4LiteMasterEnv.sv"
+  `include "Axi4LiteMasterEnvConfig.sv"
+  `include "Axi4LiteMasterEnv.sv"
 
 endpackage : Axi4LiteMasterEnvPkg
 

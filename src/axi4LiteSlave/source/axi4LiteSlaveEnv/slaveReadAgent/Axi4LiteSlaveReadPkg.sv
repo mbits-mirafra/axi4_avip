@@ -3,7 +3,7 @@
 
 //--------------------------------------------------------------------------------------------
 // Package: Axi4LiteSlaveReadPkg
-//  Includes all the files related to axi4 axi4_slave
+//  Includes all the files related to Axi4 Axi4_slave
 //--------------------------------------------------------------------------------------------
 package Axi4LiteSlaveReadPkg;
 
@@ -13,21 +13,21 @@ package Axi4LiteSlaveReadPkg;
   `include "uvm_macros.svh"
   import uvm_pkg::*;
 
-  // Import axi4_globals_pkg 
+  // Import Axi4_globals_pkg 
   import Axi4LiteGlobalsPkg::*;
 
   //-------------------------------------------------------
   // Include all other files
   //-------------------------------------------------------
-  `include "axi4LiteSlaveReadTransaction.sv"
-  `include "axi4LiteSlaveReadAgentConfig.sv"
-  `include "axi4LiteSlaveReadSeqItemConverter.sv"
-  `include "axi4LiteSlaveReadConfigConverter.sv"
-  `include "axi4LiteSlaveReadCoverage.sv"
-  `include "axi4LiteSlaveReadSequencer.sv"
-  `include "axi4LiteSlaveReadDriverProxy.sv"
-  `include "axi4LiteSlaveReadMonitorProxy.sv"
-  `include "axi4LiteSlaveReadAgent.sv"
+  `include "Axi4LiteSlaveReadTransaction.sv"
+  `include "Axi4LiteSlaveReadAgentConfig.sv"
+  `include "Axi4LiteSlaveReadSeqItemConverter.sv"
+  `include "Axi4LiteSlaveReadConfigConverter.sv"
+  `include "Axi4LiteSlaveReadCoverage.sv"
+  `include "Axi4LiteSlaveReadSequencer.sv"
+  `include "Axi4LiteSlaveReadDriverProxy.sv"
+  `include "Axi4LiteSlaveReadMonitorProxy.sv"
+  `include "Axi4LiteSlaveReadAgent.sv"
   
 endpackage : Axi4LiteSlaveReadPkg
 

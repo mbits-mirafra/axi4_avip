@@ -10,9 +10,8 @@ package Axi4LiteSlaveEnvPkg;
   import Axi4LiteSlaveWritePkg::*;
   import Axi4LiteSlaveReadPkg::*;
 
-  `include "axi4LiteSlaveEnvConfig.sv"
-  `include "axi4LiteSlaveVirtualSequencer.sv"
-  `include "axi4LiteSlaveEnv.sv"
+  `include "Axi4LiteSlaveEnvConfig.sv"
+  `include "Axi4LiteSlaveEnv.sv"
 
 endpackage : Axi4LiteSlaveEnvPkg
 

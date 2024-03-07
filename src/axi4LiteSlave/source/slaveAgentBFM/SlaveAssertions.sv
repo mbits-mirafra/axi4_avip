@@ -1,5 +1,5 @@
-`ifndef SLAVE_ASSERTIONS_INCLUDED_
-`define SLAVE_ASSERTIONS_INCLUDED_
+`ifndef SLAVEASSERTIONS_INCLUDED_
+`define SLAVEASSERTIONS_INCLUDED_
 
 //-------------------------------------------------------
 // Importing Global Package
@@ -7,10 +7,10 @@
 import axi4_globals_pkg::*;
 
 //--------------------------------------------------------------------------------------------
-// Interface : slave_assertions
+// Interface : SlaveAssertions
 // Used to write the assertion checks required for the slave checks
 //--------------------------------------------------------------------------------------------
-interface slave_assertions (input                     aclk,
+interface SlaveAssertions (input                     aclk,
                              input                     aresetn,
                              //Write Address Channel Signals
                              input               [3:0] awid,
@@ -67,7 +67,7 @@ interface slave_assertions (input                     aclk,
   `include "uvm_macros.svh";
 
   initial begin
-    `uvm_info("SLAVE_ASSERTIONS","SLAVE_ASSERTIONS",UVM_LOW);
+    `uvm_info("SlaveAssertions","SlaveAssertions",UVM_LOW);
   end
   
 
@@ -219,7 +219,7 @@ interface slave_assertions (input                     aclk,
   endproperty : axi_read_data_channel_valid_stable_check
   AXI_RD_VALID_STABLE_CHECK : assert property (axi_read_data_channel_valid_stable_check);
 
-endinterface : slave_assertions
+endinterface : SlaveAssertions
 
 `endif
 

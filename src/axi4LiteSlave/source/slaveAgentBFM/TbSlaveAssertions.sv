@@ -1,5 +1,5 @@
-`ifndef TB_SLAVE_ASSERTIONS_INCLUDED_
-`define TB_SLAVE_ASSERTIONS_INCLUDED_
+`ifndef TBSLAVEASSERTIONS_INCLUDED_
+`define TBSLAVEASSERTIONS_INCLUDED_
 
 //-------------------------------------------------------
 // Importing global package
@@ -13,10 +13,10 @@ import axi4_globals_pkg::*;
 import uvm_pkg::*;
 
 //--------------------------------------------------------------------------------------------
-// Module : tb_slave_assertions
+// Module : TbSlaveAssertions
 // Used to write the assertion checks testbench required for the slave assertion
 //--------------------------------------------------------------------------------------------
-module tb_slave_assertions;
+module TbSlaveAssertions;
   bit aclk;
   bit aresetn;
   //Write Address Channel Signals
@@ -1268,7 +1268,7 @@ module tb_slave_assertions;
     end
   endtask : if_rd_channel_valid_stable_negative_case
  
-endmodule : tb_slave_assertions
+endmodule : TbSlaveAssertions
 
 `endif
 

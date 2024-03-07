@@ -5,10 +5,10 @@ package Axi4LiteSlaveReadSeqPkg;
 
   `include "uvm_macros.svh"
   import uvm_pkg::*;
-  import axi4LiteSlaveReadPkg::*;
-  import axi4LiteGlobalsPkg::*; 
+  import Axi4LiteSlaveReadPkg::*;
+  import Axi4LiteGlobalsPkg::*; 
  
-  `include "axi4LiteSlaveReadBaseSeq.sv"
+  `include "Axi4LiteSlaveReadBaseSeq.sv"
 
 endpackage : Axi4LiteSlaveReadSeqPkg
 `endif

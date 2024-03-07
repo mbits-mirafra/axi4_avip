@@ -5,10 +5,10 @@ package Axi4LiteSlaveWriteSeqPkg;
 
   `include "uvm_macros.svh"
   import uvm_pkg::*;
-  import axi4LiteSlaveWritePkg::*;
-  import axi4LiteGlobalsPkg::*; 
+  import Axi4LiteSlaveWritePkg::*;
+  import Axi4LiteGlobalsPkg::*; 
  
-  `include "axi4LiteSlaveWriteBaseSeq.sv"
+  `include "Axi4LiteSlaveWriteBaseSeq.sv"
 
 endpackage : Axi4LiteSlaveWriteSeqPkg
 `endif

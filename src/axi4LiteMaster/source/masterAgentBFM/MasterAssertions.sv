@@ -1,5 +1,5 @@
-`ifndef MASTER_ASSERTIONS_INCLUDED_
-`define MASTER_ASSERTIONS_INCLUDED_
+`ifndef MASTERASSERTIONS_INCLUDED_
+`define MASTERASSERTIONS_INCLUDED_
 
 //-------------------------------------------------------
 // Importing Global Package
@@ -7,10 +7,10 @@
 import axi4_globals_pkg::*;
 
 //--------------------------------------------------------------------------------------------
-// Interface : master_assertions
+// Interface : MasterAssertions
 // Used to write the assertion checks required for the master checks
 //--------------------------------------------------------------------------------------------
-interface master_assertions (input                     aclk,
+interface MasterAssertions (input                     aclk,
                              input                     aresetn,
                              //Write Address Channel Signals
                              input               [3:0] awid,
@@ -67,7 +67,7 @@ interface master_assertions (input                     aclk,
   `include "uvm_macros.svh";
 
   initial begin
-    `uvm_info("MASTER_ASSERTIONS","MASTER_ASSERTIONS",UVM_LOW);
+    `uvm_info("MasterAssertions","MasterAssertions",UVM_LOW);
   end
   
 
@@ -220,7 +220,7 @@ interface master_assertions (input                     aclk,
   endproperty : axi_read_data_channel_valid_stable_check
   AXI_RD_VALID_STABLE_CHECK : assert property (axi_read_data_channel_valid_stable_check);
 
-endinterface : master_assertions
+endinterface : MasterAssertions
 
 `endif
 

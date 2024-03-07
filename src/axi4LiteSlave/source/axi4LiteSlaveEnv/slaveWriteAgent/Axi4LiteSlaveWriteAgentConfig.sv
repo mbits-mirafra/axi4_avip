@@ -13,7 +13,7 @@ class Axi4LiteSlaveWriteAgentConfig extends uvm_object;
   uvm_active_passive_enum isActive = UVM_ACTIVE;  
   
   //Variable: hasCoverage
-  //Used for enabling the master agent coverage
+  //Used for enabling the slave agent coverage
   bit hasCoverage;
 
   //Variable: slave_id

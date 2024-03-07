@@ -194,7 +194,7 @@ class Axi4LiteMasterReadCoverage extends uvm_subscriber #(Axi4LiteMasterReadTran
   // Externally defined Tasks and Functions
   //-------------------------------------------------------
   extern function new(string name = "Axi4LiteMasterReadCoverage", uvm_component parent = null);
-  //extern virtual function void write(Axi4LiteMasterReadTransaction t);
+  extern virtual function void write(Axi4LiteMasterReadTransaction t);
   //extern virtual function void report_phase(uvm_phase phase);
 
 endclass : Axi4LiteMasterReadCoverage
@@ -211,7 +211,7 @@ function Axi4LiteMasterReadCoverage::new(string name = "Axi4LiteMasterReadCovera
   super.new(name, parent);
   // GopalS: axi4_master_covergroup =new();
 endfunction : new
-/*
+
 //--------------------------------------------------------------------------------------------
 // Function: write
 // sampling is done
@@ -219,11 +219,12 @@ endfunction : new
 function void Axi4LiteMasterReadCoverage::write(Axi4LiteMasterReadTransaction t);
  `uvm_info(get_type_name(),$sformatf("Before calling SAMPLE METHOD"),UVM_HIGH);
 
-  axi4_master_covergroup.sample(axi4LiteMasterReadAgentConfig,t);
+//  axi4_master_covergroup.sample(axi4LiteMasterReadAgentConfig,t);
 
   `uvm_info(get_type_name(),"After calling SAMPLE METHOD",UVM_HIGH);
 endfunction: write
 
+/*
 //--------------------------------------------------------------------------------------------
 // Function: report_phase
 // Used for reporting the coverage instance percentage values

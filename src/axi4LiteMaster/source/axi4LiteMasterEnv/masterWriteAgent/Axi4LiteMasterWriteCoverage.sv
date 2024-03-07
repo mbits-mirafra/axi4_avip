@@ -1,20 +1,11 @@
 `ifndef AXI4LITEMASTERWRITECOVERAGE_INCLUDED_
 `define AXI4LITEMASTERWRITECOVERAGE_INCLUDED_
 
-//--------------------------------------------------------------------------------------------
-// master_coverage determines the how much code is covered for better functionality of the TB.
-//--------------------------------------------------------------------------------------------
 class Axi4LiteMasterWriteCoverage extends uvm_subscriber #(Axi4LiteMasterWriteTransaction);
   `uvm_component_utils(Axi4LiteMasterWriteCoverage)
 
-  // Declaring handle for master agent configuration class 
-  Axi4LiteMasterWriteAgentConfig axi4LiteMasterWriteAgentConfig;
+//  Axi4LiteMasterWriteAgentConfig axi4LiteMasterWriteAgentConfig;
  
-  //-------------------------------------------------------
-  // Covergroup: axi4_master_covergroup
-  // Covergroup consists of the various coverpoints based on
-  // no. of the variables used to improve the coverage.
-  //-------------------------------------------------------
 /*  covergroup axi4_master_covergroup with function sample (Axi4LiteMasterWriteAgentConfig cfg, Axi4LiteMasterWriteTransaction packet);
     option.per_instance = 1;
 
@@ -194,7 +185,7 @@ class Axi4LiteMasterWriteCoverage extends uvm_subscriber #(Axi4LiteMasterWriteTr
   // Externally defined Tasks and Functions
   //-------------------------------------------------------
   extern function new(string name = "Axi4LiteMasterWriteCoverage", uvm_component parent = null);
-  //extern virtual function void write(Axi4LiteMasterWriteTransaction t);
+  extern virtual function void write(Axi4LiteMasterWriteTransaction t);
   //extern virtual function void report_phase(uvm_phase phase);
 
 endclass : Axi4LiteMasterWriteCoverage
@@ -211,7 +202,6 @@ function Axi4LiteMasterWriteCoverage::new(string name = "Axi4LiteMasterWriteCove
   super.new(name, parent);
 // GopalS:   axi4_master_covergroup =new();
 endfunction : new
-/*
 //--------------------------------------------------------------------------------------------
 // Function: write
 // sampling is done
@@ -219,10 +209,12 @@ endfunction : new
 function void Axi4LiteMasterWriteCoverage::write(Axi4LiteMasterWriteTransaction t);
  `uvm_info(get_type_name(),$sformatf("Before calling SAMPLE METHOD"),UVM_HIGH);
 
-  axi4_master_covergroup.sample(axi4LiteMasterWriteAgentConfig,t);
+//  axi4_master_covergroup.sample(axi4LiteMasterWriteAgentConfig,t);
 
   `uvm_info(get_type_name(),"After calling SAMPLE METHOD",UVM_HIGH);
 endfunction: write
+
+/*
 
 //--------------------------------------------------------------------------------------------
 // Function: report_phase

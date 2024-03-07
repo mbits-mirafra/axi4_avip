@@ -49,13 +49,6 @@ function Axi4LiteSlaveWriteAgent::new(string name = "Axi4LiteSlaveWriteAgent", u
   super.new(name, parent);
 endfunction : new
 
-//--------------------------------------------------------------------------------------------
-// Function: build_phase
-// Creates the required ports, gets the required configuration from config_db
-//
-// Parameters:
-//  phase - stores the current phase
-//--------------------------------------------------------------------------------------------
 function void Axi4LiteSlaveWriteAgent::build_phase(uvm_phase phase);
   super.build_phase(phase);
 
@@ -84,9 +77,9 @@ function void Axi4LiteSlaveWriteAgent::connect_phase(uvm_phase phase);
   if(axi4LiteSlaveWriteAgentConfig.isActive == UVM_ACTIVE) begin
     axi4LiteSlaveWriteDriverProxy.axi4LiteSlaveWriteAgentConfig  = axi4LiteSlaveWriteAgentConfig;
     axi4LiteSlaveWriteSequencer.axi4LiteSlaveWriteAgentConfig = axi4LiteSlaveWriteAgentConfig;
-    axi4_slave_read_seqr_h.axi4LiteSlaveWriteAgentConfig  = axi4LiteSlaveWriteAgentConfig;
-    axi4LiteSlaveWriteCoverage.axi4LiteSlaveWriteAgentConfig        = axi4LiteSlaveWriteAgentConfig;
-  /*  
+    axi4LiteSlaveWriteCoverage.axi4LiteSlaveWriteAgentConfig  = axi4LiteSlaveWriteAgentConfig;
+    end
+    /*  
     // Connecting the ports
     axi4LiteSlaveWriteDriverProxy.axi_write_seq_item_port.connect(axi4LiteSlaveWriteSequencer.seq_item_export);
     axi4LiteSlaveWriteDriverProxy.axi_read_seq_item_port.connect(axi4_slave_read_seqr_h.seq_item_export);

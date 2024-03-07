@@ -12,6 +12,7 @@ package Axi4LiteMasterEnvPkg;
 
   `include "Axi4LiteMasterEnvConfig.sv"
   `include "Axi4LiteMasterEnv.sv"
+  `include "Axi4LiteMasterVirtualSequencer.sv"
 
 endpackage : Axi4LiteMasterEnvPkg
 

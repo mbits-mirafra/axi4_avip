@@ -194,7 +194,7 @@ class Axi4LiteSlaveWriteCoverage extends uvm_subscriber#(Axi4LiteSlaveWriteTrans
   // Externally defined Tasks and Functions
   //-------------------------------------------------------
   extern function new(string name = "Axi4LiteSlaveWriteCoverage", uvm_component parent = null);
-// GopalS:   extern virtual function void write(Axi4LiteSlaveWriteTransaction t);
+  extern virtual function void write(Axi4LiteSlaveWriteTransaction t);
  // GopalS:  extern virtual function void report_phase(uvm_phase phase);
 endclass : Axi4LiteSlaveWriteCoverage
 
@@ -209,20 +209,17 @@ function Axi4LiteSlaveWriteCoverage::new(string name = "Axi4LiteSlaveWriteCovera
   super.new(name, parent);
   // GopalS: axi4_slave_covergroup =new();
 endfunction : new
-/*
-//--------------------------------------------------------------------------------------------
-// Function: write
-// sampling is done
-//--------------------------------------------------------------------------------------------
+
 function void Axi4LiteSlaveWriteCoverage::write(Axi4LiteSlaveWriteTransaction t);
  `uvm_info(get_type_name(),$sformatf("Before calling SAMPLE METHOD"),UVM_HIGH);
 
-  axi4_slave_covergroup.sample(axi4LiteSlaveWriteAgentConfig,t);
+//  axi4_slave_covergroup.sample(axi4LiteSlaveWriteAgentConfig,t);
 
   `uvm_info(get_type_name(),"After calling SAMPLE METHOD",UVM_HIGH);
 
 endfunction: write
 
+/*
 //--------------------------------------------------------------------------------------------
 // Function: report_phase
 // Used for reporting the coverage instance percentage values

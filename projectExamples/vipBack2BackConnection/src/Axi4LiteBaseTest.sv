@@ -1,45 +1,34 @@
-`ifndef AXI4_BASE_TEST_INCLUDED_
-`define AXI4_BASE_TEST_INCLUDED_
+`ifndef AXI4LITEBASETEST_INCLUDED_
+`define AXI4LITEBASETEST_INCLUDED_
 
-//--------------------------------------------------------------------------------------------
-// Class: axi4_base_test
-// axi4_base test has the test scenarios for testbench which has the env, config, etc.
-// Sequences are created and started in the test
-//--------------------------------------------------------------------------------------------
-class axi4_base_test extends uvm_test;
+class Axi4LiteBaseTest extends uvm_test;
   
-  `uvm_component_utils(axi4_base_test)
+  `uvm_component_utils(Axi4LiteBaseTest)
 
-  // Variable: e_cfg_h
-  // Declaring environment config handle
-  axi4_env_config axi4_env_cfg_h;
-
-  // Variable: axi4_env_h
-  // Handle for environment 
-  axi4_env axi4_env_h;
-
+  Axi4LiteEnvConfig axi4LiteEnvConfig;
+  Axi4LiteMasterEnv axi4LiteMasterEnv;
   //-------------------------------------------------------
   // Externally defined Tasks and Functions
   //-------------------------------------------------------
-  extern function new(string name = "axi4_base_test", uvm_component parent = null);
-  extern virtual function void build_phase(uvm_phase phase);
+  extern function new(string name = "Axi4LiteBaseTest", uvm_component parent = null);
+/*  extern virtual function void build_phase(uvm_phase phase);
   extern virtual function void setup_axi4_env_cfg();
   extern virtual function void setup_axi4_master_agent_cfg();
   extern virtual function void setup_axi4_slave_agent_cfg();
   extern virtual function void end_of_elaboration_phase(uvm_phase phase);
   extern virtual task run_phase(uvm_phase phase);
-
-endclass : axi4_base_test
+*/
+endclass : Axi4LiteBaseTest
 
 //--------------------------------------------------------------------------------------------
 // Construct: new
 //  Initializes class object
 //
 // Parameters:
-//  name - axi4_base_test
+//  name - Axi4LiteBaseTest
 //  parent - parent under which this component is created
 //--------------------------------------------------------------------------------------------
-function axi4_base_test::new(string name = "axi4_base_test",uvm_component parent = null);
+function Axi4LiteBaseTest::new(string name = "Axi4LiteBaseTest",uvm_component parent = null);
   super.new(name, parent);
 endfunction : new
 
@@ -50,12 +39,13 @@ endfunction : new
 // Parameters:
 //  phase - uvm phase
 //--------------------------------------------------------------------------------------------
-function void axi4_base_test::build_phase(uvm_phase phase);
+/*
+function void Axi4LiteBaseTest::build_phase(uvm_phase phase);
   super.build_phase(phase);
   // Setup the environemnt cfg 
   setup_axi4_env_cfg();
   // Create the environment
-  axi4_env_h = axi4_env::type_id::create("axi4_env_h",this);
+  axi4LiteMasterEnv =  Axi4LiteMasterEnv::type_id::create("axi4LiteMasterEnv",this);
 endfunction : build_phase
 
 
@@ -64,7 +54,7 @@ endfunction : build_phase
 // Setup the environment configuration with the required values
 // and store the handle into the config_db
 //--------------------------------------------------------------------------------------------
-function void axi4_base_test:: setup_axi4_env_cfg();
+function void Axi4LiteBaseTest:: setup_axi4_env_cfg();
   axi4_env_cfg_h = axi4_env_config::type_id::create("axi4_env_cfg_h");
  
   axi4_env_cfg_h.has_scoreboard = 1;
@@ -88,7 +78,7 @@ endfunction: setup_axi4_env_cfg
 // Setup the axi4_master agent configuration with the required values
 // and store the handle into the config_db
 //--------------------------------------------------------------------------------------------
-function void axi4_base_test::setup_axi4_master_agent_cfg();
+function void Axi4LiteBaseTest::setup_axi4_master_agent_cfg();
   bit [63:0]local_min_address;
   bit [63:0]local_max_address;
   axi4_env_cfg_h.axi4_master_agent_cfg_h = new[axi4_env_cfg_h.no_of_masters];
@@ -123,7 +113,7 @@ endfunction: setup_axi4_master_agent_cfg
 // Setup the axi4_slave agent(s) configuration with the required values
 // and store the handle into the config_db
 //--------------------------------------------------------------------------------------------
-function void axi4_base_test::setup_axi4_slave_agent_cfg();
+function void Axi4LiteBaseTest::setup_axi4_slave_agent_cfg();
   axi4_env_cfg_h.axi4_slave_agent_cfg_h = new[axi4_env_cfg_h.no_of_slaves];
   foreach(axi4_env_cfg_h.axi4_slave_agent_cfg_h[i])begin
     axi4_env_cfg_h.axi4_slave_agent_cfg_h[i] =
@@ -153,7 +143,7 @@ endfunction: setup_axi4_slave_agent_cfg
 // Parameters:
 //  phase - uvm phase
 //--------------------------------------------------------------------------------------------
-function void axi4_base_test::end_of_elaboration_phase(uvm_phase phase);
+function void Axi4LiteBaseTest::end_of_elaboration_phase(uvm_phase phase);
   uvm_top.print_topology();
   uvm_test_done.set_drain_time(this,3000ns);
 endfunction : end_of_elaboration_phase
@@ -165,9 +155,9 @@ endfunction : end_of_elaboration_phase
 // Parameters:
 //  phase - uvm phase
 //--------------------------------------------------------------------------------------------
-task axi4_base_test::run_phase(uvm_phase phase);
+task Axi4LiteBaseTest::run_phase(uvm_phase phase);
 
-  phase.raise_objection(this, "axi4_base_test");
+  phase.raise_objection(this, "Axi4LiteBaseTest");
 
   `uvm_info(get_type_name(), $sformatf("Inside BASE_TEST"), UVM_NONE);
   super.run_phase(phase);
@@ -176,6 +166,6 @@ task axi4_base_test::run_phase(uvm_phase phase);
   phase.drop_objection(this);
 
 endtask : run_phase
-
+*/
 `endif
 

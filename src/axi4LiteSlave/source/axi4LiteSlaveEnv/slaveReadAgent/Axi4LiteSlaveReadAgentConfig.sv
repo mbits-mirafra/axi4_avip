@@ -36,10 +36,6 @@ class Axi4LiteSlaveReadAgentConfig extends uvm_object;
   //Used to determine the number of wait states inserted for read data channel
   int wait_count_read_data_channel;
 
-  //Variable: slave_response_mode
-  //Used to enable the out_of_order for writres and reads
-  rand response_mode_e slave_response_mode;
-
   //Variable: minimum_transactions
   //Used to set the minimum txns for out_of_order
   protected bit[1:0] minimum_transactions = 2;
@@ -48,14 +44,7 @@ class Axi4LiteSlaveReadAgentConfig extends uvm_object;
   //Used to set the maximumm txns for out_of_order
   bit[3:0] maximum_transactions;
 
-  //Variable: read_data_mode
-  //Used to set type of data to read
-  read_data_type_mode_e read_data_mode;
-
-  //Used to set the qos mode
-  qos_mode_e qos_mode_type;
-
-  //Variable: user_rdata
+ //Variable: user_rdata
   //Used to set default read data
   bit[DATA_WIDTH-1:0] user_rdata;
 

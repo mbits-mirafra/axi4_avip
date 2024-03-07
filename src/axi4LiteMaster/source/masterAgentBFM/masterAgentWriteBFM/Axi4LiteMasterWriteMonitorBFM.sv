@@ -66,8 +66,8 @@ interface Axi4LiteMasterWriteMonitorBFM(input bit aclk, input bit aresetn,
   //-------------------------------------------------------
   // Importing axi4 Global Package master package
   //-------------------------------------------------------
-//TODO  import axi4_master_pkg::Axi4LiteMasterWriteMonitorProxy;
  
+  Axi4LiteMasterWritePkg::Axi4LiteMasterWriteMonitorProxy;  
   //Variable : axi4LiteMasterWriteMonitorProxy
   //Creating the handle for proxy monitor
  

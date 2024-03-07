@@ -69,7 +69,7 @@ interface Axi4LiteMasterReadMonitorBFM(input bit aclk, input bit aresetn,
   //-------------------------------------------------------
   // Importing axi4 Global Package master package
   //-------------------------------------------------------
-//TODO  import axi4_master_pkg::Axi4LiteMasterReadMonitorProxy;
+  Axi4LiteMasterReadPkg::Axi4LiteMasterReadMonitorProxy; 
  
   //Variable : Axi4LiteMasterReadMonitorProxy
   //Creating the handle for proxy monitor

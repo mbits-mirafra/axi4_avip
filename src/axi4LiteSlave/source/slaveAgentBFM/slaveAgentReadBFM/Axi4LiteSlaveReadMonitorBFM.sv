@@ -69,7 +69,7 @@ interface Axi4LiteSlaveReadMonitorBFM(input bit aclk, input bit aresetn,
   //-------------------------------------------------------
   // Importing axi4 Global Package Slave package
   //-------------------------------------------------------
-//TODO  import axi4_Slave_pkg::Axi4LiteSlaveReadMonitorProxy;
+  import Axi4LiteSlaveReadPkg::Axi4LiteSlaveReadMonitorProxy;
  
   //Variable : Axi4LiteSlaveReadMonitorProxy
   //Creating the handle for proxy monitor

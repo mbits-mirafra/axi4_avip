@@ -73,8 +73,8 @@ interface Axi4LiteMasterReadDriverBFM(input bit                      aclk,
   //-------------------------------------------------------
   // Importing Global Package
   //-------------------------------------------------------
-//TODO  import axi4_master_pkg::axi4LiteMasterReadDriverProxy;
 
+  Axi4LiteMasterReadPkg::Axi4LiteMasterReadDriverProxy;
   //Variable: name
   //Used to store the name of the interface
   string name = "Axi4LiteMasterReadDriverBFM"; 

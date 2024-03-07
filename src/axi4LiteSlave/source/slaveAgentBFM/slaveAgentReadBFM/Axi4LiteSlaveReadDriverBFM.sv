@@ -73,7 +73,7 @@ interface Axi4LiteSlaveReadDriverBFM(input bit                      aclk,
   //-------------------------------------------------------
   // Importing Global Package
   //-------------------------------------------------------
-//TODO  import axi4_Slave_pkg::axi4LiteSlaveReadDriverProxy;
+  import Axi4LiteSlaveReadPkg::Axi4LiteSlaveReadDriverProxy;
 
   //Variable: name
   //Used to store the name of the interface

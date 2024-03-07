@@ -1,12 +1,10 @@
-`ifndef AXI4_GLOBALS_PKG_INCLUDED_
-`define AXI4_GLOBALS_PKG_INCLUDED_
-
+`ifndef AXI4LITEGLOBALSPKG_INCLUDED
+`define AXI4LITEGLOBALSPKG_INCLUDED
 //--------------------------------------------------------------------------------------------
 // Package: axi4_globals_pkg
 // Used for storing enums, parameters and defining the structs
 //--------------------------------------------------------------------------------------------
-package axi4_globals_pkg;
-
+package Axi4LiteGlobalsPkg;
   //-------------------------------------------------------
   // Parameters used in axi4_avip are given below
   //-------------------------------------------------------
@@ -371,7 +369,6 @@ package axi4_globals_pkg;
     int                     outstanding_read_tx;
   } axi4_transfer_cfg_s;
 
-endpackage : axi4_globals_pkg
-
+endpackage : Axi4LiteGlobalsPkg
 `endif
 

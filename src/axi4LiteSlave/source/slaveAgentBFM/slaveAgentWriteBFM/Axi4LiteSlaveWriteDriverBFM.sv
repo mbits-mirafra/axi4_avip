@@ -73,12 +73,12 @@ interface Axi4LiteSlaveWriteDriverBFM(input bit                      aclk,
   //-------------------------------------------------------
   // Importing Global Package
   //-------------------------------------------------------
-//TODO  import axi4_slave_pkg::Axi4LiteSlaveWriteDriverProxy;
 
+  import Axi4LiteSlaveWritePkg::Axi4LiteSlaveWriteDriverProxy;
   //Variable: name
   //Used to store the name of the interface
   string name = "Axi4LiteSlaveWriteDriverBFM"; 
-
+  
   //Variable: axi4LiteSlaveWriteDriverProxy
   //Creating the handle for MasterWriteDriverProxy
   Axi4LiteSlaveWriteDriverProxy axi4LiteSlaveWriteDriverProxy;

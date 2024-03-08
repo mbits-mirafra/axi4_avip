@@ -1,0 +1,623 @@
+/*
+ * Base colors (id's are assigned to 'body' tag)
+ */
+
+#ucdb2html_index {
+	color:            black;
+	background-color: white;
+}
+
+#ucdb2html_summary {
+	color:            black;
+	background-color: white;
+}
+
+#ucdb2html_detail {
+	color:            black;
+	background-color: white;
+}
+
+#loc_rec_tables {
+	border-color: 	white;
+}
+
+#loc_rec_tables  td,th{
+	border-color: 	white;
+}
+
+/*
+ * Common styles (summary and detail pages)
+ *
+ * To override a style for just one of the page types:
+ *   ucdb2html_index    Top-level index and title pages
+ *   ucdb2html_summary  Scope/testplan summary pages
+ *   ucdb2html_detail   Coverage detail pages
+ * add the page id designator to the style statement.
+ *
+ * Example:
+ *
+ *   To change the background of "yellow" coverage percent
+ *   cells, add the following style to the stylesheet:
+ *
+ *     #ucdb2html_detail td.bgYellow {
+ *       color:            white;
+ *       background-color: silver;
+ *       font-weight:      bold;
+ *     }
+ */
+
+table.tableTheme {
+	border-spacing: 0;
+	border-collapse: collapse;
+	border-style: none;
+	box-shadow: 0 1px 2px #d1d1d1;
+	-webkit-box-shadow: 0 1px 2px #d1d1d1;
+	-moz-box-shadow: 0 1px 2px #d1d1d1;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 13px;
+}
+table.tableTheme td, table.tableTheme th {
+       border-style: none;
+       border-radius: 0;      /* no rounded corners */
+       -webkit-border-radius: 0; 
+       -moz-border-radius: 0;
+       padding: 8px 18px;
+}
+table.tableTheme tr:first-child th:last-child {
+       border-top-right-radius:3px;
+       -webkit-border-top-right-radius:3px;
+       -moz-border-top-right-radius:3px;
+}
+table.tableTheme tr:first-child th:first-child {
+       border-top-left-radius:3px;
+       -webkit-border-top-left-radius:3px;
+       -moz-border-top-left-radius:3px;
+}
+
+a.stmt_testdata:link { /* the link for pertest.htm in stmt details page */
+	color:#FFFFFF;
+}
+a.stmt_testdata:visited { /* the link for pertest.htm in stmt details page */
+	color:#A0A0A0;
+}
+
+td.cvg_details_l { /* covergroups details left column */
+	padding-right:5px;
+	border-style:none; /* no borders */
+}
+
+td.cvg_details_r { /* covergroups details right column */
+	padding-left:5px;
+	border-style:none; /* no borders */
+	text-align:right;
+}
+
+table.nude, td.nude {
+	padding:          0;
+	border-style:     none; /* table with no borders */
+	border-spacing:   0;
+	border-collapse:  collapse;
+}
+
+table, th, td {
+	border-width:     1px;
+	border-style:     solid;
+}
+
+th {
+	font-weight:      bold;
+	background-color: #90CCCC;
+}
+
+table, th, td {
+	-webkit-border-radius: .3em; 
+	-moz-border-radius: .3em;
+	border-radius: .3em;
+}
+
+table {
+	border-color: 	lightgrey;
+}
+
+th, td {
+	border-color: 	darkGrey;
+}
+
+td.sharpEdge {
+	-webkit-border-radius: 0; 
+	-moz-border-radius: 0;
+	border-radius: 0;
+}
+
+td.stmtNoCvgBlock {
+	font-weight:bold;
+	height: 4em;
+}
+
+tr.lightBlue {
+	background-color: #D3D3F2;
+}
+
+th.clickable {
+	cursor:			  pointer;
+}
+
+td.invisible {
+	/* This invisible cell force the background to be white
+	   we need to do this so that we keep these indentation
+	   cells out of the row color.
+	   
+	   There is another class called invisible_nobg to make
+	   indentation but following a same background of the row. 
+	*/
+	width:            20px;
+	border-width:     0;
+	background-color: #FFFFFF;
+}
+
+td.invisible_nobg {
+	width:            20px;
+	border-width:     0;
+}
+
+td.odd, td.odd_r, td.odd_rGrey , td.odd_c {
+	background-color: #EEEEEE;
+}
+
+td.even, td.even_r, td.even_rGrey. td.even_c {
+	background-color: #FAFAFA;
+}
+
+td.odd, td.even , td.even_c, td.odd_c {
+	color: #000000;
+}
+
+td.odd_r, td.even_r, td.odd_rGrey, td.even_rGrey {
+	color: #000000;
+}
+
+
+td.odd_r, td.even_r, td.odd_rGrey, td.even_rGrey {
+	text-align:       right;
+}
+
+td.even_rGrey, td.odd_rGrey {
+	color:            dimGrey;
+}
+
+td.even_c, td.odd_c {
+	text-align:       center;
+}
+
+td.evenGrey {
+	color:            dimGrey;
+	background-color: #FAFAFA;
+}
+
+td.evenRed {
+	color:            red;
+	background-color: #FAFAFA;
+}
+
+td.oddGrey {
+	color:            dimGrey;
+	background-color: #EEEEEE;
+}
+
+td.oddRed {
+	color:            red;
+	background-color: #EEEEEE;
+}
+
+td.red {
+	color:            red;
+	text-align:       center;
+	font-weight:      bold;
+}
+
+td.grey {
+	text-align:       center;
+	font-weight:      bold;
+	color:            white;
+	background-color: dimGrey;
+}
+
+td.green {
+	color:            green;
+	text-align:       center;
+	font-weight:      bold;
+}
+
+td.bgRed, td.bgRed_r {
+	color:            red;
+	background-color:  	rgb(255,247,247);
+	font-weight:      bold;
+}
+
+td.bgYellow, td.bgYellow_r {
+	color:            black;
+	background-color: rgb(253,255,231);
+	font-weight:      bold;
+}
+
+td.bgGreen, td.bgGreen_r {
+	color:            black;
+	background-color: rgb(231,255,235);
+	font-weight:      bold;
+}
+
+td.bgRed, td.bgYellow, td.bgGreen {
+	text-align:       center;
+}
+
+td.bgRed_r, td.bgYellow_r, td.bgGreen_r {
+	text-align:       right;
+}
+
+/*
+ * Coverage detail source listings (based on hdl2html)
+ */
+
+table.src {
+	table-layout:     fixed;
+	border-width:     0;
+}
+
+table.src pre {
+	display: inline; /* we need this to remove the blank space added above/under
+	                  * the pre element. This blank space is added by default
+					  * because, by default the pre element has "display: block".
+					  * Changing "block" to "inline" will fix the problem.
+					  */
+}
+
+textarea.exclEvenTxtBox {
+	border:0;
+	background-color:#FAFAFA;
+	font-family:Serif;
+	color:gray;
+}
+
+textarea.exclOddTxtBox {
+	border:0;
+	background-color:#EEEEEE;
+	font-family:Serif;
+	color:gray;
+}
+
+textarea.oddTxtBox {
+	border:0;
+	background-color:#EEEEEE;
+	font-family:Serif;
+}
+
+td.srcL {
+	border-width:     0;
+	width:            50px;
+	color:            red;
+	text-align:       right;
+	font-family:      monospace;
+}
+
+td.srcS {
+	border-width:     0;
+	width:            50px;
+	color:            red;
+	text-align:       left;
+	font-family:      monospace;
+}
+
+td.sN {
+	border-width:     0;
+	width:            50px;
+	padding-right:    10px;
+	text-align:       right;
+	font-family:      monospace;
+}
+
+td.sY {
+	border-width:     0;
+	width:            50px;
+	padding-right:    10px;
+	text-align:       right;
+	font-family:      monospace;
+}
+
+td.sR {
+	border-width:     0;
+	width:            50px;
+	padding-right:    10px;
+	color:            white;
+	background-color: red;
+	text-align:       right;
+	font-family:      monospace;
+}
+
+td.sG {
+	border-width:     0;
+	width:            50px;
+	padding-right:    10px;
+	color:            white;
+	background-color: green;
+	text-align:       right;
+	font-family:      monospace;
+}
+
+td.sE {
+	border-width:     0;
+	width:            50px;
+	padding-right:    10px;
+	color:            white;
+	background-color: dimGrey;
+	text-align:       right;
+	font-family:      monospace;
+}
+
+td.srcN {
+	white-space:      pre;
+	border-width:     0;
+	font-family:      monospace;
+}
+
+td.srcR {
+	white-space:      pre;
+	border-width:     0;
+	color:            white;
+	background-color: red;
+	font-family:      monospace;
+}
+
+td.srcY {
+	white-space:      pre;
+	border-width:     0;
+	background-color: yellow;
+	font-family:      monospace;
+}
+
+td.srcG {
+	white-space:      pre;
+	border-width:     0;
+	color:            white;
+	background-color: green;
+	font-family:      monospace;
+}
+
+td.srcE {
+	white-space:      pre;
+	border-width:     0;
+	color:            white;
+	background-color: dimGrey;
+	font-family:      monospace;
+}
+
+/*
+ * Keyword highlighting styles -- these are not currently
+ * used because they could clash with the coverage bgcolor
+ * styles -- we need to expand these to take into account
+ * the "parent" span.
+
+#ucdb2html_detail span.comment {
+	color:            green;
+}
+#ucdb2html_detail span.literal {
+	color:            red;
+}
+#ucdb2html_detail span.compile {
+	color:            purple;
+}
+#ucdb2html_detail span.keyword {
+	color:            blue;
+}
+#ucdb2html_detail span.keytype {
+	color:            maroon;
+}
+#ucdb2html_detail span.keyattr {
+	color:            red;
+}
+#ucdb2html_detail span.keyvalu {
+	color:            orange;
+}
+ *
+ */
+
+/*
+ * Hovering tooltips (for toggle detail page)
+ */
+
+a:hover {
+	position:         relative;
+}
+
+a span {
+	display:          none;
+}
+
+a:hover span {
+	display:          block;
+	position:         absolute;
+	top:              10px;
+	left:             0;
+	padding:          5px;
+	margin:           10px;
+	z-index:          100;
+	background:       #f0f0f0;
+	border:           1px dotted #c0c0c0;
+	opacity:          0.9;
+}
+
+/*
+ * Buttons to show/hide detailed coverage items
+ */
+
+table.buttons {
+	border-style:     none;
+	background-color: white;
+}
+
+td.button_on,
+td.button_off {
+	border-style:     outset;
+	font-weight:      bold;
+	text-align:       center;
+}
+
+td.button_on {
+	color:            white;
+	background-color: blue;
+}
+
+td.button_off {
+	color:            #a9a9a9;
+	background-color: #696969;
+}
+
+td.button_on1,
+td.button_off1 {
+	border-style:     outset;
+	font-weight:      bold;
+	text-align:       center;
+}
+
+/*
+ * ModelSim/Questa logo styles (lower-left frame)
+ *
+ * Note: ModelSim logo is slightly less tall than Questa logo
+ *       so the "padding" centers each in the allotted frame.
+ */
+
+#ucdb2html_model_logo {
+	background-color: white;
+}
+
+#ucdb2html_model_logo img {
+	border-style:     none;
+	padding:          12px;
+}
+
+#ucdb2html_questa_logo {
+	background-color: black;
+}
+
+#ucdb2html_questa_logo img {
+	border-style:     none;
+	padding:          5px;
+}
+
+/* *** The following classes introduced after merging all coverage types in a single page  *** */
+table.fpw { /* fill Page Width Table */
+	width: 100%; /* needed to force the table to occupy all the page */
+	background-color: #D0D0D0;
+	border-style:    none;
+	-webkit-border-radius: 0; 
+	-moz-border-radius: 0;
+	border-radius: 0;
+}
+
+td.styleNone {
+	border-style:    none;
+}
+
+/* currently; the following classes are used in covergroup details page only */
+tr.e { /* excluded row */
+	color: dimGrey;
+}
+
+td.R { /* red cell */
+	color:            red;
+	background-color:  	rgb(255,247,247);
+	font-weight:      bold;
+}
+
+td.Y { /* Yello cell */
+	color:            black;
+	background-color: rgb(253,255,231);
+	font-weight:      bold;
+}
+
+td.G { /* green cell */
+	color:            black;
+	background-color: rgb(231,255,235);
+	font-weight:      bold;
+}
+
+td.x { /* excluded cell */
+	text-align:       center;
+	font-weight:      bold;
+	color:            white;
+	background-color: dimGrey;
+}
+tr.v { /* even row. used in pertest.htm */
+	background-color: #EEEEEE;
+}
+/* ******************
+ * The following are used in the new cvg page after it has been redesigned
+ */
+.nested {
+	padding-left: 2em;
+}
+.handMouse {
+	/* When mouse hovers over this item, it takes the hand shape (hyperlink) */
+	
+	/* we need the following 2 values to handle different browsers */
+	cursor:pointer;
+	cursor:hand;
+}
+.fontBold {
+	font-weight: bold;
+}
+.nowrap {
+	/* This one is used by the row in the cvg type/inst table, in the span @ the
+	 * instance cell.
+	 * Notice that the library "DataTables" has its own "nowrap" class. So, don't
+	 * mix between both.
+	 */
+	white-space: nowrap;
+}
+.grayFont {
+	color: #AAAAAA;
+}
+
+/* This class 'whiteGrayRows' is used to create an alternating row colors table (black & white) */
+table.whiteGrayRows tr:nth-child(even) {
+	background-color: #ffffff;
+}
+table.whiteGrayRows tr:nth-child(odd) {
+	background-color: #f9f9f9;
+}
+
+/* This class 'cvpcrs' is for the table that holds cvp/crs comulative numbers */
+table.cvpcrs tr td:FIRST-CHILD,
+table.cvpcrs tr th:FIRST-CHILD {
+	text-align: left;
+}
+table.cvpcrs tr th+th,
+table.cvpcrs tr td+td {
+	/* starting from 2nd TD (column), all TDs will be right aligned */
+	text-align: right;
+}
+table.cvpcrs tr+tr+tr {
+	/* starting from 3rd row, all TRs will be this color */
+	background-color: #f9f9f9
+}
+
+ul.noList {
+	/* a list that ha no indentation and no bullets */
+	list-style-type:none;
+	padding-left:0;
+}
+
+.truncate {
+	border: 1px solid transparent;
+}
+.truncate:hover {
+	border-color: #BBBBBB;
+}
+
+tr.cvggroup { /* green cell */
+	background-color: #DDDDDD !important;
+	font-weight:      bold;
+}
+
+div.htmlFormatedCmnt {
+	border: 1px solid #BBBBBB;
+}

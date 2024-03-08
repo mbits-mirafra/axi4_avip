@@ -80,8 +80,8 @@ compile:
 	+acc \
 	+cover \
 	+fcover \
-	-l axi4_compile.log \
-	-f ../axi4_compile.f 
+	-l Axi4LiteCompile.log \
+	-f ../Axi4LiteCompile.f 
 
 	# -s means silent mode
 	#  The command executed along with the output will be displayed on the terminal
@@ -92,7 +92,7 @@ compile:
 
 # Setting a default test as base_test
 ifndef test
-override test = axi4_base_test
+override test = Axi4LiteBaseTest
 endif
 
 # Setting the default uvm_verbosity to UVM_MEDIUM
@@ -118,8 +118,8 @@ simulate:
 	# Use -novopt for no optimization - Makes the simulation slower
 	# vsim -pli finesim.so -coverage top
 	vsim -vopt \
-	work.hvl_top \
-	work.hdl_top \
+	work.HvlTop \
+	work.HdlTop \
 	-voptargs=+acc=npr \
 	-assertdebug \
 	+UVM_TESTNAME=$(test) \
@@ -198,11 +198,11 @@ compile_war_err:
 	echo "-----------------------------------------------------------------";
 	echo "------------------- Compilation Report --------------------------";
 	echo "";
-	grep "^** " axi4_compile.log;
+	grep "^** " Axi4LiteCompile.log;
 	echo "";
-	grep "^Error" axi4_compile.log;
+	grep "^Error" Axi4LiteCompile.log;
 	echo "";
-	echo "Log file path: axi4_compile.log"
+	echo "Log file path: Axi4LiteCompile.log"
 	echo "";
 	echo "-----------------------------------------------------------------";
 	echo "-----------------------------------------------------------------";

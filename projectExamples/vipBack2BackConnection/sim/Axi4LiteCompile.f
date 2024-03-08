@@ -38,12 +38,15 @@
 ../../../../src/axi4LiteSlave/source/axi4LiteSlaveEnv/slaveVirtualSequencer/Axi4LiteSlaveVirtualSeqrPkg.sv
 ../../../../src/axi4LiteSlave/source/axi4LiteSlaveEnv/Axi4LiteSlaveEnvPkg.sv
 ../../../../projectExamples/vipBack2BackConnection/src/virtualSequences/Axi4LiteVirtualSeqPkg.sv
+../../../../projectExamples/vipBack2BackConnection/src/Axi4LiteEnvPkg.sv
 ../../../../projectExamples/vipBack2BackConnection/src/Axi4LiteTestPkg.sv
 
 ../../../../src/axi4LiteMaster/source/masterAgentBFM/Axi4LiteMasterWriteInterface.sv
 ../../../../src/axi4LiteMaster/source/masterAgentBFM/Axi4LiteMasterReadInterface.sv
+../../../../src/axi4LiteMaster/source/masterAgentBFM/Axi4LiteMasterInterface.sv
 ../../../../src/axi4LiteSlave/source/slaveAgentBFM/Axi4LiteSlaveWriteInterface.sv
 ../../../../src/axi4LiteSlave/source/slaveAgentBFM/Axi4LiteSlaveReadInterface.sv
+../../../../src/axi4LiteSlave/source/slaveAgentBFM/Axi4LiteSlaveInterface.sv
 
 ../../../../src/axi4LiteMaster/source/masterAgentBFM/masterAgentWriteBFM/Axi4LiteMasterWriteAgent.sv
 ../../../../src/axi4LiteMaster/source/masterAgentBFM/masterAgentWriteBFM/Axi4LiteMasterWriteDriverBFM.sv
@@ -52,6 +55,7 @@
 ../../../../src/axi4LiteMaster/source/masterAgentBFM/masterAgentReadBFM/Axi4LiteMasterReadAgentBFM.sv
 ../../../../src/axi4LiteMaster/source/masterAgentBFM/masterAgentReadBFM/Axi4LiteMasterReadDriverBFM.sv
 ../../../../src/axi4LiteMaster/source/masterAgentBFM/masterAgentReadBFM/Axi4LiteMasterReadMonitorBFM.sv
+../../../../src/axi4LiteMaster/source/masterAgentBFM/Axi4LiteMasterAgentBFM.sv
 
 ../../../../src/axi4LiteSlave/source/slaveAgentBFM/slaveAgentWriteBFM/Axi4LiteSlaveWriteAgent.sv
 ../../../../src/axi4LiteSlave/source/slaveAgentBFM/slaveAgentWriteBFM/Axi4LiteSlaveWriteDriverBFM.sv
@@ -60,9 +64,10 @@
 ../../../../src/axi4LiteSlave/source/slaveAgentBFM/slaveAgentReadBFM/Axi4LiteSlaveReadAgentBFM.sv
 ../../../../src/axi4LiteSlave/source/slaveAgentBFM/slaveAgentReadBFM/Axi4LiteSlaveReadDriverBFM.sv
 ../../../../src/axi4LiteSlave/source/slaveAgentBFM/slaveAgentReadBFM/Axi4LiteSlaveReadMonitorBFM.sv
+../../../../src/axi4LiteSlave/source/slaveAgentBFM/Axi4LiteSlaveAgentBFM.sv
 
-../../../../projectExamples/vipBack2BackConnection/src/hdlTop.sv
-../../../../projectExamples/vipBack2BackConnection/src/hvlTop.sv
+../../../../projectExamples/vipBack2BackConnection/src/HdlTop.sv
+../../../../projectExamples/vipBack2BackConnection/src/HvlTop.sv
 
 #../../../../src/axi4LiteMaster/source/masterAgentBFM/master_assertions.sv
 #../../../../src/axi4LiteSlave/source/slaveAgentBFM/slave_assertions.sv

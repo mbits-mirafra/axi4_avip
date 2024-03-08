@@ -12,6 +12,7 @@ package Axi4LiteTestPkg;
   import Axi4LiteSlaveReadPkg::*;
   import Axi4LiteMasterEnvPkg::*;
   import Axi4LiteSlaveEnvPkg::*;
+  import Axi4LiteEnvPkg::*;
 
   import Axi4LiteMasterWriteSeqPkg::*;
   import Axi4LiteMasterReadSeqPkg::*;

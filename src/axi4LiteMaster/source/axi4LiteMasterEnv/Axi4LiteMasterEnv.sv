@@ -61,13 +61,13 @@ function void Axi4LiteMasterEnv::build_phase(uvm_phase phase);
     axi4LiteMasterReadAgent[i]=Axi4LiteMasterReadAgent::type_id::create($sformatf("axi4LiteMasterReadAgent[%0d]",i),this);
   end
   */
-/*
-  if(axi4LiteMasterEnvConfig.hasVirtualSequencer) begin
+
+  if(axi4LiteMasterEnvConfig.hasMasterVirtualSequencer) begin
     axi4LiteMasterVirtualSequencer = Axi4LiteMasterVirtualSequencer::type_id::create("axi4LiteVirtualMasterSequencer",this);
   end
-*/
+
   foreach(axi4LiteMasterWriteAgent[i]) begin
-    axi4LiteMasterVirtualSequencer = Axi4LiteMasterVirtualSequencer::type_id::create("axi4LiteVirtualMasterSequencer",this);
+    axi4LiteMasterWriteAgent[i].axi4LiteMasterWriteAgentConfig = axi4LiteMasterWriteAgentConfig[i];
   end
   
   foreach(axi4LiteMasterReadAgent[i]) begin

@@ -10,10 +10,10 @@ package Axi4LiteEnvPkg;
   import Axi4LiteMasterEnvPkg::*;
   import Axi4LiteSlaveEnvPkg::*;
 
-  `include "axi4LiteEnvConfig.sv"
-  `include "axi4LiteVirtualSequencer.sv"
-  `include "axi4LiteScoreboard.sv"
-  `include "axi4LiteEnv.sv"
+  `include "Axi4LiteEnvConfig.sv"
+  `include "Axi4LiteVirtualSequencer.sv"
+  `include "Axi4LiteScoreboard.sv"
+  `include "Axi4LiteEnv.sv"
 
 endpackage : Axi4LiteEnvPkg
 

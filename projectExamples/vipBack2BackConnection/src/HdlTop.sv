@@ -1,12 +1,12 @@
-`ifndef HDL_TOP_INCLUDED_
-`define HDL_TOP_INCLUDED_
+`ifndef HDLTOP_INCLUDED_
+`define HDLTOP_INCLUDED_
 
 //--------------------------------------------------------------------------------------------
 // Module      : HDL Top
 // Description : Has a interface master and slave agent bfm.
 //--------------------------------------------------------------------------------------------
 
-module hdl_top;
+module HdlTop;
 
   import uvm_pkg::*;
   import Axi4LiteGlobalsPkg::*;
@@ -49,25 +49,27 @@ module hdl_top;
 
   // Variable : intf
   // axi4 Interface Instantiation
-//TODO  axi4_if intf(.aclk(aclk),
-               //.aresetn(aresetn));
+  Axi4LiteMasterInterface masterIntf(.aclk(aclk),
+                               .aresetn(aresetn));
 
+  Axi4LiteSlaveInterface slaveIntf(.aclk(aclk),
+                               .aresetn(aresetn));
   //-------------------------------------------------------
   // AXI4  No of Master and Slaves Agent Instantiation
   //-------------------------------------------------------
   genvar i;
   generate
-    for (i=0; i<NO_OF_MASTERS; i++) begin : axi4_master_agent_bfm
-      axi4_master_agent_bfm #(.MASTER_ID(i)) axi4_master_agent_bfm_h(intf);
-      defparam axi4_master_agent_bfm[i].axi4_master_agent_bfm_h.MASTER_ID = i;
+    for (i=0; i<NO_OF_MASTERS; i++) begin : Axi4LiteMasterAgentBFM
+      Axi4LiteMasterAgentBFM #(.MASTER_ID(i)) axi4LiteMasterAgentBFM(masterIntf);
+      defparam Axi4LiteMasterAgentBFM[i].axi4LiteMasterAgentBFM.MASTER_ID = i;
     end
-    for (i=0; i<NO_OF_SLAVES; i++) begin : axi4_slave_agent_bfm
-      axi4_slave_agent_bfm #(.SLAVE_ID(i)) axi4_slave_agent_bfm_h(intf);
-      defparam axi4_slave_agent_bfm[i].axi4_slave_agent_bfm_h.SLAVE_ID = i;
+    for (i=0; i<NO_OF_SLAVES; i++) begin : Axi4LiteSlaveAgentBFM
+      Axi4LiteSlaveAgentBFM #(.SLAVE_ID(i)) axi4LiteSlaveAgentBFM(slaveIntf);
+      defparam Axi4LiteSlaveAgentBFM[i].axi4LiteSlaveAgentBFM.SLAVE_ID = i;
     end
   endgenerate
   
-endmodule : hdl_top
+endmodule : HdlTop
 
 `endif
 

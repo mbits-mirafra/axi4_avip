@@ -9,13 +9,15 @@ package Axi4LiteVirtualSeqPkg;
   import Axi4LiteMasterReadPkg::*;
   import Axi4LiteSlaveWritePkg::*;
   import Axi4LiteSlaveReadPkg::*;
-  import Axi4LiteMasterEnvPkg::*;
-  import Axi4LiteSlaveEnvPkg::*;
 
   import Axi4LiteMasterWriteSeqPkg::*;
   import Axi4LiteMasterReadSeqPkg::*;
   import Axi4LiteSlaveWriteSeqPkg::*;
   import Axi4LiteSlaveReadSeqPkg::*;
+  
+  import Axi4LiteMasterEnvPkg::*;
+  import Axi4LiteSlaveEnvPkg::*;
+
 
  `include "Axi4LiteVirtualBaseSeq.sv"
 endpackage : Axi4LiteVirtualSeqPkg

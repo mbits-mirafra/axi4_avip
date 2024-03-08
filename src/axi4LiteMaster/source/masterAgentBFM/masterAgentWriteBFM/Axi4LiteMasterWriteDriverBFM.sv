@@ -39,7 +39,7 @@ interface Axi4LiteMasterWriteDriverBFM(input bit                      aclk,
                                  input      [1:0] bresp,
                                  input      [3:0] buser,
                                  input            bvalid,
-                                 output	reg       bready,
+                                 output	reg       bready
                                 /* //Read Address Channel Signals
                                  output reg               [3:0] arid,
                                  output reg [ADDRESS_WIDTH-1:0] araddr,
@@ -97,9 +97,7 @@ import Axi4LiteMasterWritePkg::Axi4LiteMasterWriteDriverProxy;
     awvalid <= 1'b0;
     wvalid  <= 1'b0;
     bready  <= 1'b0;
-    arvalid <= 1'b0;
-    rready  <= 1'b0;
-    @(posedge aresetn);
+        @(posedge aresetn);
     `uvm_info(name,$sformatf("SYSTEM RESET DEACTIVATED"),UVM_HIGH)
   endtask : wait_for_aresetn
 

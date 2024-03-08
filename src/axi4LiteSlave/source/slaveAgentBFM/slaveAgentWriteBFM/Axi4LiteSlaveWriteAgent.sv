@@ -38,7 +38,7 @@ module Axi4LiteSlaveWriteAgent #(parameter int SLAVE_ID = 0)(Axi4LiteSlaveWriteI
                                                 .bresp(axi4LiteSlaveWriteInterface.bresp),
                                                 .buser(axi4LiteSlaveWriteInterface.buser),
                                                 .bvalid(axi4LiteSlaveWriteInterface.bvalid),
-                                                .bready(axi4LiteSlaveWriteInterface.bready),
+                                                .bready(axi4LiteSlaveWriteInterface.bready)
                                               /*  .arid(axi4LiteSlaveWriteInterface.arid),
                                                 .araddr(axi4LiteSlaveWriteInterface.araddr),
                                                 .arlen(axi4LiteSlaveWriteInterface.arlen),
@@ -86,7 +86,7 @@ module Axi4LiteSlaveWriteAgent #(parameter int SLAVE_ID = 0)(Axi4LiteSlaveWriteI
                                                  .bresp(axi4LiteSlaveWriteInterface.bresp),
                                                  .buser(axi4LiteSlaveWriteInterface.buser),
                                                  .bvalid(axi4LiteSlaveWriteInterface.bvalid),
-                                                 .bready(axi4LiteSlaveWriteInterface.bready),
+                                                 .bready(axi4LiteSlaveWriteInterface.bready)
                                           /*       .arid(axi4LiteSlaveWriteInterface.arid),
                                                  .araddr(axi4LiteSlaveWriteInterface.araddr),
                                                  .arlen(axi4LiteSlaveWriteInterface.arlen),
@@ -139,7 +139,7 @@ module Axi4LiteSlaveWriteAgent #(parameter int SLAVE_ID = 0)(Axi4LiteSlaveWriteI
                                                       .buser(buser),
                                                       .bvalid(bvalid),
                                                       .bready(bready),
-                                                      .bresp(bresp),
+                                                      .bresp(bresp)
                                                      /* .arid(arid),
                                                       .araddr(araddr),  
                                                       .arlen(arlen),   

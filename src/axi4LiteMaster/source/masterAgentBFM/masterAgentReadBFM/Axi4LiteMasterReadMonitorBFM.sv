@@ -6,8 +6,7 @@
 //Used as the HDL monitor for axi4
 //It connects with the HVL monitor_proxy for driving the stimulus
 //--------------------------------------------------------------------------------------------
-import axi4_globals_pkg::*;
-
+import Axi4LiteGlobalsPkg::*;
 interface Axi4LiteMasterReadMonitorBFM(input bit aclk, input bit aresetn,
                                  //Write Address Channel Signals
                                /* input  [3:0]awid,
@@ -66,10 +65,7 @@ interface Axi4LiteMasterReadMonitorBFM(input bit aclk, input bit aresetn,
   import uvm_pkg::*;
   `include "uvm_macros.svh" 
   
-  //-------------------------------------------------------
-  // Importing axi4 Global Package master package
-  //-------------------------------------------------------
-  Axi4LiteMasterReadPkg::Axi4LiteMasterReadMonitorProxy; 
+  import Axi4LiteMasterReadPkg::Axi4LiteMasterReadMonitorProxy; 
  
   //Variable : Axi4LiteMasterReadMonitorProxy
   //Creating the handle for proxy monitor

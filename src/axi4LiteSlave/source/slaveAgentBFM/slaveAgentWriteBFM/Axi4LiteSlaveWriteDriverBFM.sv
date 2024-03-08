@@ -11,63 +11,36 @@ import Axi4LiteGlobalsPkg::*;
 //  Used as the HDL driver for axi4
 //  It connects with the HVL driver_proxy for driving the stimulus
 //--------------------------------------------------------------------------------------------
-interface Axi4LiteSlaveWriteDriverBFM(input bit                      aclk, 
-                                 input bit                      aresetn,
-                                 //Write Address Channel Signals
-                                 output reg               [3:0] awid,
-                                 output reg [ADDRESS_WIDTH-1:0] awaddr,
-                                 output reg               [3:0] awlen,
-                                 output reg               [2:0] awsize,
-                                 output reg               [1:0] awburst,
-                                 output reg               [1:0] awlock,
-                                 output reg               [3:0] awcache,
-                                 output reg               [2:0] awprot,
-                                 output reg               [3:0] awqos,
-                                 output reg               [3:0] awregion,
-                                 output reg                     awuser,
-                                 output reg                     awvalid,
-                                 input    	                    awready,
-                                 //Write Data Channel Signals
-                                 output reg    [DATA_WIDTH-1: 0] wdata,
-                                 output reg [(DATA_WIDTH/8)-1:0] wstrb,
-                                 output reg                      wlast,
-                                 output reg                [3:0] wuser,
-                                 output reg                      wvalid,
-                                 input                           wready,
-                                 //Write Response Channel Signals
-                                 input      [3:0] bid,
-                                 input      [1:0] bresp,
-                                 input      [3:0] buser,
-                                 input            bvalid,
-                                 output	reg       bready,
-                                /* //Read Address Channel Signals
-                                 output reg               [3:0] arid,
-                                 output reg [ADDRESS_WIDTH-1:0] araddr,
-                                 output reg               [7:0] arlen,
-                                 output reg               [2:0] arsize,
-                                 output reg               [1:0] arburst,
-                                 output reg               [1:0] arlock,
-                                 output reg               [3:0] arcache,
-                                 output reg               [2:0] arprot,
-                                 output reg               [3:0] arqos,
-                                 output reg               [3:0] arregion,
-                                 output reg               [3:0] aruser,
-                                 output reg                     arvalid,
-                                 input                          arready,
-                                 //Read Data Channel Signals
-                                 input                  [3:0] rid,
-                                 input      [DATA_WIDTH-1: 0] rdata,
-                                 input                  [1:0] rresp,
-                                 input                        rlast,
-                                 input                  [3:0] ruser,
-                                 input                        rvalid,
-                                 output	reg                   rready  */
-                                );  
-  
-  //-------------------------------------------------------
-  // Importing UVM Package 
-  //-------------------------------------------------------
-  import uvm_pkg::*;
+interface Axi4LiteSlaveWriteDriverBFM(input               aclk    , 
+                                input                     aresetn ,
+                                //Write_address_channel
+                                input [3:0]               awid    ,
+                                input [ADDRESS_WIDTH-1:0] awaddr  ,
+                                input [3: 0]              awlen   ,
+                                input [2: 0]              awsize  ,
+                                input [1: 0]              awburst ,
+                                input [1: 0]              awlock  ,
+                                input [3: 0]              awcache ,
+                                input [2: 0]              awprot  ,
+                                input [3: 0]              awqos   ,  
+                                input                     awvalid ,
+                                output reg	              awready ,
+
+                                //Write_data_channel
+                                input [DATA_WIDTH-1: 0]     wdata  ,
+                                input [(DATA_WIDTH/8)-1: 0] wstrb  ,
+                                input                       wlast  ,
+                                input [3: 0]                wuser  ,
+                                input                       wvalid ,
+                                output reg	                wready ,
+
+                                //Write Response Channel
+                                output reg [3:0]            bid    ,
+                                output reg [1:0]            bresp  ,
+                                output reg [3:0]            buser  ,
+                                output reg                  bvalid ,
+                                input		                    bready); 
+   import uvm_pkg::*;
   `include "uvm_macros.svh" 
 
   //-------------------------------------------------------
@@ -91,7 +64,6 @@ interface Axi4LiteSlaveWriteDriverBFM(input bit                      aclk,
     `uvm_info("axi4 slave driver bfm",$sformatf("AXI4 SLAVE DRIVER BFM"),UVM_LOW);
   end
 
-  string name = "AXI4_SLAVE_DRIVER_BFM";
 
   // Creating Memories for each signal to store each transaction attributes
 
@@ -118,17 +90,10 @@ interface Axi4LiteSlaveWriteDriverBFM(input bit                      aclk,
     `uvm_info(name,$sformatf("SYSTEM RESET ACTIVATED"),UVM_NONE)
     awready <= 0;
     wready  <= 0;
-    rvalid  <= 0;
-    rlast   <= 0;
     bvalid  <= 0;
-    arready <= 0;
     bid     <= 'bx;
     bresp   <= 'b0;
     buser   <= 'b0;
-    rid     <= 'bx;
-    rdata   <= 'b0;
-    rresp   <= 'b0;
-    ruser   <= 'b0;
     @(posedge aresetn);
     `uvm_info(name,$sformatf("SYSTEM RESET DE-ACTIVATED"),UVM_NONE)
   endtask 

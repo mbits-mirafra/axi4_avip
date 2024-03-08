@@ -5,7 +5,7 @@ class Axi4LiteVirtualBaseSeq extends uvm_sequence;
   `uvm_object_utils(Axi4LiteVirtualBaseSeq)
 
   `uvm_declare_p_sequencer(Axi4LiteMasterVirtualSequencer);
-  `uvm_declare_p_sequencer(Axi4LiteSlaveVirtualSequencer);
+//  `uvm_declare_p_sequencer(Axi4LiteSlaveVirtualSequencer);
 
   Axi4LiteMasterEnvConfig axi4LiteMasterEnvConfig;
   Axi4LiteSlaveEnvConfig axi4LiteSlaveEnvConfig;

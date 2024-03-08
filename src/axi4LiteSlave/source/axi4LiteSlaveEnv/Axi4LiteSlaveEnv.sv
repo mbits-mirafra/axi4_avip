@@ -9,7 +9,7 @@ class Axi4LiteSlaveEnv extends uvm_env;
   Axi4LiteSlaveWriteAgent axi4LiteSlaveWriteAgent[];
   Axi4LiteSlaveReadAgent axi4LiteSlaveReadAgent[];
 
-  Axi4LiteVirtualSlaveSequencer axi4LiteVirtualSlaveSequencer;
+  Axi4LiteSlaveVirtualSequencer axi4LiteSlaveVirtualSequencer;
 
   Axi4LiteSlaveWriteAgentConfig axi4LiteSlaveWriteAgentConfig[];
   Axi4LiteSlaveReadAgentConfig axi4LiteSlaveReadAgentConfig[];
@@ -30,7 +30,7 @@ function void Axi4LiteSlaveEnv::build_phase(uvm_phase phase);
   if(!uvm_config_db #(Axi4LiteSlaveEnvConfig)::get(this,"","Axi4LiteSlaveEnvConfig",axi4LiteSlaveEnvConfig)) begin
     `uvm_fatal("FATAL_SLAVE_ENV_AGENT_CONFIG", $sformatf("Couldn't get the master_env_agent_config from config_db"))
   end
-  
+ /* 
   axi4LiteSlaveWriteAgentConfig = new[axi4LiteSlaveEnvConfig.no_of_masters];
   foreach(axi4LiteSlaveWriteAgentConfig[i]) begin
     if(!uvm_config_db#(Axi4LiteSlaveWriteAgentConfig)::get(this,"",$sformatf("Axi4LiteSlaveWriteAgentConfig[%0d]",i),axi4LiteSlaveWriteAgentConfig[i])) begin
@@ -54,10 +54,10 @@ function void Axi4LiteSlaveEnv::build_phase(uvm_phase phase);
   foreach(axi4LiteSlaveReadAgent[i]) begin
     axi4LiteSlaveReadAgent[i]=Axi4LiteSlaveReadAgent::type_id::create($sformatf("axi4LiteSlaveReadAgent[%0d]",i),this);
   end
-  
   if(axi4LiteSlaveEnvConfig.hasVirtualSequencer) begin
-    axi4LiteVirtualSlaveSequencer = Axi4LiteVirtualSlaveSequencer::type_id::create("axi4LiteVirtualSlaveSequencer",this);
+    axi4LiteSlaveVirtualSequencer = Axi4LiteSlaveVirtualSequencer::type_id::create("axi4LiteSlaveVirtualSequencer",this);
   end
+*/
 
   foreach(axi4LiteSlaveWriteAgent[i]) begin
     axi4LiteSlaveWriteAgent[i].axi4LiteSlaveWriteAgentConfig = axi4LiteSlaveWriteAgentConfig[i];
@@ -73,15 +73,15 @@ endfunction : build_phase
 function void Axi4LiteSlaveEnv::connect_phase(uvm_phase phase);
   super.connect_phase(phase);
 
-  if(axi4LiteSlaveEnvConfig.hasVirtualSequencer) begin
+/*  if(axi4LiteSlaveEnvConfig.hasVirtualSequencer) begin
     foreach(axi4LiteSlaveWriteAgent[i]) begin
-      axi4LiteVirtualSlaveSequencer.axi4LiteSlaveWriteSequencer = axi4LiteSlaveWriteAgent[i].axi4LiteSlaveWriteSequencer;
+      axi4LiteSlaveVirtualSequencer.axi4LiteSlaveWriteSequencer = axi4LiteSlaveWriteAgent[i].axi4LiteSlaveWriteSequencer;
     end
-    foreach(axi4LiteSlaveReadAgent[i]) begin
-      axi4LiteVirtualSlaveSequencer.axi4LiteSlaveReadSequencer = axi4LiteSlaveReadAgent[i].axi4LiteSlaveReadSequencer;
+  */  foreach(axi4LiteSlaveReadAgent[i]) begin
+      axi4LiteSlaveVirtualSequencer.axi4LiteSlaveReadSequencer = axi4LiteSlaveReadAgent[i].axi4LiteSlaveReadSequencer;
     end
-  end
- /* 
+ /* end
+  
   foreach(axi4LiteSlaveWriteAgent[i]) begin
     axi4LiteSlaveWriteAgent[i].axi4LiteSlaveMonitorProxy.axi4LiteSlaveReadAddressAnalysisPort.connect(axi4_scoreboard_h.axi4_master_read_address_analysis_fifo.analysis_export);
     axi4LiteSlaveWriteAgent[i].axi4_master_mon_proxy_h.axi4_master_read_data_analysis_port.connect(axi4_scoreboard_h.axi4_master_read_data_analysis_fifo.analysis_export);

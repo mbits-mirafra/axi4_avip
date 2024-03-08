@@ -6,7 +6,7 @@
 //Used as the HDL monitor for axi4
 //It connects with the HVL monitor_proxy for driving the stimulus
 //--------------------------------------------------------------------------------------------
-import axi4_globals_pkg::*;
+import Axi4LiteGlobalsPkg::*;
 
 interface Axi4LiteSlaveReadMonitorBFM(input bit aclk, input bit aresetn,
                                  //Write Address Channel Signals
@@ -221,53 +221,7 @@ interface Axi4LiteSlaveReadMonitorBFM(input bit aclk, input bit aresetn,
    end
   endtask
 
-  task axi4_read_address_sampling(output axi4_read_transfer_char_s req ,input axi4_transfer_cfg_s cfg);
-
-    do begin
-      @(posedge aclk);
-    end while((arvalid!==1 || arready!==1));
-
-    req.arid    = arid;
-    req.araddr  = araddr;
-    req.arlen   = arlen;
-    req.arsize  = arsize;
-    req.arburst = arburst;
-    req.arlock  = arlock;
-    req.arcache = arcache;
-    req.arprot  = arprot;
-    req.arqos   = arqos;
-    req.arregion = arregion;
-    req.aruser     = aruser;
-    `uvm_info("FROM Slave MON BFM",$sformatf("datapacket =%p",req),UVM_HIGH)
-  endtask
   
-  //-------------------------------------------------------
-  // Task: axi4_read_data_sampling
-  // Used for sample the read data channel signals
-  //-------------------------------------------------------
-  task axi4_read_data_sampling(output axi4_read_transfer_char_s req ,input axi4_transfer_cfg_s cfg);
-    static reg[7:0] i = 0;
-    forever begin
-      // Wait for valid and ready to be high
-      do begin
-        @(posedge aclk);
-      end while((rvalid!==1 || rready!==1));
-  
-      req.rid      = rid;
-      req.rdata[i] = rdata;
-      req.ruser    = ruser;
-      req.rresp    = rresp;
-      req.rlast    = rlast;
-      i++;
-      
-      if(req.rlast == 1) begin
-        `uvm_info("FROM Slave MON BFM write data",$sformatf("Inside RLAST Read Data Packet  =%p",req),UVM_HIGH)
-        i = 0;
-        break;
-      end 
-      `uvm_info("FROM Slave MON BFM READ DATA",$sformatf("Read data packet: %p",req),UVM_HIGH)
-    end
-  endtask
 endinterface : Axi4LiteSlaveReadMonitorBFM
 
 `endif

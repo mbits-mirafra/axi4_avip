@@ -34,7 +34,7 @@ interface Axi4LiteMasterWriteMonitorBFM(input bit aclk, input bit aresetn,
                                  input  [1:0]bresp,
                                  input  [3:0]buser,
                                  input  bvalid,
-                                 input  bready,
+                                 input  bready
 
                              /*    //Read Address Channel Signals
                                  input  [3:0]arid,
@@ -67,7 +67,7 @@ interface Axi4LiteMasterWriteMonitorBFM(input bit aclk, input bit aresetn,
   // Importing axi4 Global Package master package
   //-------------------------------------------------------
  
-  Axi4LiteMasterWritePkg::Axi4LiteMasterWriteMonitorProxy;  
+  import Axi4LiteMasterWritePkg::Axi4LiteMasterWriteMonitorProxy;  
   //Variable : axi4LiteMasterWriteMonitorProxy
   //Creating the handle for proxy monitor
  

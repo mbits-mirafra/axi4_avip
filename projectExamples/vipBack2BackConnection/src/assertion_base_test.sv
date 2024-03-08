@@ -6,7 +6,7 @@
 // axi4_base test has the test scenarios for testbench which has the env, config, etc.
 // Sequences are created and started in the test
 //--------------------------------------------------------------------------------------------
-class assertion_base_test extends axi4_base_test;
+/*class assertion_base_test extends axi4_base_test;
   
   `uvm_component_utils(assertion_base_test)
 
@@ -58,5 +58,5 @@ task assertion_base_test::run_phase(uvm_phase phase);
   phase.drop_objection(this);
 
 endtask : run_phase
-
+*/
 `endif

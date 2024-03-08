@@ -34,31 +34,8 @@ interface Axi4LiteSlaveWriteMonitorBFM(input bit aclk, input bit aresetn,
                                  input  [1:0]bresp,
                                  input  [3:0]buser,
                                  input  bvalid,
-                                 input  bready,
-
-                             /*    //Read Address Channel Signals
-                                 input  [3:0]arid,
-                                 input  [ADDRESS_WIDTH-1: 0]araddr,
-                                 input  [7:0]arlen,
-                                 input  [2:0]arsize,
-                                 input  [1:0]arburst,
-                                 input  [1:0]arlock,
-                                 input  [3:0]arcache,
-                                 input  [2:0]arprot,
-                                 input  [3:0]arqos,
-                                 input  [3:0]arregion,
-                                 input  [3:0]aruser,
-                                 input  arvalid,
-                                 input  arready,
-                                 //Read Data Channel Signals
-                                 input  [3:0]rid,
-                                 input  [DATA_WIDTH-1: 0]rdata,
-                                 input  [1:0]rresp,
-                                 input  rlast,
-                                 input  [3:0]ruser,
-                                 input  rvalid,
-                                 input  rready  */
-                                );  
+                                 input  bready
+                               );  
 
   import uvm_pkg::*;
   `include "uvm_macros.svh" 
@@ -115,30 +92,7 @@ interface Axi4LiteSlaveWriteMonitorBFM(input bit aclk, input bit aresetn,
   // Used for sample the write data channel signals
   //-------------------------------------------------------
   task axi4_slave_write_data_sampling(output axi4_write_transfer_char_s req ,input axi4_transfer_cfg_s cfg);
-  
-  forever begin
-   // wait for valid and ready to be high
-   do begin
-   @(posedge aclk);
-   end while(wvalid!==1 || wready!==1);
-
-   `uvm_info("FROM SLAVE MON BFM",$sformatf("Inside while loop......"),UVM_HIGH)
-    req.wdata[i] = wdata;
-    req.wstrb[i] = wstrb;
-    req.wlast = wlast;
-    req.wuser[i] = wuser;
-
-   `uvm_info("FROM SLAVE MON BFM write data",$sformatf("write datapacket wdata[%0d] = 'h%0x",i,req.wdata[i]),UVM_HIGH)
-   `uvm_info("FROM SLAVE MON BFM write data",$sformatf("write datapacket wstrb[%0d] = 'h%0x",i,req.wstrb[i]),UVM_HIGH)
-   if(req.wlast == 1)begin
-     `uvm_info("FROM SLAVE MON BFM write data",$sformatf("Inside wlast write datapacket: %p",req),UVM_HIGH)
-   i = 0;
-   break;
-   end
-  
-   i++;
-  end
- endtask
+endtask
  
   //-------------------------------------------------------
   // Task: axi4_write_response_sampling

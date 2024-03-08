@@ -64,24 +64,17 @@ interface Axi4LiteMasterReadDriverBFM(input bit                      aclk,
                                  output	reg                   rready  
                                 );  
   
-  //-------------------------------------------------------
-  // Importing UVM Package 
-  //-------------------------------------------------------
   import uvm_pkg::*;
   `include "uvm_macros.svh" 
 
-  //-------------------------------------------------------
-  // Importing Global Package
-  //-------------------------------------------------------
-
-  Axi4LiteMasterReadPkg::Axi4LiteMasterReadDriverProxy;
+  import Axi4LiteMasterReadPkg::Axi4LiteMasterReadDriverProxy;
   //Variable: name
   //Used to store the name of the interface
   string name = "Axi4LiteMasterReadDriverBFM"; 
 
   //Variable: axi4LiteMasterReadDriverProxy
   //Creating the handle for MasterWriteDriverProxy
-  axi4LiteMasterReadDriverProxy axi4LiteMasterReadDriverProxy;
+  Axi4LiteMasterReadDriverProxy axi4LiteMasterReadDriverProxy;
 
   initial begin
     `uvm_info(name,$sformatf(name),UVM_LOW)
@@ -94,9 +87,6 @@ interface Axi4LiteMasterReadDriverBFM(input bit                      aclk,
   task wait_for_aresetn();
     @(negedge aresetn);
     `uvm_info(name,$sformatf("SYSTEM RESET DETECTED"),UVM_HIGH)
-    awvalid <= 1'b0;
-    wvalid  <= 1'b0;
-    bready  <= 1'b0;
     arvalid <= 1'b0;
     rready  <= 1'b0;
     @(posedge aresetn);

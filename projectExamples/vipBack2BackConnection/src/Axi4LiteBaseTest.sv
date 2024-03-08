@@ -1,23 +1,22 @@
 `ifndef AXI4LITEBASETEST_INCLUDED_
 `define AXI4LITEBASETEST_INCLUDED_
 
-class Axi4LiteBaseTest extends uvm_test;
-  
+class Axi4LiteBaseTest extends uvm_test; 
   `uvm_component_utils(Axi4LiteBaseTest)
 
-  Axi4LiteEnvConfig axi4LiteEnvConfig;
+  Axi4LiteMasterEnvConfig axi4LiteMasterEnvConfig;
   Axi4LiteMasterEnv axi4LiteMasterEnv;
   //-------------------------------------------------------
   // Externally defined Tasks and Functions
   //-------------------------------------------------------
   extern function new(string name = "Axi4LiteBaseTest", uvm_component parent = null);
-/*  extern virtual function void build_phase(uvm_phase phase);
-  extern virtual function void setup_axi4_env_cfg();
+  extern virtual function void build_phase(uvm_phase phase);
+/*  extern virtual function void setup_axi4_env_cfg();
   extern virtual function void setup_axi4_master_agent_cfg();
   extern virtual function void setup_axi4_slave_agent_cfg();
   extern virtual function void end_of_elaboration_phase(uvm_phase phase);
-  extern virtual task run_phase(uvm_phase phase);
-*/
+*/  extern virtual task run_phase(uvm_phase phase);
+
 endclass : Axi4LiteBaseTest
 
 //--------------------------------------------------------------------------------------------
@@ -39,16 +38,16 @@ endfunction : new
 // Parameters:
 //  phase - uvm phase
 //--------------------------------------------------------------------------------------------
-/*
+
 function void Axi4LiteBaseTest::build_phase(uvm_phase phase);
   super.build_phase(phase);
   // Setup the environemnt cfg 
-  setup_axi4_env_cfg();
+//  setup_axi4_env_cfg();
   // Create the environment
   axi4LiteMasterEnv =  Axi4LiteMasterEnv::type_id::create("axi4LiteMasterEnv",this);
 endfunction : build_phase
 
-
+/*
 //--------------------------------------------------------------------------------------------
 // Function: setup_axi4_env_cfg
 // Setup the environment configuration with the required values
@@ -143,6 +142,7 @@ endfunction: setup_axi4_slave_agent_cfg
 // Parameters:
 //  phase - uvm phase
 //--------------------------------------------------------------------------------------------
+/*
 function void Axi4LiteBaseTest::end_of_elaboration_phase(uvm_phase phase);
   uvm_top.print_topology();
   uvm_test_done.set_drain_time(this,3000ns);
@@ -155,6 +155,7 @@ endfunction : end_of_elaboration_phase
 // Parameters:
 //  phase - uvm phase
 //--------------------------------------------------------------------------------------------
+*/
 task Axi4LiteBaseTest::run_phase(uvm_phase phase);
 
   phase.raise_objection(this, "Axi4LiteBaseTest");
@@ -166,6 +167,6 @@ task Axi4LiteBaseTest::run_phase(uvm_phase phase);
   phase.drop_objection(this);
 
 endtask : run_phase
-*/
+
 `endif
 

@@ -38,8 +38,8 @@ module Axi4LiteMasterWriteAgent #(parameter int MASTER_ID = 0)(Axi4LiteMasterWri
                                                 .bresp(axi4LiteMasterWriteInterface.bresp),
                                                 .buser(axi4LiteMasterWriteInterface.buser),
                                                 .bvalid(axi4LiteMasterWriteInterface.bvalid),
-                                                .bready(axi4LiteMasterWriteInterface.bready),
-                                              /*  .arid(axi4LiteMasterWriteInterface.arid),
+                                                .bready(axi4LiteMasterWriteInterface.bready)
+                                              /*.arid(axi4LiteMasterWriteInterface.arid),
                                                 .araddr(axi4LiteMasterWriteInterface.araddr),
                                                 .arlen(axi4LiteMasterWriteInterface.arlen),
                                                 .arsize(axi4LiteMasterWriteInterface.arsize),
@@ -86,7 +86,7 @@ module Axi4LiteMasterWriteAgent #(parameter int MASTER_ID = 0)(Axi4LiteMasterWri
                                                  .bresp(axi4LiteMasterWriteInterface.bresp),
                                                  .buser(axi4LiteMasterWriteInterface.buser),
                                                  .bvalid(axi4LiteMasterWriteInterface.bvalid),
-                                                 .bready(axi4LiteMasterWriteInterface.bready),
+                                                 .bready(axi4LiteMasterWriteInterface.bready)
                                           /*       .arid(axi4LiteMasterWriteInterface.arid),
                                                  .araddr(axi4LiteMasterWriteInterface.araddr),
                                                  .arlen(axi4LiteMasterWriteInterface.arlen),
@@ -139,7 +139,7 @@ module Axi4LiteMasterWriteAgent #(parameter int MASTER_ID = 0)(Axi4LiteMasterWri
                                                       .buser(buser),
                                                       .bvalid(bvalid),
                                                       .bready(bready),
-                                                      .bresp(bresp),
+                                                      .bresp(bresp)
                                                      /* .arid(arid),
                                                       .araddr(araddr),  
                                                       .arlen(arlen),   

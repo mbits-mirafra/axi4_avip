@@ -12,57 +12,31 @@ import Axi4LiteGlobalsPkg::*;
 //  It connects with the HVL driver_proxy for driving the stimulus
 //--------------------------------------------------------------------------------------------
 interface Axi4LiteSlaveReadDriverBFM(input bit                      aclk, 
-                                 input bit                      aresetn,
-                                 //Write Address Channel Signals
-                                /* output reg               [3:0] awid,
-                                 output reg [ADDRESS_WIDTH-1:0] awaddr,
-                                 output reg               [3:0] awlen,
-                                 output reg               [2:0] awsize,
-                                 output reg               [1:0] awburst,
-                                 output reg               [1:0] awlock,
-                                 output reg               [3:0] awcache,
-                                 output reg               [2:0] awprot,
-                                 output reg               [3:0] awqos,
-                                 output reg               [3:0] awregion,
-                                 output reg                     awuser,
-                                 output reg                     awvalid,
-                                 input    	                    awready,
-                                 //Write Data Channel Signals
-                                 output reg    [DATA_WIDTH-1: 0] wdata,
-                                 output reg [(DATA_WIDTH/8)-1:0] wstrb,
-                                 output reg                      wlast,
-                                 output reg                [3:0] wuser,
-                                 output reg                      wvalid,
-                                 input                           wready,
-                                 //Write Response Channel Signals
-                                 input      [3:0] bid,
-                                 input      [1:0] bresp,
-                                 input      [3:0] buser,
-                                 input            bvalid,
-                                 output	reg       bready, */
-                                 //Read Address Channel Signals
-                                 output reg               [3:0] arid,
-                                 output reg [ADDRESS_WIDTH-1:0] araddr,
-                                 output reg               [7:0] arlen,
-                                 output reg               [2:0] arsize,
-                                 output reg               [1:0] arburst,
-                                 output reg               [1:0] arlock,
-                                 output reg               [3:0] arcache,
-                                 output reg               [2:0] arprot,
-                                 output reg               [3:0] arqos,
-                                 output reg               [3:0] arregion,
-                                 output reg               [3:0] aruser,
-                                 output reg                     arvalid,
-                                 input                          arready,
-                                 //Read Data Channel Signals
-                                 input                  [3:0] rid,
-                                 input      [DATA_WIDTH-1: 0] rdata,
-                                 input                  [1:0] rresp,
-                                 input                        rlast,
-                                 input                  [3:0] ruser,
-                                 input                        rvalid,
-                                 output	reg                   rready  
-                                );  
+                                     input bit                      aresetn,
+                                    //Read Address Channel
+                                input [3: 0]                arid    ,
+                                input [ADDRESS_WIDTH-1: 0]  araddr  ,
+                                input [7:0]                 arlen   ,
+                                input [2:0]                 arsize  ,
+                                input [1:0]                 arburst ,
+                                input [1:0]                 arlock  ,
+                                input [3:0]                 arcache ,
+                                input [2:0]                 arprot  ,
+                                input [3:0]                 arqos   ,
+                                input [3:0]                 arregion,
+                                input [3:0]                 aruser  ,
+                                input                       arvalid ,
+                                output reg                  arready ,
+
+                                //Read Data Channel
+                                output reg [3:0]                rid    ,
+                                output reg [DATA_WIDTH-1: 0]    rdata  ,
+                                output reg [1:0]                rresp  ,
+                                output reg                      rlast  ,
+                                output reg [3:0]                ruser  ,
+                                output reg                      rvalid ,
+                                input		                        rready   
+                               );  
   
   //-------------------------------------------------------
   // Importing UVM Package 
@@ -81,8 +55,7 @@ interface Axi4LiteSlaveReadDriverBFM(input bit                      aclk,
 
   //Variable: axi4LiteSlaveReadDriverProxy
   //Creating the handle for SlaveWriteDriverProxy
-  axi4LiteSlaveReadDriverProxy axi4LiteSlaveReadDriverProxy;
-
+  Axi4LiteSlaveReadDriverProxy axi4LiteSlaveReadDriverProxy;
   reg [7: 0] i = 0;
   reg [7: 0] j = 0;
   reg [7: 0] a = 0;
@@ -90,8 +63,6 @@ interface Axi4LiteSlaveReadDriverBFM(input bit                      aclk,
   initial begin
     `uvm_info("axi4 slave driver bfm",$sformatf("AXI4 SLAVE DRIVER BFM"),UVM_LOW);
   end
-
-  string name = "AXI4_SLAVE_DRIVER_BFM";
 
   // Creating Memories for each signal to store each transaction attributes
 
@@ -116,64 +87,9 @@ interface Axi4LiteSlaveReadDriverBFM(input bit                      aclk,
   task wait_for_system_reset();
     @(negedge aresetn);
     `uvm_info(name,$sformatf("SYSTEM RESET ACTIVATED"),UVM_NONE)
-    awready <= 0;
-    wready  <= 0;
     rvalid  <= 0;
     rlast   <= 0;
-    bvalid  <= 0;
     arready <= 0;
-    bid     <= 'bx;
-    bresp   <= 'b0;
-    buser   <= 'b0;
-    rid     <= 'bx;
-    rdata   <= 'b0;
-    rresp   <= 'b0;
-    ruser   <= 'b0;
-    @(posedge aresetn);
-    `uvm_info(name,$sformatf("SYSTEM RESET DE-ACTIVATED"),UVM_NONE)
-  endtask 
-  reg [7: 0] i = 0;
-  reg [7: 0] j = 0;
-  reg [7: 0] a = 0;
-
-  initial begin
-    `uvm_info("axi4 slave driver bfm",$sformatf("AXI4 SLAVE DRIVER BFM"),UVM_LOW);
-  end
-
-  string name = "AXI4_SLAVE_DRIVER_BFM";
-
-  // Creating Memories for each signal to store each transaction attributes
-
-  reg [	3 : 0] 	            mem_awid	  [2**LENGTH];
-  reg [	ADDRESS_WIDTH-1: 0]	mem_waddr	  [2**LENGTH];
-  reg [	7 : 0]	            mem_wlen	  [2**LENGTH];
-  reg [	2 : 0]	            mem_wsize	  [2**LENGTH];
-  reg [ 1	: 0]	            mem_wburst  [2**LENGTH];
-  bit                       mem_wlast   [2**LENGTH];
-  
-  reg [	3 : 0]	            mem_arid	  [2**LENGTH];
-  reg [	ADDRESS_WIDTH-1: 0]	mem_raddr	  [2**LENGTH];
-  reg [	7	: 0]	            mem_rlen	  [2**LENGTH];
-  reg [	2	: 0]	            mem_rsize	  [2**LENGTH];
-  reg [ 1	: 0]	            mem_rburst  [2**LENGTH];
-  
-  //-------------------------------------------------------
-  // Task: wait_for_system_reset
-  // Waiting for the system reset to be active low
-  //-------------------------------------------------------
-
-  task wait_for_system_reset();
-    @(negedge aresetn);
-    `uvm_info(name,$sformatf("SYSTEM RESET ACTIVATED"),UVM_NONE)
-    awready <= 0;
-    wready  <= 0;
-    rvalid  <= 0;
-    rlast   <= 0;
-    bvalid  <= 0;
-    arready <= 0;
-    bid     <= 'bx;
-    bresp   <= 'b0;
-    buser   <= 'b0;
     rid     <= 'bx;
     rdata   <= 'b0;
     rresp   <= 'b0;

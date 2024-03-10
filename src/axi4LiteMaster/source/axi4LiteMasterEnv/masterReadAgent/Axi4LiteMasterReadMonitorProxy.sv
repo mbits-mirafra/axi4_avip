@@ -112,7 +112,7 @@ endfunction : connect_phase
 //--------------------------------------------------------------------------------------------
 function void Axi4LiteMasterReadMonitorProxy::end_of_elaboration_phase(uvm_phase phase);
   super.end_of_elaboration_phase(phase);
-  axi4LiteMasterReadMonitorBFM.axi4LiteMasterReadMonitorProxy = this;
+  // GopalS: axi4LiteMasterReadMonitorBFM.axi4LiteMasterReadMonitorProxy = this;
 endfunction : end_of_elaboration_phase
 
 

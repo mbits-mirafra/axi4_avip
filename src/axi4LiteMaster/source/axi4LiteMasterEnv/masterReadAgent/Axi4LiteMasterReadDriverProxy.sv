@@ -117,7 +117,7 @@ endfunction : build_phase
 //--------------------------------------------------------------------------------------------
 function void Axi4LiteMasterReadDriverProxy::end_of_elaboration_phase(uvm_phase phase);
   super.end_of_elaboration_phase(phase);
-  axi4LiteMasterReadDriverBFM.axi4LiteMasterReadDriverProxy = this;
+  // GopalS:axi4LiteMasterReadDriverBFM.axi4LiteMasterReadDriverProxy = this;
 endfunction : end_of_elaboration_phase
 
 //--------------------------------------------------------------------------------------------

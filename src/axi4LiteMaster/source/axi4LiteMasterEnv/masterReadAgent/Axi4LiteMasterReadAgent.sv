@@ -55,7 +55,6 @@ function void Axi4LiteMasterReadAgent::connect_phase(uvm_phase phase);
   if(axi4LiteMasterReadAgentConfig.isActive == UVM_ACTIVE) begin
     axi4LiteMasterReadDriverProxy.axi4LiteMasterReadAgentConfig = axi4LiteMasterReadAgentConfig;
     axi4LiteMasterReadSequencer.axi4LiteMasterReadAgentConfig = axi4LiteMasterReadAgentConfig;
-    axi4LiteMasterReadCoverage.axi4LiteMasterReadAgentConfig = axi4LiteMasterReadAgentConfig;
   
     //Connecting the ports
     axi4LiteMasterReadDriverProxy.axi_read_seq_item_port.connect(axi4LiteMasterReadSequencer.seq_item_export);

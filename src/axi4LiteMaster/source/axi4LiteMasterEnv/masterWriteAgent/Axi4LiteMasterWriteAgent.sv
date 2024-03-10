@@ -55,14 +55,12 @@ function void Axi4LiteMasterWriteAgent::connect_phase(uvm_phase phase);
   if(axi4LiteMasterWriteAgentConfig.isActive == UVM_ACTIVE) begin
     axi4LiteMasterWriteDriverProxy.axi4LiteMasterWriteAgentConfig = axi4LiteMasterWriteAgentConfig;
     axi4LiteMasterWriteSequencer.axi4LiteMasterWriteAgentConfig = axi4LiteMasterWriteAgentConfig;
-    axi4LiteMasterWriteCoverage.axi4LiteMasterWriteAgentConfig = axi4LiteMasterWriteAgentConfig;
   
     //Connecting the ports
     axi4LiteMasterWriteDriverProxy.axi_write_seq_item_port.connect(axi4LiteMasterWriteSequencer.seq_item_export);
   end
 
   if(axi4LiteMasterWriteAgentConfig.hasCoverage) begin
-    axi4LiteMasterWriteCoverage.axi4LiteMasterWriteAgentConfig = axi4LiteMasterWriteAgentConfig;   
     //Connecting monitor_proxy port to coverage export
     axi4LiteMasterWriteMonitorProxy.axi4_master_read_address_analysis_port.connect(axi4LiteMasterWriteCoverage.analysis_export);
     axi4LiteMasterWriteMonitorProxy.axi4_master_read_data_analysis_port.connect(axi4LiteMasterWriteCoverage.analysis_export);

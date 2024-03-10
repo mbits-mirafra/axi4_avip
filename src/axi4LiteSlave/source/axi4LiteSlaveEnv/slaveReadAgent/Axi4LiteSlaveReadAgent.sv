@@ -84,7 +84,6 @@ function void Axi4LiteSlaveReadAgent::connect_phase(uvm_phase phase);
   if(axi4LiteSlaveReadAgentConfig.isActive == UVM_ACTIVE) begin
     axi4LiteSlaveReadDriverProxy.axi4LiteSlaveReadAgentConfig  = axi4LiteSlaveReadAgentConfig;
     axi4LiteSlaveReadSequencer.axi4LiteSlaveReadAgentConfig = axi4LiteSlaveReadAgentConfig;
-    axi4LiteSlaveReadCoverage.axi4LiteSlaveReadAgentConfig        = axi4LiteSlaveReadAgentConfig;
   end
     /*  
     // Connecting the ports

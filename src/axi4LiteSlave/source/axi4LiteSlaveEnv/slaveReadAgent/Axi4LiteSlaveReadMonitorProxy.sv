@@ -97,7 +97,7 @@ endfunction : build_phase
 //------------------------------------------------------------------------------------------
 function void Axi4LiteSlaveReadMonitorProxy::end_of_elaboration_phase(uvm_phase phase);
   super.end_of_elaboration_phase(phase);
-  axi4LiteSlaveReadMonitorBFM.axi4LiteSlaveReadMonitorProxy = this;
+  // GopalS: axi4LiteSlaveReadMonitorBFM.axi4LiteSlaveReadMonitorProxy = this;
 endfunction : end_of_elaboration_phase
 
 

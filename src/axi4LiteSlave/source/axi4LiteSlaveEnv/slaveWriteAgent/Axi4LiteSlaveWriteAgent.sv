@@ -77,7 +77,6 @@ function void Axi4LiteSlaveWriteAgent::connect_phase(uvm_phase phase);
   if(axi4LiteSlaveWriteAgentConfig.isActive == UVM_ACTIVE) begin
     axi4LiteSlaveWriteDriverProxy.axi4LiteSlaveWriteAgentConfig  = axi4LiteSlaveWriteAgentConfig;
     axi4LiteSlaveWriteSequencer.axi4LiteSlaveWriteAgentConfig = axi4LiteSlaveWriteAgentConfig;
-    axi4LiteSlaveWriteCoverage.axi4LiteSlaveWriteAgentConfig  = axi4LiteSlaveWriteAgentConfig;
     end
     /*  
     // Connecting the ports

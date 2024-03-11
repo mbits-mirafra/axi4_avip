@@ -1,16 +1,8 @@
 `ifndef AXI4LITESLAVEREADDRIVERBFM_INCLUDED_
 `define AXI4LITESLAVEREADDRIVERBFM_INCLUDED_
 
-//-------------------------------------------------------
-// Importing global package
-//-------------------------------------------------------
 import Axi4LiteGlobalsPkg::*;
 
-//--------------------------------------------------------------------------------------------
-// Interface : Axi4LiteSlaveReadDriverBFM
-//  Used as the HDL driver for axi4
-//  It connects with the HVL driver_proxy for driving the stimulus
-//--------------------------------------------------------------------------------------------
 interface Axi4LiteSlaveReadDriverBFM(input bit                      aclk, 
                                      input bit                      aresetn,
                                      //Read Address Channel
@@ -26,23 +18,13 @@ interface Axi4LiteSlaveReadDriverBFM(input bit                      aclk,
                                      input		                        rready   
                                     );  
   
-  //-------------------------------------------------------
-  // Importing UVM Package 
-  //-------------------------------------------------------
   import uvm_pkg::*;
   `include "uvm_macros.svh" 
 
-  //-------------------------------------------------------
-  // Importing Global Package
-  //-------------------------------------------------------
   import Axi4LiteSlaveReadPkg::Axi4LiteSlaveReadDriverProxy;
 
-  //Variable: name
-  //Used to store the name of the interface
   string name = "Axi4LiteSlaveReadDriverBFM"; 
 
-  //Variable: axi4LiteSlaveReadDriverProxy
-  //Creating the handle for SlaveWriteDriverProxy
   Axi4LiteSlaveReadDriverProxy axi4LiteSlaveReadDriverProxy;
   reg [7: 0] i = 0;
   reg [7: 0] j = 0;

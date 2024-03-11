@@ -12,6 +12,9 @@ class Axi4LiteEnvConfig extends uvm_object;
   
   int no_of_masters;
 
+  Axi4LiteMasterEnvConfig axi4LiteMasterEnvConfig[];
+  Axi4LiteSlaveEnvConfig axi4LiteSlaveEnvConfig[];
+
   extern function new(string name = "Axi4LiteEnvConfig");
   extern function void do_print(uvm_printer printer);
 

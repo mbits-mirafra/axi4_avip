@@ -1,11 +1,6 @@
 `ifndef AXI4LITESLAVEREADMONITORBFM_INCLUDED_
 `define AXI4LITESLAVEREADMONITORBFM_INCLUDED_
 
-//--------------------------------------------------------------------------------------------
-//Interface : Axi4LiteSlaveReadMonitorBFM
-//Used as the HDL monitor for axi4
-//It connects with the HVL monitor_proxy for driving the stimulus
-//--------------------------------------------------------------------------------------------
 import Axi4LiteGlobalsPkg::*;
 
 interface Axi4LiteSlaveReadMonitorBFM(input bit aclk, input bit aresetn,
@@ -21,19 +16,10 @@ interface Axi4LiteSlaveReadMonitorBFM(input bit aclk, input bit aresetn,
                                       input  rready  
                                      );  
 
-  //-------------------------------------------------------
-  // Importing UVM Package 
-  //-------------------------------------------------------
   import uvm_pkg::*;
   `include "uvm_macros.svh" 
   
-  //-------------------------------------------------------
-  // Importing axi4 Global Package Slave package
-  //-------------------------------------------------------
   import Axi4LiteSlaveReadPkg::Axi4LiteSlaveReadMonitorProxy;
- 
-  //Variable : Axi4LiteSlaveReadMonitorProxy
-  //Creating the handle for proxy monitor
  
   Axi4LiteSlaveReadMonitorProxy axi4LiteSlaveReadMonitorProxy;
   

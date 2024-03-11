@@ -48,7 +48,7 @@
 ../../../../src/axi4LiteSlave/source/slaveAgentBFM/slaveAgentReadBFM/Axi4LiteSlaveReadInterface.sv
 ../../../../src/axi4LiteSlave/source/slaveAgentBFM/Axi4LiteSlaveInterface.sv
 
-../../../../src/axi4LiteMaster/source/masterAgentBFM/masterAgentWriteBFM/Axi4LiteMasterWriteAgent.sv
+../../../../src/axi4LiteMaster/source/masterAgentBFM/masterAgentWriteBFM/Axi4LiteMasterWriteAgentBFM.sv
 ../../../../src/axi4LiteMaster/source/masterAgentBFM/masterAgentWriteBFM/Axi4LiteMasterWriteDriverBFM.sv
 ../../../../src/axi4LiteMaster/source/masterAgentBFM/masterAgentWriteBFM/Axi4LiteMasterWriteMonitorBFM.sv
 
@@ -57,7 +57,7 @@
 ../../../../src/axi4LiteMaster/source/masterAgentBFM/masterAgentReadBFM/Axi4LiteMasterReadMonitorBFM.sv
 ../../../../src/axi4LiteMaster/source/masterAgentBFM/Axi4LiteMasterAgentBFM.sv
 
-../../../../src/axi4LiteSlave/source/slaveAgentBFM/slaveAgentWriteBFM/Axi4LiteSlaveWriteAgent.sv
+../../../../src/axi4LiteSlave/source/slaveAgentBFM/slaveAgentWriteBFM/Axi4LiteSlaveWriteAgentBFM.sv
 ../../../../src/axi4LiteSlave/source/slaveAgentBFM/slaveAgentWriteBFM/Axi4LiteSlaveWriteDriverBFM.sv
 ../../../../src/axi4LiteSlave/source/slaveAgentBFM/slaveAgentWriteBFM/Axi4LiteSlaveWriteMonitorBFM.sv
 

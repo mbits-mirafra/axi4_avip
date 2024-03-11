@@ -1,3 +1,6 @@
+`ifndef HVLTOP_INCLUDED_
+`define HVLTOP_INCLUDED_
+
 module HvlTop;
 
   import Axi4LiteTestPkg::*;
@@ -5,10 +8,10 @@ module HvlTop;
 
   initial begin : START_TEST 
     
-    // The test to start is given at the command line
-    // The command-line UVM_TESTNAME takes the precedance
     run_test("Axi4LiteBaseTest");
 
   end
 
 endmodule : HvlTop
+
+`endif

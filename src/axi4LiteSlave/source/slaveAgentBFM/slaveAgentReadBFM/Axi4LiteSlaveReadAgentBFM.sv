@@ -1,18 +1,26 @@
-`ifndef AXI4LITESLAVEREADAGENT_INCLUDED_
-`define AXI4LITESLAVEREADAGENT_INCLUDED_
+`ifndef AXI4LITESLAVEREADAGENTBFM_INCLUDED_
+`define AXI4LITESLAVEREADAGENTBFM_INCLUDED_
 
-//--------------------------------------------------------------------------------------------
-// Module:Axi4LiteSlaveReadAgent 
-// This module is used as the configuration class for Slave agent bfm and its components
-//--------------------------------------------------------------------------------------------
-module Axi4LiteSlaveReadAgent #(parameter int Slave_ID = 0)(Axi4LiteSlaveReadInterface axi4LiteSlaveReadInterface);
+module Axi4LiteSlaveReadAgentBFM #(parameter int ADDR_WIDTH = 32,
+                                   parameter int DATA_WIDTH = 32
+                                   )
+                                   (input  clk,
+                                    input  aresetn,
+                                    input  araddr,
+                                    input  arprot,
+                                    input  arvalid,
+                                    output arready,
+                                    output rdata,
+                                    input  rresp,
+                                    output rvalid,
+                                    input  rready
+                                    );
    
   import uvm_pkg::*;
   `include "uvm_macros.svh"
-  
-  //-------------------------------------------------------
-  // Axi4LiteSlaveReadDriverBFM instantiation
-  //-------------------------------------------------------
+
+  Axi4LiteSlaveReadInterface axi4LiteSlaveReadInterface();
+
   Axi4LiteSlaveReadDriverBFM axi4LiteSlaveReadDriverBFM (.aclk(axi4LiteSlaveReadInterface.aclk), 
                                                          .aresetn(axi4LiteSlaveReadInterface.aresetn),
                                                          .araddr(axi4LiteSlaveReadInterface.araddr),
@@ -25,9 +33,6 @@ module Axi4LiteSlaveReadAgent #(parameter int Slave_ID = 0)(Axi4LiteSlaveReadInt
                                                          .rready(axi4LiteSlaveReadInterface.rready) 
                                                         );
 
-  //-------------------------------------------------------
-  //Axi4LiteSlaveWriteMonitorBFM instantiation
-  //-------------------------------------------------------
   Axi4LiteSlaveReadMonitorBFM axi4LiteSlaveReadMonitorBFM (.aclk(axi4LiteSlaveReadInterface.aclk),
                                                            .aresetn(axi4LiteSlaveReadInterface.aresetn),
                                                            .araddr(axi4LiteSlaveReadInterface.araddr),
@@ -40,9 +45,19 @@ module Axi4LiteSlaveReadAgent #(parameter int Slave_ID = 0)(Axi4LiteSlaveReadInt
                                                            .rready(axi4LiteSlaveReadInterface.rready)
                                                           );
 
-  //-------------------------------------------------------
-  // Setting the virtual handle of BMFs into config_db
-  //-------------------------------------------------------
+
+   assign clk     = axi4LiteSlaveReadInterface.aclk;
+   assign aresetn = axi4LiteSlaveReadInterface.aresetn;
+   assign araddr  = axi4LiteSlaveReadInterface.araddr;
+   assign arprot  = axi4LiteSlaveReadInterface.arprot;
+   assign arvalid = axi4LiteSlaveReadInterface.arvalid;
+   assign arready = axi4LiteSlaveReadInterface.arready;
+   assign rdata   = axi4LiteSlaveReadInterface.rdata;
+   assign rresp   = axi4LiteSlaveReadInterface.rresp;
+   assign rvalid  = axi4LiteSlaveReadInterface.rvalid;
+   assign rready  = axi4LiteSlaveReadInterface.rready;
+
+
   initial begin
     uvm_config_db#(virtual Axi4LiteSlaveReadDriverBFM)::set(null,"*", "Axi4LiteSlaveReadDriverBFM", axi4LiteSlaveReadDriverBFM); 
     uvm_config_db#(virtual Axi4LiteSlaveReadMonitorBFM)::set(null,"*", "Axi4LiteSlaveReadMonitorBFM",axi4LiteSlaveReadMonitorBFM);
@@ -65,10 +80,10 @@ module Axi4LiteSlaveReadAgent #(parameter int Slave_ID = 0)(Axi4LiteSlaveReadInt
    uvm_config_db#(virtual Axi4LiteSlaveReadDriverBFM)::set(null,"*", "Axi4LiteSlaveReadDriverBFM", axi4LiteSlaveReadDriverBFM); 
     uvm_config_db#(virtual Axi4LiteSlaveReadMonitorBFM)::set(null,"*", "Axi4LiteSlaveReadMonitorBFM", axi4LiteSlaveReadMonitorBFM);
   end
-  //Printing Axi4LiteSlaveReadAgent
+
   initial begin
-    `uvm_info("Axi4LiteSlaveReadAgent",$sformatf("AXI4LITE SlaveREADAGENTBFM"),UVM_LOW);
+    `uvm_info("Axi4LiteSlaveReadAgentBFM",$sformatf("AXI4LITE SlaveREADAGENTBFM"),UVM_LOW);
   end
    
-endmodule : Axi4LiteSlaveReadAgent
+endmodule : Axi4LiteSlaveReadAgentBFM
 `endif

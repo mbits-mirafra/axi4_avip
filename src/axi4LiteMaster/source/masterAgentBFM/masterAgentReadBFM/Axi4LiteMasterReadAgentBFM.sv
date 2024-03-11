@@ -1,18 +1,26 @@
-`ifndef AXI4LITEMASTERREADAGENT_INCLUDED_
-`define AXI4LITEMASTERREADAGENT_INCLUDED_
+`ifndef AXI4LITEMASTERREADAGENTBFM_INCLUDED_
+`define AXI4LITEMASTERREADAGENTBFM_INCLUDED_
 
-//--------------------------------------------------------------------------------------------
-// Module:Axi4LiteMasterReadAgent 
-// This module is used as the configuration class for master agent bfm and its components
-//--------------------------------------------------------------------------------------------
-module Axi4LiteMasterReadAgent #(parameter int MASTER_ID = 0)(Axi4LiteMasterReadInterface axi4LiteMasterReadInterface);
+module Axi4LiteMasterReadAgentBFM #(parameter int ADDR_WIDTH = 32,
+                                    parameter int DATA_WIDTH = 32
+                                   )
+                                   (input  clk,
+                                    input  aresetn,
+                                    output araddr,
+                                    output arprot,
+                                    output arvalid,
+                                    input  arready,
+                                    input  rdata,
+                                    output rresp,
+                                    input  rvalid,
+                                    output rready
+                                    );
    
   import uvm_pkg::*;
   `include "uvm_macros.svh"
   
-  //-------------------------------------------------------
-  // Axi4LiteMasterReadDriverBFM instantiation
-  //-------------------------------------------------------
+  Axi4LiteMasterReadInterface axi4LiteMasterReadInterface();
+
   Axi4LiteMasterReadDriverBFM axi4LiteMasterReadDriverBFM (.aclk(axi4LiteMasterReadInterface.aclk), 
                                                            .aresetn(axi4LiteMasterReadInterface.aresetn),
                                                            .araddr(axi4LiteMasterReadInterface.araddr),
@@ -25,9 +33,6 @@ module Axi4LiteMasterReadAgent #(parameter int MASTER_ID = 0)(Axi4LiteMasterRead
                                                            .rready(axi4LiteMasterReadInterface.rready) 
                                                           );
 
-  //-------------------------------------------------------
-  //Axi4LiteMasterWriteMonitorBFM instantiation
-  //-------------------------------------------------------
   Axi4LiteMasterReadMonitorBFM axi4LiteMasterReadMonitorBFM (.aclk(axi4LiteMasterReadInterface.aclk),
                                                              .aresetn(axi4LiteMasterReadInterface.aresetn),
                                                              .araddr(axi4LiteMasterReadInterface.araddr),
@@ -39,6 +44,17 @@ module Axi4LiteMasterReadAgent #(parameter int MASTER_ID = 0)(Axi4LiteMasterRead
                                                              .rvalid(axi4LiteMasterReadInterface.rvalid),
                                                              .rready(axi4LiteMasterReadInterface.rready)
                                                             );
+
+   assign clk     = axi4LiteMasterReadInterface.aclk;
+   assign aresetn = axi4LiteMasterReadInterface.aresetn;
+   assign araddr  = axi4LiteMasterReadInterface.araddr;
+   assign arprot  = axi4LiteMasterReadInterface.arprot;
+   assign arvalid = axi4LiteMasterReadInterface.arvalid;
+   assign arready = axi4LiteMasterReadInterface.arready;
+   assign rdata   = axi4LiteMasterReadInterface.rdata;
+   assign rresp   = axi4LiteMasterReadInterface.rresp;
+   assign rvalid  = axi4LiteMasterReadInterface.rvalid;
+   assign rready  = axi4LiteMasterReadInterface.rready;
 
   //-------------------------------------------------------
   // Setting the virtual handle of BMFs into config_db
@@ -61,10 +77,9 @@ module Axi4LiteMasterReadAgent #(parameter int MASTER_ID = 0)(Axi4LiteMasterRead
                                                           );
 
 
-  //Printing Axi4LiteMasterReadAgent
   initial begin
-    `uvm_info("Axi4LiteMasterReadAgent",$sformatf("AXI4LITE MASTERREADAGENTBFM"),UVM_LOW);
+    `uvm_info("Axi4LiteMasterReadAgentBFM",$sformatf("AXI4LITE MASTERREADAGENTBFM"),UVM_LOW);
   end
    
-endmodule : Axi4LiteMasterReadAgent
+endmodule : Axi4LiteMasterReadAgentBFM
 `endif

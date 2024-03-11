@@ -1,18 +1,29 @@
-`ifndef AXI4LITESLAVEWRITEAGENT_INCLUDED_
-`define AXI4LITESLAVEWRITEAGENT_INCLUDED_
+`ifndef AXI4LITESLAVEWRITEAGENTBFM_INCLUDED_
+`define AXI4LITESLAVEWRITEAGENTBFM_INCLUDED_
 
-//--------------------------------------------------------------------------------------------
-// Module:Axi4LiteSlaveWriteAgent 
-// This module is used as the configuration class for slave agent bfm and its components
-//--------------------------------------------------------------------------------------------
-module Axi4LiteSlaveWriteAgent #(parameter int SLAVE_ID = 0)(Axi4LiteSlaveWriteInterface axi4LiteSlaveWriteInterface);
    
+module Axi4LiteSlaveWriteAgentBFM #(parameter int ADDR_WIDTH = 32,
+                                    parameter int DATA_WIDTH = 32
+                                   )
+                                   (input  clk,
+                                    input  aresetn,
+                                    input  awaddr,
+                                    input  awprot,
+                                    input  awvalid,
+                                    output awready,
+                                    input  wdata,
+                                    input  wstrb,
+                                    input  wvalid,
+                                    output wready,
+                                    output bresp,
+                                    output bvalid,
+                                    input  bready
+                                    );
   import uvm_pkg::*;
   `include "uvm_macros.svh"
+
+  Axi4LiteSlaveWriteInterface axi4LiteSlaveWriteInterface();
   
-  //-------------------------------------------------------
-  // Axi4LiteSlaveWriteDriverBFM instantiation
-  //-------------------------------------------------------
   Axi4LiteSlaveWriteDriverBFM axi4LiteSlaveWriteDriverBFM (.aclk(axi4LiteSlaveWriteInterface.aclk), 
                                                            .aresetn(axi4LiteSlaveWriteInterface.aresetn),
                                                            .awaddr(axi4LiteSlaveWriteInterface.awaddr),
@@ -28,9 +39,6 @@ module Axi4LiteSlaveWriteAgent #(parameter int SLAVE_ID = 0)(Axi4LiteSlaveWriteI
                                                            .bready(axi4LiteSlaveWriteInterface.bready)
                                                           );
 
-  //-------------------------------------------------------
-  //Axi4LiteSlaveWriteMonitorBFM instantiation
-  //-------------------------------------------------------
   Axi4LiteSlaveWriteMonitorBFM axi4LiteSlaveWriteMonitorBFM (.aclk(axi4LiteSlaveWriteInterface.aclk),
                                                              .aresetn(axi4LiteSlaveWriteInterface.aresetn),
                                                              .awaddr(axi4LiteSlaveWriteInterface.awaddr),
@@ -46,9 +54,21 @@ module Axi4LiteSlaveWriteAgent #(parameter int SLAVE_ID = 0)(Axi4LiteSlaveWriteI
                                                              .bready(axi4LiteSlaveWriteInterface.bready)
                                                             );
 
-  //-------------------------------------------------------
-  // Setting the virtual handle of BMFs into config_db
-  //-------------------------------------------------------
+  assign clk     = axi4LiteSlaveWriteInterface.aclk;
+  assign aresetn = axi4LiteSlaveWriteInterface.aresetn;
+  assign awaddr  = axi4LiteSlaveWriteInterface.awaddr;
+  assign awprot  = axi4LiteSlaveWriteInterface.awprot;
+  assign awvalid = axi4LiteSlaveWriteInterface.awvalid;
+  assign awready = axi4LiteSlaveWriteInterface.awready;
+  assign wdata   = axi4LiteSlaveWriteInterface.wdata;
+  assign wstrb   = axi4LiteSlaveWriteInterface.wstrb;
+  assign wvalid  = axi4LiteSlaveWriteInterface.wvalid;
+  assign wready  = axi4LiteSlaveWriteInterface.wready;
+  assign bresp   = axi4LiteSlaveWriteInterface.bresp;
+  assign bvalid  = axi4LiteSlaveWriteInterface.bvalid;
+  assign bready  = axi4LiteSlaveWriteInterface.bready;
+
+
   initial begin
     uvm_config_db#(virtual Axi4LiteSlaveWriteDriverBFM)::set(null,"*", "Axi4LiteSlaveWriteDriverBFM", axi4LiteSlaveWriteDriverBFM); 
     uvm_config_db#(virtual Axi4LiteSlaveWriteMonitorBFM)::set(null,"*", "Axi4LiteSlaveWriteMonitorBFM", axi4LiteSlaveWriteMonitorBFM);
@@ -76,10 +96,9 @@ module Axi4LiteSlaveWriteAgent #(parameter int SLAVE_ID = 0)(Axi4LiteSlaveWriteI
     uvm_config_db#(virtual Axi4LiteSlaveWriteMonitorBFM)::set(null,"*", "Axi4LiteSlaveWriteMonitorBFM", axi4LiteSlaveWriteMonitorBFM);
   end
 
-  //Printing Axi4LiteSlaveWriteAgent
   initial begin
-    `uvm_info("Axi4LiteSlaveWriteAgent",$sformatf("AXI4LITE SLAVEWRITEAGENTBFM"),UVM_LOW);
+    `uvm_info("Axi4LiteSlaveWriteAgentBFM",$sformatf("AXI4LITE SLAVEWRITEAGENTBFM"),UVM_LOW);
   end
    
-endmodule : Axi4LiteSlaveWriteAgent
+endmodule : Axi4LiteSlaveWriteAgentBFM
 `endif

@@ -26,11 +26,12 @@ endfunction : new
 
 function void Axi4LiteSlaveEnv::build_phase(uvm_phase phase);
   super.build_phase(phase);
-  
+/*  
   if(!uvm_config_db #(Axi4LiteSlaveEnvConfig)::get(this,"","Axi4LiteSlaveEnvConfig",axi4LiteSlaveEnvConfig)) begin
     `uvm_fatal("FATAL_SLAVE_ENV_AGENT_CONFIG", $sformatf("Couldn't get the master_env_agent_config from config_db"))
   end
- /* 
+ */
+  /* 
   axi4LiteSlaveWriteAgentConfig = new[axi4LiteSlaveEnvConfig.no_of_masters];
   foreach(axi4LiteSlaveWriteAgentConfig[i]) begin
     if(!uvm_config_db#(Axi4LiteSlaveWriteAgentConfig)::get(this,"",$sformatf("Axi4LiteSlaveWriteAgentConfig[%0d]",i),axi4LiteSlaveWriteAgentConfig[i])) begin

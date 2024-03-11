@@ -29,10 +29,10 @@ endfunction : new
 function void Axi4LiteMasterEnv::build_phase(uvm_phase phase);
   super.build_phase(phase);
   
-  if(!uvm_config_db #(Axi4LiteMasterEnvConfig)::get(this,"","Axi4LiteMasterEnvConfig",axi4LiteMasterEnvConfig)) begin
+/*  if(!uvm_config_db #(Axi4LiteMasterEnvConfig)::get(this,"","Axi4LiteMasterEnvConfig",axi4LiteMasterEnvConfig)) begin
     `uvm_fatal("FATAL_MASTER_ENV_AGENT_CONFIG", $sformatf("Couldn't get the master_env_agent_config from config_db"))
   end
-  
+  */
 /* axi4LiteMasterWriteAgentConfig = new[axi4LiteMasterEnvConfig.no_of_masters];
   foreach(axi4LiteMasterWriteAgentConfig[i]) begin
     if(!uvm_config_db#(Axi4LiteMasterWriteAgentConfig)::get(this,"",$sformatf("Axi4LiteMasterWriteAgentConfig[%0d]",i),axi4LiteMasterWriteAgentConfig[i])) begin

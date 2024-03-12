@@ -4,38 +4,33 @@
 class Axi4LiteMasterWriteMonitorProxy extends uvm_component;
   `uvm_component_utils(Axi4LiteMasterWriteMonitorProxy)
 
-  // Variable: axi4LiteMasterWriteAgentConfig
-  // Declaring handle for axi4_master agent config class 
   Axi4LiteMasterWriteAgentConfig axi4LiteMasterWriteAgentConfig;
 
-  // Declaring handles for master transaction
-  Axi4LiteMasterWriteTransaction req_wr;
+  Axi4LiteMasterWriteTransaction reqWrite;
 
-  // Variable : apb_master_mon_bfm_h
-  // Declaring handle for apb monitor bfm
   virtual Axi4LiteMasterWriteMonitorBFM axi4LiteMasterWriteMonitorBFM;
   
   // Declaring analysis port for the monitor port
- uvm_analysis_port#(Axi4LiteMasterWriteTransaction) axi4_master_write_address_analysis_port;
-  uvm_analysis_port#(Axi4LiteMasterWriteTransaction) axi4_master_write_data_analysis_port;
-  uvm_analysis_port#(Axi4LiteMasterWriteTransaction) axi4_master_write_response_analysis_port;
+  uvm_analysis_port#(Axi4LiteMasterWriteTransaction) axi4LiteMasterWriteAddressAnalysisPort;
+  uvm_analysis_port#(Axi4LiteMasterWriteTransaction) axi4LiteMasterWriteDataAnalysisPort;
+  uvm_analysis_port#(Axi4LiteMasterWriteTransaction) axi4LiteMasterWriteResponseAnalysisPort;
 
-  //Variable: axi4_master_write_address_fifo_h
+  //Variable: axi4LiteMasterWriteAddressFIFO
   //Declaring handle for uvm_tlm_analysis_fifo for write task
-  uvm_tlm_analysis_fifo #(Axi4LiteMasterWriteTransaction) axi4_master_write_address_fifo_h;
+  uvm_tlm_analysis_fifo #(Axi4LiteMasterWriteTransaction) axi4LiteMasterWriteAddressFIFO;
   
-  //Variable: axi4_master_write_data_fifo_h
+  //Variable: axi4LiteMasterWriteDataFIFO
   //Declaring handle for uvm_tlm_analysis_fifo for write task
-  uvm_tlm_analysis_fifo #(Axi4LiteMasterWriteTransaction) axi4_master_write_data_fifo_h;
+  uvm_tlm_analysis_fifo #(Axi4LiteMasterWriteTransaction) axi4LiteMasterWriteDataFIFO;
 
   extern function new(string name = "Axi4LiteMasterWriteMonitorProxy", uvm_component parent = null);
   extern virtual function void build_phase(uvm_phase phase);
   extern virtual function void connect_phase(uvm_phase phase);
   extern virtual function void end_of_elaboration_phase(uvm_phase phase);
   extern virtual task run_phase(uvm_phase phase);
-// GopalS:   extern virtual task axi4_write_address();
-// GopalS:   extern virtual task axi4_write_data();
-// GopalS:   extern virtual task axi4_write_response();
+  extern virtual task axi4LiteMasterWriteAddress();
+  extern virtual task axi4LiteMasterWriteData();
+  extern virtual task axi4LiteMasterWriteResponse();
 
 endclass : Axi4LiteMasterWriteMonitorProxy
 
@@ -43,11 +38,11 @@ endclass : Axi4LiteMasterWriteMonitorProxy
 function Axi4LiteMasterWriteMonitorProxy::new(string name = "Axi4LiteMasterWriteMonitorProxy",
                                  uvm_component parent = null);
   super.new(name, parent);
-  axi4_master_write_address_analysis_port  = new("axi4_master_write_address_analysis_port",this);
-  axi4_master_write_data_analysis_port     = new("axi4_master_write_data_analysis_port",this);
-  axi4_master_write_response_analysis_port = new("axi4_master_write_response_analysis_port",this);
-  axi4_master_write_address_fifo_h= new("axi4_master_write_address_fifo_h",this);
-  axi4_master_write_data_fifo_h= new("axi4_master_write_data_fifo_h",this);
+  axi4LiteMasterWriteAddressAnalysisPort  = new("axi4LiteMasterWriteAddressAnalysisPort",this);
+  axi4LiteMasterWriteDataAnalysisPort     = new("axi4LiteMasterWriteDataAnalysisPort",this);
+  axi4LiteMasterWriteResponseAnalysisPort = new("axi4LiteMasterWriteResponseAnalysisPort",this);
+  axi4LiteMasterWriteAddressFIFO= new("axi4LiteMasterWriteAddressFIFO",this);
+  axi4LiteMasterWriteDataFIFO= new("axi4LiteMasterWriteDataFIFO",this);
 endfunction : new
 
 function void Axi4LiteMasterWriteMonitorProxy::build_phase(uvm_phase phase);
@@ -72,38 +67,30 @@ task Axi4LiteMasterWriteMonitorProxy::run_phase(uvm_phase phase);
   axi4LiteMasterWriteMonitorBFM.wait_for_aresetn();
 
   fork 
-    axi4_write_address();
-    axi4_write_data();
-    axi4_write_response();
+    axi4LiteMasterWriteAddress();
+    axi4LiteMasterWriteData();
+    axi4LiteMasterWriteResponse();
   join
 */
 endtask : run_phase
 
-//--------------------------------------------------------------------------------------------
-// Task: axi4_write_address
-//  Gets the struct packet samples the data, convert it to req and drives to analysis port
-//--------------------------------------------------------------------------------------------
-/*
-task Axi4LiteMasterWriteMonitorProxy::axi4_write_address();
- 
-endtask
+// Task: axi4LiteMasterWriteAddress
+task Axi4LiteMasterWriteMonitorProxy::axi4LiteMasterWriteAddress();
 
-//--------------------------------------------------------------------------------------------
-// Task: axi4_write_data
-//  Gets the struct packet samples the data, convert it to req and drives to analysis port
-//--------------------------------------------------------------------------------------------
-
-task Axi4LiteMasterWriteMonitorProxy::axi4_write_data();
 
 endtask
 
-// Task: axi4_write_response
-// Gets the struct packet samples the data, convert it to req and drives to analysis port
+// Task: axi4LiteMasterWriteData
+task Axi4LiteMasterWriteMonitorProxy::axi4LiteMasterWriteData();
 
-task Axi4LiteMasterWriteMonitorProxy::axi4_write_response();
 
 endtask
-*/
 
+
+// Task: axi4LiteMasterWriteResponse
+task Axi4LiteMasterWriteMonitorProxy::axi4LiteMasterWriteResponse();
+
+
+endtask
 `endif
 

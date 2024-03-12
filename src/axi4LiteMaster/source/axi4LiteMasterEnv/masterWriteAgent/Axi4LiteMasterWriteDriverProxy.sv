@@ -5,23 +5,12 @@ class Axi4LiteMasterWriteDriverProxy extends uvm_driver#(Axi4LiteMasterWriteTran
   `uvm_component_utils(Axi4LiteMasterWriteDriverProxy)
 
   uvm_seq_item_pull_port #(REQ,RSP) axi4LiteMasterWriteSeqItemPort;
+  uvm_analysis_port #(RSP) axi4LiteMasterWriteRspPort;
+  uvm_tlm_analysis_fifo #(Axi4LiteMasterWriteTransaction) axi4LiteMasterWriteFIFO;
   
-  //Port: axi_write_rsp_port
-  //This port provides an alternate way of sending responses back to the originating sequencer. 
-  //Which port to use depends on which export the sequencer provides for connection.
-  uvm_analysis_port #(RSP) axi_write_rsp_port;
+  REQ reqWrite; 
   
-    //Variable: axi4_master_write_fifo_h
-  //Declaring handle for uvm_tlm_analysis_fifo for write task
-  uvm_tlm_analysis_fifo #(Axi4LiteMasterWriteTransaction) axi4_master_write_fifo_h;
-  
-  //Variable: req_wr
-  //Declaration of REQ handles
-  REQ req_wr; 
-  
-  //Variable: rsp_wr
-  //Declaration of RSP handles
-  RSP rsp_wr;
+  RSP rspWrite;
       
   Axi4LiteMasterWriteAgentConfig axi4LiteMasterWriteAgentConfig;
 
@@ -31,15 +20,15 @@ class Axi4LiteMasterWriteDriverProxy extends uvm_driver#(Axi4LiteMasterWriteTran
   extern virtual function void build_phase(uvm_phase phase);
   extern virtual function void end_of_elaboration_phase(uvm_phase phase);
   extern virtual task run_phase(uvm_phase phase);
-// GopalS:   extern virtual task axi4_write_task();
+  extern virtual task axi4LiteMasterWriteTask();
 
 endclass : Axi4LiteMasterWriteDriverProxy
 
 function Axi4LiteMasterWriteDriverProxy::new(string name = "Axi4LiteMasterWriteDriverProxy", uvm_component parent = null);
   super.new(name, parent);
-  axi4LiteMasterWriteSeqItemPort    = new("axi4LiteMasterWriteSeqItemPort",this);
-  axi_write_rsp_port         = new("axi_write_rsp_port",this);
-  axi4_master_write_fifo_h   = new("axi4_master_write_fifo_h",this);
+  axi4LiteMasterWriteSeqItemPort  = new("axi4LiteMasterWriteSeqItemPort",this);
+  axi4LiteMasterWriteRspPort      = new("axi4LiteMasterWriteRspPort",this);
+  axi4LiteMasterWriteFIFO         = new("axi4LiteMasterWriteFIFO",this);
 endfunction : new
 
 function void Axi4LiteMasterWriteDriverProxy::build_phase(uvm_phase phase);
@@ -58,15 +47,15 @@ task Axi4LiteMasterWriteDriverProxy::run_phase(uvm_phase phase);
 
 /*  axi4LiteMasterWriteDriverBFM.wait_for_aresetn();
   fork 
-    axi4_write_task();
+    axi4LiteMasterWriteTask();
   join
 */
 endtask : run_phase
 
-/*
-task Axi4LiteMasterWriteDriverProxy::axi4_write_task();
 
-endtask : axi4_write_task
-*/
+task Axi4LiteMasterWriteDriverProxy::axi4LiteMasterWriteTask();
+
+endtask : axi4LiteMasterWriteTask
+
 `endif
 

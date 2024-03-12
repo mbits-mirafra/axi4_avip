@@ -5,47 +5,39 @@ class Axi4LiteSlaveWriteDriverProxy extends uvm_driver#(Axi4LiteSlaveWriteTransa
   `uvm_component_utils(Axi4LiteSlaveWriteDriverProxy)
 
   uvm_seq_item_pull_port #(REQ, RSP) axi4LiteSlaveWriteSeqItemPort;
-
-  uvm_analysis_port #(RSP) axi_write_rsp_port;
+  uvm_analysis_port #(RSP) axi4LiteSlaveWriteRspPort;
   
-  REQ req_wr;
-  RSP rsp_wr;
+  REQ reqWrite;
+  RSP rspWrite;
 
-  // Variable: axi4LiteSlaveWriteAgentConfig
-  // Declaring handle for axi4_slave agent config class 
   Axi4LiteSlaveWriteAgentConfig axi4LiteSlaveWriteAgentConfig;
 
-  //Variable : axi4LiteSlaveWriteDriverBFM
-  //Declaring handle for axi4 driver bfm
   virtual Axi4LiteSlaveWriteDriverBFM axi4LiteSlaveWriteDriverBFM;
 
   //Declaring handle for uvm_tlm_analysis_fifo's for all the five channels
-  uvm_tlm_fifo #(Axi4LiteSlaveWriteTransaction) axi4_slave_write_addr_fifo_h;
-  uvm_tlm_fifo #(Axi4LiteSlaveWriteTransaction) axi4_slave_write_data_in_fifo_h;
-  uvm_tlm_fifo #(Axi4LiteSlaveWriteTransaction) axi4_slave_write_response_fifo_h;
-  uvm_tlm_fifo #(Axi4LiteSlaveWriteTransaction) axi4_slave_write_data_out_fifo_h;
-
-  bit[3:0] wr_addr_cnt;
-  bit[3:0] wr_resp_cnt;
+  uvm_tlm_fifo #(Axi4LiteSlaveWriteTransaction) axi4LiteSlaveWriteAddressFIFO;
+  uvm_tlm_fifo #(Axi4LiteSlaveWriteTransaction) axi4LiteSlaveWriteDataInFIFO;
+  uvm_tlm_fifo #(Axi4LiteSlaveWriteTransaction) axi4LiteSlaveWriteResponseFIFO;
+  uvm_tlm_fifo #(Axi4LiteSlaveWriteTransaction) axi4LiteSlaveWriteDataOutFIFO;
 
   extern function new(string name = "Axi4LiteSlaveWriteDriverProxy", uvm_component parent = null);
   extern virtual function void build_phase(uvm_phase phase);
   extern virtual function void end_of_elaboration_phase(uvm_phase phase);
   extern virtual task run_phase(uvm_phase phase);
- /* extern virtual task axi4_write_task();
-  extern virtual task task_memory_write(input Axi4LiteSlaveWriteTransaction struct_write_packet);
-*/
+  extern virtual task axi4LiteSlaveWriteTask();
+ // extern virtual task axi4LiteSlaveMemoryWrite(input Axi4LiteSlaveWriteTransaction struct_write_packet);
+
  endclass : Axi4LiteSlaveWriteDriverProxy
 
 function Axi4LiteSlaveWriteDriverProxy::new(string name = "Axi4LiteSlaveWriteDriverProxy",
                                       uvm_component parent = null);
   super.new(name, parent);
-  axi4LiteSlaveWriteSeqItemPort                   = new("axi4LiteSlaveWriteSeqItemPort", this);
-  axi_write_rsp_port                        = new("axi_write_rsp_port", this);
-  axi4_slave_write_addr_fifo_h              = new("axi4_slave_write_addr_fifo_h",this,16);
-  axi4_slave_write_data_in_fifo_h           = new("axi4_slave_write_data_in_fifo_h",this,16);
-  axi4_slave_write_response_fifo_h          = new("axi4_slave_write_response_fifo_h",this,16);
-  axi4_slave_write_data_out_fifo_h          = new("axi4_slave_write_data_out_fifo_h",this,16);
+  axi4LiteSlaveWriteSeqItemPort        = new("axi4LiteSlaveWriteSeqItemPort", this);
+  axi4LiteSlaveWriteRspPort            = new("axi4LiteSlaveWriteRspPort", this);
+  axi4LiteSlaveWriteAddressFIFO        = new("axi4LiteSlaveWriteAddressFIFO",this,16);
+  axi4LiteSlaveWriteDataInFIFO         = new("axi4LiteSlaveWriteDataInFIFO",this,16);
+  axi4LiteSlaveWriteResponseFIFO       = new("axi4LiteSlaveWriteResponseFIFO",this,16);
+  axi4LiteSlaveWriteDataOutFIFO        = new("axi4LiteSlaveWriteDataOutFIFO",this,16);
 endfunction : new
 
 function void Axi4LiteSlaveWriteDriverProxy::build_phase(uvm_phase phase);
@@ -67,18 +59,15 @@ task Axi4LiteSlaveWriteDriverProxy::run_phase(uvm_phase phase);
   //wait for system reset
   axi4LiteSlaveWriteDriverBFM.wait_for_system_reset();
   fork 
-    axi4_write_task();
+    axi4LiteSlaveWriteTask();
   join
 */
 
 endtask : run_phase 
-/*
-//--------------------------------------------------------------------------------------------
-// task axi4 write task
-//--------------------------------------------------------------------------------------------
-task Axi4LiteSlaveWriteDriverProxy::axi4_write_task();
+
+task Axi4LiteSlaveWriteDriverProxy::axi4LiteSlaveWriteTask();
  
  
- endtask : axi4_write_task
-*/
+endtask : axi4LiteSlaveWriteTask
+
 `endif

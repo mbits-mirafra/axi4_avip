@@ -1,13 +1,9 @@
 `ifndef AXI4LITEMASTERWRITESEQUENCER_INCLUDED_
 `define AXI4LITEMASTERWRITESEQUENCER_INCLUDED_
 
-//--------------------------------------------------------------------------------------------
-// Class: Axi4LiteMasterWriteSequencer
-//--------------------------------------------------------------------------------------------
 class Axi4LiteMasterWriteSequencer extends uvm_sequencer#(Axi4LiteMasterWriteTransaction);
   `uvm_component_utils(Axi4LiteMasterWriteSequencer)
 
-  // Declaring handle for master agent config class 
   Axi4LiteMasterWriteAgentConfig axi4LiteMasterWriteAgentConfig;
   
   extern function new(string name = "Axi4LiteMasterWriteSequencer", uvm_component parent = null);
@@ -24,57 +20,22 @@ function Axi4LiteMasterWriteSequencer::new(string name = "Axi4LiteMasterWriteSeq
   super.new(name, parent);
 endfunction : new
 
-//--------------------------------------------------------------------------------------------
-// Function: build_phase
-// <Description_here>
-//
-// Parameters:
-//  phase - uvm phase
-//--------------------------------------------------------------------------------------------
 function void Axi4LiteMasterWriteSequencer::build_phase(uvm_phase phase);
   super.build_phase(phase);
 endfunction : build_phase
 
-//--------------------------------------------------------------------------------------------
-// Function: connect_phase
-// <Description_here>
-//
-// Parameters:
-//  phase - uvm phase
-//--------------------------------------------------------------------------------------------
 function void Axi4LiteMasterWriteSequencer::connect_phase(uvm_phase phase);
   super.connect_phase(phase);
 endfunction : connect_phase
 
-//--------------------------------------------------------------------------------------------
-// Function: end_of_elaboration_phase
-// <Description_here>
-//
-// Parameters:
-//  phase - uvm phase
-//--------------------------------------------------------------------------------------------
 function void Axi4LiteMasterWriteSequencer::end_of_elaboration_phase(uvm_phase phase);
   super.end_of_elaboration_phase(phase);
 endfunction  : end_of_elaboration_phase
 
-//--------------------------------------------------------------------------------------------
-// Function: start_of_simulation_phase
-// <Description_here>
-//
-// Parameters:
-//  phase - uvm phase
-//--------------------------------------------------------------------------------------------
 function void Axi4LiteMasterWriteSequencer::start_of_simulation_phase(uvm_phase phase);
   super.start_of_simulation_phase(phase);
 endfunction : start_of_simulation_phase
 
-//--------------------------------------------------------------------------------------------
-// Task: run_phase
-// <Description_here>
-//
-// Parameters:
-//  phase - uvm phase
-//--------------------------------------------------------------------------------------------
 task Axi4LiteMasterWriteSequencer::run_phase(uvm_phase phase);
 
   // Work here

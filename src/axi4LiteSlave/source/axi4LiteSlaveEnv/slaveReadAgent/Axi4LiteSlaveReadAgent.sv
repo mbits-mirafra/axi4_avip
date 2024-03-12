@@ -4,29 +4,16 @@
 class Axi4LiteSlaveReadAgent extends uvm_agent;
   `uvm_component_utils(Axi4LiteSlaveReadAgent)
 
-  // Variable: axi4LiteSlaveReadAgentConfig;
-  // Handle for axi4_slave agent configuration
   Axi4LiteSlaveReadAgentConfig axi4LiteSlaveReadAgentConfig;
 
-  // Varible: axi4LiteSlaveReadSequencer 
-  // Handle for slave write sequencer
   Axi4LiteSlaveReadSequencer axi4LiteSlaveReadSequencer;
   
-  // Variable: axi4LiteSlaveReadDriverProxy
-  // Handle for axi4_slave driver proxy
   Axi4LiteSlaveReadDriverProxy axi4LiteSlaveReadDriverProxy;
 
-  // Variable: axi4LiteSlaveReadMonitorProxy
-  // Handle for axi4_slave monitor proxy
   Axi4LiteSlaveReadMonitorProxy axi4LiteSlaveReadMonitorProxy;
 
-  // Variable: Axi4LiteSlaveReadCoverage
-  // Decalring a handle for Axi4LiteSlaveReadCoverage
   Axi4LiteSlaveReadCoverage axi4LiteSlaveReadCoverage;
   
-  //-------------------------------------------------------
-  // Externally defined Tasks and Functions
-  //-------------------------------------------------------
   extern function new(string name = "Axi4LiteSlaveReadAgent", uvm_component parent);
   extern virtual function void build_phase(uvm_phase phase);
   extern virtual function void connect_phase(uvm_phase phase);
@@ -65,8 +52,8 @@ function void Axi4LiteSlaveReadAgent::connect_phase(uvm_phase phase);
   if(axi4LiteSlaveReadAgentConfig.hasCoverage) begin
     axi4LiteSlaveReadCoverage.axi4LiteSlaveReadAgentConfig = axi4LiteSlaveReadAgentConfig; 
     // Connecting monitor_proxy port to coverage export
-    axi4LiteSlaveReadMonitorProxy.axi4_slave_read_address_analysis_port.connect(axi4LiteSlaveReadCoverage.analysis_export);
-    axi4LiteSlaveReadMonitorProxy.axi4_slave_read_data_analysis_port.connect(axi4LiteSlaveReadCoverage.analysis_export);
+    axi4LiteSlaveReadMonitorProxy.axi4LiteSlaveReadAddressAnalysisPort.connect(axi4LiteSlaveReadCoverage.analysis_export);
+    axi4LiteSlaveReadMonitorProxy.axi4LiteSlaveReadDataAnalysisPort.connect(axi4LiteSlaveReadCoverage.analysis_export);
       end
 
   axi4LiteSlaveReadMonitorProxy.axi4LiteSlaveReadAgentConfig = axi4LiteSlaveReadAgentConfig;

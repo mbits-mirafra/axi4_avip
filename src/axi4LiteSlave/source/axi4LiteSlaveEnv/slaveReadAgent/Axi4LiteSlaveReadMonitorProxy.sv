@@ -4,29 +4,23 @@
 class Axi4LiteSlaveReadMonitorProxy extends uvm_monitor;
   `uvm_component_utils(Axi4LiteSlaveReadMonitorProxy)
 
-  // Variable: axi4LiteSlaveReadAgentConfig;
-  // Handle for axi4 slave agent configuration
   Axi4LiteSlaveReadAgentConfig axi4LiteSlaveReadAgentConfig;
 
-  // Declaring Virtual Monitor BFM Handle
   virtual Axi4LiteSlaveReadMonitorBFM axi4LiteSlaveReadMonitorBFM;
 
-  Axi4LiteSlaveReadTransaction req_rd;
+  Axi4LiteSlaveReadTransaction reqRead;
 
-  // Variable: axi4_slave_analysis_port
- uvm_analysis_port#(Axi4LiteSlaveReadTransaction) axi4_slave_read_address_analysis_port;
-  uvm_analysis_port#(Axi4LiteSlaveReadTransaction) axi4_slave_read_data_analysis_port;
+   uvm_analysis_port#(Axi4LiteSlaveReadTransaction) axi4LiteSlaveReadAddressAnalysisPort;
+   uvm_analysis_port#(Axi4LiteSlaveReadTransaction) axi4LiteSlaveReadDataAnalysisPort;
  
-  //Variable: axi4_slave_read_fifo_h
-  //Declaring handle for uvm_tlm_analysis_fifo for read task
-  uvm_tlm_analysis_fifo #(Axi4LiteSlaveReadTransaction) axi4_slave_read_fifo_h;
+   uvm_tlm_analysis_fifo #(Axi4LiteSlaveReadTransaction) axi4LiteSlaveReadDataFIFO;
   
   extern function new(string name = "Axi4LiteSlaveReadMonitorProxy", uvm_component parent = null);
   extern virtual function void build_phase(uvm_phase phase);
   extern function void end_of_elaboration_phase(uvm_phase phase);
   extern virtual task run_phase(uvm_phase phase);
-// GopalS:   extern virtual task axi4_slave_read_address();
-// GopalS:   extern virtual task axi4_slave_read_data();
+  extern virtual task axi4LiteSlaveReadAddress();
+  extern virtual task axi4LiteSlaveReadData();
 
 endclass : Axi4LiteSlaveReadMonitorProxy
 
@@ -34,9 +28,9 @@ endclass : Axi4LiteSlaveReadMonitorProxy
 function Axi4LiteSlaveReadMonitorProxy::new(string name = "Axi4LiteSlaveReadMonitorProxy",
                                  uvm_component parent = null);
   super.new(name, parent);
-  axi4_slave_read_address_analysis_port = new("axi4_slave_read_address_analysis_port",this);
-  axi4_slave_read_data_analysis_port = new("axi4_slave_read_data_analysis_port",this);
-  axi4_slave_read_fifo_h = new("axi4_slave_read_fifo_h",this);
+  axi4LiteSlaveReadAddressAnalysisPort  = new("axi4LiteSlaveReadAddressAnalysisPort",this);
+  axi4LiteSlaveReadDataAnalysisPort     = new("axi4LiteSlaveReadDataAnalysisPort",this);
+  axi4LiteSlaveReadDataFIFO             = new("axi4LiteSlaveReadDataFIFO",this);
 endfunction : new
 
 function void Axi4LiteSlaveReadMonitorProxy::build_phase(uvm_phase phase);
@@ -55,25 +49,16 @@ task Axi4LiteSlaveReadMonitorProxy::run_phase(uvm_phase phase);
 /*
   axi4LiteSlaveReadMonitorBFM.wait_for_aresetn();
   fork 
-    axi4_slave_read_address();
-    axi4_slave_read_data();
+    axi4LiteSlaveReadAddress();
+    axi4LiteSlaveReadData();
   join
 */
 endtask : run_phase 
-//--------------------------------------------------------------------------------------------
-// Task: axi4_slave_read_address
-//  Gets the struct packet samples the data, convert it to req and drives to analysis port
-//--------------------------------------------------------------------------------------------
-/*
-task Axi4LiteSlaveReadMonitorProxy::axi4_slave_read_address();
+
+task Axi4LiteSlaveReadMonitorProxy::axi4LiteSlaveReadAddress();
 endtask
 
-//--------------------------------------------------------------------------------------------
-// Task: axi4_slave_read_data
-//  Gets the struct packet samples the data, convert it to req and drives to analysis port
-//--------------------------------------------------------------------------------------------
-
-task Axi4LiteSlaveReadMonitorProxy::axi4_slave_read_data();
+task Axi4LiteSlaveReadMonitorProxy::axi4LiteSlaveReadData();
 endtask
-*/
+
 `endif

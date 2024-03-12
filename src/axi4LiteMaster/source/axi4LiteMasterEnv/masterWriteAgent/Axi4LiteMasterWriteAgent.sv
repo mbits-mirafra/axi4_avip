@@ -1,10 +1,6 @@
 `ifndef AXI4LITEMASTERWRITEAGENT_INCLUDED_
 `define AXI4LITEMASTERWRITEAGENT_INCLUDED_
 
-//--------------------------------------------------------------------------------------------
-// This agent is a configurable with respect to configuration which can create active and passive components
-// It contains testbench components like sequencer,driver_proxy and monitor_proxy for AXI4
-//--------------------------------------------------------------------------------------------
 class Axi4LiteMasterWriteAgent extends uvm_agent;
   `uvm_component_utils(Axi4LiteMasterWriteAgent)
 
@@ -43,13 +39,6 @@ function void Axi4LiteMasterWriteAgent::build_phase(uvm_phase phase);
 
 endfunction : build_phase
 
-//--------------------------------------------------------------------------------------------
-//  Function: connect_phase 
-//  Connecting axi4 master driver, master monitor and master sequencer for configuration
-//
-//  Parameters:
-//  phase - uvm phase
-//--------------------------------------------------------------------------------------------
 function void Axi4LiteMasterWriteAgent::connect_phase(uvm_phase phase);
   super.connect_phase(phase);
   if(axi4LiteMasterWriteAgentConfig.isActive == UVM_ACTIVE) begin
@@ -57,13 +46,11 @@ function void Axi4LiteMasterWriteAgent::connect_phase(uvm_phase phase);
     axi4LiteMasterWriteSequencer.axi4LiteMasterWriteAgentConfig = axi4LiteMasterWriteAgentConfig;
   
     //Connecting the ports
-    axi4LiteMasterWriteDriverProxy.axi_write_seq_item_port.connect(axi4LiteMasterWriteSequencer.seq_item_export);
+    axi4LiteMasterWriteDriverProxy.axi4LiteMasterWriteSeqItemPort.connect(axi4LiteMasterWriteSequencer.seq_item_export);
   end
 
   if(axi4LiteMasterWriteAgentConfig.hasCoverage) begin
     //Connecting monitor_proxy port to coverage export
-    axi4LiteMasterWriteMonitorProxy.axi4_master_read_address_analysis_port.connect(axi4LiteMasterWriteCoverage.analysis_export);
-    axi4LiteMasterWriteMonitorProxy.axi4_master_read_data_analysis_port.connect(axi4LiteMasterWriteCoverage.analysis_export);
     axi4LiteMasterWriteMonitorProxy.axi4_master_write_address_analysis_port.connect(axi4LiteMasterWriteCoverage.analysis_export);
     axi4LiteMasterWriteMonitorProxy.axi4_master_write_data_analysis_port.connect(axi4LiteMasterWriteCoverage.analysis_export);
     axi4LiteMasterWriteMonitorProxy.axi4_master_write_response_analysis_port.connect(axi4LiteMasterWriteCoverage.analysis_export);

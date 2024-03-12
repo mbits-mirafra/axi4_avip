@@ -28,39 +28,35 @@ endfunction : new
 
 function void Axi4LiteMasterEnv::build_phase(uvm_phase phase);
   super.build_phase(phase);
+ axi4LiteMasterEnvConfig = Axi4LiteMasterEnvConfig::type_id::create("axi4LiteMasterEnvConfig"); 
   
-/*  if(!uvm_config_db #(Axi4LiteMasterEnvConfig)::get(this,"","Axi4LiteMasterEnvConfig",axi4LiteMasterEnvConfig)) begin
+  if(!uvm_config_db #(Axi4LiteMasterEnvConfig)::get(this,"","Axi4LiteMasterEnvConfig",axi4LiteMasterEnvConfig)) begin
     `uvm_fatal("FATAL_MASTER_ENV_AGENT_CONFIG", $sformatf("Couldn't get the master_env_agent_config from config_db"))
   end
-  */
-/* axi4LiteMasterWriteAgentConfig = new[axi4LiteMasterEnvConfig.no_of_masters];
+
+ axi4LiteMasterWriteAgentConfig = new[axi4LiteMasterEnvConfig.no_of_masters];
   foreach(axi4LiteMasterWriteAgentConfig[i]) begin
     if(!uvm_config_db#(Axi4LiteMasterWriteAgentConfig)::get(this,"",$sformatf("Axi4LiteMasterWriteAgentConfig[%0d]",i),axi4LiteMasterWriteAgentConfig[i])) begin
       `uvm_fatal("FATAL_MASTER_WRITE_AGENT_CONFIG", $sformatf("Couldn't get the Axi4LiteMasterWriteAgentConfig[%0d] from config_db",i))
     end
   end
-*/
 
-/*
   axi4LiteMasterReadAgentConfig = new[axi4LiteMasterEnvConfig.no_of_masters];
   foreach(axi4LiteMasterReadAgentConfig[i]) begin
     if(!uvm_config_db #(Axi4LiteMasterReadAgentConfig)::get(this,"",$sformatf("Axi4LiteMasterReadAgentConfig[%0d]",i),axi4LiteMasterReadAgentConfig[i])) begin
       `uvm_fatal("FATAL_MASTER_READ_AGENT_CONFIG", $sformatf("Couldn't get the Axi4LiteMasterReadAgentConfig[%0d] from config_db",i))
     end
   end
-*/
-/*
+
   axi4LiteMasterWriteAgent = new[axi4LiteMasterEnvConfig.no_of_masters];
   foreach(axi4LiteMasterWriteAgent[i]) begin
     axi4LiteMasterWriteAgent[i]=Axi4LiteMasterWriteAgent::type_id::create($sformatf("axi4LiteMasterWriteAgent[%0d]",i),this);
   end
-*/
-/*
+
   axi4LiteMasterReadAgent = new[axi4LiteMasterEnvConfig.no_of_masters];
   foreach(axi4LiteMasterReadAgent[i]) begin
     axi4LiteMasterReadAgent[i]=Axi4LiteMasterReadAgent::type_id::create($sformatf("axi4LiteMasterReadAgent[%0d]",i),this);
   end
-  */
 
   if(axi4LiteMasterEnvConfig.hasMasterVirtualSequencer) begin
     axi4LiteMasterVirtualSequencer = Axi4LiteMasterVirtualSequencer::type_id::create("axi4LiteVirtualMasterSequencer",this);

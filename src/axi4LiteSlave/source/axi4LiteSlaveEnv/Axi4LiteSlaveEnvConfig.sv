@@ -5,6 +5,7 @@ class Axi4LiteSlaveEnvConfig extends uvm_object;
   `uvm_object_utils(Axi4LiteSlaveEnvConfig)
   
   bit hasSlaveVirtualSequencer = 1;
+  int no_of_slaves;
 
   Axi4LiteSlaveWriteAgentConfig axi4LiteSlaveWriteAgentConfig[];
   Axi4LiteSlaveReadAgentConfig axi4LiteSlaveReadAgentConfig[];

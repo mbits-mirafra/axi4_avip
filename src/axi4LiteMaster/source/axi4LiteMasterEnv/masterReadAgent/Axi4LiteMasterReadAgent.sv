@@ -1,10 +1,6 @@
 `ifndef AXI4LITEMASTERREADAGENT_INCLUDED_
 `define AXI4LITEMASTERREADAGENT_INCLUDED_
 
-//--------------------------------------------------------------------------------------------
-// This agent is a configurable with respect to configuration which can create active and passive components
-// It contains testbench components like sequencer,driver_proxy and monitor_proxy for AXI4
-//--------------------------------------------------------------------------------------------
 class Axi4LiteMasterReadAgent extends uvm_agent;
   `uvm_component_utils(Axi4LiteMasterReadAgent)
 
@@ -43,13 +39,6 @@ function void Axi4LiteMasterReadAgent::build_phase(uvm_phase phase);
 
 endfunction : build_phase
 
-//--------------------------------------------------------------------------------------------
-//  Function: connect_phase 
-//  Connecting axi4 master driver, master monitor and master sequencer for configuration
-//
-//  Parameters:
-//  phase - uvm phase
-//--------------------------------------------------------------------------------------------
 function void Axi4LiteMasterReadAgent::connect_phase(uvm_phase phase);
   super.connect_phase(phase);
   if(axi4LiteMasterReadAgentConfig.isActive == UVM_ACTIVE) begin
@@ -57,7 +46,7 @@ function void Axi4LiteMasterReadAgent::connect_phase(uvm_phase phase);
     axi4LiteMasterReadSequencer.axi4LiteMasterReadAgentConfig = axi4LiteMasterReadAgentConfig;
   
     //Connecting the ports
-    axi4LiteMasterReadDriverProxy.axi_read_seq_item_port.connect(axi4LiteMasterReadSequencer.seq_item_export);
+    axi4LiteMasterReadDriverProxy.axi4LiteMasterReadSeqItemPort.connect(axi4LiteMasterReadSequencer.seq_item_export);
   end
 
   if(axi4LiteMasterReadAgentConfig.hasCoverage) begin
@@ -65,9 +54,6 @@ function void Axi4LiteMasterReadAgent::connect_phase(uvm_phase phase);
     //Connecting monitor_proxy port to coverage export
     axi4LiteMasterReadMonitorProxy.axi4_master_read_address_analysis_port.connect(axi4LiteMasterReadCoverage.analysis_export);
     axi4LiteMasterReadMonitorProxy.axi4_master_read_data_analysis_port.connect(axi4LiteMasterReadCoverage.analysis_export);
-    axi4LiteMasterReadMonitorProxy.axi4_master_write_address_analysis_port.connect(axi4LiteMasterReadCoverage.analysis_export);
-    axi4LiteMasterReadMonitorProxy.axi4_master_write_data_analysis_port.connect(axi4LiteMasterReadCoverage.analysis_export);
-    axi4LiteMasterReadMonitorProxy.axi4_master_write_response_analysis_port.connect(axi4LiteMasterReadCoverage.analysis_export);
   end
   
   axi4LiteMasterReadMonitorProxy.axi4LiteMasterReadAgentConfig = axi4LiteMasterReadAgentConfig;

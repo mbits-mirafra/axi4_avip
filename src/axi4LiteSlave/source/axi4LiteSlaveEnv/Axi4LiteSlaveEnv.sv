@@ -26,36 +26,35 @@ endfunction : new
 
 function void Axi4LiteSlaveEnv::build_phase(uvm_phase phase);
   super.build_phase(phase);
-/*  
+  
   if(!uvm_config_db #(Axi4LiteSlaveEnvConfig)::get(this,"","Axi4LiteSlaveEnvConfig",axi4LiteSlaveEnvConfig)) begin
-    `uvm_fatal("FATAL_SLAVE_ENV_AGENT_CONFIG", $sformatf("Couldn't get the master_env_agent_config from config_db"))
+    `uvm_fatal("FATAL_SLAVE_ENV_AGENT_CONFIG", $sformatf("Couldn't get the Slave_env_agent_config from config_db"))
   end
- */
-  /* 
-  axi4LiteSlaveWriteAgentConfig = new[axi4LiteSlaveEnvConfig.no_of_masters];
+  
+  axi4LiteSlaveWriteAgentConfig = new[axi4LiteSlaveEnvConfig.no_of_slaves];
   foreach(axi4LiteSlaveWriteAgentConfig[i]) begin
     if(!uvm_config_db#(Axi4LiteSlaveWriteAgentConfig)::get(this,"",$sformatf("Axi4LiteSlaveWriteAgentConfig[%0d]",i),axi4LiteSlaveWriteAgentConfig[i])) begin
       `uvm_fatal("FATAL_SLAVE_WRITE_AGENT_CONFIG", $sformatf("Couldn't get the Axi4LiteSlaveWriteAgentConfig[%0d] from config_db",i))
     end
   end
 
-  axi4LiteSlaveReadAgentConfig = new[axi4LiteSlaveEnvConfig.no_of_masters];
+  axi4LiteSlaveReadAgentConfig = new[axi4LiteSlaveEnvConfig.no_of_slaves];
   foreach(axi4LiteSlaveReadAgentConfig[i]) begin
     if(!uvm_config_db #(Axi4LiteSlaveReadAgentConfig)::get(this,"",$sformatf("Axi4LiteSlaveReadAgentConfig[%0d]",i),axi4LiteSlaveReadAgentConfig[i])) begin
       `uvm_fatal("FATAL_SLAVE_READ_AGENT_CONFIG", $sformatf("Couldn't get the Axi4LiteSlaveReadAgentConfig[%0d] from config_db",i))
     end
   end
 
-  axi4LiteSlaveWriteAgent = new[axi4LiteSlaveEnvConfig.no_of_masters];
+  axi4LiteSlaveWriteAgent = new[axi4LiteSlaveEnvConfig.no_of_slaves];
   foreach(axi4LiteSlaveWriteAgent[i]) begin
     axi4LiteSlaveWriteAgent[i]=Axi4LiteSlaveWriteAgent::type_id::create($sformatf("axi4LiteSlaveWriteAgent[%0d]",i),this);
   end
 
-  axi4LiteSlaveReadAgent = new[axi4LiteSlaveEnvConfig.no_of_masters];
+  axi4LiteSlaveReadAgent = new[axi4LiteSlaveEnvConfig.no_of_slaves];
   foreach(axi4LiteSlaveReadAgent[i]) begin
     axi4LiteSlaveReadAgent[i]=Axi4LiteSlaveReadAgent::type_id::create($sformatf("axi4LiteSlaveReadAgent[%0d]",i),this);
   end
-*/
+
   if(axi4LiteSlaveEnvConfig.hasSlaveVirtualSequencer) begin
     axi4LiteSlaveVirtualSequencer = Axi4LiteSlaveVirtualSequencer::type_id::create("axi4LiteSlaveVirtualSequencer",this);
   end
@@ -82,7 +81,8 @@ function void Axi4LiteSlaveEnv::connect_phase(uvm_phase phase);
       axi4LiteSlaveVirtualSequencer.axi4LiteSlaveReadSequencer = axi4LiteSlaveReadAgent[i].axi4LiteSlaveReadSequencer;
     end
   end
- /* 
+
+  /* 
   foreach(axi4LiteSlaveWriteAgent[i]) begin
     axi4LiteSlaveWriteAgent[i].axi4LiteSlaveMonitorProxy.axi4LiteSlaveReadAddressAnalysisPort.connect(axi4_scoreboard_h.axi4_master_read_address_analysis_fifo.analysis_export);
     axi4LiteSlaveWriteAgent[i].axi4_master_mon_proxy_h.axi4_master_read_data_analysis_port.connect(axi4_scoreboard_h.axi4_master_read_data_analysis_fifo.analysis_export);

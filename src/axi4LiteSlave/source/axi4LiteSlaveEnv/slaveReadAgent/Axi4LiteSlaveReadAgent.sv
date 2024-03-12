@@ -1,10 +1,6 @@
 `ifndef AXI4LITESLAVEREADAGENT_INCLUDED_
 `define AXI4LITESLAVEREADAGENT_INCLUDED_
 
-//--------------------------------------------------------------------------------------------
-// Class: Axi4LiteSlaveReadAgent
-// This agent has sequencer, driver_proxy, monitor_proxy for axi4  
-//--------------------------------------------------------------------------------------------
 class Axi4LiteSlaveReadAgent extends uvm_agent;
   `uvm_component_utils(Axi4LiteSlaveReadAgent)
 
@@ -37,25 +33,10 @@ class Axi4LiteSlaveReadAgent extends uvm_agent;
 
 endclass : Axi4LiteSlaveReadAgent
 
-//--------------------------------------------------------------------------------------------
-// Construct: new
-// Initializes the Axi4LiteSlaveReadAgent class object
-//
-// Parameters:
-//  name - instance name of the  Axi4LiteSlaveReadAgent
-//  parent - parent under which this component is created
-//--------------------------------------------------------------------------------------------
 function Axi4LiteSlaveReadAgent::new(string name = "Axi4LiteSlaveReadAgent", uvm_component parent);
   super.new(name, parent);
 endfunction : new
 
-//--------------------------------------------------------------------------------------------
-// Function: build_phase
-// Creates the required ports, gets the required configuration from config_db
-//
-// Parameters:
-//  phase - stores the current phase
-//--------------------------------------------------------------------------------------------
 function void Axi4LiteSlaveReadAgent::build_phase(uvm_phase phase);
   super.build_phase(phase);
 
@@ -71,24 +52,14 @@ function void Axi4LiteSlaveReadAgent::build_phase(uvm_phase phase);
    end
 endfunction : build_phase
 
-//--------------------------------------------------------------------------------------------
-//  Function: connect_phase 
-//  Connecting axi4 slave driver, slave monitor and slave sequencer for configuration
-//
-//  Parameters:
-//  phase - uvm phase
-//--------------------------------------------------------------------------------------------
 function void Axi4LiteSlaveReadAgent::connect_phase(uvm_phase phase);
   super.connect_phase(phase);
   
   if(axi4LiteSlaveReadAgentConfig.isActive == UVM_ACTIVE) begin
     axi4LiteSlaveReadDriverProxy.axi4LiteSlaveReadAgentConfig  = axi4LiteSlaveReadAgentConfig;
     axi4LiteSlaveReadSequencer.axi4LiteSlaveReadAgentConfig = axi4LiteSlaveReadAgentConfig;
-  end
-    /*  
     // Connecting the ports
-    axi4LiteSlaveReadDriverProxy.axi_write_seq_item_port.connect(axi4LiteSlaveReadSequencer.seq_item_export);
-    axi4LiteSlaveReadDriverProxy.axi_read_seq_item_port.connect(axi4_slave_read_seqr_h.seq_item_export);
+    axi4LiteSlaveReadDriverProxy.axi4LiteSlaveReadSeqItemPort.connect(axi4LiteSlaveReadSequencer.seq_item_export);
   end
 
   if(axi4LiteSlaveReadAgentConfig.hasCoverage) begin
@@ -96,11 +67,8 @@ function void Axi4LiteSlaveReadAgent::connect_phase(uvm_phase phase);
     // Connecting monitor_proxy port to coverage export
     axi4LiteSlaveReadMonitorProxy.axi4_slave_read_address_analysis_port.connect(axi4LiteSlaveReadCoverage.analysis_export);
     axi4LiteSlaveReadMonitorProxy.axi4_slave_read_data_analysis_port.connect(axi4LiteSlaveReadCoverage.analysis_export);
-    axi4LiteSlaveReadMonitorProxy.axi4_slave_write_address_analysis_port.connect(axi4LiteSlaveReadCoverage.analysis_export);
-    axi4LiteSlaveReadMonitorProxy.axi4_slave_write_data_analysis_port.connect(axi4LiteSlaveReadCoverage.analysis_export);
-    axi4LiteSlaveReadMonitorProxy.axi4_slave_write_response_analysis_port.connect(axi4LiteSlaveReadCoverage.analysis_export);
-  end
-*/
+      end
+
   axi4LiteSlaveReadMonitorProxy.axi4LiteSlaveReadAgentConfig = axi4LiteSlaveReadAgentConfig;
 
 endfunction: connect_phase

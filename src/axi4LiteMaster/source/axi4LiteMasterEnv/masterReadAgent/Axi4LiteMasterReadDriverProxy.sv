@@ -34,14 +34,14 @@ endfunction : new
 
 function void Axi4LiteMasterReadDriverProxy::build_phase(uvm_phase phase);
   super.build_phase(phase);
-/*  if(!uvm_config_db #(virtual Axi4LiteMasterReadDriverBFM)::get(this,"","Axi4LiteMasterReadDriverBFM",axi4LiteMasterReadDriverBFM)) begin
+  if(!uvm_config_db #(virtual Axi4LiteMasterReadDriverBFM)::get(this,"","Axi4LiteMasterReadDriverBFM",axi4LiteMasterReadDriverBFM)) begin
     `uvm_fatal("FATAL_MDP_CANNOT_GET_Axi4LiteMasterReadDriverBFM","cannot get() axi4LiteMasterReadDriverBFM");
   end
-*/endfunction : build_phase
+endfunction : build_phase
 
 function void Axi4LiteMasterReadDriverProxy::end_of_elaboration_phase(uvm_phase phase);
   super.end_of_elaboration_phase(phase);
-  // GopalS:axi4LiteMasterReadDriverBFM.axi4LiteMasterReadDriverProxy = this;
+  axi4LiteMasterReadDriverBFM.axi4LiteMasterReadDriverProxy = this;
 endfunction : end_of_elaboration_phase
 
 task Axi4LiteMasterReadDriverProxy::run_phase(uvm_phase phase);

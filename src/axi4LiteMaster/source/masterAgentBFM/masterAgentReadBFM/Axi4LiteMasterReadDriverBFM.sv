@@ -77,7 +77,7 @@ interface Axi4LiteMasterReadDriverBFM(input bit                      aclk,
     end
     while(arready !== 1);
 
-    `uvm_info(name,$sformatf("After_loop_of_Detecting_awready = %0d, awvalid = %0d",awready,awvalid),UVM_HIGH)
+    `uvm_info(name,$sformatf("After_loop_of_Detecting_arready = %0d, awvalid = %0d",arready,arvalid),UVM_HIGH)
     arvalid <= 1'b0;
   endtask : axi4_read_address_channel_task
 

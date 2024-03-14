@@ -4,7 +4,7 @@
 module Axi4LiteMasterReadAgentBFM #(parameter int ADDR_WIDTH = 32,
                                     parameter int DATA_WIDTH = 32
                                    )
-                                   (input  clk,
+                                   (input  aclk,
                                     input  aresetn,
                                     output araddr,
                                     output arprot,
@@ -64,7 +64,7 @@ module Axi4LiteMasterReadAgentBFM #(parameter int ADDR_WIDTH = 32,
     uvm_config_db#(virtual Axi4LiteMasterReadMonitorBFM)::set(null,"*", "Axi4LiteMasterReadMonitorBFM",axi4LiteMasterReadMonitorBFM);
   end
 
-  bind axi4LiteMasterReadMonitorBFM master_assertions M_A (.aclk(aclk),
+  bind axi4LiteMasterReadMonitorBFM MasterAssertions M_A (.aclk(aclk),
                                                            .aresetn(aresetn),
                                                            .araddr(araddr),  
                                                            .arprot(arprot),

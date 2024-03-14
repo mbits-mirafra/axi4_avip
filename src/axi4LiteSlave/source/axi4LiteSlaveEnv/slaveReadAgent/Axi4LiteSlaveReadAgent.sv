@@ -14,6 +14,9 @@ class Axi4LiteSlaveReadAgent extends uvm_agent;
 
   Axi4LiteSlaveReadCoverage axi4LiteSlaveReadCoverage;
   
+  uvm_analysis_port#(Axi4LiteSlaveReadTransaction) axi4LiteSlaveReadAgentAddressAnalysisPort;
+  uvm_analysis_port#(Axi4LiteSlaveReadTransaction) axi4LiteSlaveReadAgentDataAnalysisPort;
+
   extern function new(string name = "Axi4LiteSlaveReadAgent", uvm_component parent);
   extern virtual function void build_phase(uvm_phase phase);
   extern virtual function void connect_phase(uvm_phase phase);
@@ -22,6 +25,8 @@ endclass : Axi4LiteSlaveReadAgent
 
 function Axi4LiteSlaveReadAgent::new(string name = "Axi4LiteSlaveReadAgent", uvm_component parent);
   super.new(name, parent);
+  axi4LiteSlaveReadAgentAddressAnalysisPort  = new("axi4LiteSlaveReadAgentAddressAnalysisPort",this);
+  axi4LiteSlaveReadAgentDataAnalysisPort     = new("axi4LiteSlaveReadAgentDataAnalysisPort",this);
 endfunction : new
 
 function void Axi4LiteSlaveReadAgent::build_phase(uvm_phase phase);
@@ -54,7 +59,10 @@ function void Axi4LiteSlaveReadAgent::connect_phase(uvm_phase phase);
     // Connecting monitor_proxy port to coverage export
     axi4LiteSlaveReadMonitorProxy.axi4LiteSlaveReadAddressAnalysisPort.connect(axi4LiteSlaveReadCoverage.analysis_export);
     axi4LiteSlaveReadMonitorProxy.axi4LiteSlaveReadDataAnalysisPort.connect(axi4LiteSlaveReadCoverage.analysis_export);
-      end
+  end
+
+  axi4LiteSlaveReadMonitorProxy.axi4LiteSlaveReadAddressAnalysisPort.connect(axi4LiteSlaveReadAgentAddressAnalysisPort);
+  axi4LiteSlaveReadMonitorProxy.axi4LiteSlaveReadDataAnalysisPort.connect(axi4LiteSlaveReadAgentDataAnalysisPort);
 
   axi4LiteSlaveReadMonitorProxy.axi4LiteSlaveReadAgentConfig = axi4LiteSlaveReadAgentConfig;
 

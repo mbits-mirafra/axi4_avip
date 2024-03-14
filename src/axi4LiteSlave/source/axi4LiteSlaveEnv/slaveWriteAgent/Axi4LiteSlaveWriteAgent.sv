@@ -14,6 +14,10 @@ class Axi4LiteSlaveWriteAgent extends uvm_agent;
 
   Axi4LiteSlaveWriteCoverage axi4LiteSlaveWriteCoverage;
   
+  uvm_analysis_port#(Axi4LiteSlaveWriteTransaction) axi4LiteSlaveWriteAgentAddressAnalysisPort;
+  uvm_analysis_port#(Axi4LiteSlaveWriteTransaction) axi4LiteSlaveWriteAgentDataAnalysisPort;
+  uvm_analysis_port#(Axi4LiteSlaveWriteTransaction) axi4LiteSlaveWriteAgentResponseAnalysisPort;
+
   extern function new(string name = "Axi4LiteSlaveWriteAgent", uvm_component parent);
   extern virtual function void build_phase(uvm_phase phase);
   extern virtual function void connect_phase(uvm_phase phase);
@@ -22,6 +26,9 @@ endclass : Axi4LiteSlaveWriteAgent
 
 function Axi4LiteSlaveWriteAgent::new(string name = "Axi4LiteSlaveWriteAgent", uvm_component parent);
   super.new(name, parent);
+  axi4LiteSlaveWriteAgentAddressAnalysisPort  = new("axi4LiteSlaveWriteAgentAddressAnalysisPort",this);
+  axi4LiteSlaveWriteAgentDataAnalysisPort     = new("axi4LiteSlaveWriteAgentDataAnalysisPort",this);
+  axi4LiteSlaveWriteAgentResponseAnalysisPort = new("axi4LiteSlaveWriteAgentResponseAnalysisPort",this);
 endfunction : new
 
 function void Axi4LiteSlaveWriteAgent::build_phase(uvm_phase phase);
@@ -57,6 +64,10 @@ function void Axi4LiteSlaveWriteAgent::connect_phase(uvm_phase phase);
     axi4LiteSlaveWriteMonitorProxy.axi4LiteSlaveWriteDataAnalysisPort.connect(axi4LiteSlaveWriteCoverage.analysis_export);
     axi4LiteSlaveWriteMonitorProxy.axi4LiteSlaveWriteResponseAnalysisPort.connect(axi4LiteSlaveWriteCoverage.analysis_export);
   end
+
+  axi4LiteSlaveWriteMonitorProxy.axi4LiteSlaveWriteAddressAnalysisPort.connect(axi4LiteSlaveWriteAgentAddressAnalysisPort);
+  axi4LiteSlaveWriteMonitorProxy.axi4LiteSlaveWriteDataAnalysisPort.connect(axi4LiteSlaveWriteAgentDataAnalysisPort);
+  axi4LiteSlaveWriteMonitorProxy.axi4LiteSlaveWriteResponseAnalysisPort.connect(axi4LiteSlaveWriteAgentResponseAnalysisPort);
 
   axi4LiteSlaveWriteMonitorProxy.axi4LiteSlaveWriteAgentConfig = axi4LiteSlaveWriteAgentConfig;
 

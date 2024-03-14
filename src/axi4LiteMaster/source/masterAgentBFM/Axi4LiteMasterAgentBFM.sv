@@ -5,7 +5,7 @@
 module Axi4LiteMasterAgentBFM #(parameter int ADDR_WIDTH = 32,
                                 parameter int DATA_WIDTH = 32
                                 )
-                                (input   clk,
+                                (input   aclk,
                                  input   aresetn,
                                  output  awaddr,
                                  output  awprot,
@@ -60,7 +60,11 @@ module Axi4LiteMasterAgentBFM #(parameter int ADDR_WIDTH = 32,
                                                        .rvalid(axi4LiteMasterInterface.rvalid),
                                                        .rready(axi4LiteMasterInterface.rready) 
                                                       );
-
+/*  initial begin
+    uvm_config_db#(virtual Axi4LiteMasterWriteAgentBFM.Axi4LiteMasterWriteDriverBFM)::set(null,"*", "Axi4LiteMasterWriteDriverBFM", Axi4LiteMasterWriteAgentBFM.axi4LiteMasterWriteDriverBFM); 
+    uvm_config_db#(virtual Axi4LiteMasterWriteAgentBFM.Axi4LiteMasterWriteMonitorBFM)::set(null,"*", "Axi4LiteMasterWriteMonitorBFM", Axi4LiteMasterWriteAgentBFM.axi4LiteMasterWriteMonitorBFM);
+  end
+*/
   assign clk     = axi4LiteMasterInterface.aclk;
   assign areset  = axi4LiteMasterInterface.aresetn;
   assign awaddr  = axi4LiteMasterInterface.awaddr;

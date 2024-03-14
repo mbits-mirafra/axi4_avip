@@ -14,6 +14,12 @@ class Axi4LiteSlaveEnv extends uvm_env;
   Axi4LiteSlaveWriteAgentConfig axi4LiteSlaveWriteAgentConfig[];
   Axi4LiteSlaveReadAgentConfig axi4LiteSlaveReadAgentConfig[];
 
+  uvm_analysis_port#(Axi4LiteSlaveWriteTransaction) axi4LiteSlaveWriteEnvAddressAnalysisPort;
+  uvm_analysis_port#(Axi4LiteSlaveWriteTransaction) axi4LiteSlaveWriteEnvDataAnalysisPort;
+  uvm_analysis_port#(Axi4LiteSlaveWriteTransaction) axi4LiteSlaveWriteEnvResponseAnalysisPort;
+  uvm_analysis_port#(Axi4LiteSlaveReadTransaction) axi4LiteSlaveReadEnvAddressAnalysisPort;
+  uvm_analysis_port#(Axi4LiteSlaveReadTransaction) axi4LiteSlaveReadEnvDataAnalysisPort;
+
   extern function new(string name = "Axi4LiteSlaveEnv", uvm_component parent = null);
   extern virtual function void build_phase(uvm_phase phase);
   extern virtual function void connect_phase(uvm_phase phase);
@@ -22,6 +28,11 @@ endclass : Axi4LiteSlaveEnv
 
 function Axi4LiteSlaveEnv::new(string name = "Axi4LiteSlaveEnv",uvm_component parent = null);
   super.new(name, parent);
+  axi4LiteSlaveWriteEnvAddressAnalysisPort  = new("axi4LiteSlaveWriteEnvAddressAnalysisPort",this);
+  axi4LiteSlaveWriteEnvDataAnalysisPort     = new("axi4LiteSlaveWriteEnvDataAnalysisPort",this);
+  axi4LiteSlaveWriteEnvResponseAnalysisPort = new("axi4LiteSlaveWriteEnvResponseAnalysisPort",this);
+  axi4LiteSlaveReadEnvAddressAnalysisPort  = new("axi4LiteSlaveReadEnvAddressAnalysisPort",this);
+  axi4LiteSlaveReadEnvDataAnalysisPort     = new("axi4LiteSlaveReadEnvDataAnalysisPort",this);
 endfunction : new
 
 function void Axi4LiteSlaveEnv::build_phase(uvm_phase phase);
@@ -82,22 +93,17 @@ function void Axi4LiteSlaveEnv::connect_phase(uvm_phase phase);
     end
   end
 
-  /* 
   foreach(axi4LiteSlaveWriteAgent[i]) begin
-    axi4LiteSlaveWriteAgent[i].axi4LiteSlaveMonitorProxy.axi4LiteSlaveReadAddressAnalysisPort.connect(axi4_scoreboard_h.axi4_master_read_address_analysis_fifo.analysis_export);
-    axi4LiteSlaveWriteAgent[i].axi4_master_mon_proxy_h.axi4_master_read_data_analysis_port.connect(axi4_scoreboard_h.axi4_master_read_data_analysis_fifo.analysis_export);
-    axi4LiteSlaveWriteAgent[i].axi4_master_mon_proxy_h.axi4_master_write_address_analysis_port.connect(axi4_scoreboard_h.axi4_master_write_address_analysis_fifo.analysis_export);
-    axi4LiteSlaveWriteAgent[i].axi4_master_mon_proxy_h.axi4_master_write_data_analysis_port.connect(axi4_scoreboard_h.axi4_master_write_data_analysis_fifo.analysis_export);
-    axi4LiteSlaveWriteAgent[i].axi4_master_mon_proxy_h.axi4_master_write_response_analysis_port.connect(axi4_scoreboard_h.axi4_master_write_response_analysis_fifo.analysis_export);
+    axi4LiteSlaveWriteAgent[i].axi4LiteSlaveWriteAgentAddressAnalysisPort.connect(axi4LiteSlaveWriteEnvAddressAnalysisPort);
+    axi4LiteSlaveWriteAgent[i].axi4LiteSlaveWriteAgentDataAnalysisPort.connect(axi4LiteSlaveWriteEnvDataAnalysisPort);
+    axi4LiteSlaveWriteAgent[i].axi4LiteSlaveWriteAgentResponseAnalysisPort.connect(axi4LiteSlaveWriteEnvResponseAnalysisPort);
   end
 
   foreach(axi4LiteSlaveReadAgent[i]) begin
-    axi4LiteSlaveReadAgent[i].axi4_slave_mon_proxy_h.axi4_slave_write_address_analysis_port.connect(axi4_scoreboard_h.axi4_slave_write_address_analysis_fifo.analysis_export);
-    axi4LiteSlaveReadAgent[i].axi4_slave_mon_proxy_h.axi4_slave_write_data_analysis_port.connect(axi4_scoreboard_h.axi4_slave_write_data_analysis_fifo.analysis_export);
-    axi4LiteSlaveReadAgent[i].axi4_slave_mon_proxy_h.axi4_slave_write_response_analysis_port.connect(axi4_scoreboard_h.axi4_slave_write_response_analysis_fifo.analysis_export);
-    axi4LiteSlaveReadAgent[i].axi4_slave_mon_proxy_h.axi4_slave_read_address_analysis_port.connect(axi4_scoreboard_h.axi4_slave_read_address_analysis_fifo.analysis_export);
-    axi4LiteSlaveReadAgent[i].axi4_slave_mon_proxy_h.axi4_slave_read_data_analysis_port.connect(axi4_scoreboard_h.axi4_slave_read_data_analysis_fifo.analysis_export);
-  end */
+    axi4LiteSlaveReadAgent[i].axi4LiteSlaveReadAgentAddressAnalysisPort.connect(axi4LiteSlaveReadEnvAddressAnalysisPort);
+    axi4LiteSlaveReadAgent[i].axi4LiteSlaveReadAgentDataAnalysisPort.connect(axi4LiteSlaveReadEnvDataAnalysisPort);
+  end
+
 endfunction : connect_phase
 
 `endif

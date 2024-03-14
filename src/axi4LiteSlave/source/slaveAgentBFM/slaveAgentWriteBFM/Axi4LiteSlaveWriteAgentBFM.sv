@@ -5,7 +5,7 @@
 module Axi4LiteSlaveWriteAgentBFM #(parameter int ADDR_WIDTH = 32,
                                     parameter int DATA_WIDTH = 32
                                    )
-                                   (input  clk,
+                                   (input  aclk,
                                     input  aresetn,
                                     input  awaddr,
                                     input  awprot,
@@ -74,7 +74,7 @@ module Axi4LiteSlaveWriteAgentBFM #(parameter int ADDR_WIDTH = 32,
     uvm_config_db#(virtual Axi4LiteSlaveWriteMonitorBFM)::set(null,"*", "Axi4LiteSlaveWriteMonitorBFM", axi4LiteSlaveWriteMonitorBFM);
   end
 
-  bind axi4LiteSlaveWriteMonitorBFM slave_assertions M_A (.aclk(aclk),
+  bind axi4LiteSlaveWriteMonitorBFM SlaveAssertions M_A (.aclk(aclk),
                                                           .aresetn(aresetn),
                                                           .awaddr(awaddr),
                                                           .awprot(awprot),

@@ -14,6 +14,8 @@ class Axi4LiteEnv extends uvm_env;
   Axi4LiteMasterEnvConfig axi4LiteMasterEnvConfig;
   Axi4LiteSlaveEnvConfig axi4LiteSlaveEnvConfig;
 
+  Axi4LiteScoreboard axi4LiteScoreboard;
+
   extern function new(string name = "Axi4LiteEnv", uvm_component parent = null);
   extern virtual function void build_phase(uvm_phase phase);
   extern virtual function void connect_phase(uvm_phase phase);
@@ -48,6 +50,10 @@ function void Axi4LiteEnv::build_phase(uvm_phase phase);
 
    axi4LiteMasterEnv.axi4LiteMasterEnvConfig = axi4LiteMasterEnvConfig;
    axi4LiteSlaveEnv.axi4LiteSlaveEnvConfig = axi4LiteSlaveEnvConfig;
+
+   if(axi4LiteEnvConfig.hasScoreboard) begin
+     axi4LiteScoreboard = Axi4LiteScoreboard::type_id::create("axi4LiteScoreboard",this); 
+   end
   
 endfunction : build_phase
 
@@ -58,6 +64,19 @@ function void Axi4LiteEnv::connect_phase(uvm_phase phase);
      axi4LiteVirtualSequencer.axi4LiteMasterVirtualSequencer = axi4LiteMasterEnv.axi4LiteMasterVirtualSequencer;
      axi4LiteVirtualSequencer.axi4LiteSlaveVirtualSequencer = axi4LiteSlaveEnv.axi4LiteSlaveVirtualSequencer;
   end
+
+    axi4LiteMasterEnv.axi4LiteMasterWriteEnvAddressAnalysisPort.connect(axi4LiteScoreboard.axi4LiteMasterWriteEnvAddressFIFO.analysis_export);
+    axi4LiteMasterEnv.axi4LiteMasterWriteEnvDataAnalysisPort.connect(axi4LiteScoreboard.axi4LiteMasterWriteEnvDataFIFO.analysis_export);
+    axi4LiteMasterEnv.axi4LiteMasterWriteEnvResponseAnalysisPort.connect(axi4LiteScoreboard.axi4LiteMasterWriteEnvResponseFIFO.analysis_export);
+    axi4LiteMasterEnv.axi4LiteMasterReadEnvAddressAnalysisPort.connect(axi4LiteScoreboard.axi4LiteMasterReadEnvAddressFIFO.analysis_export);
+    axi4LiteMasterEnv.axi4LiteMasterReadEnvDataAnalysisPort.connect(axi4LiteScoreboard.axi4LiteMasterReadEnvDataFIFO.analysis_export);
+
+    axi4LiteSlaveEnv.axi4LiteSlaveWriteEnvAddressAnalysisPort.connect(axi4LiteScoreboard.axi4LiteSlaveWriteEnvAddressFIFO.analysis_export);
+    axi4LiteSlaveEnv.axi4LiteSlaveWriteEnvDataAnalysisPort.connect(axi4LiteScoreboard.axi4LiteSlaveWriteEnvDataFIFO.analysis_export);
+    axi4LiteSlaveEnv.axi4LiteSlaveWriteEnvResponseAnalysisPort.connect(axi4LiteScoreboard.axi4LiteSlaveWriteEnvResponseFIFO.analysis_export);
+    axi4LiteSlaveEnv.axi4LiteSlaveReadEnvAddressAnalysisPort.connect(axi4LiteScoreboard.axi4LiteSlaveReadEnvAddressFIFO.analysis_export);
+    axi4LiteSlaveEnv.axi4LiteSlaveReadEnvDataAnalysisPort.connect(axi4LiteScoreboard.axi4LiteSlaveReadEnvDataFIFO.analysis_export);
+
 endfunction : connect_phase
 
 `endif

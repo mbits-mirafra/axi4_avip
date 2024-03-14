@@ -35,14 +35,14 @@ endfunction : new
 
 function void Axi4LiteSlaveReadMonitorProxy::build_phase(uvm_phase phase);
   super.build_phase(phase);
-/*   if(!uvm_config_db#(virtual Axi4LiteSlaveReadMonitorBFM)::get(this,"","Axi4LiteSlaveReadMonitorBFM",axi4LiteSlaveReadMonitorBFM)) begin
+   if(!uvm_config_db#(virtual Axi4LiteSlaveReadMonitorBFM)::get(this,"","Axi4LiteSlaveReadMonitorBFM",axi4LiteSlaveReadMonitorBFM)) begin
      `uvm_fatal("FATAL_SMP_MON_BFM",$sformatf("Couldn't get S_MON_BFM in Axi4LiteSlaveReadMonitorProxy"));  
-  end */
+  end 
 endfunction : build_phase
 
 function void Axi4LiteSlaveReadMonitorProxy::end_of_elaboration_phase(uvm_phase phase);
   super.end_of_elaboration_phase(phase);
-  // GopalS: axi4LiteSlaveReadMonitorBFM.axi4LiteSlaveReadMonitorProxy = this;
+  axi4LiteSlaveReadMonitorBFM.axi4LiteSlaveReadMonitorProxy = this;
 endfunction : end_of_elaboration_phase
 
 task Axi4LiteSlaveReadMonitorProxy::run_phase(uvm_phase phase);

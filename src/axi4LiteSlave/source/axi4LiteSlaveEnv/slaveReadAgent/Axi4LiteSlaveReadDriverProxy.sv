@@ -37,15 +37,15 @@ endfunction : new
 
 function void Axi4LiteSlaveReadDriverProxy::build_phase(uvm_phase phase);
   super.build_phase(phase);
- /* if(!uvm_config_db #(virtual Axi4LiteSlaveReadDriverBFM)::get(this,"","Axi4LiteSlaveReadDriverBFM",axi4LiteSlaveReadDriverBFM)) begin
+  if(!uvm_config_db #(virtual Axi4LiteSlaveReadDriverBFM)::get(this,"","Axi4LiteSlaveReadDriverBFM",axi4LiteSlaveReadDriverBFM)) begin
     `uvm_fatal("FATAL_MDP_CANNOT_GET_tx_DRIVER_BFM","cannot get() axi4LiteSlaveReadDriverBFM");
   end
-*/
+
  endfunction : build_phase
 
 function void Axi4LiteSlaveReadDriverProxy::end_of_elaboration_phase(uvm_phase phase);
   super.end_of_elaboration_phase(phase);
-  // GopalS: axi4LiteSlaveReadDriverBFM.axi4LiteSlaveReadDriverProxy= this;
+  axi4LiteSlaveReadDriverBFM.axi4LiteSlaveReadDriverProxy= this;
 endfunction  : end_of_elaboration_phase
 
 

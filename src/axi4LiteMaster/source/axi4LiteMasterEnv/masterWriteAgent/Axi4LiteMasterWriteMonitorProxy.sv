@@ -47,9 +47,9 @@ endfunction : new
 
 function void Axi4LiteMasterWriteMonitorProxy::build_phase(uvm_phase phase);
   super.build_phase(phase);
-/*  if(!uvm_config_db #(virtual Axi4LiteMasterWriteMonitorBFM)::get(this,"","Axi4LiteMasterWriteMonitorBFM",axi4LiteMasterWriteMonitorBFM)) begin
+  if(!uvm_config_db #(virtual Axi4LiteMasterWriteMonitorBFM)::get(this,"","Axi4LiteMasterWriteMonitorBFM",axi4LiteMasterWriteMonitorBFM)) begin
     `uvm_fatal("FATAL_MDP_CANNOT_GET_Axi4LiteMasterWriteMonitorBFM","cannot get() axi4LiteMasterWriteMonitorBFM");
-  end */
+  end 
 endfunction : build_phase
 
 function void Axi4LiteMasterWriteMonitorProxy::connect_phase(uvm_phase phase);
@@ -58,7 +58,7 @@ endfunction : connect_phase
 
 function void Axi4LiteMasterWriteMonitorProxy::end_of_elaboration_phase(uvm_phase phase);
   super.end_of_elaboration_phase(phase);
-  // GopalS: axi4LiteMasterWriteMonitorBFM.axi4LiteMasterWriteMonitorProxy = this;
+  axi4LiteMasterWriteMonitorBFM.axi4LiteMasterWriteMonitorProxy = this;
 endfunction : end_of_elaboration_phase
 
 

@@ -37,10 +37,10 @@ endfunction : new
 
 function void Axi4LiteMasterReadMonitorProxy::build_phase(uvm_phase phase);
   super.build_phase(phase);
-/*  if(!uvm_config_db #(virtual Axi4LiteMasterReadMonitorBFM)::get(this,"","Axi4LiteMasterReadMonitorBFM",axi4LiteMasterReadMonitorBFM)) begin
+  if(!uvm_config_db #(virtual Axi4LiteMasterReadMonitorBFM)::get(this,"","Axi4LiteMasterReadMonitorBFM",axi4LiteMasterReadMonitorBFM)) begin
     `uvm_fatal("FATAL_MDP_CANNOT_GET_Axi4LiteMasterReadMonitorBFM","cannot get() axi4LiteMasterReadMonitorBFM");
   end 
-*/endfunction : build_phase
+endfunction : build_phase
 
 function void Axi4LiteMasterReadMonitorProxy::connect_phase(uvm_phase phase);
   super.connect_phase(phase);
@@ -48,7 +48,7 @@ endfunction : connect_phase
 
 function void Axi4LiteMasterReadMonitorProxy::end_of_elaboration_phase(uvm_phase phase);
   super.end_of_elaboration_phase(phase);
-  // GopalS: axi4LiteMasterReadMonitorBFM.axi4LiteMasterReadMonitorProxy = this;
+  axi4LiteMasterReadMonitorBFM.axi4LiteMasterReadMonitorProxy = this;
 endfunction : end_of_elaboration_phase
 
 task Axi4LiteMasterReadMonitorProxy::run_phase(uvm_phase phase);

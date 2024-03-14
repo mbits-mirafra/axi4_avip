@@ -13,6 +13,9 @@ class Axi4LiteMasterReadAgent extends uvm_agent;
   
   Axi4LiteMasterReadCoverage axi4LiteMasterReadCoverage;
 
+  uvm_analysis_port#(Axi4LiteMasterReadTransaction) axi4LiteMasterReadAgentAddressAnalysisPort;
+  uvm_analysis_port#(Axi4LiteMasterReadTransaction) axi4LiteMasterReadAgentDataAnalysisPort;
+
   extern function new(string name = "Axi4LiteMasterReadAgent", uvm_component parent = null);
   extern virtual function void build_phase(uvm_phase phase);
   extern virtual function void connect_phase(uvm_phase phase);
@@ -21,6 +24,8 @@ endclass : Axi4LiteMasterReadAgent
 
 function Axi4LiteMasterReadAgent::new(string name = "Axi4LiteMasterReadAgent", uvm_component parent = null);
   super.new(name, parent);
+  axi4LiteMasterReadAgentAddressAnalysisPort  = new("axi4LiteMasterReadAgentAddressAnalysisPort",this);
+  axi4LiteMasterReadAgentDataAnalysisPort     = new("axi4LiteMasterReadAgentDataAnalysisPort",this);
 endfunction : new
 
 function void Axi4LiteMasterReadAgent::build_phase(uvm_phase phase);
@@ -56,6 +61,9 @@ function void Axi4LiteMasterReadAgent::connect_phase(uvm_phase phase);
     axi4LiteMasterReadMonitorProxy.axi4LiteMasterReadDataAnalysisPort.connect(axi4LiteMasterReadCoverage.analysis_export);
   end
   
+  axi4LiteMasterReadMonitorProxy.axi4LiteMasterReadAddressAnalysisPort.connect(axi4LiteMasterReadAgentAddressAnalysisPort);
+  axi4LiteMasterReadMonitorProxy.axi4LiteMasterReadDataAnalysisPort.connect(axi4LiteMasterReadAgentDataAnalysisPort);
+
   axi4LiteMasterReadMonitorProxy.axi4LiteMasterReadAgentConfig = axi4LiteMasterReadAgentConfig;
 
 endfunction : connect_phase

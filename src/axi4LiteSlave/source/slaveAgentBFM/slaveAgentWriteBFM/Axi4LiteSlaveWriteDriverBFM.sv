@@ -95,7 +95,7 @@ interface Axi4LiteSlaveWriteDriverBFM(input               aclk    ,
 
     `uvm_info("SLAVE_DRIVER_WADDR_PHASE", $sformatf("outside of awvalid"), UVM_MEDIUM);
     
-    if(axi4_slave_drv_proxy_h.axi4_slave_write_addr_fifo_h.is_full()) begin
+    if(axi4LiteSlaveWriteDriverProxy.axi4LiteSlaveWriteAddressFIFO.is_full()) begin
       `uvm_error("UVM_TLM_FIFO","FIFO is now FULL!")
     end 
       
@@ -174,7 +174,6 @@ interface Axi4LiteSlaveWriteDriverBFM(input               aclk    ,
     //3. fifo shouldn't get full.
       
     bvalid <= 1;
-    `uvm_info("DEBUG_BRESP",$sformatf("BID = %0d",bid),UVM_HIGH)
     
     while(bready === 0) begin
       @(posedge aclk);

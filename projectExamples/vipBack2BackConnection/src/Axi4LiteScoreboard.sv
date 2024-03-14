@@ -8,6 +8,19 @@
 class Axi4LiteScoreboard extends uvm_scoreboard;
   `uvm_component_utils(Axi4LiteScoreboard)
 
+  Axi4LiteMasterWriteTransaction axi4LiteMasterWriteTransaction;
+
+  uvm_tlm_analysis_fifo #(Axi4LiteMasterWriteTransaction) axi4LiteMasterWriteEnvAddressFIFO;
+  uvm_tlm_analysis_fifo #(Axi4LiteMasterWriteTransaction) axi4LiteMasterWriteEnvDataFIFO;
+  uvm_tlm_analysis_fifo #(Axi4LiteMasterWriteTransaction) axi4LiteMasterWriteEnvResponseFIFO;
+  uvm_tlm_analysis_fifo #(Axi4LiteMasterReadTransaction) axi4LiteMasterReadEnvAddressFIFO;
+  uvm_tlm_analysis_fifo #(Axi4LiteMasterReadTransaction) axi4LiteMasterReadEnvDataFIFO;
+
+  uvm_tlm_analysis_fifo #(Axi4LiteSlaveWriteTransaction) axi4LiteSlaveWriteEnvAddressFIFO;
+  uvm_tlm_analysis_fifo #(Axi4LiteSlaveWriteTransaction) axi4LiteSlaveWriteEnvDataFIFO;
+  uvm_tlm_analysis_fifo #(Axi4LiteSlaveWriteTransaction) axi4LiteSlaveWriteEnvResponseFIFO;
+  uvm_tlm_analysis_fifo #(Axi4LiteSlaveReadTransaction) axi4LiteSlaveReadEnvAddressFIFO;
+  uvm_tlm_analysis_fifo #(Axi4LiteSlaveReadTransaction) axi4LiteSlaveReadEnvDataFIFO;
 
   extern function new(string name = "Axi4LiteScoreboard", uvm_component parent = null);
   extern virtual function void build_phase(uvm_phase phase);
@@ -27,6 +40,17 @@ endfunction : new
 
 function void Axi4LiteScoreboard::build_phase(uvm_phase phase);
   super.build_phase(phase);
+  axi4LiteMasterWriteEnvAddressFIFO = new("axi4LiteMasterWriteEnvAddressFIFO",this);
+  axi4LiteMasterWriteEnvDataFIFO = new("axi4LiteMasterWriteEnvDataFIFO",this);
+  axi4LiteMasterWriteEnvResponseFIFO = new("axi4LiteMasterWriteEnvResponseFIFO",this);
+  axi4LiteMasterReadEnvAddressFIFO = new("axi4LiteMasterReadEnvAddressFIFO",this);
+  axi4LiteMasterReadEnvDataFIFO = new("axi4LiteMasterReadEnvDataFIFO",this);
+
+  axi4LiteSlaveWriteEnvAddressFIFO = new("axi4LiteSlaveWriteEnvAddressFIFO",this);
+  axi4LiteSlaveWriteEnvDataFIFO = new("axi4LiteSlaveWriteEnvDataFIFO",this);
+  axi4LiteSlaveWriteEnvResponseFIFO = new("axi4LiteSlaveWriteEnvResponseFIFO",this);
+  axi4LiteSlaveReadEnvAddressFIFO = new("axi4LiteSlaveReadEnvAddressFIFO",this);
+  axi4LiteSlaveReadEnvDataFIFO = new("axi4LiteSlaveReadEnvDataFIFO",this);
 endfunction : build_phase
 
 function void Axi4LiteScoreboard::connect_phase(uvm_phase phase);

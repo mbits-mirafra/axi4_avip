@@ -13,6 +13,10 @@ class Axi4LiteMasterWriteAgent extends uvm_agent;
   
   Axi4LiteMasterWriteCoverage axi4LiteMasterWriteCoverage;
 
+  uvm_analysis_port#(Axi4LiteMasterWriteTransaction) axi4LiteMasterWriteAgentAddressAnalysisPort;
+  uvm_analysis_port#(Axi4LiteMasterWriteTransaction) axi4LiteMasterWriteAgentDataAnalysisPort;
+  uvm_analysis_port#(Axi4LiteMasterWriteTransaction) axi4LiteMasterWriteAgentResponseAnalysisPort;
+
   extern function new(string name = "Axi4LiteMasterWriteAgent", uvm_component parent = null);
   extern virtual function void build_phase(uvm_phase phase);
   extern virtual function void connect_phase(uvm_phase phase);
@@ -21,6 +25,9 @@ endclass : Axi4LiteMasterWriteAgent
 
 function Axi4LiteMasterWriteAgent::new(string name = "Axi4LiteMasterWriteAgent", uvm_component parent = null);
   super.new(name, parent);
+  axi4LiteMasterWriteAgentAddressAnalysisPort  = new("axi4LiteMasterWriteAgentAddressAnalysisPort",this);
+  axi4LiteMasterWriteAgentDataAnalysisPort     = new("axi4LiteMasterWriteAgentDataAnalysisPort",this);
+  axi4LiteMasterWriteAgentResponseAnalysisPort = new("axi4LiteMasterWriteAgentResponseAnalysisPort",this);
 endfunction : new
 
 function void Axi4LiteMasterWriteAgent::build_phase(uvm_phase phase);
@@ -56,6 +63,10 @@ function void Axi4LiteMasterWriteAgent::connect_phase(uvm_phase phase);
     axi4LiteMasterWriteMonitorProxy.axi4LiteMasterWriteResponseAnalysisPort.connect(axi4LiteMasterWriteCoverage.analysis_export);
   end
   
+  axi4LiteMasterWriteMonitorProxy.axi4LiteMasterWriteAddressAnalysisPort.connect(axi4LiteMasterWriteAgentAddressAnalysisPort);
+  axi4LiteMasterWriteMonitorProxy.axi4LiteMasterWriteDataAnalysisPort.connect(axi4LiteMasterWriteAgentDataAnalysisPort);
+  axi4LiteMasterWriteMonitorProxy.axi4LiteMasterWriteResponseAnalysisPort.connect(axi4LiteMasterWriteAgentResponseAnalysisPort);
+
   axi4LiteMasterWriteMonitorProxy.axi4LiteMasterWriteAgentConfig = axi4LiteMasterWriteAgentConfig;
 
 endfunction : connect_phase

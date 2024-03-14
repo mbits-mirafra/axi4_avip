@@ -29,23 +29,61 @@ module HdlTop;
     aresetn = 1'b1;
   end
 
-  Axi4LiteMasterInterface masterIntf(.aclk(aclk),
-                               .aresetn(aresetn));
+  Axi4LiteInterface Intf(.aclk(aclk),
+                         .aresetn(aresetn));
 
-  Axi4LiteSlaveInterface slaveIntf(.aclk(aclk),
-                               .aresetn(aresetn));
-/*  genvar i;
+  genvar i;
   generate
     for (i=0; i<NO_OF_MASTERS; i++) begin : Axi4LiteMasterAgentBFM
-      Axi4LiteMasterAgentBFM #() axi4LiteMasterAgentBFM(masterIntf);
-      defparam Axi4LiteMasterAgentBFM[i].axi4LiteMasterAgentBFM.MASTER_ID = i;
+      Axi4LiteMasterAgentBFM #() axi4LiteMasterAgentBFM(.aclk(Intf.aclk),
+                                                        .aresetn(Intf.aresetn),
+                                                        .awaddr(Intf.awaddr),
+                                                        .awprot(Intf.awprot),
+                                                        .awvalid(Intf.awvalid),
+                                                        .awready(Intf.awready),
+                                                        .wdata(Intf.wdata),
+                                                        .wstrb(Intf.wstrb),
+                                                        .wvalid(Intf.wvalid),
+                                                        .wready(Intf.wready),
+                                                        .bresp(Intf.bresp),
+                                                        .bvalid(Intf.bvalid),
+                                                        .bready(Intf.bready),
+                                                        .araddr(Intf.araddr),
+                                                        .arprot(Intf.arprot),
+                                                        .arvalid(Intf.arvalid),
+                                                        .arready(Intf.arready),
+                                                        .rdata(Intf.rdata),
+                                                        .rresp(Intf.rresp),
+                                                        .rvalid(Intf.rvalid),
+                                                        .rready(Intf.rready)
+                                                       );
     end
     for (i=0; i<NO_OF_SLAVES; i++) begin : Axi4LiteSlaveAgentBFM
-      Axi4LiteSlaveAgentBFM #() axi4LiteSlaveAgentBFM(slaveIntf);
-      defparam Axi4LiteSlaveAgentBFM[i].axi4LiteSlaveAgentBFM.SLAVE_ID = i;
+      Axi4LiteSlaveAgentBFM #() axi4LiteSlaveAgentBFM(.aclk(Intf.aclk),
+                                                      .aresetn(Intf.aresetn),
+                                                      .awaddr(Intf.awaddr),
+                                                      .awprot(Intf.awprot),
+                                                      .awvalid(Intf.awvalid),
+                                                      .awready(Intf.awready),
+                                                      .wdata(Intf.wdata),
+                                                      .wstrb(Intf.wstrb),
+                                                      .wvalid(Intf.wvalid),
+                                                      .wready(Intf.wready),
+                                                      .bresp(Intf.bresp),
+                                                      .bvalid(Intf.bvalid),
+                                                      .bready(Intf.bready),
+                                                      .araddr(Intf.araddr),
+                                                      .arprot(Intf.arprot),
+                                                      .arvalid(Intf.arvalid),
+                                                      .arready(Intf.arready),
+                                                      .rdata(Intf.rdata),
+                                                      .rresp(Intf.rresp),
+                                                      .rvalid(Intf.rvalid),
+                                                      .rready(Intf.rready)
+                                                     );
     end
   endgenerate
-  */
+  
 endmodule : HdlTop
 
 `endif

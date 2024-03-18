@@ -55,8 +55,6 @@ function void Axi4LiteMasterReadAgent::connect_phase(uvm_phase phase);
   end
 
   if(axi4LiteMasterReadAgentConfig.hasCoverage) begin
-    axi4LiteMasterReadCoverage.axi4LiteMasterReadAgentConfig = axi4LiteMasterReadAgentConfig;   
-    //Connecting monitor_proxy port to coverage export
     axi4LiteMasterReadMonitorProxy.axi4LiteMasterReadAddressAnalysisPort.connect(axi4LiteMasterReadCoverage.analysis_export);
     axi4LiteMasterReadMonitorProxy.axi4LiteMasterReadDataAnalysisPort.connect(axi4LiteMasterReadCoverage.analysis_export);
   end

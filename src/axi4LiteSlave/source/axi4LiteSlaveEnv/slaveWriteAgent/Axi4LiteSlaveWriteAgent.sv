@@ -58,8 +58,6 @@ function void Axi4LiteSlaveWriteAgent::connect_phase(uvm_phase phase);
     end
 
   if(axi4LiteSlaveWriteAgentConfig.hasCoverage) begin
-    axi4LiteSlaveWriteCoverage.axi4LiteSlaveWriteAgentConfig = axi4LiteSlaveWriteAgentConfig; 
-    // Connecting monitor_proxy port to coverage export
     axi4LiteSlaveWriteMonitorProxy.axi4LiteSlaveWriteAddressAnalysisPort.connect(axi4LiteSlaveWriteCoverage.analysis_export);
     axi4LiteSlaveWriteMonitorProxy.axi4LiteSlaveWriteDataAnalysisPort.connect(axi4LiteSlaveWriteCoverage.analysis_export);
     axi4LiteSlaveWriteMonitorProxy.axi4LiteSlaveWriteResponseAnalysisPort.connect(axi4LiteSlaveWriteCoverage.analysis_export);

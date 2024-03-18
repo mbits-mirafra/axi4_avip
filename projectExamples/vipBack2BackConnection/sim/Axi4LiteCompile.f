@@ -37,8 +37,8 @@
 ../../../../src/axi4LiteMaster/source/axi4LiteMasterEnv/Axi4LiteMasterEnvPkg.sv
 ../../../../src/axi4LiteSlave/source/axi4LiteSlaveEnv/slaveVirtualSequencer/Axi4LiteSlaveVirtualSeqrPkg.sv
 ../../../../src/axi4LiteSlave/source/axi4LiteSlaveEnv/Axi4LiteSlaveEnvPkg.sv
-../../../../projectExamples/vipBack2BackConnection/src/virtualSequences/Axi4LiteVirtualSeqPkg.sv
 ../../../../projectExamples/vipBack2BackConnection/src/Axi4LiteEnvPkg.sv
+../../../../projectExamples/vipBack2BackConnection/src/virtualSequences/Axi4LiteVirtualSeqPkg.sv
 ../../../../projectExamples/vipBack2BackConnection/src/Axi4LiteTestPkg.sv
 
 ../../../../src/axi4LiteMaster/source/masterAgentBFM/masterAgentWriteBFM/Axi4LiteMasterWriteInterface.sv

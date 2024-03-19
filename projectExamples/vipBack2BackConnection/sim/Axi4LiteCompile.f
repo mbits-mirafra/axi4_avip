@@ -70,5 +70,7 @@
 ../../../../projectExamples/vipBack2BackConnection/src/HdlTop.sv
 ../../../../projectExamples/vipBack2BackConnection/src/HvlTop.sv
 
-../../../../src/axi4LiteMaster/source/masterAgentBFM/MasterAssertions.sv
-../../../../src/axi4LiteSlave/source/slaveAgentBFM/SlaveAssertions.sv
+../../../../src/axi4LiteMaster/source/masterAgentBFM/masterAgentWriteBFM/Axi4LiteMasterWriteAssertions.sv
+../../../../src/axi4LiteMaster/source/masterAgentBFM/masterAgentReadBFM/Axi4LiteMasterReadAssertions.sv
+../../../../src/axi4LiteSlave/source/slaveAgentBFM/slaveAgentWriteBFM/Axi4LiteSlaveWriteAssertions.sv
+../../../../src/axi4LiteSlave/source/slaveAgentBFM/slaveAgentReadBFM/Axi4LiteSlaveReadAssertions.sv

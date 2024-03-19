@@ -76,7 +76,7 @@ module Axi4LiteMasterWriteAgentBFM #(parameter int ADDR_WIDTH = 32,
     uvm_config_db#(virtual Axi4LiteMasterWriteMonitorBFM)::set(null,"*", "Axi4LiteMasterWriteMonitorBFM", axi4LiteMasterWriteMonitorBFM);
   end
 
-  bind axi4LiteMasterWriteMonitorBFM MasterAssertions M_A (.aclk(aclk),
+  bind axi4LiteMasterWriteMonitorBFM Axi4LiteMasterWriteAssertions M_A (.aclk(aclk),
                                                             .aresetn(aresetn),
                                                             .awaddr(awaddr),
                                                             .awprot(awprot),

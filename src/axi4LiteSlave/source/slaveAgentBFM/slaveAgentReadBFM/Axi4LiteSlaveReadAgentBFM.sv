@@ -63,7 +63,7 @@ module Axi4LiteSlaveReadAgentBFM #(parameter int ADDR_WIDTH = 32,
     uvm_config_db#(virtual Axi4LiteSlaveReadMonitorBFM)::set(null,"*", "Axi4LiteSlaveReadMonitorBFM",axi4LiteSlaveReadMonitorBFM);
   end
 
-  bind axi4LiteSlaveReadMonitorBFM SlaveAssertions M_A (.aclk(aclk),
+  bind axi4LiteSlaveReadMonitorBFM Axi4LiteSlaveReadAssertions M_A (.aclk(aclk),
                                                          .aresetn(aresetn),
                                                          .araddr(araddr),  
                                                          .arprot(arprot),

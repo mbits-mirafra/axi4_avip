@@ -21,7 +21,7 @@ class Axi4LiteMasterReadDriverProxy extends uvm_driver#(Axi4LiteMasterReadTransa
   extern virtual function void build_phase(uvm_phase phase);
   extern virtual function void end_of_elaboration_phase(uvm_phase phase);
   extern virtual task run_phase(uvm_phase phase);
-  extern virtual task axi4LiteMasterReadTask();
+  extern virtual task readTransferTask();
 
 endclass : Axi4LiteMasterReadDriverProxy
 
@@ -45,18 +45,33 @@ function void Axi4LiteMasterReadDriverProxy::end_of_elaboration_phase(uvm_phase 
 endfunction : end_of_elaboration_phase
 
 task Axi4LiteMasterReadDriverProxy::run_phase(uvm_phase phase);
-
-  //waiting for system reset
-/*  axi4LiteMasterReadDriverBFM.wait_for_aresetn();
-  fork 
-    axi4LiteMasterReadTask();
-  join
-*/
+  axi4LiteMasterReadDriverBFM.wait_for_aresetn();
+  readTransferTask();
 endtask : run_phase
 
-task Axi4LiteMasterReadDriverProxy::axi4LiteMasterReadTask();
+task Axi4LiteMasterReadDriverProxy::readTransferTask();
+  forever begin
+    Axi4LiteMasterReadTransaction masterReadTx;
+    axi4LiteReadTransferCfgStruct masterReadCfgStruct;
+    axi4LiteReadTransferCharStruct masterReadCharStruct;
 
-endtask : axi4LiteMasterReadTask
+    axi4LiteMasterReadSeqItemPort.get_next_item(reqRead);
+  `uvm_info(get_type_name(),$sformatf("MASTER_READ_TASK::Before Sending_Req_Read_Packet = \n%s",reqRead.sprint()),UVM_HIGH);
+
+     Axi4LiteMasterReadConfigConverter::fromClass(axi4LiteMasterReadAgentConfig, masterReadCfgStruct); 
+     `uvm_info(get_type_name(),$sformatf("MASTER_READ_TASK::Checking transfer type Before calling task if = %s",reqRead.transferType),UVM_FULL);
+
+     if(reqRead.transferType == BLOCKING_WRITE) begin
+     
+     end
+
+     else if(reqRead.transferType == NON_BLOCKING_WRITE) begin
+     end
+
+     axi4LiteMasterReadSeqItemPort.item_done();
+   end
+ 
+endtask : readTransferTask
 
 `endif
 

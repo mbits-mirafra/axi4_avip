@@ -7,25 +7,19 @@ class Axi4LiteSlaveReadTransaction extends uvm_sequence_item;
   
   rand bit [ADDRESS_WIDTH-1:0] araddr;
 
-  rand arprot_e arprot;
+  rand arprotEnum arprot;
 
-  rand bit [DATA_WIDTH-1:0] rdata [$:2**LENGTH];
+  rand bit [DATA_WIDTH-1:0] rdata;
 
   bit rvalid;
 
-  rand rresp_e rresp ;
+  rand rrespEnum rresp ;
 
-  //Variable : no_of_wait_states
-  //Used to count number of wait states
   rand int no_of_wait_states;
   
-  //Variable : tx_type
-  //Used to determine the transaction type
-  tx_type_e tx_type;
+  transactionTypeEnum tx_type;
   
-  //Variable : transfer_type
-  //Used to determine the tranfer type
-  transfer_type_e transfer_type;
+  transferTypeEnum transferType;
 
   //Variable: wait_count_read_address_channel
   //Used to determine wait count for write response channel
@@ -62,7 +56,7 @@ function void Axi4LiteSlaveReadTransaction::do_copy (uvm_object rhs);
   rresp = axi_slave_tx_copy_obj.rresp;
   //OTHERS
   tx_type = axi_slave_tx_copy_obj.tx_type;
-  transfer_type = axi_slave_tx_copy_obj.transfer_type;
+  transferType = axi_slave_tx_copy_obj.transferType;
 
 endfunction : do_copy
 

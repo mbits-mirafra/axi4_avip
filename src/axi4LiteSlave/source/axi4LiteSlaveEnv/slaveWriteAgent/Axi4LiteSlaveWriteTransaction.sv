@@ -7,13 +7,13 @@ class Axi4LiteSlaveWriteTransaction extends uvm_sequence_item;
   
   bit [ADDRESS_WIDTH-1:0] awaddr;
 
-  awprot_e awprot;
+  awprotEnum awprot;
 
-  bit [DATA_WIDTH-1:0] wdata [$:2**LENGTH];
+  bit [DATA_WIDTH-1:0] wdata;
 
-  bit [(DATA_WIDTH/8)-1:0] wstrb [$:2**LENGTH];
+  bit [(DATA_WIDTH/8)-1:0] wstrb;
 
-  rand bresp_e bresp;
+  rand brespEnum bresp;
 
   //Variable : no_of_wait_states
   //Used to count number of wait states
@@ -21,11 +21,11 @@ class Axi4LiteSlaveWriteTransaction extends uvm_sequence_item;
   
   //Variable : tx_type
   //Used to determine the transaction type
-  tx_type_e tx_type;
+   transactionTypeEnum tx_type;
   
-  //Variable : transfer_type
+  //Variable : transferType
   //Used to determine the tranfer type
-  transfer_type_e transfer_type;
+  transferTypeEnum transferType;
 
   //Variable: wait_count_write_address_channel
   //Used to determine wait count for write address channel
@@ -68,7 +68,7 @@ function void Axi4LiteSlaveWriteTransaction::do_copy (uvm_object rhs);
   bresp   = axi_slave_tx_copy_obj.bresp;
   //OTHERS
   tx_type = axi_slave_tx_copy_obj.tx_type;
-  transfer_type = axi_slave_tx_copy_obj.transfer_type;
+  transferType = axi_slave_tx_copy_obj.transferType;
 
 endfunction : do_copy
 

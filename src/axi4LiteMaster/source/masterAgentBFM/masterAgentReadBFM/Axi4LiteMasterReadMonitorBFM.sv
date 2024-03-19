@@ -44,40 +44,6 @@ interface Axi4LiteMasterReadMonitorBFM(input bit aclk, input bit aresetn,
     `uvm_info("FROM MASTER MON BFM",$sformatf("SYSTEM RESET DEACTIVATED"),UVM_HIGH)
   endtask : wait_for_aresetn
 
-  //-------------------------------------------------------
-  // Task: axi4_read_address_sampling
-  // Used for sample the read address channel signals
-  //-------------------------------------------------------
-  task axi4_read_address_sampling(output axi4_read_transfer_char_s req ,input axi4_transfer_cfg_s cfg);
-
-    do begin
-      @(posedge aclk);
-    end while((arvalid!==1 || arready!==1));
-
-    req.araddr  = araddr;
-    req.arprot  = arprot;
-    `uvm_info("FROM MASTER MON BFM",$sformatf("datapacket =%p",req),UVM_HIGH)
-  endtask
-  
-  //-------------------------------------------------------
-  // Task: axi4_read_data_sampling
-  // Used for sample the read data channel signals
-  //-------------------------------------------------------
-  task axi4_read_data_sampling(output axi4_read_transfer_char_s req ,input axi4_transfer_cfg_s cfg);
-    static reg[7:0] i = 0;
-    forever begin
-      // Wait for valid and ready to be high
-      do begin
-        @(posedge aclk);
-      end while((rvalid!==1 || rready!==1));
-  
-      req.rdata[i] = rdata;
-      req.rresp    = rresp;
-      i++;
-      
-      `uvm_info("FROM MASTER MON BFM READ DATA",$sformatf("Read data packet: %p",req),UVM_HIGH)
-    end
-  endtask
 endinterface : Axi4LiteMasterReadMonitorBFM
 
 `endif

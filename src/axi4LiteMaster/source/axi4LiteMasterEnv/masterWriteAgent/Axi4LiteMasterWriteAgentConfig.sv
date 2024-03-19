@@ -10,10 +10,6 @@ class Axi4LiteMasterWriteAgentConfig extends uvm_object;
   //Used for enabling the master agent coverage
   bit hasCoverage;
 
-  //Used to store all the data from the slaves
-  //Each location of the master memory stores 32 bit data
-  bit [MEMORY_WIDTH-1:0]masterMemory[(SLAVE_MEMORY_SIZE+SLAVE_MEMORY_GAP)*NO_OF_SLAVES:0];
-
   //Variable : master_min_array
   //An associative array used to store the min address ranges of every slave
   //Index - type    - int

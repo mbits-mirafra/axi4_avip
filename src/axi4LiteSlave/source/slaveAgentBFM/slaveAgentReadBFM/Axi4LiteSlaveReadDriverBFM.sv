@@ -35,8 +35,6 @@ interface Axi4LiteSlaveReadDriverBFM(input bit                      aclk,
   end
 
   // Creating Memories for each signal to store each transaction attributes
-
-  reg [	ADDRESS_WIDTH-1: 0]	mem_raddr	  [2**LENGTH];
   
   //-------------------------------------------------------
   // Task: wait_for_system_reset
@@ -58,57 +56,7 @@ interface Axi4LiteSlaveReadDriverBFM(input bit                      aclk,
     `uvm_info(name,$sformatf(name),UVM_LOW)
   end
 
- //-------------------------------------------------------
-  // Task: axi4_read_address_phase
-  // This task will sample the read address signals
-  //-------------------------------------------------------
-  task axi4_read_address_phase (inout axi4_read_transfer_char_s data_read_packet, input axi4_transfer_cfg_s cfg_packet);
-    @(posedge aclk);
-    `uvm_info(name,$sformatf("data_read_packet=\n%p",data_read_packet),UVM_HIGH);
-    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_HIGH);
-    `uvm_info(name,$sformatf("INSIDE READ ADDRESS CHANNEL"),UVM_HIGH);
-    
-    // Ready can be HIGH even before we start to check 
-    // based on wait_cycles variable
-    // Can make arready to zero 
-     arready <= 0;
-
-    while(arvalid === 0) begin
-      @(posedge aclk);
-    end
-   
-    repeat(data_read_packet.no_of_wait_states)begin
-      `uvm_info(name,$sformatf("DRIVING_READ_ADDRS_WAIT_STATES :: %0d",data_read_packet.no_of_wait_states),UVM_HIGH);
-      @(posedge aclk);
-      arready<=0;
-    end
-
-    `uvm_info("SLAVE_DRIVER_RADDR_PHASE", $sformatf("outside of arvalid"), UVM_NONE); 
-    
-    // Sample the values
-	  mem_raddr	[j] 	= araddr	;
-    arready         = 1       ;
-
-    data_read_packet.araddr  = mem_raddr[j]    ;
-	  j = j+1                                    ;
-
-    `uvm_info(name,$sformatf("struct_pkt_rd_addr_phase = \n %0p",data_read_packet),UVM_HIGH)
-    
-    @(posedge aclk);
-    arready <= 0;
-  
-  endtask: axi4_read_address_phase
-    
-  //-------------------------------------------------------
-  // Task: axi4_read_data_channel_task
-  // This task will drive the read data signals
-  //-------------------------------------------------------
-  task axi4_read_data_phase (inout axi4_read_transfer_char_s data_read_packet, input axi4_transfer_cfg_s cfg_packet);
-    `uvm_info(name,$sformatf("INSIDE READ DATA CHANNEL"),UVM_LOW);
-    
-  endtask : axi4_read_data_phase
-
-endinterface : Axi4LiteSlaveReadDriverBFM
+ endinterface : Axi4LiteSlaveReadDriverBFM
 
 `endif
 

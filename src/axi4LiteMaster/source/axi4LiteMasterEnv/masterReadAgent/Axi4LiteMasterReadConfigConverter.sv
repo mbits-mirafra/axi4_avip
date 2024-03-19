@@ -1,18 +1,11 @@
 `ifndef AXI4LITEMASTERREADCONFIGCONVERTER_INCLUDED_
 `define AXI4LITEMASTERREADCONFIGCONVERTER_INCLUDED_
 
-//--------------------------------------------------------------------------------------------
-// Description:
-// class for converting the transaction items to struct and vice versa
-//--------------------------------------------------------------------------------------------
 class Axi4LiteMasterReadConfigConverter extends uvm_object;
   `uvm_object_utils(Axi4LiteMasterReadConfigConverter)
 
-  //-------------------------------------------------------
-  // Externally defined Tasks and Functions
-  //-------------------------------------------------------
   extern function new(string name = "Axi4LiteMasterReadConfigConverter");
- // GopalS:  extern static function void from_class(input axi4_master_agent_config input_conv,output axi4_transfer_cfg_s output_conv);
+  extern static function void fromClass(input Axi4LiteMasterReadAgentConfig input_conv,output axi4LiteReadTransferCfgStruct output_conv);
  // GopalS:  extern function void do_print(uvm_printer printer);
 
 endclass : Axi4LiteMasterReadConfigConverter
@@ -20,22 +13,18 @@ endclass : Axi4LiteMasterReadConfigConverter
 function Axi4LiteMasterReadConfigConverter::new(string name = "Axi4LiteMasterReadConfigConverter");
   super.new(name);
 endfunction : new
-/*
-//--------------------------------------------------------------------------------------------
-// converting seq_item transactions into struct data items
-//--------------------------------------------------------------------------------------------
-function void Axi4LiteMasterReadConfigConverter::from_class(input axi4_master_agent_config input_conv, output axi4_transfer_cfg_s output_conv);
-  output_conv.wait_count_write_address_channel =input_conv.wait_count_write_address_channel ;
+
+function void Axi4LiteMasterReadConfigConverter::fromClass(input Axi4LiteMasterReadAgentConfig input_conv, output axi4LiteReadTransferCfgStruct output_conv);
+  
+/*  output_conv.wait_count_write_address_channel =input_conv.wait_count_write_address_channel ;
   output_conv.wait_count_write_data_channel =input_conv.wait_count_write_data_channel ;
   output_conv.wait_count_read_address_channel =input_conv.wait_count_read_address_channel ;
   output_conv.outstanding_write_tx =input_conv.outstanding_write_tx ;
   output_conv.outstanding_read_tx =input_conv.outstanding_read_tx ;
-endfunction: from_class
+*/
+endfunction: fromClass
 
-//--------------------------------------------------------------------------------------------
-// Print method can be added to display the data members values
-//--------------------------------------------------------------------------------------------
-function void Axi4LiteMasterReadConfigConverter:: do_print(uvm_printer printer); 
+/*function void Axi4LiteMasterReadConfigConverter:: do_print(uvm_printer printer); 
   axi4_transfer_cfg_s axi4_cfg;
   printer.print_field ("wait_count_write_address_channel",axi4_cfg.wait_count_write_address_channel,$bits(axi4_cfg.wait_count_write_address_channel),UVM_DEC);
   printer.print_field ("wait_count_write_data_channel",axi4_cfg.wait_count_write_data_channel,$bits(axi4_cfg.wait_count_write_data_channel),UVM_DEC);

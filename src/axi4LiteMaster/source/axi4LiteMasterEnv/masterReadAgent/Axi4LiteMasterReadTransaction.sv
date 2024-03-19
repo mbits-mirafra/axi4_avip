@@ -9,29 +9,18 @@ class Axi4LiteMasterReadTransaction extends uvm_sequence_item;
   
   rand bit [ADDRESS_WIDTH-1:0] araddr;
 
-  rand arprot_e arprot;
+  rand arprotEnum arprot;
 
-  rid_e rid;
+  bit [DATA_WIDTH-1:0] rdata;
+
+  rrespEnum rresp;
+
+  rand endianEnum endian;
+
+  rand transactionTypeEnum tx_type;
+
+  rand transferTypeEnum  transferType;
   
-  //varaible[$] gives a unbounded queue
-  //variable[$:value] gives a bounded queue to a value of given value 
-  bit [DATA_WIDTH-1:0] rdata [$:2**LENGTH];
-
-  rresp_e rresp;
-  //Used to differentiate the type of memory storage
-
-  rand endian_e endian;
-
-  //Variable : tx_type
-  //Used to determine the transaction type
-  rand tx_type_e tx_type;
-
-  //Variable: transfer_type
-  //Used to the determine the type of the transfer
-  rand transfer_type_e transfer_type;
-  
-  //Variable : no_of_wait_states
-  //Used to count number of wait states
   rand int no_of_wait_states;
 
   //Variable: wait_count_read_address_channel
@@ -73,7 +62,7 @@ function void Axi4LiteMasterReadTransaction::do_copy(uvm_object rhs);
   rresp = Axi4LiteMasterReadTransaction_copy_obj.rresp;
   //OTHERS
   tx_type       = Axi4LiteMasterReadTransaction_copy_obj.tx_type;
-  transfer_type = Axi4LiteMasterReadTransaction_copy_obj.transfer_type;
+  transferType = Axi4LiteMasterReadTransaction_copy_obj.transferType;
 endfunction : do_copy
 
 function bit Axi4LiteMasterReadTransaction::do_compare (uvm_object rhs, uvm_comparer comparer);
@@ -105,7 +94,7 @@ function void Axi4LiteMasterReadTransaction::do_print(uvm_printer printer);
     end
     printer.print_string("rresp",rresp.name());
   end
-  printer.print_string("transfer_type",transfer_type.name());
+  printer.print_string("transferType",transferType.name());
 endfunction : do_print
 
 `endif

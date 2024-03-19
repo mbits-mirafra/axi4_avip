@@ -1,9 +1,6 @@
 `ifndef AXI4LITEMASTERREADSEQITEMCONVERTER_INCLUDED_
 `define AXI4LITEMASTERREADSEQITEMCONVERTER_INCLUDED_
 
-//--------------------------------------------------------------------------------------------
-// class converting seq_item transactions into struct data items and viceversa
-//--------------------------------------------------------------------------------------------
 class Axi4LiteMasterReadSeqItemConverter extends uvm_object;
   `uvm_object_utils(Axi4LiteMasterReadSeqItemConverter)
   

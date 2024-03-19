@@ -10,10 +10,6 @@ class Axi4LiteMasterReadAgentConfig extends uvm_object;
   //Used for enabling the master agent coverage
   bit hasCoverage;
 
-  //Used to store all the data from the slaves
-  //Each location of the master memory stores 32 bit data
-  bit [MEMORY_WIDTH-1:0]masterMemory[(SLAVE_MEMORY_SIZE+SLAVE_MEMORY_GAP)*NO_OF_SLAVES:0];
-
   //Variable : master_min_array
   //An associative array used to store the min address ranges of every slave
   //Index - type    - int
@@ -40,21 +36,10 @@ class Axi4LiteMasterReadAgentConfig extends uvm_object;
   //Used to determine the number of wait states inserted for read address channel
   int wait_count_read_address_channel;
 
-  //Variable : outstanding_write_tx
-  //Used to send the outstanding transactions
-  int outstanding_write_tx;
-  
-  //Variable : outstanding_read_tx
-  //Used to send the outstanding transactions
-  int outstanding_read_tx;
-
-  //-------------------------------------------------------
-  // Externally defined Tasks and Functions
-  //-------------------------------------------------------
   extern function new(string name = "Axi4LiteMasterReadAgentConfig");
   extern function void do_print(uvm_printer printer);
-  extern function void master_min_addr_range(int slave_number, bit [ADDRESS_WIDTH-1:0]slave_min_address_range);
-  extern function void master_max_addr_range(int slave_number, bit [ADDRESS_WIDTH-1:0]slave_max_address_range);
+ // extern function void master_min_addr_range(int slave_number, bit [ADDRESS_WIDTH-1:0]slave_min_address_range);
+  //extern function void master_max_addr_range(int slave_number, bit [ADDRESS_WIDTH-1:0]slave_max_address_range);
 endclass : Axi4LiteMasterReadAgentConfig
 
 function Axi4LiteMasterReadAgentConfig::new(string name = "Axi4LiteMasterReadAgentConfig");
@@ -68,7 +53,7 @@ endfunction : new
 //  slave_number            - int
 //  slave_max_address_range - bit [63:0]
 //--------------------------------------------------------------------------------------------
-function void Axi4LiteMasterReadAgentConfig::master_max_addr_range(int slave_number, bit[ADDRESS_WIDTH-1:0]slave_max_address_range);
+/*function void Axi4LiteMasterReadAgentConfig::master_max_addr_range(int slave_number, bit[ADDRESS_WIDTH-1:0]slave_max_address_range);
   master_max_addr_range_array[slave_number] = slave_max_address_range;
 endfunction : master_max_addr_range
 
@@ -82,7 +67,7 @@ endfunction : master_max_addr_range
 function void Axi4LiteMasterReadAgentConfig::master_min_addr_range(int slave_number, bit[ADDRESS_WIDTH-1:0]slave_min_address_range);
   master_min_addr_range_array[slave_number] = slave_min_address_range;
 endfunction : master_min_addr_range
-
+*/
 //--------------------------------------------------------------------------------------------
 // Function: do_print method
 // Print method can be added to display the data members values

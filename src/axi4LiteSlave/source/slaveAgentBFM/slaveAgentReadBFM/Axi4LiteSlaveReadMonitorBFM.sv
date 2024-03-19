@@ -34,54 +34,6 @@ interface Axi4LiteSlaveReadMonitorBFM(input bit aclk, input bit aresetn,
     `uvm_info("FROM Slave MON BFM",$sformatf("SYSTEM RESET DEACTIVATED"),UVM_HIGH)
   endtask : wait_for_aresetn
 
-  //-------------------------------------------------------
-  // Task: axi4_read_address_sampling
-  // Used for sample the read address channel signals
-  //-------------------------------------------------------
-  task axi4_read_address_sampling(output axi4_read_transfer_char_s req ,input axi4_transfer_cfg_s cfg);
-
-    @(posedge aclk);
-    while(arvalid!==1 || arready!==1)begin
-      @(posedge aclk);
-      `uvm_info("FROM SLAVE MON BFM READ ADDR",$sformatf("INSIDE WHILE LOOP OF READ ADDRESS"),UVM_HIGH)
-    end    
-    `uvm_info("FROM SLAVE MON BFM READ ADDR",$sformatf("AFTER WHILE LOOP OF READ ADDRESS"),UVM_HIGH)
-    
-    req.araddr   = araddr;
-    req.arprot   = arprot;
-
-    `uvm_info("FROM SLAVE MON BFM READ ADDR",$sformatf("datapacket =%p",req),UVM_HIGH)
-  endtask
-
-  //-------------------------------------------------------
-  // Task: axi4_read_data_sampling
-  // Used for sample the read data channel signals
-  //-------------------------------------------------------
-  task axi4_read_data_sampling(output axi4_read_transfer_char_s req ,input axi4_transfer_cfg_s cfg);
-    static reg[7:0] i = 0;
-    
-    forever begin
-      
-      // Wait for valid and ready to be high
-      do begin
-        @(posedge aclk);
-      end while((rvalid!==1 || rready!==1));
-  
-      `uvm_info("FROM SLAVE MON BFM",$sformatf("after do_while loop of read data sample"),UVM_HIGH)
-
-      req.rdata[i] = rdata;
-      req.rresp    = rresp;
-
-      `uvm_info("FROM SLAVE MON BFM READ DATA",$sformatf("DEBUG:SLAVE MON REQ.RID=%0d",req.rid),UVM_HIGH)
-      `uvm_info("FROM SLAVE MON BFM READ DATA",$sformatf("DEBUG:SLAVE MON RDATA[%0d]=%0h",i,rdata),UVM_HIGH)
-      `uvm_info("FROM SLAVE MON BFM READ DATA",$sformatf("DEBUG:SLAVE MON REQ.RDATA[%0d]=%0h",i,req.rdata[i]),UVM_HIGH)
-      i++;
-      
-      `uvm_info("FROM SLAVE MON BFM READ DATA",$sformatf("Read data packet: %p",req),UVM_HIGH)
-   end
-  endtask
-
-  
 endinterface : Axi4LiteSlaveReadMonitorBFM
 
 `endif

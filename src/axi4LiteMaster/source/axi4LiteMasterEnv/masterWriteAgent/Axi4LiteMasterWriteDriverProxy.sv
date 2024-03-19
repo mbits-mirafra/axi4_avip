@@ -9,7 +9,6 @@ class Axi4LiteMasterWriteDriverProxy extends uvm_driver#(Axi4LiteMasterWriteTran
   uvm_tlm_analysis_fifo #(Axi4LiteMasterWriteTransaction) axi4LiteMasterWriteFIFO;
   
   REQ reqWrite; 
-  
   RSP rspWrite;
       
   Axi4LiteMasterWriteAgentConfig axi4LiteMasterWriteAgentConfig;
@@ -20,7 +19,7 @@ class Axi4LiteMasterWriteDriverProxy extends uvm_driver#(Axi4LiteMasterWriteTran
   extern virtual function void build_phase(uvm_phase phase);
   extern virtual function void end_of_elaboration_phase(uvm_phase phase);
   extern virtual task run_phase(uvm_phase phase);
-  extern virtual task axi4LiteMasterWriteTask();
+  extern virtual task writeTransferTask();
 
 endclass : Axi4LiteMasterWriteDriverProxy
 
@@ -44,18 +43,33 @@ function void Axi4LiteMasterWriteDriverProxy::end_of_elaboration_phase(uvm_phase
 endfunction : end_of_elaboration_phase
 
 task Axi4LiteMasterWriteDriverProxy::run_phase(uvm_phase phase);
-
-/*  axi4LiteMasterWriteDriverBFM.wait_for_aresetn();
-  fork 
-    axi4LiteMasterWriteTask();
-  join
-*/
+  axi4LiteMasterWriteDriverBFM.wait_for_aresetn();
+  writeTransferTask();
 endtask : run_phase
 
+  
+task Axi4LiteMasterWriteDriverProxy::writeTransferTask();
+  forever begin
+    Axi4LiteMasterWriteTransaction masterWriteTx;
+    axi4LiteWriteTransferCfgStruct masterWriteCfgStruct;
+    axi4LiteWriteTransferCharStruct masterWriteCharStruct;
 
-task Axi4LiteMasterWriteDriverProxy::axi4LiteMasterWriteTask();
+    axi4LiteMasterWriteSeqItemPort.get_next_item(reqWrite);
+  `uvm_info(get_type_name(),$sformatf("MASTER_WRITE_TASK::Before Sending_Req_Write_Packet = \n%s",reqWrite.sprint()),UVM_HIGH);
 
-endtask : axi4LiteMasterWriteTask
+     Axi4LiteMasterWriteConfigConverter::fromClass(axi4LiteMasterWriteAgentConfig, masterWriteCfgStruct); 
+     `uvm_info(get_type_name(),$sformatf("MASTER_WRITE_TASK::Checking transfer type Before calling task if = %s",reqWrite.transferType),UVM_FULL);
+
+     if(reqWrite.transferType == BLOCKING_WRITE) begin
+     
+     end
+
+     else if(reqWrite.transferType == NON_BLOCKING_WRITE) begin
+     end
+
+     axi4LiteMasterWriteSeqItemPort.item_done();
+   end
+ endtask : writeTransferTask 
 
 `endif
 

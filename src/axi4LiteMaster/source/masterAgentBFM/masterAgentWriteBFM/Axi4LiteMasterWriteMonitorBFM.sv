@@ -52,61 +52,6 @@ interface Axi4LiteMasterWriteMonitorBFM(input bit aclk, input bit aresetn,
     `uvm_info("FROM MASTER MON BFM",$sformatf("SYSTEM RESET DEACTIVATED"),UVM_HIGH)
   endtask : wait_for_aresetn
 
-  //-------------------------------------------------------
-  // Task: axi4_write_address_sampling
-  // Used for sample the write address channel signals
-  //-------------------------------------------------------
-  task axi4_write_address_sampling(output axi4_write_transfer_char_s req ,input axi4_transfer_cfg_s cfg);
-
-    @(posedge aclk);
-    while(awvalid!==1 || awready!==1)begin
-      @(posedge aclk);
-      `uvm_info("FROM MASTER MON BFM",$sformatf("Inside while loop......"),UVM_HIGH)
-    end    
-    `uvm_info("FROM MASTER MON BFM",$sformatf("after while loop ......."),UVM_HIGH)
-      
-    req.awaddr  = awaddr;
-    req.awprot  = awprot;
-    `uvm_info("FROM MASTER MON BFM",$sformatf("datapacket =%p",req),UVM_HIGH)
-  endtask
-  
-  //-------------------------------------------------------
-  // Task: axi4_write_data_sampling
-  // Used for sample the write data channel signals
-  //-------------------------------------------------------
-  task axi4_write_data_sampling(output axi4_write_transfer_char_s req ,input axi4_transfer_cfg_s cfg);
-
-    static int i = 0;
-
-    forever begin
-      // Wait for valid and ready to be high
-      do begin
-        @(posedge aclk);
-      end while((wvalid!==1 || wready!==1));
-      `uvm_info("FROM MASTER MON BFM",$sformatf("After while loop write data......"),UVM_HIGH)
-  
-      req.wdata[i] = wdata;
-      req.wstrb[i] = wstrb;
-  
-      `uvm_info("FROM MASTER MON BFM write data",$sformatf("write datapacket wdata[%0d] = 'h%0x",i,req.wdata[i]),UVM_HIGH)
-      `uvm_info("FROM MASTER MON BFM write data",$sformatf("write datapacket wstrb[%0d] = 'h%0x",i,req.wstrb[i]),UVM_HIGH)
-     i++;
-    end
-  endtask 
-
-  //-------------------------------------------------------
-  // Task: axi4_write_response_sampling
-  // Used for sample the write response channel signals
-  //-------------------------------------------------------
-  task axi4_write_response_sampling(output axi4_write_transfer_char_s req ,input axi4_transfer_cfg_s cfg);
-    `uvm_info("FROM MASTER MON BFM",$sformatf("AFTER WHILE LOOP OF WRITE RESPONSE"),UVM_HIGH)
-   
-    do begin
-      @(posedge aclk);
-    end while((bvalid!==1 || bready!==1));
-    req.bresp    = bresp;
-    `uvm_info("FROM MASTER MON BFM::WRITE RESPONSE",$sformatf("WRITE RESPONSE PACKET: \n %p",req),UVM_HIGH)
-  endtask
 
 endinterface : Axi4LiteMasterWriteMonitorBFM
 

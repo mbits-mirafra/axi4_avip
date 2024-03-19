@@ -8,25 +8,25 @@ class Axi4LiteMasterWriteTransaction extends uvm_sequence_item;
   Axi4LiteMasterWriteAgentConfig axi4LiteMasterWriteAgentConfig; 
   
   rand bit [ADDRESS_WIDTH-1:0] awaddr;
-  rand awprot_e awprot;
+  rand awprotEnum awprot;
 
   //varaible[$] gives a unbounded queue
   //variable[$:value] gives a bounded queue to a value of given value 
-  rand bit [DATA_WIDTH-1:0] wdata [$:2**LENGTH];
+  rand bit [DATA_WIDTH-1:0] wdata;
 
   //varaible[$] gives a unbounded queue
   //variable[$:value] gives a bounded queue to a value of given value 
-  rand bit [(DATA_WIDTH/8)-1:0] wstrb [$:2**LENGTH];
+  rand bit [(DATA_WIDTH/8)-1:0] wstrb;
 
-  bresp_e bresp;
+  brespEnum bresp;
   
   //Variable : tx_type
   //Used to determine the transaction type
-  rand tx_type_e tx_type;
+  rand transactionTypeEnum tx_type;
 
-  //Variable: transfer_type
+  //Variable: transferType
   //Used to the determine the type of the transfer
-  rand transfer_type_e transfer_type;
+  rand transferTypeEnum transferType;
   
   //Variable : no_of_wait_states
   //Used to count number of wait states
@@ -77,7 +77,7 @@ function void Axi4LiteMasterWriteTransaction::do_copy(uvm_object rhs);
   bresp = Axi4LiteMasterWriteTransaction_copy_obj.bresp;
   //OTHERS
   tx_type       = Axi4LiteMasterWriteTransaction_copy_obj.tx_type;
-  transfer_type = Axi4LiteMasterWriteTransaction_copy_obj.transfer_type;
+  transferType = Axi4LiteMasterWriteTransaction_copy_obj.transferType;
 endfunction : do_copy
 
 function bit Axi4LiteMasterWriteTransaction::do_compare (uvm_object rhs, uvm_comparer comparer);
@@ -116,7 +116,7 @@ function void Axi4LiteMasterWriteTransaction::do_print(uvm_printer printer);
     printer.print_string("bresp",bresp.name());
   end
   
-  printer.print_string("transfer_type",transfer_type.name());
+  printer.print_string("transferType",transferType.name());
 endfunction : do_print
 
 `endif

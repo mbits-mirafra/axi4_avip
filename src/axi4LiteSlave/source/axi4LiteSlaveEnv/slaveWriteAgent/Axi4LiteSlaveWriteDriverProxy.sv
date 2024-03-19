@@ -14,7 +14,6 @@ class Axi4LiteSlaveWriteDriverProxy extends uvm_driver#(Axi4LiteSlaveWriteTransa
 
   virtual Axi4LiteSlaveWriteDriverBFM axi4LiteSlaveWriteDriverBFM;
 
-  //Declaring handle for uvm_tlm_analysis_fifo's for all the five channels
   uvm_tlm_fifo #(Axi4LiteSlaveWriteTransaction) axi4LiteSlaveWriteAddressFIFO;
   uvm_tlm_fifo #(Axi4LiteSlaveWriteTransaction) axi4LiteSlaveWriteDataInFIFO;
   uvm_tlm_fifo #(Axi4LiteSlaveWriteTransaction) axi4LiteSlaveWriteResponseFIFO;
@@ -24,7 +23,7 @@ class Axi4LiteSlaveWriteDriverProxy extends uvm_driver#(Axi4LiteSlaveWriteTransa
   extern virtual function void build_phase(uvm_phase phase);
   extern virtual function void end_of_elaboration_phase(uvm_phase phase);
   extern virtual task run_phase(uvm_phase phase);
-  extern virtual task axi4LiteSlaveWriteTask();
+  extern virtual task writeTransferTask();
  // extern virtual task axi4LiteSlaveMemoryWrite(input Axi4LiteSlaveWriteTransaction struct_write_packet);
 
  endclass : Axi4LiteSlaveWriteDriverProxy
@@ -53,21 +52,32 @@ function void Axi4LiteSlaveWriteDriverProxy::end_of_elaboration_phase(uvm_phase 
 endfunction  : end_of_elaboration_phase
 
 task Axi4LiteSlaveWriteDriverProxy::run_phase(uvm_phase phase);
-
-  `uvm_info(get_type_name(),"SLAVE_DRIVER_PROXY",UVM_MEDIUM)
-/*
-  //wait for system reset
-  axi4LiteSlaveWriteDriverBFM.wait_for_system_reset();
-  fork 
-    axi4LiteSlaveWriteTask();
-  join
-*/
-
+ axi4LiteSlaveWriteDriverBFM.wait_for_system_reset();
+ writeTransferTask();
 endtask : run_phase 
 
-task Axi4LiteSlaveWriteDriverProxy::axi4LiteSlaveWriteTask();
+task Axi4LiteSlaveWriteDriverProxy::writeTransferTask();
+ forever begin
+    Axi4LiteSlaveWriteTransaction masterWriteTx;
+    axi4LiteWriteTransferCfgStruct masterWriteCfgStruct;
+    axi4LiteWriteTransferCharStruct masterWriteCharStruct;
+
+    axi4LiteSlaveWriteSeqItemPort.get_next_item(reqWrite);
+  `uvm_info(get_type_name(),$sformatf("SLAVE_WRITE_TASK::Before Sending_Req_Write_Packet = \n%s",reqWrite.sprint()),UVM_HIGH);
+
+     Axi4LiteSlaveWriteConfigConverter::fromClass(axi4LiteSlaveWriteAgentConfig, masterWriteCfgStruct); 
+     `uvm_info(get_type_name(),$sformatf("SLAVE_WRITE_TASK::Checking transfer type Before calling task if = %s",reqWrite.transferType),UVM_FULL);
+
+     if(reqWrite.transferType == BLOCKING_WRITE) begin
+     
+     end
+
+     else if(reqWrite.transferType == NON_BLOCKING_WRITE) begin
+     end
+
+     axi4LiteSlaveWriteSeqItemPort.item_done();
+   end
  
- 
-endtask : axi4LiteSlaveWriteTask
+endtask : writeTransferTask
 
 `endif

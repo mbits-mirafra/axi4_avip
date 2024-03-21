@@ -61,7 +61,15 @@ task Axi4LiteMasterWriteDriverProxy::writeTransferTask();
      `uvm_info(get_type_name(),$sformatf("MASTER_WRITE_TASK::Checking transfer type Before calling task if = %s",reqWrite.transferType),UVM_FULL);
 
      if(reqWrite.transferType == BLOCKING_WRITE) begin
-     
+         Axi4LiteMasterWriteTransaction localMasterWriteTx;
+         Axi4LiteMasterWriteSeqItemConverter::fromWriteClass(reqWrite, masterWriteCharStruct);
+         `uvm_info(get_type_name(),$sformatf("MASTER_WRITE_TASK::Checking transfer type = %s",reqWrite.transferType),UVM_MEDIUM);        
+         axi4LiteMasterWriteDriverBFM.masterWriteAddressChannelTask(masterWriteCharStruct, masterWriteCfgStruct);
+         axi4LiteMasterWriteDriverBFM.masterWriteDataChannelTask(masterWriteCharStruct, masterWriteCfgStruct);
+         axi4LiteMasterWriteDriverBFM.masterWriteResponseChannelTask(masterWriteCharStruct, masterWriteCfgStruct);
+ 
+         Axi4LiteMasterWriteSeqItemConverter::toWriteClass(masterWriteCharStruct,localMasterWriteTx);
+         `uvm_info(get_type_name(),$sformatf("MASTER_WRITE_TASK::Response Received_Req_write_Packet = \n %s",localMasterWriteTx.sprint()),UVM_MEDIUM); 
      end
 
      else if(reqWrite.transferType == NON_BLOCKING_WRITE) begin

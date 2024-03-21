@@ -1,79 +1,34 @@
 `ifndef AXI4LITEMASTERWRITESEQITEMCONVERTER_INCLUDED_
 `define AXI4LITEMASTERWRITESEQITEMCONVERTER_INCLUDED_
 
-//--------------------------------------------------------------------------------------------
-// class converting seq_item transactions into struct data items and viceversa
-//--------------------------------------------------------------------------------------------
 class Axi4LiteMasterWriteSeqItemConverter extends uvm_object;
   `uvm_object_utils(Axi4LiteMasterWriteSeqItemConverter)
   
   extern function new(string name = "Axi4LiteMasterWriteSeqItemConverter");
-/*  extern static function void from_write_class(input axi4_master_tx input_conv_h,output axi4_write_transfer_char_s output_conv_h);
-  extern static function void from_read_class(input axi4_master_tx input_conv_h,output axi4_read_transfer_char_s output_conv_h);
-  extern static function void to_write_class(input axi4_write_transfer_char_s input_conv_h,output axi4_master_tx output_conv_h);
-  extern static function void to_read_class(input axi4_read_transfer_char_s input_conv_h,output axi4_master_tx output_conv_h);
-  extern static function void to_write_addr_data_class(input axi4_master_tx waddr_packet, input axi4_write_transfer_char_s input_conv_h,output axi4_master_tx output_conv_h);
+  extern static function void fromWriteClass(input Axi4LiteMasterWriteTransaction input_conv_h,output axi4LiteWriteTransferCharStruct output_conv_h);
+  extern static function void toWriteClass(input axi4LiteWriteTransferCharStruct input_conv_h, output Axi4LiteMasterWriteTransaction output_conv_h);
+/*  extern static function void to_write_addr_data_class(input axi4_master_tx waddr_packet, input axi4_write_transfer_char_s input_conv_h,output axi4_master_tx output_conv_h);
   extern static function void to_write_addr_data_resp_class(input axi4_master_tx waddr_data_packet, input axi4_write_transfer_char_s input_conv_h,output axi4_master_tx output_conv_h);
   extern static function void to_read_addr_data_class(input axi4_master_tx raddr_packet, input axi4_read_transfer_char_s input_conv_h,output axi4_master_tx output_conv_h);
   extern function void do_print(uvm_printer printer);
 */
 endclass : Axi4LiteMasterWriteSeqItemConverter
 
-//--------------------------------------------------------------------------------------------
-// Construct: new
-//
-// Parameters:
-//  name - Axi4LiteMasterWriteSeqItemConverter
-//--------------------------------------------------------------------------------------------
 function Axi4LiteMasterWriteSeqItemConverter::new(string name = "Axi4LiteMasterWriteSeqItemConverter");
   super.new(name);
 endfunction : new
 
-//--------------------------------------------------------------------------------------------
-// Function: from_write_class
-// Converting seq_item transactions into struct data items
-//
-// Parameters:
-// name - axi4_master_tx, axi4_write_transfer_char_s
-//--------------------------------------------------------------------------------------------
-/*
-function void Axi4LiteMasterWriteSeqItemConverter::from_write_class( input axi4_master_tx input_conv_h, output axi4_write_transfer_char_s output_conv_h);
+
+function void Axi4LiteMasterWriteSeqItemConverter::fromWriteClass(input Axi4LiteMasterWriteTransaction input_conv_h, output axi4LiteWriteTransferCharStruct output_conv_h);
   `uvm_info("axi4_master_seq_item_conv_class",$sformatf("----------------------------------------------------------------------"),UVM_HIGH);
- $cast(output_conv_h.awid,input_conv_h.awid); 
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting awid =  %b",output_conv_h.awid),UVM_HIGH);
-
-  $cast(output_conv_h.awlen,input_conv_h.awlen);
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting awlen =  %b",output_conv_h.awlen),UVM_HIGH);
-
-  $cast(output_conv_h.awsize,input_conv_h.awsize);
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After randomizing awsize =  %b",output_conv_h.awsize),UVM_HIGH);
-
-  $cast(output_conv_h.awburst,input_conv_h.awburst); 
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting awburst =  %b",output_conv_h.awburst),UVM_HIGH);
-
-  $cast(output_conv_h.awlock,input_conv_h.awlock);
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting awlock =  %b",output_conv_h.awlock),UVM_HIGH);
-
-  $cast(output_conv_h.awcache,input_conv_h.awcache);
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After randomizing awcache =  %b",output_conv_h.awcache),UVM_HIGH);
-
-  $cast(output_conv_h.awprot,input_conv_h.awprot);
+/*  $cast(output_conv_h.awprot,input_conv_h.awprot);
   `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After randomizing awprot =  %b",output_conv_h.awprot),UVM_HIGH);
-
-  $cast(output_conv_h.bid,input_conv_h.bid);
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting bid =  %b",output_conv_h.bid),UVM_HIGH);
 
   $cast(output_conv_h.bresp,input_conv_h.bresp);
   `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting bresp =  %b",output_conv_h.bresp),UVM_HIGH);
  
-  output_conv_h.buser = input_conv_h.buser;
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting buser =  %b",output_conv_h.buser),UVM_HIGH);
-
   output_conv_h.awaddr = input_conv_h.awaddr;
   `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting awaddr =  %0h",output_conv_h.awaddr),UVM_HIGH);
-
-  output_conv_h.awqos = input_conv_h.awqos;
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting awqos =  %0h",output_conv_h.awqos),UVM_HIGH);
 
   foreach(input_conv_h.wdata[i]) begin
     if(input_conv_h.wdata[i] != 0)begin
@@ -89,126 +44,23 @@ function void Axi4LiteMasterWriteSeqItemConverter::from_write_class( input axi4_
     end
   end
 
-  output_conv_h.wlast = input_conv_h.wlast;
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting wlast =  %0h",output_conv_h.wlast),UVM_HIGH);
-
-  output_conv_h.wuser = input_conv_h.wuser;
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting wuser =  %0h",output_conv_h.wuser),UVM_HIGH);
-
   output_conv_h.no_of_wait_states = input_conv_h.no_of_wait_states;
   `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting no_wait_states =  %0d",output_conv_h.no_of_wait_states),UVM_HIGH);
 
   output_conv_h.wait_count_write_address_channel =input_conv_h.wait_count_write_address_channel ;
   output_conv_h.wait_count_write_data_channel =input_conv_h.wait_count_write_data_channel ;
   output_conv_h.wait_count_write_response_channel =input_conv_h.wait_count_write_response_channel ;
+*/
+endfunction : fromWriteClass
 
-endfunction : from_write_class
-
-
-//--------------------------------------------------------------------------------------------
-// Function: from_read_class
-// Converting seq_item transactions into struct data items
-//
-// Parameters:
-// name - axi4_master_tx, axi4_read_transfer_char_s
-//--------------------------------------------------------------------------------------------
-
-function void Axi4LiteMasterWriteSeqItemConverter::from_read_class( input axi4_master_tx input_conv_h, output axi4_read_transfer_char_s output_conv_h);
-
-  $cast(output_conv_h.arid,input_conv_h.arid);
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting arid =  %b",output_conv_h.arid),UVM_HIGH);
-
-  $cast(output_conv_h.arlen,input_conv_h.arlen);
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After conrveting arlen =  %b",output_conv_h.arlen),UVM_HIGH);
-
-  $cast(output_conv_h.arsize,input_conv_h.arsize);
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting arsize =  %b",output_conv_h.arsize),UVM_HIGH);
-
-  $cast(output_conv_h.arburst,input_conv_h.arburst);
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting arburst =  %b",output_conv_h.arburst),UVM_HIGH);
-
-  $cast(output_conv_h.arlock,input_conv_h.arlock);
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting arlock =  %b",output_conv_h.arlock),UVM_HIGH);
-
-  $cast(output_conv_h.arcache,input_conv_h.arcache);
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting arcache =  %b",output_conv_h.arcache),UVM_HIGH);
-
-  $cast(output_conv_h.arprot,input_conv_h.arprot);
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting arprot =  %b",output_conv_h.arprot),UVM_HIGH);
-
-  $cast(output_conv_h.rresp,input_conv_h.rresp);
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting rresp =  %b",output_conv_h.rresp),UVM_HIGH);
-  
-  output_conv_h.araddr = input_conv_h.araddr;
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting araddr =  %0h",output_conv_h.araddr),UVM_HIGH);
-
-  output_conv_h.arqos = input_conv_h.arqos;
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting arqos =  %0h",output_conv_h.arqos),UVM_HIGH);
-
-  output_conv_h.aruser = input_conv_h.aruser;
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting aruser =  %0h",output_conv_h.aruser),UVM_HIGH);
-
-  output_conv_h.arregion = input_conv_h.arregion;
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting arregion =  %0h",output_conv_h.arregion),UVM_HIGH);
-
-  $cast(output_conv_h.rid,input_conv_h.rid);
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting rid =  %b",output_conv_h.rid),UVM_HIGH);
-
-  foreach(input_conv_h.rdata[i]) begin
-    if(input_conv_h.rdata[i] != 0)begin
-      output_conv_h.rdata[i] = input_conv_h.rdata[i];
-      `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting rdata = %0p",output_conv_h.rdata[i]),UVM_HIGH);
-    end
-  end
-
-  output_conv_h.ruser = input_conv_h.ruser;
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting ruser =  %0b",output_conv_h.ruser),UVM_HIGH);
-
-  output_conv_h.no_of_wait_states = input_conv_h.no_of_wait_states;
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting no_wait_states =  %0d",output_conv_h.no_of_wait_states),UVM_HIGH);
-
-  output_conv_h.wait_count_read_address_channel =input_conv_h.wait_count_read_address_channel ;
-  output_conv_h.wait_count_read_data_channel =input_conv_h.wait_count_read_data_channel ;
-
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("----------------------------------------------------------------------"),UVM_HIGH);
-  
-endfunction : from_read_class  
-
-//--------------------------------------------------------------------------------------------
-// Function: to_write_class
-// Converting struct data items into seq_item transactions
-//
-// Parameters:
-// name - axi4_master_tx, axi4_write_transfer_char_s
-//--------------------------------------------------------------------------------------------
-function void Axi4LiteMasterWriteSeqItemConverter::to_write_class( input axi4_write_transfer_char_s
-  input_conv_h, output axi4_master_tx output_conv_h);
-  output_conv_h = new();
+function void Axi4LiteMasterWriteSeqItemConverter::toWriteClass(input axi4LiteWriteTransferCharStruct input_conv_h, output Axi4LiteMasterWriteTransaction output_conv_h);
 
   `uvm_info("axi4_master_seq_item_conv_class",$sformatf("----------------------------------------------------------------------"),UVM_HIGH);
  
-
+/*
   output_conv_h.tx_type = WRITE; 
 
-  $cast(output_conv_h.awid,input_conv_h.awid); 
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting awid =  %b",output_conv_h.awid),UVM_HIGH);
-
-  $cast(output_conv_h.awlen,input_conv_h.awlen);
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting awlen =  %b",output_conv_h.awlen),UVM_HIGH);
-
-  $cast(output_conv_h.awsize,input_conv_h.awsize);
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After randomizing awsize =  %b",output_conv_h.awsize),UVM_HIGH);
-
-  $cast(output_conv_h.awburst,input_conv_h.awburst); 
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting awburst =  %b",output_conv_h.awburst),UVM_HIGH);
-
-  $cast(output_conv_h.awlock,input_conv_h.awlock);
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting awlock =  %b",output_conv_h.awlock),UVM_HIGH);
-
-  $cast(output_conv_h.awcache,input_conv_h.awcache);
-  `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After randomizing awcache =  %b",output_conv_h.awcache),UVM_HIGH);
-
-  $cast(output_conv_h.awprot,input_conv_h.awprot);
+   $cast(output_conv_h.awprot,input_conv_h.awprot);
   `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After randomizing awprot =  %b",output_conv_h.awprot),UVM_HIGH);
 
   output_conv_h.awaddr = input_conv_h.awaddr;
@@ -251,8 +103,8 @@ function void Axi4LiteMasterWriteSeqItemConverter::to_write_class( input axi4_wr
 
   output_conv_h.wait_count_write_response_channel = input_conv_h.wait_count_write_response_channel;
   `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting wait_count_write_response_channel = %0h",output_conv_h.wait_count_write_response_channel),UVM_HIGH);
-
-endfunction : to_write_class
+*/
+endfunction : toWriteClass
 
 //--------------------------------------------------------------------------------------------
 // Function: to_read_class
@@ -261,7 +113,7 @@ endfunction : to_write_class
 // Parameters:
 // name - axi4_master_tx, axi4_read_transfer_char_s
 //--------------------------------------------------------------------------------------------
-function void Axi4LiteMasterWriteSeqItemConverter::to_read_class( input axi4_read_transfer_char_s
+/*function void Axi4LiteMasterWriteSeqItemConverter::to_read_class( input axi4_read_transfer_char_s
   input_conv_h, output axi4_master_tx output_conv_h);
 
   output_conv_h = new();

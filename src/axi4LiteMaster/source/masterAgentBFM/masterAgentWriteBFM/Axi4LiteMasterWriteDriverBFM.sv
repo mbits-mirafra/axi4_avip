@@ -1,16 +1,8 @@
 `ifndef AXI4LITEMASTERWRITEDRIVERBFM_INCLUDED_
 `define AXI4LITEMASTERWRITEDRIVERBFM_INCLUDED_
 
-//-------------------------------------------------------
-// Importing global package
-//-------------------------------------------------------
 import Axi4LiteGlobalsPkg::*;
 
-//--------------------------------------------------------------------------------------------
-// Interface : Axi4LiteMasterWriteDriverBFM
-//  Used as the HDL driver for axi4
-//  It connects with the HVL driver_proxy for driving the stimulus
-//--------------------------------------------------------------------------------------------
 interface Axi4LiteMasterWriteDriverBFM(input bit                      aclk, 
                                        input bit                      aresetn,
                                        //Write Address Channel Signals
@@ -29,15 +21,9 @@ interface Axi4LiteMasterWriteDriverBFM(input bit                      aclk,
                                        output	reg       bready
                                       );  
   
-  //-------------------------------------------------------
-  // Importing UVM Package 
-  //-------------------------------------------------------
   import uvm_pkg::*;
   `include "uvm_macros.svh" 
 
-  //-------------------------------------------------------
-  // Importing Global Package
-  //-------------------------------------------------------
 
 import Axi4LiteMasterWritePkg::Axi4LiteMasterWriteDriverProxy; 
   //Variable: name
@@ -65,6 +51,18 @@ import Axi4LiteMasterWritePkg::Axi4LiteMasterWriteDriverProxy;
         @(posedge aresetn);
     `uvm_info(name,$sformatf("SYSTEM RESET DEACTIVATED"),UVM_HIGH)
   endtask : wait_for_aresetn
+
+task masterWriteAddressChannelTask(inout axi4LiteWriteTransferCharStruct masterWriteCharStruct,axi4LiteWriteTransferCfgStruct masterWriteCfgStruct);
+
+endtask : masterWriteAddressChannelTask
+
+task masterWriteDataChannelTask(inout axi4LiteWriteTransferCharStruct masterWriteCharStruct,axi4LiteWriteTransferCfgStruct masterWriteCfgStruct);
+
+endtask : masterWriteDataChannelTask
+
+task masterWriteResponseChannelTask(inout axi4LiteWriteTransferCharStruct masterWriteCharStruct,axi4LiteWriteTransferCfgStruct masterWriteCfgStruct);
+
+endtask : masterWriteResponseChannelTask
 
 endinterface : Axi4LiteMasterWriteDriverBFM
 

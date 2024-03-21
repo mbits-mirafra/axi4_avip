@@ -50,25 +50,35 @@ endfunction  : end_of_elaboration_phase
 
 
 task Axi4LiteSlaveReadDriverProxy::run_phase(uvm_phase phase);
-//  axi4LiteMasterReadDriverBFM.wait_for_aresetn();
+  axi4LiteSlaveReadDriverBFM.wait_for_system_reset();
   readTransferTask();
 endtask : run_phase 
 
 
 task Axi4LiteSlaveReadDriverProxy::readTransferTask();
   forever begin
-    Axi4LiteSlaveReadTransaction masterReadTx;
-    axi4LiteReadTransferCfgStruct masterReadCfgStruct;
-    axi4LiteReadTransferCharStruct masterReadCharStruct;
+    Axi4LiteSlaveReadTransaction slaveReadTx;
+    axi4LiteReadTransferCfgStruct slaveReadCfgStruct;
+    axi4LiteReadTransferCharStruct slaveReadCharStruct;
 
     axi4LiteSlaveReadSeqItemPort.get_next_item(reqRead);
   `uvm_info(get_type_name(),$sformatf("SLAVE_READ_TASK::Before Sending_Req_Read_Packet = \n%s",reqRead.sprint()),UVM_HIGH);
 
-     Axi4LiteSlaveReadConfigConverter::fromClass(axi4LiteSlaveReadAgentConfig, masterReadCfgStruct); 
+     Axi4LiteSlaveReadConfigConverter::fromClass(axi4LiteSlaveReadAgentConfig, slaveReadCfgStruct); 
      `uvm_info(get_type_name(),$sformatf("SLAVE_READ_TASK::Checking transfer type Before calling task if = %s",reqRead.transferType),UVM_FULL);
 
      if(reqRead.transferType == BLOCKING_WRITE) begin
+         Axi4LiteSlaveReadTransaction localSlaveReadTx;
+         Axi4LiteSlaveReadSeqItemConverter::fromReadClass(reqRead, slaveReadCharStruct);
+         `uvm_info(get_type_name(),$sformatf("SLAVE_READ_TASK::Checking transfer type = %s",reqRead.transferType),UVM_MEDIUM);        
+         axi4LiteSlaveReadDriverBFM.slaveReadAddressChannelTask(slaveReadCharStruct, slaveReadCfgStruct);
+         axi4LiteSlaveReadDriverBFM.slaveReadDataChannelTask(slaveReadCharStruct, slaveReadCfgStruct);
+         axi4LiteSlaveReadDriverBFM.slaveReadResponseChannelTask(slaveReadCharStruct, slaveReadCfgStruct);
      
+         Axi4LiteSlaveReadSeqItemConverter::toReadClass(slaveReadCharStruct,localSlaveReadTx);
+         `uvm_info(get_type_name(),$sformatf("SLAVE_READ_TASK::Response Received_Req_read_Packet = \n %s",localSlaveReadTx.sprint()),UVM_MEDIUM);
+
+ 
      end
 
      else if(reqRead.transferType == NON_BLOCKING_WRITE) begin

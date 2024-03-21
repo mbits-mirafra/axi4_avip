@@ -1,16 +1,8 @@
 `ifndef AXI4LITESLAVEWRITEDRIVERBFM_INCLUDED_
 `define AXI4LITESLAVEWRITEDRIVERBFM_INCLUDED_
 
-//-------------------------------------------------------
-// Importing global package
-//-------------------------------------------------------
 import Axi4LiteGlobalsPkg::*;
 
-//--------------------------------------------------------------------------------------------
-// Interface : Axi4LiteSlaveWriteDriverBFM
-//  Used as the HDL driver for axi4
-//  It connects with the HVL driver_proxy for driving the stimulus
-//--------------------------------------------------------------------------------------------
 interface Axi4LiteSlaveWriteDriverBFM(input               aclk    , 
                                       input                     aresetn ,
                                       //Write_address_channel
@@ -33,10 +25,6 @@ interface Axi4LiteSlaveWriteDriverBFM(input               aclk    ,
    import uvm_pkg::*;
   `include "uvm_macros.svh" 
 
-  //-------------------------------------------------------
-  // Importing Global Package
-  //-------------------------------------------------------
-
   import Axi4LiteSlaveWritePkg::Axi4LiteSlaveWriteDriverProxy;
   //Variable: name
   //Used to store the name of the interface
@@ -54,15 +42,6 @@ interface Axi4LiteSlaveWriteDriverBFM(input               aclk    ,
     `uvm_info("axi4 slave driver bfm",$sformatf("AXI4 SLAVE DRIVER BFM"),UVM_LOW);
   end
 
-
-  // Creating Memories for each signal to store each transaction attributes
-
-  
-  //-------------------------------------------------------
-  // Task: wait_for_system_reset
-  // Waiting for the system reset to be active low
-  //-------------------------------------------------------
-
   task wait_for_system_reset();
     @(negedge aresetn);
     `uvm_info(name,$sformatf("SYSTEM RESET ACTIVATED"),UVM_NONE)
@@ -73,7 +52,21 @@ interface Axi4LiteSlaveWriteDriverBFM(input               aclk    ,
     @(posedge aresetn);
     `uvm_info(name,$sformatf("SYSTEM RESET DE-ACTIVATED"),UVM_NONE)
   endtask 
-  
+
+task slaveWriteAddressChannelTask(inout axi4LiteWriteTransferCharStruct slaveWriteCharStruct,axi4LiteWriteTransferCfgStruct slaveWriteCfgStruct);
+
+endtask : slaveWriteAddressChannelTask
+
+task slaveWriteDataChannelTask(inout axi4LiteWriteTransferCharStruct slaveWriteCharStruct,axi4LiteWriteTransferCfgStruct slaveWriteCfgStruct);
+
+endtask : slaveWriteDataChannelTask
+
+task slaveWriteResponseChannelTask(inout axi4LiteWriteTransferCharStruct slaveWriteCharStruct,axi4LiteWriteTransferCfgStruct slaveWriteCfgStruct);
+
+endtask : slaveWriteResponseChannelTask
+
+
+
 endinterface : Axi4LiteSlaveWriteDriverBFM
 
 `endif

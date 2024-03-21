@@ -1,35 +1,32 @@
 `ifndef AXI4LITESLAVEREADSEQITEMCONVERTER_INCLUDED_
 `define AXI4LITESLAVEREADSEQITEMCONVERTER_INCLUDED_
 
-//--------------------------------------------------------------------------------------------
-// Class: Axi4LiteSlaveReadSeqItemConverter
-// Description:
-// class for converting the transaction items to struct and vice versa
-//--------------------------------------------------------------------------------------------
 class Axi4LiteSlaveReadSeqItemConverter extends uvm_object;
   `uvm_object_utils(Axi4LiteSlaveReadSeqItemConverter)
 
-  //-------------------------------------------------------
-  // Externally defined Tasks and Functions
-  //-------------------------------------------------------
   extern function new(string name = "Axi4LiteSlaveReadSeqItemConverter");
+  extern static function void fromReadClass(input Axi4LiteSlaveReadTransaction input_conv_h, output axi4LiteReadTransferCharStruct output_conv_h);
+  extern static function void toReadClass(input axi4LiteReadTransferCharStruct input_conv_h, output Axi4LiteSlaveReadTransaction output_conv_h);
+   
   extern function void do_print(uvm_printer printer);
 
 endclass : Axi4LiteSlaveReadSeqItemConverter
-//------------------------------------------------------------------------------------------
-// Construct: new
-//
-// Parameters:
-// name - Axi4LiteSlaveReadSeqItemConverter
-//--------------------------------------------------------------------------------------------
+
 function Axi4LiteSlaveReadSeqItemConverter::new(string name = "Axi4LiteSlaveReadSeqItemConverter");
   super.new(name);
 endfunction : new
 
-//--------------------------------------------------------------------------------------------
-// Function: do_print method
-// Print method can be added to display the data members values
-//--------------------------------------------------------------------------------------------
+function void Axi4LiteSlaveReadSeqItemConverter::fromReadClass(input Axi4LiteSlaveReadTransaction input_conv_h,output axi4LiteReadTransferCharStruct output_conv_h);
+
+  `uvm_info("axi4Lite_Slave_Read_Seq_item_conv_class",$sformatf("------------------------------------fromReadClass----------------------------------"),UVM_HIGH);
+
+endfunction : fromReadClass
+
+function void Axi4LiteSlaveReadSeqItemConverter::toReadClass(input axi4LiteReadTransferCharStruct input_conv_h, output Axi4LiteSlaveReadTransaction output_conv_h);
+  `uvm_info("axi4Lite_Slave_Read_Seq_item_conv_class",$sformatf("--------------------------------------------toReadClass--------------------------"),UVM_HIGH);
+ 
+endfunction : toReadClass
+
 function void Axi4LiteSlaveReadSeqItemConverter::do_print(uvm_printer printer);
 
 

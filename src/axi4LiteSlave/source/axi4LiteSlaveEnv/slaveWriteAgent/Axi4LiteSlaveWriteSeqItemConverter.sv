@@ -1,35 +1,31 @@
 `ifndef AXI4LITESLAVEWRITESEQITEMCONVERTER_INCLUDED_
 `define AXI4LITESLAVEWRITESEQITEMCONVERTER_INCLUDED_
 
-//--------------------------------------------------------------------------------------------
-// Class: Axi4LiteSlaveWriteSeqItemConverter
-// Description:
-// class for converting the transaction items to struct and vice versa
-//--------------------------------------------------------------------------------------------
 class Axi4LiteSlaveWriteSeqItemConverter extends uvm_object;
   `uvm_object_utils(Axi4LiteSlaveWriteSeqItemConverter)
 
-  //-------------------------------------------------------
-  // Externally defined Tasks and Functions
-  //-------------------------------------------------------
   extern function new(string name = "Axi4LiteSlaveWriteSeqItemConverter");
-  extern function void do_print(uvm_printer printer);
+  extern static function void fromWriteClass(input Axi4LiteSlaveWriteTransaction input_conv_h, output axi4LiteWriteTransferCharStruct output_conv_h);
+  extern static function void toWriteClass(input axi4LiteWriteTransferCharStruct input_conv_h, output Axi4LiteSlaveWriteTransaction output_conv_h);
+//  extern function void do_print(uvm_printer printer);
 
 endclass : Axi4LiteSlaveWriteSeqItemConverter
-//------------------------------------------------------------------------------------------
-// Construct: new
-//
-// Parameters:
-// name - Axi4LiteSlaveWriteSeqItemConverter
-//--------------------------------------------------------------------------------------------
+
 function Axi4LiteSlaveWriteSeqItemConverter::new(string name = "Axi4LiteSlaveWriteSeqItemConverter");
   super.new(name);
 endfunction : new
 
-//--------------------------------------------------------------------------------------------
-// Function: do_print method
-// Print method can be added to display the data members values
-//--------------------------------------------------------------------------------------------
+function void Axi4LiteSlaveWriteSeqItemConverter::fromWriteClass(input Axi4LiteSlaveWriteTransaction input_conv_h,output axi4LiteWriteTransferCharStruct output_conv_h);
+
+  `uvm_info("axi4Lite_Slave_Write_Seq_item_conv_class",$sformatf("------------------------------------fromWriteClass----------------------------------"),UVM_HIGH);
+
+endfunction : fromWriteClass
+
+function void  Axi4LiteSlaveWriteSeqItemConverter::toWriteClass(input axi4LiteWriteTransferCharStruct input_conv_h, output Axi4LiteSlaveWriteTransaction output_conv_h);
+  `uvm_info("axi4Lite_Slave_Write_Seq_item_conv_class",$sformatf("--------------------------------------------toWriteClass--------------------------"),UVM_HIGH);
+ 
+endfunction : toWriteClass
+/*
 function void Axi4LiteSlaveWriteSeqItemConverter::do_print(uvm_printer printer);
 
 
@@ -58,7 +54,7 @@ function void Axi4LiteSlaveWriteSeqItemConverter::do_print(uvm_printer printer);
   foreach(axi4_r_st.rdata[i]) begin
     printer.print_field($sformatf("rdata[%0d]",i),axi4_r_st.rdata[i],$bits(axi4_r_st.rdata[i]),UVM_HEX);
   end
-*/
 endfunction : do_print
+*/
 
 `endif

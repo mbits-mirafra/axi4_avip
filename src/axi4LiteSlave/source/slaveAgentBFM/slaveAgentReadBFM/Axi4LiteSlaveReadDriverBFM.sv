@@ -26,22 +26,12 @@ interface Axi4LiteSlaveReadDriverBFM(input bit                      aclk,
   string name = "Axi4LiteSlaveReadDriverBFM"; 
 
   Axi4LiteSlaveReadDriverProxy axi4LiteSlaveReadDriverProxy;
-  reg [7: 0] i = 0;
-  reg [7: 0] j = 0;
-  reg [7: 0] a = 0;
-
+ 
   initial begin
     `uvm_info("axi4 slave driver bfm",$sformatf("AXI4 SLAVE DRIVER BFM"),UVM_LOW);
   end
 
-  // Creating Memories for each signal to store each transaction attributes
-  
-  //-------------------------------------------------------
-  // Task: wait_for_system_reset
-  // Waiting for the system reset to be active low
-  //-------------------------------------------------------
-
-  task wait_for_system_reset();
+   task wait_for_system_reset();
     @(negedge aresetn);
     `uvm_info(name,$sformatf("SYSTEM RESET ACTIVATED"),UVM_NONE)
     rvalid  <= 0;
@@ -56,6 +46,21 @@ interface Axi4LiteSlaveReadDriverBFM(input bit                      aclk,
     `uvm_info(name,$sformatf(name),UVM_LOW)
   end
 
+  task slaveReadAddressChannelTask(inout axi4LiteReadTransferCharStruct slaveReadCharStruct,axi4LiteReadTransferCfgStruct slaveReadCfgStruct);
+
+  endtask : slaveReadAddressChannelTask
+
+task slaveReadDataChannelTask(inout axi4LiteReadTransferCharStruct slaveReadCharStruct,axi4LiteReadTransferCfgStruct slaveReadCfgStruct);
+
+endtask : slaveReadDataChannelTask
+
+task slaveReadResponseChannelTask(inout axi4LiteReadTransferCharStruct slaveReadCharStruct,axi4LiteReadTransferCfgStruct slaveReadCfgStruct);
+
+endtask : slaveReadResponseChannelTask
+
+
+
+  
  endinterface : Axi4LiteSlaveReadDriverBFM
 
 `endif

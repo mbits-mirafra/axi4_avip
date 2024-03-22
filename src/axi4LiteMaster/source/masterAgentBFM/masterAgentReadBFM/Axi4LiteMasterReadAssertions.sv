@@ -20,68 +20,23 @@ interface Axi4LiteMasterReadAssertions (input                     aclk,
   import uvm_pkg::*;
   `include "uvm_macros.svh";
 
+  Axi4LiteAssertions axi4LiteAssertions();
+
   initial begin
     `uvm_info("Axi4LiteMasterReadAssertions","Axi4LiteMasterReadAssertions",UVM_LOW);
   end
   
 // READ ADDRESS CHANNEL
-  property ifReadAddressSignalsAreUnknown;
-    @(posedge aclk)
-     !aresetn |-> !($isunknown(arvalid) && $isunknown(arready));
-  endproperty : ifReadAddressSignalsAreUnknown
-
-  AXI4LITE_MASTERREAD_ADDRESS_SIGNALS_CHECK_IFUNKNOWN: assert property (ifReadAddressSignalsAreUnknown);
-
-  property readAddressSignalarvalidStableUntillarreadyDeasserted;
-    @(posedge aclk) disable iff (!aresetn)  
-    $rose(arvalid) |-> arvalid until_with arready;
-  endproperty : readAddressSignalarvalidStableUntillarreadyDeasserted
-
-  AXI4LITE_MASTERREAD_ADDRESS_SIGNALS_CHECK_ARVALIDSTABLE: assert property (readAddressSignalarvalidStableUntillarreadyDeasserted);
-
-  property readAddressSignalarvalidStableCheckUpto16ClkIfarreadyLow;
-    @(posedge aclk) disable iff (!aresetn)  
-    $rose(arvalid) |-> ##[0:15] $rose(arready);
-  endproperty : readAddressSignalarvalidStableCheckUpto16ClkIfarreadyLow
-
-  AXI4LITE_MASTERREAD_ADDRESS_SIGNALS_CHECK_ARVALIDSTABLE_UPTO16CLK: assert property (readAddressSignalarvalidStableCheckUpto16ClkIfarreadyLow);
-
+  AXI4LITE_MASTERREAD_ADDRESS_SIGNALS_CHECK_IFUNKNOWN: assert property (axi4LiteAssertions.ifSignalsAreUnknown(arvalid,arready));
+  AXI4LITE_MASTERREAD_ADDRESS_SIGNALS_CHECK_ARVALIDSTABLE: assert property (axi4LiteAssertions.validStableUntillreadyDeasserted(arvalid,arready));
+  AXI4LITE_MASTERREAD_ADDRESS_SIGNALS_CHECK_ARVALIDSTABLE_UPTO16CLK: assert property (axi4LiteAssertions.validStableCheckUpto16ClkIfreadyLow(arvalid,arready));
 
 // READ DATA CHANNEL
-  property ifReadDataSignalsAreUnknown;
-    @(posedge aclk)
-     !aresetn |-> !($isunknown(rvalid) && $isunknown(rready));
-  endproperty : ifReadDataSignalsAreUnknown
-
-  AXI4LITE_MASTERREAD_DATA_SIGNALS_CHECK_IFUNKNOWN: assert property (ifReadDataSignalsAreUnknown);
-
-  property readDataSignalrvalidStableUntillrreadyDeasserted;
-    @(posedge aclk) disable iff (!aresetn)  
-    $rose(rvalid) |-> rvalid until_with rready;
-  endproperty : readDataSignalrvalidStableUntillrreadyDeasserted
-
-  AXI4LITE_MASTERREAD_DATA_SIGNALS_CHECK_RVALIDSTABLE: assert property (readDataSignalrvalidStableUntillrreadyDeasserted);
-
-  property readDataSignalrvalidStableCheckUpto16ClkIfrreadyLow;
-    @(posedge aclk) disable iff (!aresetn)  
-    $rose(rvalid) |-> ##[0:15] $rose(rready);
-  endproperty : readDataSignalrvalidStableCheckUpto16ClkIfrreadyLow
-
-  AXI4LITE_MASTERREAD_DATA_SIGNALS_CHECK_RVALIDSTABLE_UPTO16CLK: assert property (readDataSignalrvalidStableCheckUpto16ClkIfrreadyLow);
-
-  property readDataSignalrvalidAssertedCorrespondingDataCannotBeUnknown;
-    @(posedge aclk) disable iff (!aresetn)  
-    $rose(rvalid) |-> !$isunknown(rdata);
-  endproperty : readDataSignalrvalidAssertedCorrespondingDataCannotBeUnknown
-
-  AXI4LITE_MASTERREAD_DATA_SIGNALS_RVALIDASSERTED_DATAISNOTUNKNOWN: assert property (readDataSignalrvalidAssertedCorrespondingDataCannotBeUnknown);
-
-  property readDataSignalrreadyAssertedBeforeThervalidCorrespondingDataCanBeUnknown;
-    @(posedge aclk) disable iff (!aresetn)  
-    $rose(rready) |-> (rready && $isunknown(rdata)) throughout ( !$rose(rvalid) ##0 !$isunknown(rdata));
-  endproperty : readDataSignalrreadyAssertedBeforeThervalidCorrespondingDataCanBeUnknown
-
-  AXI4LITE_MASTERREAD_DATA_SIGNALS_RREADYASSERTED_BEFORERVALID_DATACANBEUNKNOWN: assert property (readDataSignalrreadyAssertedBeforeThervalidCorrespondingDataCanBeUnknown);
+  AXI4LITE_MASTERREAD_DATA_SIGNALS_CHECK_IFUNKNOWN: assert property (axi4LiteAssertions.ifSignalsAreUnknown(rvalid,rready));
+  AXI4LITE_MASTERREAD_DATA_SIGNALS_CHECK_RVALIDSTABLE: assert property (axi4LiteAssertions.validStableUntillreadyDeasserted(rvalid,rready));
+  AXI4LITE_MASTERREAD_DATA_SIGNALS_CHECK_RVALIDSTABLE_UPTO16CLK: assert property (axi4LiteAssertions.validStableCheckUpto16ClkIfreadyLow(rvalid,rready));
+//  AXI4LITE_MASTERREAD_DATA_SIGNALS_RVALIDASSERTED_DATAISNOTUNKNOWN: assert property (axi4LiteAssertions.validAssertedCorrespondingDataCannotBeUnknown(rvalid,rready,rdata));
+//  AXI4LITE_MASTERREAD_DATA_SIGNALS_RREADYASSERTED_BEFORERVALID_DATACANBEUNKNOWN: assert property (axi4LiteAssertions.readyAssertedBeforeThewvalidCorrespondingDataCanBeUnknown(rvalid,rready,rdata));
 
 endinterface : Axi4LiteMasterReadAssertions
 

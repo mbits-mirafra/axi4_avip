@@ -37,6 +37,7 @@
 ../../../../src/axi4LiteMaster/source/axi4LiteMasterEnv/Axi4LiteMasterEnvPkg.sv
 ../../../../src/axi4LiteSlave/source/axi4LiteSlaveEnv/slaveVirtualSequencer/Axi4LiteSlaveVirtualSeqrPkg.sv
 ../../../../src/axi4LiteSlave/source/axi4LiteSlaveEnv/Axi4LiteSlaveEnvPkg.sv
+../../../../projectExamples/vipBack2BackConnection/src/Axi4LiteAssertions.sv
 ../../../../projectExamples/vipBack2BackConnection/src/Axi4LiteEnvPkg.sv
 ../../../../projectExamples/vipBack2BackConnection/src/virtualSequences/Axi4LiteVirtualSeqPkg.sv
 ../../../../projectExamples/vipBack2BackConnection/src/Axi4LiteTestPkg.sv
@@ -47,6 +48,11 @@
 ../../../../src/axi4LiteSlave/source/slaveAgentBFM/slaveAgentWriteBFM/Axi4LiteSlaveWriteInterface.sv
 ../../../../src/axi4LiteSlave/source/slaveAgentBFM/slaveAgentReadBFM/Axi4LiteSlaveReadInterface.sv
 ../../../../src/axi4LiteSlave/source/slaveAgentBFM/Axi4LiteSlaveInterface.sv
+
+../../../../src/axi4LiteMaster/source/masterAgentBFM/masterAgentWriteBFM/Axi4LiteMasterWriteAssertions.sv
+../../../../src/axi4LiteMaster/source/masterAgentBFM/masterAgentReadBFM/Axi4LiteMasterReadAssertions.sv
+../../../../src/axi4LiteSlave/source/slaveAgentBFM/slaveAgentWriteBFM/Axi4LiteSlaveWriteAssertions.sv
+../../../../src/axi4LiteSlave/source/slaveAgentBFM/slaveAgentReadBFM/Axi4LiteSlaveReadAssertions.sv
 
 ../../../../src/axi4LiteMaster/source/masterAgentBFM/masterAgentWriteBFM/Axi4LiteMasterWriteAgentBFM.sv
 ../../../../src/axi4LiteMaster/source/masterAgentBFM/masterAgentWriteBFM/Axi4LiteMasterWriteDriverBFM.sv
@@ -69,8 +75,6 @@
 ../../../../projectExamples/vipBack2BackConnection/src/Axi4LiteInterface.sv
 ../../../../projectExamples/vipBack2BackConnection/src/HdlTop.sv
 ../../../../projectExamples/vipBack2BackConnection/src/HvlTop.sv
+../../../../projectExamples/vipBack2BackConnection/src/Axi4LiteAssertionTB.sv
 
-../../../../src/axi4LiteMaster/source/masterAgentBFM/masterAgentWriteBFM/Axi4LiteMasterWriteAssertions.sv
-../../../../src/axi4LiteMaster/source/masterAgentBFM/masterAgentReadBFM/Axi4LiteMasterReadAssertions.sv
-../../../../src/axi4LiteSlave/source/slaveAgentBFM/slaveAgentWriteBFM/Axi4LiteSlaveWriteAssertions.sv
-../../../../src/axi4LiteSlave/source/slaveAgentBFM/slaveAgentReadBFM/Axi4LiteSlaveReadAssertions.sv
+#../../../../src/axi4LiteMaster/source/masterAgentBFM/masterAgentWriteBFM/Axi4LiteMasterWriteAssertionTB.sv

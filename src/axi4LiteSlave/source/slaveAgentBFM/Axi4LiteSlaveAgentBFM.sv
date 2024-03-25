@@ -31,7 +31,9 @@ module Axi4LiteSlaveAgentBFM #(parameter int ADDR_WIDTH = 32,
   import uvm_pkg::*;
   `include "uvm_macros.svh"
 
-  Axi4LiteSlaveInterface axi4LiteSlaveInterface();
+  Axi4LiteSlaveInterface axi4LiteSlaveInterface(.aclk(aclk), 
+                                                .aresetn(aresetn)
+                                               );
 
   Axi4LiteSlaveWriteAgentBFM axi4LiteSlaveWriteAgentBFM (.aclk(axi4LiteSlaveInterface.aclk), 
                                                          .aresetn(axi4LiteSlaveInterface.aresetn),
@@ -60,28 +62,28 @@ module Axi4LiteSlaveAgentBFM #(parameter int ADDR_WIDTH = 32,
                                                        .rready(axi4LiteSlaveInterface.rready) 
                                                       );
                                  
-  assign clk     = axi4LiteSlaveInterface.aclk;
-  assign areset  = axi4LiteSlaveInterface.aresetn;
-  assign awaddr  = axi4LiteSlaveInterface.awaddr;
-  assign awprot  = axi4LiteSlaveInterface.awprot;
-  assign awvalid = axi4LiteSlaveInterface.awvalid;
+  assign axi4LiteSlaveInterface.awaddr  = awaddr; 
+  assign axi4LiteSlaveInterface.awprot  = awprot; 
+  assign axi4LiteSlaveInterface.awvalid = awvalid;
+  assign axi4LiteSlaveInterface.wdata   = wdata;  
+  assign axi4LiteSlaveInterface.wstrb   = wstrb;  
+  assign axi4LiteSlaveInterface.wvalid  = wvalid; 
+  assign axi4LiteSlaveInterface.bready  = bready; 
+
+  assign axi4LiteSlaveInterface.araddr  = araddr; 
+  assign axi4LiteSlaveInterface.arprot  = arprot;   
+  assign axi4LiteSlaveInterface.arvalid = arvalid; 
+  assign axi4LiteSlaveInterface.rdata   = rdata;  
+  assign axi4LiteSlaveInterface.rready  = rready;  
+
   assign awready = axi4LiteSlaveInterface.awready;  
-  assign wdata   = axi4LiteSlaveInterface.wdata;
-  assign wstrb   = axi4LiteSlaveInterface.wstrb;
-  assign wvalid  = axi4LiteSlaveInterface.wvalid;
   assign wready  = axi4LiteSlaveInterface.wready;
   assign bresp   = axi4LiteSlaveInterface.bresp;
   assign bvalid  = axi4LiteSlaveInterface.bvalid;
-  assign bready  = axi4LiteSlaveInterface.bready;
 
-  assign araddr  = axi4LiteSlaveInterface.araddr;
-  assign arprot  = axi4LiteSlaveInterface.arprot;  
-  assign arvalid = axi4LiteSlaveInterface.arvalid; 
   assign arready = axi4LiteSlaveInterface.arready; 
-  assign rdata   = axi4LiteSlaveInterface.rdata; 
   assign rresp   = axi4LiteSlaveInterface.rresp; 
   assign rvalid  = axi4LiteSlaveInterface.rvalid; 
-  assign rready  = axi4LiteSlaveInterface.rready; 
 
   initial begin
     `uvm_info("Axi4LiteMasterAgent",$sformatf("AXI4LITESLAVEAGENTBFM"),UVM_LOW);

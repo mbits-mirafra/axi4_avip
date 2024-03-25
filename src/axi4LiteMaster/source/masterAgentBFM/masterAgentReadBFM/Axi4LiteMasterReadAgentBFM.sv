@@ -19,7 +19,9 @@ module Axi4LiteMasterReadAgentBFM #(parameter int ADDR_WIDTH = 32,
   import uvm_pkg::*;
   `include "uvm_macros.svh"
   
-  Axi4LiteMasterReadInterface axi4LiteMasterReadInterface();
+  Axi4LiteMasterReadInterface axi4LiteMasterReadInterface(.aclk(aclk), 
+                                                          .aresetn(aresetn)
+                                                         );
 
   Axi4LiteMasterReadDriverBFM axi4LiteMasterReadDriverBFM (.aclk(axi4LiteMasterReadInterface.aclk), 
                                                            .aresetn(axi4LiteMasterReadInterface.aresetn),
@@ -45,16 +47,15 @@ module Axi4LiteMasterReadAgentBFM #(parameter int ADDR_WIDTH = 32,
                                                              .rready(axi4LiteMasterReadInterface.rready)
                                                             );
 
-   assign clk     = axi4LiteMasterReadInterface.aclk;
-   assign aresetn = axi4LiteMasterReadInterface.aresetn;
-   assign araddr  = axi4LiteMasterReadInterface.araddr;
-   assign arprot  = axi4LiteMasterReadInterface.arprot;
-   assign arvalid = axi4LiteMasterReadInterface.arvalid;
-   assign arready = axi4LiteMasterReadInterface.arready;
-   assign rdata   = axi4LiteMasterReadInterface.rdata;
-   assign rresp   = axi4LiteMasterReadInterface.rresp;
-   assign rvalid  = axi4LiteMasterReadInterface.rvalid;
-   assign rready  = axi4LiteMasterReadInterface.rready;
+  assign araddr  = axi4LiteMasterReadInterface.araddr;
+  assign arprot  = axi4LiteMasterReadInterface.arprot;  
+  assign arvalid = axi4LiteMasterReadInterface.arvalid; 
+  assign rready  = axi4LiteMasterReadInterface.rready; 
+
+  assign axi4LiteMasterReadInterface.arready = arready;  
+  assign axi4LiteMasterReadInterface.rdata   = rdata;  
+  assign axi4LiteMasterReadInterface.rresp   = rresp;  
+  assign axi4LiteMasterReadInterface.rvalid  = rvalid;  
 
   //-------------------------------------------------------
   // Setting the virtual handle of BMFs into config_db

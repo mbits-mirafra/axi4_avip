@@ -55,9 +55,10 @@ task Axi4LiteMasterReadDriverProxy::readTransferTask();
     axi4LiteReadTransferCfgStruct masterReadCfgStruct;
     axi4LiteReadTransferCharStruct masterReadCharStruct;
 
-    axi4LiteMasterReadSeqItemPort.get_next_item(reqRead);
+    axi4LiteMasterReadSeqItemPort.get_next_item(reqRead); 
   `uvm_info(get_type_name(),$sformatf("MASTER_READ_TASK::Before Sending_Req_Read_Packet = \n%s",reqRead.sprint()),UVM_HIGH);
 
+  /*
      Axi4LiteMasterReadConfigConverter::fromClass(axi4LiteMasterReadAgentConfig, masterReadCfgStruct); 
      `uvm_info(get_type_name(),$sformatf("MASTER_READ_TASK::Checking transfer type Before calling task if = %s",reqRead.transferType),UVM_FULL);
 
@@ -74,7 +75,7 @@ task Axi4LiteMasterReadDriverProxy::readTransferTask();
 
      else if(reqRead.transferType == NON_BLOCKING_WRITE) begin
      end
-
+     */
      axi4LiteMasterReadSeqItemPort.item_done();
    end
  

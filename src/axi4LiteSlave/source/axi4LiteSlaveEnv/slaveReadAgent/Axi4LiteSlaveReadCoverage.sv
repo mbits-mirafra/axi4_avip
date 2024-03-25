@@ -5,11 +5,7 @@ class Axi4LiteSlaveReadCoverage extends uvm_subscriber#(Axi4LiteSlaveReadTransac
   `uvm_component_utils(Axi4LiteSlaveReadCoverage)
 
   covergroup axi4LiteSlaveReadCovergroup with function sample (Axi4LiteSlaveReadTransaction packet);
-    option.per_instance = 1;
-
-    ARADDR_CP : coverpoint packet.araddr {
-      option.comment = "Slave Read Address signals";
-    }
+    option.per_instance = 1; 
   endgroup: axi4LiteSlaveReadCovergroup
 
   extern function new(string name = "Axi4LiteSlaveReadCoverage", uvm_component parent = null);

@@ -32,7 +32,9 @@ module Axi4LiteMasterAgentBFM #(parameter int ADDR_WIDTH = 32,
   import uvm_pkg::*;
   `include "uvm_macros.svh"
 
-  Axi4LiteMasterInterface axi4LiteMasterInterface();
+  Axi4LiteMasterInterface axi4LiteMasterInterface(.aclk(aclk), 
+                                                  .aresetn(aresetn)
+                                                 );
 
   Axi4LiteMasterWriteAgentBFM axi4LiteMasterWriteAgentBFM (.aclk(axi4LiteMasterInterface.aclk), 
                                                          .aresetn(axi4LiteMasterInterface.aresetn),
@@ -60,33 +62,27 @@ module Axi4LiteMasterAgentBFM #(parameter int ADDR_WIDTH = 32,
                                                        .rvalid(axi4LiteMasterInterface.rvalid),
                                                        .rready(axi4LiteMasterInterface.rready) 
                                                       );
-/*  initial begin
-    uvm_config_db#(virtual Axi4LiteMasterWriteAgentBFM.Axi4LiteMasterWriteDriverBFM)::set(null,"*", "Axi4LiteMasterWriteDriverBFM", Axi4LiteMasterWriteAgentBFM.axi4LiteMasterWriteDriverBFM); 
-    uvm_config_db#(virtual Axi4LiteMasterWriteAgentBFM.Axi4LiteMasterWriteMonitorBFM)::set(null,"*", "Axi4LiteMasterWriteMonitorBFM", Axi4LiteMasterWriteAgentBFM.axi4LiteMasterWriteMonitorBFM);
-  end
-*/
-  assign clk     = axi4LiteMasterInterface.aclk;
-  assign areset  = axi4LiteMasterInterface.aresetn;
   assign awaddr  = axi4LiteMasterInterface.awaddr;
   assign awprot  = axi4LiteMasterInterface.awprot;
   assign awvalid = axi4LiteMasterInterface.awvalid;
-  assign awready = axi4LiteMasterInterface.awready;  
   assign wdata   = axi4LiteMasterInterface.wdata;
   assign wstrb   = axi4LiteMasterInterface.wstrb;
   assign wvalid  = axi4LiteMasterInterface.wvalid;
-  assign wready  = axi4LiteMasterInterface.wready;
-  assign bresp   = axi4LiteMasterInterface.bresp;
-  assign bvalid  = axi4LiteMasterInterface.bvalid;
   assign bready  = axi4LiteMasterInterface.bready;
 
   assign araddr  = axi4LiteMasterInterface.araddr;
   assign arprot  = axi4LiteMasterInterface.arprot;  
   assign arvalid = axi4LiteMasterInterface.arvalid; 
-  assign arready = axi4LiteMasterInterface.arready; 
-  assign rdata   = axi4LiteMasterInterface.rdata; 
-  assign rresp   = axi4LiteMasterInterface.rresp; 
-  assign rvalid  = axi4LiteMasterInterface.rvalid; 
   assign rready  = axi4LiteMasterInterface.rready; 
+
+  assign axi4LiteMasterInterface.awready = awready;   
+  assign axi4LiteMasterInterface.wready  = wready;  
+  assign axi4LiteMasterInterface.bresp   = bresp;  
+  assign axi4LiteMasterInterface.bvalid  = bvalid;  
+  assign axi4LiteMasterInterface.arready = arready;  
+  assign axi4LiteMasterInterface.rdata   = rdata;  
+  assign axi4LiteMasterInterface.rresp   = rresp;  
+  assign axi4LiteMasterInterface.rvalid  = rvalid;  
 
   initial begin
     `uvm_info("Axi4LiteMasterAgent",$sformatf("AXI4LITEMASTERAGENTBFM"),UVM_LOW);

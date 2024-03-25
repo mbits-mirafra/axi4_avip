@@ -22,7 +22,9 @@ module Axi4LiteSlaveWriteAgentBFM #(parameter int ADDR_WIDTH = 32,
   import uvm_pkg::*;
   `include "uvm_macros.svh"
 
-  Axi4LiteSlaveWriteInterface axi4LiteSlaveWriteInterface();
+  Axi4LiteSlaveWriteInterface axi4LiteSlaveWriteInterface(.aclk(aclk), 
+                                                          .aresetn(aresetn)
+                                                         );
   
   Axi4LiteSlaveWriteDriverBFM axi4LiteSlaveWriteDriverBFM (.aclk(axi4LiteSlaveWriteInterface.aclk), 
                                                            .aresetn(axi4LiteSlaveWriteInterface.aresetn),
@@ -54,20 +56,17 @@ module Axi4LiteSlaveWriteAgentBFM #(parameter int ADDR_WIDTH = 32,
                                                              .bready(axi4LiteSlaveWriteInterface.bready)
                                                             );
 
-  assign clk     = axi4LiteSlaveWriteInterface.aclk;
-  assign aresetn = axi4LiteSlaveWriteInterface.aresetn;
-  assign awaddr  = axi4LiteSlaveWriteInterface.awaddr;
-  assign awprot  = axi4LiteSlaveWriteInterface.awprot;
-  assign awvalid = axi4LiteSlaveWriteInterface.awvalid;
-  assign awready = axi4LiteSlaveWriteInterface.awready;
-  assign wdata   = axi4LiteSlaveWriteInterface.wdata;
-  assign wstrb   = axi4LiteSlaveWriteInterface.wstrb;
-  assign wvalid  = axi4LiteSlaveWriteInterface.wvalid;
+  assign axi4LiteSlaveWriteInterface.awaddr  = awaddr; 
+  assign axi4LiteSlaveWriteInterface.awprot  = awprot; 
+  assign axi4LiteSlaveWriteInterface.awvalid = awvalid;
+  assign axi4LiteSlaveWriteInterface.wdata   = wdata;  
+  assign axi4LiteSlaveWriteInterface.wstrb   = wstrb;  
+  assign axi4LiteSlaveWriteInterface.wvalid  = wvalid; 
+  assign axi4LiteSlaveWriteInterface.bready  = bready; 
+  assign awready = axi4LiteSlaveWriteInterface.awready;  
   assign wready  = axi4LiteSlaveWriteInterface.wready;
   assign bresp   = axi4LiteSlaveWriteInterface.bresp;
   assign bvalid  = axi4LiteSlaveWriteInterface.bvalid;
-  assign bready  = axi4LiteSlaveWriteInterface.bready;
-
 
   initial begin
     uvm_config_db#(virtual Axi4LiteSlaveWriteDriverBFM)::set(null,"*", "Axi4LiteSlaveWriteDriverBFM", axi4LiteSlaveWriteDriverBFM); 

@@ -64,6 +64,7 @@ task Axi4LiteSlaveReadDriverProxy::readTransferTask();
     axi4LiteSlaveReadSeqItemPort.get_next_item(reqRead);
   `uvm_info(get_type_name(),$sformatf("SLAVE_READ_TASK::Before Sending_Req_Read_Packet = \n%s",reqRead.sprint()),UVM_HIGH);
 
+  /*
      Axi4LiteSlaveReadConfigConverter::fromClass(axi4LiteSlaveReadAgentConfig, slaveReadCfgStruct); 
      `uvm_info(get_type_name(),$sformatf("SLAVE_READ_TASK::Checking transfer type Before calling task if = %s",reqRead.transferType),UVM_FULL);
 
@@ -83,7 +84,7 @@ task Axi4LiteSlaveReadDriverProxy::readTransferTask();
 
      else if(reqRead.transferType == NON_BLOCKING_WRITE) begin
      end
-
+      */
      axi4LiteSlaveReadSeqItemPort.item_done();
    end
  

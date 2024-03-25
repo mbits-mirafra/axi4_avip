@@ -6,9 +6,6 @@ class Axi4LiteMasterWriteCoverage extends uvm_subscriber #(Axi4LiteMasterWriteTr
  
   covergroup axi4LiteMasterWriteCovergroup with function sample (Axi4LiteMasterWriteTransaction packet);
     option.per_instance = 1;
-    AWADDR_CP : coverpoint packet.awaddr{
-      option.comment = "Master Write Agent awaddress signal";
-    }
   endgroup: axi4LiteMasterWriteCovergroup
 
   extern function new(string name = "Axi4LiteMasterWriteCoverage", uvm_component parent = null);

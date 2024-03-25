@@ -19,7 +19,9 @@ module Axi4LiteSlaveReadAgentBFM #(parameter int ADDR_WIDTH = 32,
   import uvm_pkg::*;
   `include "uvm_macros.svh"
 
-  Axi4LiteSlaveReadInterface axi4LiteSlaveReadInterface();
+  Axi4LiteSlaveReadInterface axi4LiteSlaveReadInterface(.aclk(aclk), 
+                                                        .aresetn(aresetn)
+                                                       );
 
   Axi4LiteSlaveReadDriverBFM axi4LiteSlaveReadDriverBFM (.aclk(axi4LiteSlaveReadInterface.aclk), 
                                                          .aresetn(axi4LiteSlaveReadInterface.aresetn),
@@ -45,17 +47,14 @@ module Axi4LiteSlaveReadAgentBFM #(parameter int ADDR_WIDTH = 32,
                                                            .rready(axi4LiteSlaveReadInterface.rready)
                                                           );
 
-
-   assign clk     = axi4LiteSlaveReadInterface.aclk;
-   assign aresetn = axi4LiteSlaveReadInterface.aresetn;
-   assign araddr  = axi4LiteSlaveReadInterface.araddr;
-   assign arprot  = axi4LiteSlaveReadInterface.arprot;
-   assign arvalid = axi4LiteSlaveReadInterface.arvalid;
-   assign arready = axi4LiteSlaveReadInterface.arready;
-   assign rdata   = axi4LiteSlaveReadInterface.rdata;
-   assign rresp   = axi4LiteSlaveReadInterface.rresp;
-   assign rvalid  = axi4LiteSlaveReadInterface.rvalid;
-   assign rready  = axi4LiteSlaveReadInterface.rready;
+  assign axi4LiteSlaveReadInterface.araddr  = araddr; 
+  assign axi4LiteSlaveReadInterface.arprot  = arprot;   
+  assign axi4LiteSlaveReadInterface.arvalid = arvalid; 
+  assign axi4LiteSlaveReadInterface.rdata   = rdata;  
+  assign axi4LiteSlaveReadInterface.rready  = rready;  
+  assign arready = axi4LiteSlaveReadInterface.arready; 
+  assign rresp   = axi4LiteSlaveReadInterface.rresp; 
+  assign rvalid  = axi4LiteSlaveReadInterface.rvalid; 
 
 
   initial begin

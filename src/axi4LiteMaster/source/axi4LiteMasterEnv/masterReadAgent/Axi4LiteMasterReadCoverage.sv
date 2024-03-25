@@ -6,8 +6,6 @@ class Axi4LiteMasterReadCoverage extends uvm_subscriber #(Axi4LiteMasterReadTran
 
   covergroup axi4LiteMasterReadCovergroup with function sample (Axi4LiteMasterReadTransaction packet);
     option.per_instance = 1;
-    ARADDR_CP : coverpoint packet.araddr{
-      option.comment = "Master Read Agent araddress signal";}
   endgroup : axi4LiteMasterReadCovergroup
 
 

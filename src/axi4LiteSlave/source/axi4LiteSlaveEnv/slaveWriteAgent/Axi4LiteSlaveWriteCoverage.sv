@@ -6,12 +6,8 @@ class Axi4LiteSlaveWriteCoverage extends uvm_subscriber#(Axi4LiteSlaveWriteTrans
 
     covergroup axi4LiteSlaveWriteCovergroup with function sample (Axi4LiteSlaveWriteTransaction packet);
     option.per_instance = 1;
-    
-   AWADDR_CP : coverpoint packet.awaddr {
-      option.comment = "Slave Write Agent awaddress signal";
-   }
-
   endgroup: axi4LiteSlaveWriteCovergroup
+ 
   extern function new(string name = "Axi4LiteSlaveWriteCoverage", uvm_component parent = null);
   extern virtual function void write(Axi4LiteSlaveWriteTransaction t);
   extern virtual function void report_phase(uvm_phase phase);

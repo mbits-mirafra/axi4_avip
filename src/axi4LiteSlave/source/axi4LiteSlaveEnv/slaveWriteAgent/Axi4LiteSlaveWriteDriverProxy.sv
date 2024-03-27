@@ -24,7 +24,6 @@ class Axi4LiteSlaveWriteDriverProxy extends uvm_driver#(Axi4LiteSlaveWriteTransa
   extern virtual function void end_of_elaboration_phase(uvm_phase phase);
   extern virtual task run_phase(uvm_phase phase);
   extern virtual task writeTransferTask();
- // extern virtual task axi4LiteSlaveMemoryWrite(input Axi4LiteSlaveWriteTransaction struct_write_packet);
 
  endclass : Axi4LiteSlaveWriteDriverProxy
 
@@ -64,26 +63,6 @@ task Axi4LiteSlaveWriteDriverProxy::writeTransferTask();
 
     axi4LiteSlaveWriteSeqItemPort.get_next_item(reqWrite);
   `uvm_info(get_type_name(),$sformatf("SLAVE_WRITE_TASK::Before Sending_Req_Write_Packet = \n%s",reqWrite.sprint()),UVM_HIGH);
-/*
-     Axi4LiteSlaveWriteConfigConverter::fromClass(axi4LiteSlaveWriteAgentConfig, slaveWriteCfgStruct); 
-     `uvm_info(get_type_name(),$sformatf("SLAVE_WRITE_TASK::Checking transfer type Before calling task if = %s",reqWrite.transferType),UVM_FULL);
-
-     if(reqWrite.transferType == BLOCKING_WRITE) begin
-         Axi4LiteSlaveWriteTransaction localSlaveWriteTx;
-         Axi4LiteSlaveWriteSeqItemConverter::fromWriteClass(reqWrite, slaveWriteCharStruct);
-         `uvm_info(get_type_name(),$sformatf("SLAVE_WRITE_TASK::Checking transfer type = %s",reqWrite.transferType),UVM_MEDIUM);        
-         axi4LiteSlaveWriteDriverBFM.slaveWriteAddressChannelTask(slaveWriteCharStruct, slaveWriteCfgStruct);
-         axi4LiteSlaveWriteDriverBFM.slaveWriteDataChannelTask(slaveWriteCharStruct, slaveWriteCfgStruct);
-         axi4LiteSlaveWriteDriverBFM.slaveWriteResponseChannelTask(slaveWriteCharStruct, slaveWriteCfgStruct);
-     
-         Axi4LiteSlaveWriteSeqItemConverter::toWriteClass(slaveWriteCharStruct,localSlaveWriteTx);
-         `uvm_info(get_type_name(),$sformatf("SLAVE_WRITE_TASK::Response Received_Req_write_Packet = \n %s",localSlaveWriteTx.sprint()),UVM_MEDIUM);
-
-     end
-
-     else if(reqWrite.transferType == NON_BLOCKING_WRITE) begin
-     end
-*/
      axi4LiteSlaveWriteSeqItemPort.item_done();
    end
  

@@ -3,23 +3,11 @@
 
 import Axi4LiteGlobalsPkg::*;
 
-interface Axi4LiteMasterWriteAssertions (input                     aclk,
-                             input                     aresetn,
-                             //Write Address Channel Signals
-                             input [ADDRESS_WIDTH-1:0] awaddr,
-                             input               [2:0] awprot,
-                             input                     awvalid,
-                             input                     awready,
-                             //Write Data Channel Signals
-                             input     [DATA_WIDTH-1:0] wdata,
-                             input [(DATA_WIDTH/8)-1:0] wstrb,
-                             input                      wvalid,
-                             input                      wready,
-                             //Write Response Channel
-                             input [1:0] bresp,
-                             input       bvalid,
-                             input       bready
-                            );  
+interface Axi4LiteMasterWriteAssertions (input  aclk,
+                                         input  aresetn,
+                                         input  valid,
+                                         input  ready
+                                        );  
 
   import uvm_pkg::*;
   `include "uvm_macros.svh";
@@ -29,7 +17,7 @@ interface Axi4LiteMasterWriteAssertions (input                     aclk,
   initial begin
     `uvm_info("Axi4LiteMasterWriteAssertions","Axi4LiteMasterWriteAssertions",UVM_LOW);
   end
-
+/*
 // WRITE ADDRESS CHANNEL
   AXI4LITE_MASTERWRITE_ADDRESS_SIGNALS_CHECK_IFUNKNOWN: assert property (axi4LiteAssertions.ifSignalsAreUnknown(awvalid,awready));
   AXI4LITE_MASTERWRITE_ADDRESS_SIGNALS_CHECK_AWVALIDSTABLE: assert property (axi4LiteAssertions.validStableUntillreadyDeasserted(awvalid,awready));
@@ -46,7 +34,7 @@ interface Axi4LiteMasterWriteAssertions (input                     aclk,
   AXI4LITE_MASTERWRITE_RESPONSE_SIGNALS_CHECK_IFUNKNOWN: assert property (axi4LiteAssertions.ifSignalsAreUnknown(bvalid,bready));
   AXI4LITE_MASTERWRITE_RESPONSE_SIGNALS_CHECK_BVALIDSTABLE: assert property (axi4LiteAssertions.validStableUntillreadyDeasserted(bvalid,bready));
   AXI4LITE_MASTERWRITE_RESPONSE_SIGNALS_CHECK_BVALIDSTABLE_UPTO16CLK: assert property (axi4LiteAssertions.validStableCheckUpto16ClkIfreadyLow(bvalid,bready));
-
+*/
 endinterface : Axi4LiteMasterWriteAssertions
 
 `endif

@@ -22,9 +22,8 @@ class Axi4LiteSlaveReadDriverProxy extends uvm_driver#(Axi4LiteSlaveReadTransact
   extern virtual function void end_of_elaboration_phase(uvm_phase phase);
   extern virtual task run_phase(uvm_phase phase);
   extern virtual task readTransferTask();
-//  extern virtual task task_memory_read(input Axi4LiteSlaveReadTransaction read_pkt,ref axi4_read_transfer_char_s struct_read_packet);
 
- endclass : Axi4LiteSlaveReadDriverProxy
+endclass : Axi4LiteSlaveReadDriverProxy
 
 function Axi4LiteSlaveReadDriverProxy::new(string name = "Axi4LiteSlaveReadDriverProxy",
                                       uvm_component parent = null);
@@ -64,27 +63,6 @@ task Axi4LiteSlaveReadDriverProxy::readTransferTask();
     axi4LiteSlaveReadSeqItemPort.get_next_item(reqRead);
   `uvm_info(get_type_name(),$sformatf("SLAVE_READ_TASK::Before Sending_Req_Read_Packet = \n%s",reqRead.sprint()),UVM_HIGH);
 
-  /*
-     Axi4LiteSlaveReadConfigConverter::fromClass(axi4LiteSlaveReadAgentConfig, slaveReadCfgStruct); 
-     `uvm_info(get_type_name(),$sformatf("SLAVE_READ_TASK::Checking transfer type Before calling task if = %s",reqRead.transferType),UVM_FULL);
-
-     if(reqRead.transferType == BLOCKING_WRITE) begin
-         Axi4LiteSlaveReadTransaction localSlaveReadTx;
-         Axi4LiteSlaveReadSeqItemConverter::fromReadClass(reqRead, slaveReadCharStruct);
-         `uvm_info(get_type_name(),$sformatf("SLAVE_READ_TASK::Checking transfer type = %s",reqRead.transferType),UVM_MEDIUM);        
-         axi4LiteSlaveReadDriverBFM.slaveReadAddressChannelTask(slaveReadCharStruct, slaveReadCfgStruct);
-         axi4LiteSlaveReadDriverBFM.slaveReadDataChannelTask(slaveReadCharStruct, slaveReadCfgStruct);
-         axi4LiteSlaveReadDriverBFM.slaveReadResponseChannelTask(slaveReadCharStruct, slaveReadCfgStruct);
-     
-         Axi4LiteSlaveReadSeqItemConverter::toReadClass(slaveReadCharStruct,localSlaveReadTx);
-         `uvm_info(get_type_name(),$sformatf("SLAVE_READ_TASK::Response Received_Req_read_Packet = \n %s",localSlaveReadTx.sprint()),UVM_MEDIUM);
-
- 
-     end
-
-     else if(reqRead.transferType == NON_BLOCKING_WRITE) begin
-     end
-      */
      axi4LiteSlaveReadSeqItemPort.item_done();
    end
  

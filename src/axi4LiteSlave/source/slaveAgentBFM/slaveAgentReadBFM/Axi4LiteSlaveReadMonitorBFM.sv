@@ -3,17 +3,10 @@
 
 import Axi4LiteGlobalsPkg::*;
 
-interface Axi4LiteSlaveReadMonitorBFM(input bit aclk, input bit aresetn,
-                                      //Read Address Channel Signals
-                                      input  [ADDRESS_WIDTH-1: 0]araddr,
-                                      input  [2:0]arprot,
-                                      input  arvalid,
-                                      input  arready, 
-                                      //Read Data Channel Signals
-                                      input  [DATA_WIDTH-1: 0]rdata,
-                                      input  [1:0]rresp,
-                                      input  rvalid,
-                                      input  rready  
+interface Axi4LiteSlaveReadMonitorBFM(input bit aclk, 
+                                      input bit aresetn,
+                                      input valid,
+                                      input ready 
                                      );  
 
   import uvm_pkg::*;

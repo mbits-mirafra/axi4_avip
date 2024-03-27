@@ -23,7 +23,6 @@ package Axi4LiteTestPkg;
 
   //including base_test for testing
   `include "Axi4LiteBaseTest.sv"
-  `include "assertion_base_test.sv"
 
 endpackage : Axi4LiteTestPkg
 

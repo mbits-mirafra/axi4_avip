@@ -8,23 +8,10 @@
 //--------------------------------------------------------------------------------------------
 import Axi4LiteGlobalsPkg::*;
 
-interface Axi4LiteSlaveWriteMonitorBFM(input bit aclk, input bit aresetn,
-                                       //Write Address Channel Signals
-                                       input  [ADDRESS_WIDTH-1:0]awaddr,
-                                       input  [2:0]awprot,
-                                       input  awvalid,
-                                       input  awready,
-      
-                                       //Write Data Channel Signals
-                                       input  [DATA_WIDTH-1: 0]wdata,
-                                       input  [(DATA_WIDTH/8)-1:0]wstrb,
-                                       input  wvalid,
-                                       input  wready,
-      
-                                       //Write Response Channel Signals
-                                       input  [1:0]bresp,
-                                       input  bvalid,
-                                       input  bready
+interface Axi4LiteSlaveWriteMonitorBFM(input bit aclk, 
+                                       input bit aresetn,
+                                       input  valid,
+                                       input  ready
                                      );  
 
   import uvm_pkg::*;

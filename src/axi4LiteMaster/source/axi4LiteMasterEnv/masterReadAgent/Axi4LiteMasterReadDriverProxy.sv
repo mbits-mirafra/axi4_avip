@@ -58,24 +58,6 @@ task Axi4LiteMasterReadDriverProxy::readTransferTask();
     axi4LiteMasterReadSeqItemPort.get_next_item(reqRead); 
   `uvm_info(get_type_name(),$sformatf("MASTER_READ_TASK::Before Sending_Req_Read_Packet = \n%s",reqRead.sprint()),UVM_HIGH);
 
-  /*
-     Axi4LiteMasterReadConfigConverter::fromClass(axi4LiteMasterReadAgentConfig, masterReadCfgStruct); 
-     `uvm_info(get_type_name(),$sformatf("MASTER_READ_TASK::Checking transfer type Before calling task if = %s",reqRead.transferType),UVM_FULL);
-
-     if(reqRead.transferType == BLOCKING_WRITE) begin
-         Axi4LiteMasterReadTransaction localMasterReadTx;
-         Axi4LiteMasterReadSeqItemConverter::fromReadClass(reqRead, masterReadCharStruct);
-         `uvm_info(get_type_name(),$sformatf("MASTER_READ_TASK::Checking transfer type = %s",reqRead.transferType),UVM_MEDIUM);        
-         axi4LiteMasterReadDriverBFM.masterReadAddressChannelTask(masterReadCharStruct, masterReadCfgStruct);
-         axi4LiteMasterReadDriverBFM.masterReadDataChannelTask(masterReadCharStruct, masterReadCfgStruct);
-
-         Axi4LiteMasterReadSeqItemConverter::toReadClass(masterReadCharStruct,localMasterReadTx);
-         `uvm_info(get_type_name(),$sformatf("MASTER_READ_TASK::Response Received_Req_write_Packet = \n %s",localMasterReadTx.sprint()),UVM_MEDIUM); 
-      end
-
-     else if(reqRead.transferType == NON_BLOCKING_WRITE) begin
-     end
-     */
      axi4LiteMasterReadSeqItemPort.item_done();
    end
  

@@ -7,26 +7,8 @@ module Axi4LiteMasterAgentBFM #(parameter int ADDR_WIDTH = 32,
                                 )
                                 (input   aclk,
                                  input   aresetn,
-                                 output  awaddr,
-                                 output  awprot,
-                                 output  awvalid,
-                                 input   awready,
-                                 output  wdata,
-                                 output  wstrb,
-                                 output  wvalid,
-                                 input   wready,
-                                 input   bresp,
-                                 input   bvalid,
-                                 output  bready,
-
-                                 output  araddr,
-                                 output  arprot,
-                                 output  arvalid,
-                                 input   arready,
-                                 input   rdata,
-                                 output  rresp,
-                                 input   rvalid,
-                                 output  rready
+                                 output  valid,
+                                 input   ready
                                  );
    
   import uvm_pkg::*;
@@ -38,51 +20,17 @@ module Axi4LiteMasterAgentBFM #(parameter int ADDR_WIDTH = 32,
 
   Axi4LiteMasterWriteAgentBFM axi4LiteMasterWriteAgentBFM (.aclk(axi4LiteMasterInterface.aclk), 
                                                          .aresetn(axi4LiteMasterInterface.aresetn),
-                                                         .awaddr(axi4LiteMasterInterface.awaddr),
-                                                         .awprot(axi4LiteMasterInterface.awprot),
-                                                         .awvalid(axi4LiteMasterInterface.awvalid),
-                                                         .awready(axi4LiteMasterInterface.awready),
-                                                         .wdata(axi4LiteMasterInterface.wdata),
-                                                         .wstrb(axi4LiteMasterInterface.wstrb),
-                                                         .wvalid(axi4LiteMasterInterface.wvalid),
-                                                         .wready(axi4LiteMasterInterface.wready),
-                                                         .bresp(axi4LiteMasterInterface.bresp),
-                                                         .bvalid(axi4LiteMasterInterface.bvalid),
-                                                         .bready(axi4LiteMasterInterface.bready)
+                                                         .valid(axi4LiteMasterInterface.valid),
+                                                         .ready(axi4LiteMasterInterface.ready)
                                                         );
 
   Axi4LiteMasterReadAgentBFM axi4LiteMasterReadAgentBFM (.aclk(axi4LiteMasterInterface.aclk), 
                                                        .aresetn(axi4LiteMasterInterface.aresetn),
-                                                       .araddr(axi4LiteMasterInterface.araddr),
-                                                       .arprot(axi4LiteMasterInterface.arprot),
-                                                       .arvalid(axi4LiteMasterInterface.arvalid),
-                                                       .arready(axi4LiteMasterInterface.arready),
-                                                       .rdata(axi4LiteMasterInterface.rdata),
-                                                       .rresp(axi4LiteMasterInterface.rresp),
-                                                       .rvalid(axi4LiteMasterInterface.rvalid),
-                                                       .rready(axi4LiteMasterInterface.rready) 
+                                                       .valid(axi4LiteMasterInterface.valid),
+                                                       .ready(axi4LiteMasterInterface.ready)
                                                       );
-  assign awaddr  = axi4LiteMasterInterface.awaddr;
-  assign awprot  = axi4LiteMasterInterface.awprot;
-  assign awvalid = axi4LiteMasterInterface.awvalid;
-  assign wdata   = axi4LiteMasterInterface.wdata;
-  assign wstrb   = axi4LiteMasterInterface.wstrb;
-  assign wvalid  = axi4LiteMasterInterface.wvalid;
-  assign bready  = axi4LiteMasterInterface.bready;
-
-  assign araddr  = axi4LiteMasterInterface.araddr;
-  assign arprot  = axi4LiteMasterInterface.arprot;  
-  assign arvalid = axi4LiteMasterInterface.arvalid; 
-  assign rready  = axi4LiteMasterInterface.rready; 
-
-  assign axi4LiteMasterInterface.awready = awready;   
-  assign axi4LiteMasterInterface.wready  = wready;  
-  assign axi4LiteMasterInterface.bresp   = bresp;  
-  assign axi4LiteMasterInterface.bvalid  = bvalid;  
-  assign axi4LiteMasterInterface.arready = arready;  
-  assign axi4LiteMasterInterface.rdata   = rdata;  
-  assign axi4LiteMasterInterface.rresp   = rresp;  
-  assign axi4LiteMasterInterface.rvalid  = rvalid;  
+  assign valid = axi4LiteMasterInterface.valid;
+  assign axi4LiteMasterInterface.ready = ready;   
 
   initial begin
     `uvm_info("Axi4LiteMasterAgent",$sformatf("AXI4LITEMASTERAGENTBFM"),UVM_LOW);

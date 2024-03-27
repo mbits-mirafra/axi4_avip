@@ -6,14 +6,8 @@ module Axi4LiteSlaveReadAgentBFM #(parameter int ADDR_WIDTH = 32,
                                    )
                                    (input  aclk,
                                     input  aresetn,
-                                    input  araddr,
-                                    input  arprot,
-                                    input  arvalid,
-                                    output arready,
-                                    output rdata,
-                                    input  rresp,
-                                    output rvalid,
-                                    input  rready
+                                    input  valid,
+                                    output ready
                                     );
    
   import uvm_pkg::*;
@@ -25,36 +19,18 @@ module Axi4LiteSlaveReadAgentBFM #(parameter int ADDR_WIDTH = 32,
 
   Axi4LiteSlaveReadDriverBFM axi4LiteSlaveReadDriverBFM (.aclk(axi4LiteSlaveReadInterface.aclk), 
                                                          .aresetn(axi4LiteSlaveReadInterface.aresetn),
-                                                         .araddr(axi4LiteSlaveReadInterface.araddr),
-                                                         .arprot(axi4LiteSlaveReadInterface.arprot),
-                                                         .arvalid(axi4LiteSlaveReadInterface.arvalid),
-                                                         .arready(axi4LiteSlaveReadInterface.arready),
-                                                         .rdata(axi4LiteSlaveReadInterface.rdata),
-                                                         .rresp(axi4LiteSlaveReadInterface.rresp),
-                                                         .rvalid(axi4LiteSlaveReadInterface.rvalid),
-                                                         .rready(axi4LiteSlaveReadInterface.rready) 
+                                                         .valid(axi4LiteSlaveReadInterface.valid),
+                                                         .ready(axi4LiteSlaveReadInterface.ready)
                                                         );
 
   Axi4LiteSlaveReadMonitorBFM axi4LiteSlaveReadMonitorBFM (.aclk(axi4LiteSlaveReadInterface.aclk),
                                                            .aresetn(axi4LiteSlaveReadInterface.aresetn),
-                                                           .araddr(axi4LiteSlaveReadInterface.araddr),
-                                                           .arprot(axi4LiteSlaveReadInterface.arprot),
-                                                           .arvalid(axi4LiteSlaveReadInterface.arvalid),
-                                                           .arready(axi4LiteSlaveReadInterface.arready),
-                                                           .rdata(axi4LiteSlaveReadInterface.rdata),
-                                                           .rresp(axi4LiteSlaveReadInterface.rresp),
-                                                           .rvalid(axi4LiteSlaveReadInterface.rvalid),
-                                                           .rready(axi4LiteSlaveReadInterface.rready)
+                                                           .valid(axi4LiteSlaveReadInterface.valid),
+                                                           .ready(axi4LiteSlaveReadInterface.ready)
                                                           );
 
-  assign axi4LiteSlaveReadInterface.araddr  = araddr; 
-  assign axi4LiteSlaveReadInterface.arprot  = arprot;   
-  assign axi4LiteSlaveReadInterface.arvalid = arvalid; 
-  assign axi4LiteSlaveReadInterface.rdata   = rdata;  
-  assign axi4LiteSlaveReadInterface.rready  = rready;  
-  assign arready = axi4LiteSlaveReadInterface.arready; 
-  assign rresp   = axi4LiteSlaveReadInterface.rresp; 
-  assign rvalid  = axi4LiteSlaveReadInterface.rvalid; 
+  assign axi4LiteSlaveReadInterface.valid = valid; 
+  assign ready = axi4LiteSlaveReadInterface.ready; 
 
 
   initial begin
@@ -64,14 +40,8 @@ module Axi4LiteSlaveReadAgentBFM #(parameter int ADDR_WIDTH = 32,
 
   bind axi4LiteSlaveReadMonitorBFM Axi4LiteSlaveReadAssertions M_A (.aclk(aclk),
                                                          .aresetn(aresetn),
-                                                         .araddr(araddr),  
-                                                         .arprot(arprot),
-                                                         .arvalid(arvalid), 
-                                                         .arready(arready),
-                                                         .rdata(rdata),
-                                                         .rresp(rresp),
-                                                         .rvalid(rvalid),
-                                                         .rready(rready)
+                                                         .valid(valid), 
+                                                         .ready(ready)
                                                         );
 
 

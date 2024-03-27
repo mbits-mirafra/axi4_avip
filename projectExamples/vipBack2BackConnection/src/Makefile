@@ -23,9 +23,6 @@
 #
 # make target -i 
 
-# // TODO(mshariff): 
-# Add .git rules to ignore log files, basically the sim folder except makefile and scripts
-
 
 .IGNORE:
 	compile
@@ -57,12 +54,6 @@ usage:
 	echo "Example:":
 	echo "make simulate test=base_test uvm_verbosity=UVM_HIGH";
 	echo "";
-	echo "To run regression:"
-	echo "make regression testlist_name=<regression_testlist_name.list>";
-	echo "";
-	echo "Example:":
-	echo "make regression testlist_name=axi4_transfers_regression.list";
-	echo "";
 	echo "-----------------------------------------------------------------";
 	echo "-----------------------------------------------------------------";
 	echo "";
@@ -80,8 +71,9 @@ compile:
 	+acc \
 	+cover \
 	+fcover \
-	-l Axi4LiteCompile.log \
-	-f ../Axi4LiteCompile.f 
+	-l Axi4LiteAssertionCompile.log \
+	./Axi4LiteAssertionTB.sv \
+	./Axi4LiteAssertions.sv 
 
 	# -s means silent mode
 	#  The command executed along with the output will be displayed on the terminal
@@ -90,26 +82,14 @@ compile:
 	# or use .SILENT
 	make compile_war_err
 
-# Setting a default test as base_test
-ifndef test
-override test = Axi4LiteBaseTest
-endif
-
 # Setting the default uvm_verbosity to UVM_MEDIUM
 ifndef uvm_verbosity
 override uvm_verbosity = UVM_MEDIUM
 endif
 
-
-
-## For randomized seed
-# TODO(mshariff): 
-#Add this line after -sva 
-#-sv_seed random 
-
 # Setting the default test folder to test name 
 ifndef test_folder
-override test_folder = $(test)
+override test_folder = Axi4LiteAssertionTB
 endif
 
 simulate:
@@ -118,16 +98,14 @@ simulate:
 	# Use -novopt for no optimization - Makes the simulation slower
 	# vsim -pli finesim.so -coverage top
 	vsim -vopt \
-	work.HvlTop \
-	work.HdlTop \
+	work.Axi4LiteAssertionTB \
 	-voptargs=+acc=npr \
 	-assertdebug \
-	+UVM_TESTNAME=$(test) \
 	+UVM_VERBOSITY=$(uvm_verbosity) \
-	-l $(test_folder)/$(test).log \
+	-l $(test_folder)/Axi4LiteAssertionTB.log \
 	-sva \
   -coverage \
-	-c -do "log -r /*; add wave -r /*; coverage save -onexit -assert -directive -cvg -codeAll $(test_folder)/$(test)_coverage.ucdb; run -all; exit" \
+	-c -do "log -r /*; add wave -r /*; coverage save -onexit -assert -directive -cvg -codeAll $(test_folder)/Axi4LiteAssertionTB_coverage.ucdb; run -all; exit" \
 	-wlf $(test_folder)/waveform.wlf
 
 
@@ -136,12 +114,12 @@ simulate:
 
 	## TODO(mshariff): 
 	## # For coverage report in text format 
-	## #vcover report -text $(test)/$(test)_cov
-	# -c -do "log -r /*; add wave -r /*; coverage save -onexit -assert -directive -cvg -codeAll $(test)/coverage.ucdb; coverage report -file $(teset)/coverage.txt -byfile -detail -noannotate -option -directive -cvg -details -verbose; run -all; exit" \
+	## #vcover report -text Axi4LiteAssertionTB/Axi4LiteAssertionTB_cov
+	# -c -do "log -r /*; add wave -r /*; coverage save -onexit -assert -directive -cvg -codeAll Axi4LiteAssertionTB/coverage.ucdb; coverage report -file $(teset)/coverage.txt -byfile -detail -noannotate -option -directive -cvg -details -verbose; run -all; exit" \
 	# vcover report -file  -byfile -detail -noannotate -option -cvg
 
 	# For coverage report in HTML format 
-	vcover report -html $(test_folder)/$(test)_coverage.ucdb -htmldir $(test_folder)/html_cov_report -details
+	vcover report -html $(test_folder)/Axi4LiteAssertionTB_coverage.ucdb -htmldir $(test_folder)/html_cov_report -details
 
 	# To open the html coverage report
 	# firefox test_folder/html_cov_report/index.html &
@@ -163,21 +141,6 @@ clean_compile:
 #	make clean_compile
 #	make clean_simulate
 
-##
-## For Regression and coverage merge
-##
-regression:
-	# Run compilation
-	#make compile
-	make clean_simulate
-	# Run simualtion - regression 
-	python regression_handling.py $(testlist_name)
-	#	# Get the tests from regression list
-	#	grep "_test" ../../src/hvl_top/testlists/axi4_simple_fd_regression.list | grep -v "\#" > reg_list
-	#	make simulate test=value #Get the name from regression list
-	#	Merge coverage
-	make merge_cov_report
-		
 # For merge to happen, the coverage names for each test must be different
 #
 merge_cov_report:
@@ -198,11 +161,11 @@ compile_war_err:
 	echo "-----------------------------------------------------------------";
 	echo "------------------- Compilation Report --------------------------";
 	echo "";
-	grep "^** " Axi4LiteCompile.log;
+	grep "^** " Axi4LiteAssertionCompile.log;
 	echo "";
-	grep "^Error" Axi4LiteCompile.log;
+	grep "^Error" Axi4LiteAssertionCompile.log;
 	echo "";
-	echo "Log file path: Axi4LiteCompile.log"
+	echo "Log file path: Axi4LiteAssertionCompile.log"
 	echo "";
 	echo "-----------------------------------------------------------------";
 	echo "-----------------------------------------------------------------";
@@ -214,20 +177,20 @@ simulate_war_err:
 	echo "-------------------- Simulation Report --------------------------";
 	echo "";
 	echo "Simulator Errors";
-	grep "Error" $(test_folder)/$(test).log;
+	grep "Error" $(test_folder)/Axi4LiteAssertionTB.log;
 	echo "";
 	echo "UVM Fatal";
-	grep "UVM_FATAL" $(test_folder)/$(test).log;
+	grep "UVM_FATAL" $(test_folder)/Axi4LiteAssertionTB.log;
 	echo "";
 	echo "UVM Errors";
-	grep "UVM_ERROR" $(test_folder)/$(test).log;
+	grep "UVM_ERROR" $(test_folder)/Axi4LiteAssertionTB.log;
 	echo "";
 	echo "UVM Warnings";
-	grep "UVM_WARNING" $(test_folder)/$(test).log;
+	grep "UVM_WARNING" $(test_folder)/Axi4LiteAssertionTB.log;
 	echo "";
-	echo "Testname: $(test)"
+	echo "Testname: Axi4LiteAssertionTB"
 	echo "";
-	echo "Log file path: $(test_folder)/$(test).log"
+	echo "Log file path: $(test_folder)/Axi4LiteAssertionTB.log"
 	echo "";
 	echo "Waveform: vsim -view $(test_folder)/waveform.wlf &"
 	echo "";

@@ -3,19 +3,10 @@
 
 import Axi4LiteGlobalsPkg::*;
 
-interface Axi4LiteSlaveReadDriverBFM(input bit                      aclk, 
-                                     input bit                      aresetn,
-                                     //Read Address Channel
-                                     input [ADDRESS_WIDTH-1: 0]  araddr  ,
-                                     input [2:0]                 arprot  ,
-                                     input                       arvalid ,
-                                     output reg                  arready ,
-     
-                                     //Read Data Channel
-                                     output reg [DATA_WIDTH-1: 0]    rdata  ,
-                                     output reg [1:0]                rresp  ,
-                                     output reg                      rvalid ,
-                                     input		                        rready   
+interface Axi4LiteSlaveReadDriverBFM(input bit  aclk, 
+                                     input bit  aresetn,
+                                     input      valid,
+                                     output reg ready
                                     );  
   
   import uvm_pkg::*;
@@ -34,10 +25,7 @@ interface Axi4LiteSlaveReadDriverBFM(input bit                      aclk,
    task wait_for_system_reset();
     @(negedge aresetn);
     `uvm_info(name,$sformatf("SYSTEM RESET ACTIVATED"),UVM_NONE)
-    rvalid  <= 0;
-    arready <= 0;
-    rdata   <= 'b0;
-    rresp   <= 'b0;
+    ready <= 0;
     @(posedge aresetn);
     `uvm_info(name,$sformatf("SYSTEM RESET DE-ACTIVATED"),UVM_NONE)
   endtask 

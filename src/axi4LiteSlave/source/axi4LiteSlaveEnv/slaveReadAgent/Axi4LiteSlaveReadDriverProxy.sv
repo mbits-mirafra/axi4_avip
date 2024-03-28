@@ -11,6 +11,7 @@ class Axi4LiteSlaveReadDriverProxy extends uvm_driver#(Axi4LiteSlaveReadTransact
   RSP rspRead;
 
   Axi4LiteSlaveReadAgentConfig axi4LiteSlaveReadAgentConfig;
+  Axi4LiteSlaveReadSeqItemConverter axi4LiteSlaveReadSeqItemConverter; 
 
   virtual Axi4LiteSlaveReadDriverBFM axi4LiteSlaveReadDriverBFM;
 
@@ -62,6 +63,13 @@ task Axi4LiteSlaveReadDriverProxy::readTransferTask();
 
     axi4LiteSlaveReadSeqItemPort.get_next_item(reqRead);
   `uvm_info(get_type_name(),$sformatf("SLAVE_READ_TASK::Before Sending_Req_Read_Packet = \n%s",reqRead.sprint()),UVM_HIGH);
+     
+     Axi4LiteSlaveReadSeqItemConverter::fromReadClass(reqRead, slaveReadCharStruct);
+     Axi4LiteSlaveReadConfigConverter::fromClass(axi4LiteSlaveReadAgentConfig, slaveReadCfgStruct);
+
+     axi4LiteSlaveReadDriverBFM.readChannelTask(slaveReadCfgStruct, slaveReadCharStruct);
+
+     Axi4LiteSlaveReadSeqItemConverter::toReadClass(slaveReadCharStruct,slaveReadTx);
 
      axi4LiteSlaveReadSeqItemPort.item_done();
    end

@@ -24,16 +24,32 @@ interface Axi4LiteSlaveReadDriverBFM(input bit  aclk,
 
    task wait_for_system_reset();
     @(negedge aresetn);
-    `uvm_info(name,$sformatf("SYSTEM RESET ACTIVATED"),UVM_NONE)
+    `uvm_info(name,$sformatf("SYSTEM RESET ACTIVATED"),UVM_HIGH)
     ready <= 0;
     @(posedge aresetn);
-    `uvm_info(name,$sformatf("SYSTEM RESET DE-ACTIVATED"),UVM_NONE)
+    `uvm_info(name,$sformatf("SYSTEM RESET DE-ACTIVATED"),UVM_HIGH)
   endtask 
  
   initial begin
     `uvm_info(name,$sformatf(name),UVM_LOW)
   end
 
+  task readChannelTask(input axi4LiteReadTransferCfgStruct slaveReadCfgStruct, 
+                       inout axi4LiteReadTransferCharStruct slaveReadCharStruct
+                      );
+    `uvm_info(name,$sformatf("READ_CHANNEL_TASK_STARTED"),UVM_HIGH)
+    do begin
+      @(posedge aclk);
+    end while(valid===0);
+
+    repeat(slaveReadCharStruct.readDelayForReady) begin 
+      @(posedge aclk);
+    end
+    ready <= 1'b1;
+    `uvm_info(name,$sformatf("READ_CHANNEL_TASK_ENDED"),UVM_HIGH)
+  endtask
+
+/*
   task slaveReadAddressChannelTask(inout axi4LiteReadTransferCharStruct slaveReadCharStruct,axi4LiteReadTransferCfgStruct slaveReadCfgStruct);
 
   endtask : slaveReadAddressChannelTask
@@ -46,9 +62,7 @@ task slaveReadResponseChannelTask(inout axi4LiteReadTransferCharStruct slaveRead
 
 endtask : slaveReadResponseChannelTask
 
-
-
-  
+*/
  endinterface : Axi4LiteSlaveReadDriverBFM
 
 `endif

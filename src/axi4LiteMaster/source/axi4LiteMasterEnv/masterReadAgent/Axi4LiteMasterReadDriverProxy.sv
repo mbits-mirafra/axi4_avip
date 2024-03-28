@@ -58,7 +58,14 @@ task Axi4LiteMasterReadDriverProxy::readTransferTask();
     axi4LiteMasterReadSeqItemPort.get_next_item(reqRead); 
   `uvm_info(get_type_name(),$sformatf("MASTER_READ_TASK::Before Sending_Req_Read_Packet = \n%s",reqRead.sprint()),UVM_HIGH);
 
-     axi4LiteMasterReadSeqItemPort.item_done();
+    Axi4LiteMasterReadSeqItemConverter::fromReadClass(reqRead, masterReadCharStruct);
+    Axi4LiteMasterReadConfigConverter::fromClass(axi4LiteMasterReadAgentConfig, masterReadCfgStruct);
+
+    axi4LiteMasterReadDriverBFM.readChannelTask(masterReadCfgStruct, masterReadCharStruct);
+
+    Axi4LiteMasterReadSeqItemConverter::toReadClass(masterReadCharStruct,masterReadTx);
+
+    axi4LiteMasterReadSeqItemPort.item_done();
    end
  
 endtask : readTransferTask

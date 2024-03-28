@@ -9,6 +9,7 @@ package Axi4LiteMasterWriteSeqPkg;
   import Axi4LiteGlobalsPkg::*; 
  
   `include "Axi4LiteMasterWriteBaseSeq.sv"
+  `include "Axi4LiteMasterWriteTransferValidGenerateSeq.sv"
 
 endpackage : Axi4LiteMasterWriteSeqPkg
 `endif

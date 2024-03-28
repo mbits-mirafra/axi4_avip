@@ -20,15 +20,22 @@ function void Axi4LiteSlaveReadSeqItemConverter::fromReadClass(input Axi4LiteSla
 
   `uvm_info("axi4Lite_Slave_Read_Seq_item_conv_class",$sformatf("------------------------------------fromReadClass----------------------------------"),UVM_HIGH);
 
+  output_conv_h.readDelayForReady = input_conv_h.readDelayForReady;
+
 endfunction : fromReadClass
 
 function void Axi4LiteSlaveReadSeqItemConverter::toReadClass(input axi4LiteReadTransferCharStruct input_conv_h, output Axi4LiteSlaveReadTransaction output_conv_h);
   `uvm_info("axi4Lite_Slave_Read_Seq_item_conv_class",$sformatf("--------------------------------------------toReadClass--------------------------"),UVM_HIGH);
  
+  output_conv_h = new();
+  output_conv_h.readDelayForReady = input_conv_h.readDelayForReady;
+
 endfunction : toReadClass
 
 function void Axi4LiteSlaveReadSeqItemConverter::do_print(uvm_printer printer);
+  axi4LiteReadTransferCharStruct readCharStruct; 
   super.do_print(printer);
+  printer.print_field("readDelayForReady",readCharStruct.readDelayForReady,$bits(readCharStruct.readDelayForReady),UVM_HEX);
 endfunction : do_print
 
 `endif

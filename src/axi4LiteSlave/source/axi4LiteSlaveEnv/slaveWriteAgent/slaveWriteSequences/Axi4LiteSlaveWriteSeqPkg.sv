@@ -9,6 +9,7 @@ package Axi4LiteSlaveWriteSeqPkg;
   import Axi4LiteGlobalsPkg::*; 
  
   `include "Axi4LiteSlaveWriteBaseSeq.sv"
+  `include "Axi4LiteSlaveWriteTransferRandomReadyDelaySeq.sv"
 
 endpackage : Axi4LiteSlaveWriteSeqPkg
 `endif

@@ -135,6 +135,24 @@ function void Axi4LiteBaseTest::setupAxi4LiteSlaveWriteAgentConfig();
     axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveWriteAgentConfig[i].isActive = uvm_active_passive_enum'(UVM_ACTIVE);
     axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveWriteAgentConfig[i].hasCoverage = 1;
 
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveWriteAgentConfig[i].delayForReadyWriteCfgValue = new[DELAY_VALUE];
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveWriteAgentConfig[i].delayForReadyWriteCfgValue[0]  = DELAY_VALUE0;
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveWriteAgentConfig[i].delayForReadyWriteCfgValue[1]  = DELAY_VALUE1;
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveWriteAgentConfig[i].delayForReadyWriteCfgValue[2]  = DELAY_VALUE2;
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveWriteAgentConfig[i].delayForReadyWriteCfgValue[3]  = DELAY_VALUE3;
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveWriteAgentConfig[i].delayForReadyWriteCfgValue[4]  = DELAY_VALUE4;
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveWriteAgentConfig[i].delayForReadyWriteCfgValue[5]  = DELAY_VALUE5;
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveWriteAgentConfig[i].delayForReadyWriteCfgValue[6]  = DELAY_VALUE6;
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveWriteAgentConfig[i].delayForReadyWriteCfgValue[7]  = DELAY_VALUE7;
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveWriteAgentConfig[i].delayForReadyWriteCfgValue[8]  = DELAY_VALUE8;
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveWriteAgentConfig[i].delayForReadyWriteCfgValue[9]  = DELAY_VALUE9;
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveWriteAgentConfig[i].delayForReadyWriteCfgValue[10] = DELAY_VALUE10;
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveWriteAgentConfig[i].delayForReadyWriteCfgValue[11] = DELAY_VALUE11;
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveWriteAgentConfig[i].delayForReadyWriteCfgValue[12] = DELAY_VALUE12;
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveWriteAgentConfig[i].delayForReadyWriteCfgValue[13] = DELAY_VALUE13;
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveWriteAgentConfig[i].delayForReadyWriteCfgValue[14] = DELAY_VALUE14;
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveWriteAgentConfig[i].delayForReadyWriteCfgValue[15] = DELAY_VALUE15;
+
     uvm_config_db#(Axi4LiteSlaveWriteAgentConfig)::set(
         this, "*", $sformatf("Axi4LiteSlaveWriteAgentConfig[%0d]", i),
         axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveWriteAgentConfig[i]);
@@ -154,6 +172,24 @@ function void Axi4LiteBaseTest::setupAxi4LiteSlaveReadAgentConfig();
         $sformatf("axi4LiteSlaveReadAgentConfig[%0d]", i));
     axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveReadAgentConfig[i].isActive = uvm_active_passive_enum'(UVM_ACTIVE);
     axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveReadAgentConfig[i].hasCoverage = 1;
+
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveReadAgentConfig[i].delayForReadyReadCfgValue = new[DELAY_VALUE];
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveReadAgentConfig[i].delayForReadyReadCfgValue[0]  = DELAY_VALUE0;
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveReadAgentConfig[i].delayForReadyReadCfgValue[1]  = DELAY_VALUE1;
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveReadAgentConfig[i].delayForReadyReadCfgValue[2]  = DELAY_VALUE2;
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveReadAgentConfig[i].delayForReadyReadCfgValue[3]  = DELAY_VALUE3;
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveReadAgentConfig[i].delayForReadyReadCfgValue[4]  = DELAY_VALUE4;
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveReadAgentConfig[i].delayForReadyReadCfgValue[5]  = DELAY_VALUE5;
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveReadAgentConfig[i].delayForReadyReadCfgValue[6]  = DELAY_VALUE6;
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveReadAgentConfig[i].delayForReadyReadCfgValue[7]  = DELAY_VALUE7;
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveReadAgentConfig[i].delayForReadyReadCfgValue[8]  = DELAY_VALUE8;
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveReadAgentConfig[i].delayForReadyReadCfgValue[9]  = DELAY_VALUE9;
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveReadAgentConfig[i].delayForReadyReadCfgValue[10] = DELAY_VALUE10;
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveReadAgentConfig[i].delayForReadyReadCfgValue[11] = DELAY_VALUE11;
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveReadAgentConfig[i].delayForReadyReadCfgValue[12] = DELAY_VALUE12;
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveReadAgentConfig[i].delayForReadyReadCfgValue[13] = DELAY_VALUE13;
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveReadAgentConfig[i].delayForReadyReadCfgValue[14] = DELAY_VALUE14;
+    axi4LiteEnvConfig.axi4LiteSlaveEnvConfig.axi4LiteSlaveReadAgentConfig[i].delayForReadyReadCfgValue[15] = DELAY_VALUE15;
 
     uvm_config_db#(Axi4LiteSlaveReadAgentConfig)::set(
         this, "*", $sformatf("Axi4LiteSlaveReadAgentConfig[%0d]", i),

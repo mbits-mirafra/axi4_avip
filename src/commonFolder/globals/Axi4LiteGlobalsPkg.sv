@@ -15,6 +15,27 @@ package Axi4LiteGlobalsPkg;
 
   parameter int DATA_WIDTH = 32;
 
+  parameter int DELAY_WIDTH = 4;
+
+  parameter int DELAY_VALUE = 16;
+
+  parameter DELAY_VALUE0  = 4'b0000;
+  parameter DELAY_VALUE1  = 4'b0001;
+  parameter DELAY_VALUE2  = 4'b0010;
+  parameter DELAY_VALUE3  = 4'b0011;
+  parameter DELAY_VALUE4  = 4'b0100;
+  parameter DELAY_VALUE5  = 4'b0101;
+  parameter DELAY_VALUE6  = 4'b0110;
+  parameter DELAY_VALUE7  = 4'b0111;
+  parameter DELAY_VALUE8  = 4'b1000;
+  parameter DELAY_VALUE9  = 4'b1001;
+  parameter DELAY_VALUE10 = 4'b1010;
+  parameter DELAY_VALUE11 = 4'b1011;
+  parameter DELAY_VALUE12 = 4'b1100;
+  parameter DELAY_VALUE13 = 4'b1101;
+  parameter DELAY_VALUE14 = 4'b1110;
+  parameter DELAY_VALUE15 = 4'b1111;
+
   typedef enum bit {
     BIG_ENDIAN    = 1'b0,
     LITTLE_ENDIAN = 1'b1
@@ -71,51 +92,19 @@ package Axi4LiteGlobalsPkg;
 
   
   typedef struct {
-    //Write Address Channel Signals
-    bit [ADDRESS_WIDTH-1:0]  awaddr;
-    bit [2:0]                awprot;
-    bit                      awvalid;
-    bit	                     awready;
-    //Write Data Channel Signals
-    bit [DATA_WIDTH-1:0]     wdata;
-    bit [(DATA_WIDTH/8)-1:0] wstrb;
-    //Write Response Channel Signals
-    bit [1:0] bresp;
-    bit       bvalid;
-    bit       transactionType; 
-    int       waitCountWriteAddressChannel;
-    int       waitCountWriteDataChannel;
-    int       waitCountWriteResponseChannel;
-    int       noOfWaitStates;
+    bit [DELAY_WIDTH-1:0]   writeDelayForReady;
   } axi4LiteWriteTransferCharStruct; 
 
   typedef struct {
-    //Read Address Channel Signals
-    bit [ADDRESS_WIDTH-1:0] araddr;
-    bit               [2:0] arprot;
-    //Read Data Channel Signals
-    bit [DATA_WIDTH-1:0]    rdata;
-    bit [1:0]               rresp; 
-    bit                     rvalid;
-    bit                     transactionType; 
-    int                     waitCountReadAddressChannel;
-    int                     waitCountReadDataChannel;
-    int                     noOfWaitStates;
+    bit [DELAY_WIDTH-1:0]   readDelayForReady;
   } axi4LiteReadTransferCharStruct;
 
   typedef struct {
-    bit [ADDRESS_WIDTH-1:0] minAddress;
-    bit [ADDRESS_WIDTH-1:0] maxAddress;
-    int                     waitCountWriteAddressChannel;
-    int                     waitCountWriteDataChannel;
-    int                     waitCountWriteResponseChannel;
+    bit [DELAY_WIDTH-1:0] delayForReadyWriteCfgValue;
   } axi4LiteWriteTransferCfgStruct;
 
   typedef struct {
-    bit [ADDRESS_WIDTH-1:0] minAddress;
-    bit [ADDRESS_WIDTH-1:0] maxAddress;
-    int                     waitCountReadAddressChannel;
-    int                     waitCountReadDataChannel;
+    bit [DELAY_WIDTH-1:0] delayForReadyReadCfgValue;
   } axi4LiteReadTransferCfgStruct;
 
 endpackage : Axi4LiteGlobalsPkg

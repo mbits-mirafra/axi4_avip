@@ -11,6 +11,7 @@ class Axi4LiteSlaveWriteDriverProxy extends uvm_driver#(Axi4LiteSlaveWriteTransa
   RSP rspWrite;
 
   Axi4LiteSlaveWriteAgentConfig axi4LiteSlaveWriteAgentConfig;
+  Axi4LiteSlaveWriteSeqItemConverter axi4LiteSlaveWriteSeqItemConverter; 
 
   virtual Axi4LiteSlaveWriteDriverBFM axi4LiteSlaveWriteDriverBFM;
 
@@ -63,6 +64,14 @@ task Axi4LiteSlaveWriteDriverProxy::writeTransferTask();
 
     axi4LiteSlaveWriteSeqItemPort.get_next_item(reqWrite);
   `uvm_info(get_type_name(),$sformatf("SLAVE_WRITE_TASK::Before Sending_Req_Write_Packet = \n%s",reqWrite.sprint()),UVM_HIGH);
+
+     Axi4LiteSlaveWriteSeqItemConverter::fromWriteClass(reqWrite, slaveWriteCharStruct);
+     Axi4LiteSlaveWriteConfigConverter::fromClass(axi4LiteSlaveWriteAgentConfig, slaveWriteCfgStruct);
+
+     axi4LiteSlaveWriteDriverBFM.writeChannelTask(slaveWriteCfgStruct, slaveWriteCharStruct);
+
+     Axi4LiteSlaveWriteSeqItemConverter::toWriteClass(slaveWriteCharStruct,slaveWriteTx);
+
      axi4LiteSlaveWriteSeqItemPort.item_done();
    end
  

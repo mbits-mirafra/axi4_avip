@@ -4,8 +4,10 @@
 class Axi4LiteSlaveWriteBaseSeq extends uvm_sequence #(Axi4LiteSlaveWriteTransaction);
   `uvm_object_utils(Axi4LiteSlaveWriteBaseSeq)
   
-    extern function new(string name = "Axi4LiteSlaveWriteBaseSeq");
-    extern task body();
+  `uvm_declare_p_sequencer(Axi4LiteSlaveWriteSequencer)
+
+  extern function new(string name = "Axi4LiteSlaveWriteBaseSeq");
+  extern task body();
 endclass : Axi4LiteSlaveWriteBaseSeq
 
 function Axi4LiteSlaveWriteBaseSeq::new(string name = "Axi4LiteSlaveWriteBaseSeq");
@@ -13,7 +15,10 @@ function Axi4LiteSlaveWriteBaseSeq::new(string name = "Axi4LiteSlaveWriteBaseSeq
 endfunction : new
 
 task Axi4LiteSlaveWriteBaseSeq::body();
-  req = Axi4LiteSlaveWriteTransaction::type_id::create("req");
+  //dynamic casting of p_sequencer and m_sequencer
+  if(!$cast(p_sequencer,m_sequencer))begin
+    `uvm_error(get_full_name(),"Virtual sequencer pointer cast failed")
+  end
 endtask : body
 
 

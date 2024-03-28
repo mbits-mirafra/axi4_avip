@@ -12,12 +12,9 @@ interface Axi4LiteSlaveWriteDriverBFM(input      aclk,
   `include "uvm_macros.svh" 
 
   import Axi4LiteSlaveWritePkg::Axi4LiteSlaveWriteDriverProxy;
-  //Variable: name
-  //Used to store the name of the interface
+
   string name = "Axi4LiteSlaveWriteDriverBFM"; 
   
-  //Variable: axi4LiteSlaveWriteDriverProxy
-  //Creating the handle for MasterWriteDriverProxy
   Axi4LiteSlaveWriteDriverProxy axi4LiteSlaveWriteDriverProxy;
 
   initial begin
@@ -26,12 +23,28 @@ interface Axi4LiteSlaveWriteDriverBFM(input      aclk,
 
   task wait_for_system_reset();
     @(negedge aresetn);
-    `uvm_info(name,$sformatf("SYSTEM RESET ACTIVATED"),UVM_NONE)
+    `uvm_info(name,$sformatf("SYSTEM RESET ACTIVATED"),UVM_HIGH)
     ready <= 0;
     @(posedge aresetn);
-    `uvm_info(name,$sformatf("SYSTEM RESET DE-ACTIVATED"),UVM_NONE)
+    `uvm_info(name,$sformatf("SYSTEM RESET DE-ACTIVATED"),UVM_HIGH)
   endtask 
 
+  task writeChannelTask(input axi4LiteWriteTransferCfgStruct slaveWriteCfgStruct, 
+                        inout axi4LiteWriteTransferCharStruct slaveWriteCharStruct
+                       );
+    `uvm_info(name,$sformatf("WRITE_CHANNEL_TASK_STARTED"),UVM_HIGH)
+    do begin
+      @(posedge aclk);
+    end while(valid===0);
+
+    repeat(slaveWriteCharStruct.writeDelayForReady) begin 
+      @(posedge aclk);
+    end
+    ready <= 1'b1;
+    `uvm_info(name,$sformatf("WRITE_CHANNEL_TASK_ENDED"),UVM_HIGH)
+  endtask
+
+/*
 task slaveWriteAddressChannelTask(inout axi4LiteWriteTransferCharStruct slaveWriteCharStruct,axi4LiteWriteTransferCfgStruct slaveWriteCfgStruct);
 
 endtask : slaveWriteAddressChannelTask
@@ -43,8 +56,7 @@ endtask : slaveWriteDataChannelTask
 task slaveWriteResponseChannelTask(inout axi4LiteWriteTransferCharStruct slaveWriteCharStruct,axi4LiteWriteTransferCfgStruct slaveWriteCfgStruct);
 
 endtask : slaveWriteResponseChannelTask
-
-
+*/
 
 endinterface : Axi4LiteSlaveWriteDriverBFM
 

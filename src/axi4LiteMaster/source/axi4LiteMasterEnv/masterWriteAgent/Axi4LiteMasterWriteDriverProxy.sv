@@ -64,6 +64,13 @@ task Axi4LiteMasterWriteDriverProxy::writeTransferTask();
               "MASTER_WRITE_TASK::Before Sending_Req_Write_Packet = \n%s", reqWrite.sprint()),
               UVM_HIGH);
 
+    Axi4LiteMasterWriteSeqItemConverter::fromWriteClass(reqWrite, masterWriteCharStruct);
+    Axi4LiteMasterWriteConfigConverter::fromClass(axi4LiteMasterWriteAgentConfig, masterWriteCfgStruct);
+
+    axi4LiteMasterWriteDriverBFM.writeChannelTask(masterWriteCfgStruct, masterWriteCharStruct);
+
+    Axi4LiteMasterWriteSeqItemConverter::toWriteClass(masterWriteCharStruct,masterWriteTx);
+
     axi4LiteMasterWriteSeqItemPort.item_done();
   end
 endtask : writeTransferTask

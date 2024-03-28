@@ -7,7 +7,7 @@ class Axi4LiteSlaveWriteSeqItemConverter extends uvm_object;
   extern function new(string name = "Axi4LiteSlaveWriteSeqItemConverter");
   extern static function void fromWriteClass(input Axi4LiteSlaveWriteTransaction input_conv_h, output axi4LiteWriteTransferCharStruct output_conv_h);
   extern static function void toWriteClass(input axi4LiteWriteTransferCharStruct input_conv_h, output Axi4LiteSlaveWriteTransaction output_conv_h);
-//  extern function void do_print(uvm_printer printer);
+  extern function void do_print(uvm_printer printer);
 
 endclass : Axi4LiteSlaveWriteSeqItemConverter
 
@@ -19,19 +19,22 @@ function void Axi4LiteSlaveWriteSeqItemConverter::fromWriteClass(input Axi4LiteS
 
   `uvm_info("axi4Lite_Slave_Write_Seq_item_conv_class",$sformatf("------------------------------------fromWriteClass----------------------------------"),UVM_HIGH);
 
+  output_conv_h.writeDelayForReady = input_conv_h.writeDelayForReady;
+
 endfunction : fromWriteClass
 
 function void  Axi4LiteSlaveWriteSeqItemConverter::toWriteClass(input axi4LiteWriteTransferCharStruct input_conv_h, output Axi4LiteSlaveWriteTransaction output_conv_h);
   `uvm_info("axi4Lite_Slave_Write_Seq_item_conv_class",$sformatf("--------------------------------------------toWriteClass--------------------------"),UVM_HIGH);
  
-endfunction : toWriteClass
-/*
-function void Axi4LiteSlaveWriteSeqItemConverter::do_print(uvm_printer printer);
+  output_conv_h = new();
+  output_conv_h.writeDelayForReady = input_conv_h.writeDelayForReady;
 
-//  axi4_write_transfer_char_s axi4_w_st;
-//  axi4_read_transfer_char_s axi4_r_st;
+endfunction : toWriteClass
+
+function void Axi4LiteSlaveWriteSeqItemConverter::do_print(uvm_printer printer);
+  axi4LiteWriteTransferCharStruct writeCharStruct; 
   super.do_print(printer);
+  printer.print_field("writeDelayForReady",writeCharStruct.writeDelayForReady,$bits(writeCharStruct.writeDelayForReady),UVM_HEX);
 endfunction : do_print
-*/
 
 `endif

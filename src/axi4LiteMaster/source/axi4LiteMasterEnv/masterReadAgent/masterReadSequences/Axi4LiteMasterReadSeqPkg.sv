@@ -9,6 +9,7 @@ package Axi4LiteMasterReadSeqPkg;
   import Axi4LiteGlobalsPkg::*; 
  
   `include "Axi4LiteMasterReadBaseSeq.sv"
+  `include "Axi4LiteMasterReadTransferValidGenerateSeq.sv"
 
 endpackage : Axi4LiteMasterReadSeqPkg
 `endif

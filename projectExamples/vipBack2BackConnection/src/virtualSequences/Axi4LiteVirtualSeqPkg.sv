@@ -19,9 +19,10 @@ package Axi4LiteVirtualSeqPkg;
   import Axi4LiteSlaveEnvPkg::*;
   import Axi4LiteEnvPkg::*;
 
-
-
   `include "Axi4LiteVirtualBaseSeq.sv"
+  `include "Axi4LiteVirtualSlaveRandomReadyDelaySeq.sv"
+  `include "Axi4LiteVirtualMasterValidGenerateSeq.sv"
+  `include "Axi4LiteVirtualValidAndReadyWithProgrammableDelaySeq.sv"
 endpackage : Axi4LiteVirtualSeqPkg
 
 `endif

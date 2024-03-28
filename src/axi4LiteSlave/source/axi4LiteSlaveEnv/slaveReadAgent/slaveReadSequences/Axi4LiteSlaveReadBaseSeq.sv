@@ -10,22 +10,21 @@ class Axi4LiteSlaveReadBaseSeq extends uvm_sequence #(Axi4LiteSlaveReadTransacti
   //factory registration
   `uvm_object_utils(Axi4LiteSlaveReadBaseSeq)
   
-  //-------------------------------------------------------
-  // Externally defined Function
-  //-------------------------------------------------------
-  extern function new(string name = "Axi4LiteSlaveReadBaseSeq");
+  `uvm_declare_p_sequencer(Axi4LiteSlaveReadSequencer)
 
+  extern function new(string name = "Axi4LiteSlaveReadBaseSeq");
+  extern task body();
 endclass : Axi4LiteSlaveReadBaseSeq
 
-//-----------------------------------------------------------------------------
-// Constructor: new
-// Initializes the axi4_master_sequence class object
-//
-// Parameters:
-//  name - instance name of the config_template
-//-----------------------------------------------------------------------------
 function Axi4LiteSlaveReadBaseSeq::new(string name = "Axi4LiteSlaveReadBaseSeq");
   super.new(name);
 endfunction : new
+
+task Axi4LiteSlaveReadBaseSeq::body();
+  //dynamic casting of p_sequencer and m_sequencer
+  if(!$cast(p_sequencer,m_sequencer))begin
+    `uvm_error(get_full_name(),"Virtual sequencer pointer cast failed")
+  end
+endtask : body
 
 `endif

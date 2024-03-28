@@ -14,22 +14,15 @@ interface Axi4LiteMasterWriteDriverBFM(input bit  aclk,
 
 
 import Axi4LiteMasterWritePkg::Axi4LiteMasterWriteDriverProxy; 
-  //Variable: name
-  //Used to store the name of the interface
+
   string name = "Axi4LiteMasterWriteDriverBFM"; 
 
-  //Variable: axi4LiteMasterWriteDriverProxy
-  //Creating the handle for MasterWriteDriverProxy
   Axi4LiteMasterWriteDriverProxy axi4LiteMasterWriteDriverProxy;
 
   initial begin
     `uvm_info(name,$sformatf(name),UVM_LOW)
   end
 
-  //-------------------------------------------------------
-  // Task: wait_for_aresetn
-  // Waiting for the system reset to be active low
-  //-------------------------------------------------------
   task wait_for_aresetn();
     @(negedge aresetn);
     `uvm_info(name,$sformatf("SYSTEM RESET DETECTED"),UVM_HIGH)
@@ -38,6 +31,22 @@ import Axi4LiteMasterWritePkg::Axi4LiteMasterWriteDriverProxy;
     `uvm_info(name,$sformatf("SYSTEM RESET DEACTIVATED"),UVM_HIGH)
   endtask : wait_for_aresetn
 
+  task writeChannelTask(input axi4LiteWriteTransferCfgStruct masterWriteCfgStruct, 
+                        inout axi4LiteWriteTransferCharStruct masterWriteCharStruct
+                       );
+    `uvm_info(name,$sformatf("WRITE_CHANNEL_TASK_STARTED"),UVM_HIGH)
+    @(posedge aclk);
+    valid<=1'b1;
+
+    
+    do begin
+      @(posedge aclk);
+    end
+    while(ready !== 1);
+    `uvm_info(name,$sformatf("WRITE_CHANNEL_TASK_ENDED"),UVM_HIGH)
+  endtask
+
+/*
 task masterWriteAddressChannelTask(inout axi4LiteWriteTransferCharStruct masterWriteCharStruct,axi4LiteWriteTransferCfgStruct masterWriteCfgStruct);
 
 endtask : masterWriteAddressChannelTask
@@ -49,7 +58,7 @@ endtask : masterWriteDataChannelTask
 task masterWriteResponseChannelTask(inout axi4LiteWriteTransferCharStruct masterWriteCharStruct,axi4LiteWriteTransferCfgStruct masterWriteCfgStruct);
 
 endtask : masterWriteResponseChannelTask
-
+*/
 endinterface : Axi4LiteMasterWriteDriverBFM
 
 `endif

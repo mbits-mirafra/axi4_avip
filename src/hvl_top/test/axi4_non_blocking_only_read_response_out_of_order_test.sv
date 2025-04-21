@@ -18,6 +18,7 @@ class axi4_non_blocking_only_read_response_out_of_order_test extends axi4_base_t
   //-------------------------------------------------------
   extern function new(string name = "axi4_non_blocking_only_read_response_out_of_order_test", uvm_component parent = null);
   
+  extern function void setup_axi4_env_cfg();
   extern virtual function void setup_axi4_slave_agent_cfg();
   extern virtual task run_phase(uvm_phase phase);
 
@@ -36,6 +37,10 @@ function axi4_non_blocking_only_read_response_out_of_order_test::new(string name
 endfunction : new
 
 
+function void axi4_non_blocking_only_read_response_out_of_order_test::setup_axi4_env_cfg();
+  super.setup_axi4_env_cfg();
+  axi4_env_cfg_h.write_read_mode_h = ONLY_READ_DATA;
+endfunction:setup_axi4_env_cfg
 
 //--------------------------------------------------------------------------------------------
 // Function: setup_axi4_slave_agents_cfg
@@ -46,7 +51,7 @@ function void axi4_non_blocking_only_read_response_out_of_order_test::setup_axi4
   super.setup_axi4_slave_agent_cfg();
   foreach(axi4_env_cfg_h.axi4_slave_agent_cfg_h[i])begin
     axi4_env_cfg_h.axi4_slave_agent_cfg_h[i].slave_response_mode = ONLY_READ_RESP_OUT_OF_ORDER;
-    axi4_env_cfg_h.axi4_slave_agent_cfg_h[i].read_data_mode = SLAVE_MEM_MODE;
+    //axi4_env_cfg_h.axi4_slave_agent_cfg_h[i].read_data_mode = SLAVE_MEM_MODE;
   end
 endfunction: setup_axi4_slave_agent_cfg
 

@@ -62,6 +62,9 @@ usage:
 	echo "Example:":
 	echo "make simulate test=base_test uvm_verbosity=UVM_HIGH";
 	echo "";
+	echo "To provide seed number (default is random):"
+	echo "make simulate test=<test_name> uvm_verbosity=<VERBOSITY_LEVEL> seed=<value>";
+	echo "";
 	echo "To run regression:"
 	echo "make regression testlist_name=<regression_testlist_name.list>";
 	echo "";
@@ -116,6 +119,12 @@ endif
 #Add this line after -sva 
 #-sv_seed random 
 
+# Setting the default seed value to random
+ifndef seed
+override seed = random
+endif
+
+
 # Setting the default test folder to test name 
 ifndef test_folder
 override test_folder = $(test)
@@ -130,6 +139,7 @@ simulate:
 	work.hvl_top \
 	work.hdl_top \
 	-voptargs=+acc=npr \
+	-sv_seed $(seed) \
 	-assertdebug \
 	+UVM_TESTNAME=$(test) \
 	+UVM_VERBOSITY=$(uvm_verbosity) \

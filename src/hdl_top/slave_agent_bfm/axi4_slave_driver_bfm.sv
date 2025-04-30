@@ -112,19 +112,9 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
   task wait_for_system_reset();
     @(negedge aresetn);
     `uvm_info(name,$sformatf("SYSTEM RESET ACTIVATED"),UVM_NONE)
-    awready <= 0;
-    wready  <= 0;
-    rvalid  <= 0;
-    rlast   <= 0;
-    bvalid  <= 0;
-    arready <= 0;
-    bid     <= 'bx;
-    bresp   <= 'b0;
-    buser   <= 'b0;
-    rid     <= 'bx;
-    rdata   <= 'b0;
-    rresp   <= 'b0;
-    ruser   <= 'b0;
+
+    default_values();
+
     @(posedge aresetn);
     `uvm_info(name,$sformatf("SYSTEM RESET DE-ACTIVATED"),UVM_NONE)
   endtask 
@@ -434,6 +424,24 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
     j1++;
        
   endtask : axi4_read_data_phase
+
+  task default_values();
+    awready <= 0;
+    wready  <= 0;
+    rvalid  <= 0;
+    bvalid  <= 0;
+    arready <= 0;
+
+    bid     <= 'b0;
+    bresp   <= 'b0;
+    buser   <= 'b0;
+
+    rid     <= 'b0;
+    rdata   <= 'b0;
+    rresp   <= 'b0;
+    ruser   <= 'b0;
+    rlast   <= 'b0;
+  endtask : default_values
 
 endinterface : axi4_slave_driver_bfm
 

@@ -94,11 +94,9 @@ interface axi4_master_driver_bfm(input bit                      aclk,
   task wait_for_aresetn();
     @(negedge aresetn);
     `uvm_info(name,$sformatf("SYSTEM RESET DETECTED"),UVM_HIGH)
-    awvalid <= 1'b0;
-    wvalid  <= 1'b0;
-    bready  <= 1'b0;
-    arvalid <= 1'b0;
-    rready  <= 1'b0;
+
+    default_values();
+ 
     @(posedge aresetn);
     `uvm_info(name,$sformatf("SYSTEM RESET DEACTIVATED"),UVM_HIGH)
   endtask : wait_for_aresetn
@@ -294,6 +292,43 @@ task axi4_write_address_channel_task (inout axi4_write_transfer_char_s data_writ
     rready <= 1'b0;
 
   endtask : axi4_read_data_channel_task
+
+  task default_values();
+    awvalid  <= 1'b0;
+    wvalid   <= 1'b0;
+    bready   <= 1'b0;
+    arvalid  <= 1'b0;
+    rready   <= 1'b0;
+
+    awid     <= 'b0;
+    awaddr   <= 'b0;
+    awlen    <= 'b0;
+    awsize   <= 'b0;
+    awburst  <= 'b0;
+    awlock   <= 'b0;
+    awcache  <= 'b0;
+    awprot   <= 'b0;
+    awqos    <= 'b0;
+    awregion <= 'b0;
+    awuser   <= 'b0;
+    
+    wdata    <= 'b0;
+    wstrb    <= 'b0;
+    wlast    <= 'b0;
+    wuser    <= 'b0;
+
+    arid     <= 'b0;
+    araddr   <= 'b0;
+    arlen    <= 'b0;
+    arsize   <= 'b0;
+    arburst  <= 'b0;
+    arlock   <= 'b0;
+    arcache  <= 'b0;
+    arprot   <= 'b0;
+    arqos    <= 'b0;
+    arregion <= 'b0;
+    aruser   <= 'b0;
+  endtask : default_values
 
 endinterface : axi4_master_driver_bfm
 

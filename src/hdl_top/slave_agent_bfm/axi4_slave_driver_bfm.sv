@@ -293,6 +293,7 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
      `uvm_info("DEBUG_BRESP",$sformatf("BID = %0d",bid),UVM_HIGH)
    end
     
+    @(posedge aclk);
     while(bready === 0) begin
       @(posedge aclk);
       data_write_packet.wait_count_write_response_channel++;

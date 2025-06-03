@@ -34,7 +34,8 @@ task axi4_master_nbk_read_unaligned_addr_seq::body();
   super.body();
 
   start_item(req);
-  if(!req.randomize() with {req.araddr % 4 !=0;
+  if(!req.randomize() with {//req.araddr % 4 !=0;
+                              req.araddr % 2**req.arsize !=0;
                               req.tx_type == READ;
                               req.arburst == READ_FIXED;
                               req.transfer_type == NON_BLOCKING_READ;}) begin

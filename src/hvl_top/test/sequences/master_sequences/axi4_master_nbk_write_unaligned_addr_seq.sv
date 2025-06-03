@@ -35,8 +35,9 @@ task axi4_master_nbk_write_unaligned_addr_seq::body();
  
   start_item(req);
   if(!req.randomize() with {
-                             req.awsize == WRITE_2_BYTES;
-                             req.awaddr == (req.awaddr % 2**req.awsize != 0);
+                             //req.awsize == WRITE_2_BYTES;
+                             //req.awaddr == (req.awaddr % 2**req.awsize != 0);
+                             req.awaddr % 2**req.awsize != 0;
                              req.awlen == 11;
                              req.tx_type == WRITE;
                              req.awburst == WRITE_FIXED;

@@ -582,6 +582,9 @@ task axi4_slave_driver_proxy::axi4_read_task();
      end
      else if (axi4_slave_agent_cfg_h.read_data_mode == SLAVE_MEM_MODE || axi4_slave_agent_cfg_h.read_data_mode == SLAVE_ERR_RESP_MODE && write_read_mode_h != ONLY_READ_DATA) begin
 
+      if(wr_addr_cnt != wr_resp_cnt)
+         completed_initial_txn=0;	
+
        wait(completed_initial_txn==1);
        //Converting transactions into struct data type
        axi4_slave_seq_item_converter::from_read_class(local_slave_rdata_tx,struct_read_packet);

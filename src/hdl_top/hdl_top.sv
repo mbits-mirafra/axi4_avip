@@ -46,6 +46,11 @@ module hdl_top;
     end
     aresetn = 1'b1;
   end
+  
+  initial begin
+    $dumpfile("waveform.vcd");      // name of the VCD file
+    $dumpvars(0, hdl_top);    // dump variables from the testbench top
+  end
 
   // Variable : intf
   // axi4 Interface Instantiation

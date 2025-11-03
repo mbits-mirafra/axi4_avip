@@ -197,7 +197,7 @@ task axi4_master_driver_proxy::axi4_write_task();
     `uvm_info(get_type_name(),$sformatf("WRITE_TASK::Checking transfer type outside if = %s",req_wr.transfer_type),UVM_FULL); 
     
     //Checking if the tranfer type is blocking write 
-    if(req_wr.transfer_type == BLOCKING_WRITE) begin
+    if(blocking==1) begin
       
       axi4_master_tx local_master_write_tx; 
       axi4_master_seq_item_converter::from_write_class(req_wr,struct_write_packet);
@@ -215,7 +215,7 @@ task axi4_master_driver_proxy::axi4_write_task();
     end
 
     //Checking if the tranfer type is non blocking write 
-    else if(req_wr.transfer_type == NON_BLOCKING_WRITE) begin
+    else if(blocking ==0 )begin
 
       //Variable : write_address_process
       //Used to control the fork_join process
@@ -586,7 +586,7 @@ task axi4_master_driver_proxy::axi4_read_task();
     `uvm_info(get_type_name(),$sformatf("READ_TASK::Checking transfer type outside if= %s",req_rd.transfer_type),UVM_FULL); 
     `uvm_info(get_type_name(),$sformatf("READ_TASK::Checking transfer type outside if= %s",req_rd.transfer_type),UVM_FULL); 
     
-    if(req_rd.transfer_type == BLOCKING_READ) begin
+    if(blocking == 1) begin
       
       //Converts the req read packet to struct read packet
       axi4_master_seq_item_converter::from_read_class(req_rd,struct_read_packet);
@@ -603,7 +603,7 @@ task axi4_master_driver_proxy::axi4_read_task();
       `uvm_info(get_type_name(),$sformatf("READ_TASK::Response_received_req_read_packet = \n %s",req_rd.sprint()),UVM_MEDIUM);
     end
 
-    else if(req_rd.transfer_type ==  NON_BLOCKING_READ) begin
+    else if(blocking ==0) begin
 
       //Variable : read_addr_process
       //Used to control the fork_join process
@@ -713,4 +713,3 @@ task axi4_master_driver_proxy::axi4_read_task();
 endtask : axi4_read_task
 
 `endif
-

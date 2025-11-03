@@ -10,7 +10,7 @@ class axi4_virtual_bk_64b_data_read_seq extends axi4_virtual_base_seq;
 
   //Variable: axi4_master_bk_read_64b_trasnfer_seq_h
   //Instantiation of handle axi4_master_bk_read_64b_transfer_seq 
-  axi4_master_bk_read_64b_transfer_seq axi4_master_bk_read_64b_transfer_seq_h;
+ // axi4_master_bk_read_64b_transfer_seq axi4_master_bk_read_64b_transfer_seq_h;
 
   //Variable: axi4_slave_read_seq_h
   //Instantiation of axi4_slave_read_seq handle
@@ -39,7 +39,7 @@ endfunction : new
 // Creates and starts the data of master and slave sequences
 //--------------------------------------------------------------------------------------------
 task axi4_virtual_bk_64b_data_read_seq::body();
-  axi4_master_bk_read_64b_transfer_seq_h = axi4_master_bk_read_64b_transfer_seq::type_id::create("axi4_master_bk_read_64b_transfer_seq_h");
+  //axi4_master_bk_read_64b_transfer_seq_h = axi4_master_bk_read_64b_transfer_seq::type_id::create("axi4_master_bk_read_64b_transfer_seq_h");
 
   axi4_slave_bk_read_64b_transfer_seq_h = axi4_slave_bk_read_64b_transfer_seq::type_id::create("axi4_slave_bk_read_64b_transfer_seq_h");
 
@@ -47,13 +47,13 @@ task axi4_virtual_bk_64b_data_read_seq::body();
 
   fork 
     begin : T2_SL_RD
-      forever begin
+       repeat(2) begin 
         axi4_slave_bk_read_64b_transfer_seq_h.start(p_sequencer.axi4_slave_read_seqr_h);
       end
     end
-  join_none
+  join 
 
-
+/*
   fork 
     begin: T2_READ
       repeat(3) begin
@@ -61,6 +61,8 @@ task axi4_virtual_bk_64b_data_read_seq::body();
       end
     end
   join
+
+*/
  endtask : body
 
 `endif

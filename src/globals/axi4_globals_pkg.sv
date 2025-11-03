@@ -62,7 +62,10 @@ package axi4_globals_pkg;
   //Variable: OUTSTANDING_FIFO_DEPTH
   //Indicates the fifo depth of outstanding transaction
   parameter int OUTSTANDING_FIFO_DEPTH = 16;
-  
+  parameter blocking = 1; 
+
+  parameter activeTransactionCapacity = 2;
+ 
   //-------------------------------------------------------
   // Enums used in axi4_avip are given below
   //-------------------------------------------------------

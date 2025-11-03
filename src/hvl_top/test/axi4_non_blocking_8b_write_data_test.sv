@@ -51,9 +51,12 @@ task axi4_non_blocking_8b_write_data_test::run_phase(uvm_phase phase);
 
   axi4_virtual_nbk_8b_write_data_seq_h=axi4_virtual_nbk_8b_write_data_seq::type_id::create("axi4_virtual_nbk_8b_write_data_seq_h");
   `uvm_info(get_type_name(),$sformatf("axi4_non_blocking_8b_write_data_test"),UVM_LOW);
+
   phase.raise_objection(this);
   axi4_virtual_nbk_8b_write_data_seq_h.start(axi4_env_h.axi4_virtual_seqr_h);
-  phase.drop_objection(this);
+    #10000000; 
+  
+ phase.drop_objection(this);
 
 endtask : run_phase
 

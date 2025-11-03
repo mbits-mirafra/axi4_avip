@@ -149,8 +149,8 @@ function void axi4_base_test::setup_axi4_slave_agent_cfg();
     axi4_env_cfg_h.axi4_slave_agent_cfg_h[i].max_address = axi4_env_cfg_h.axi4_master_agent_cfg_h[i].
                                                            master_max_addr_range_array[i];
     axi4_env_cfg_h.axi4_slave_agent_cfg_h[i].maximum_transactions = 3;
-    axi4_env_cfg_h.axi4_slave_agent_cfg_h[i].read_data_mode = RANDOM_DATA_MODE;
-    axi4_env_cfg_h.axi4_slave_agent_cfg_h[i].slave_response_mode = RESP_IN_ORDER;
+    axi4_env_cfg_h.axi4_slave_agent_cfg_h[i].read_data_mode = SLAVE_MEM_MODE;
+    axi4_env_cfg_h.axi4_slave_agent_cfg_h[i].slave_response_mode = WRITE_READ_RESP_OUT_OF_ORDER;
     axi4_env_cfg_h.axi4_slave_agent_cfg_h[i].qos_mode_type = QOS_MODE_DISABLE;
 
     

@@ -10,6 +10,7 @@
 +incdir+../../src/hvl_top/test
 +incdir+../../src/hdl_top/slave_agent_bfm
 +incdir+../../src/hdl_top/axi4_interface
++incdir+../../src/hdl_top/axi_master 
 ../../src/globals/axi4_globals_pkg.sv
 ../../src/hvl_top/master/axi4_master_pkg.sv
 ../../src/hvl_top/slave/axi4_slave_pkg.sv
@@ -25,6 +26,7 @@
 ../../src/hdl_top/slave_agent_bfm/axi4_slave_driver_bfm.sv
 ../../src/hdl_top/slave_agent_bfm/axi4_slave_monitor_bfm.sv
 ../../src/hdl_top/slave_agent_bfm/axi4_slave_agent_bfm.sv
+../../src/hdl_top/axi_master/axi_master_design.sv
 ../../src/hdl_top/hdl_top.sv
 ../../src/hvl_top/hvl_top.sv
 ../../src/hdl_top/master_assertions.sv

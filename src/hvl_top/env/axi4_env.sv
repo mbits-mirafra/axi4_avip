@@ -143,7 +143,7 @@ function void axi4_env::connect_phase(uvm_phase phase);
     axi4_master_agent_h[i].axi4_master_mon_proxy_h.axi4_master_write_address_analysis_port.connect(axi4_scoreboard_h.axi4_master_write_address_analysis_fifo.analysis_export);
     axi4_master_agent_h[i].axi4_master_mon_proxy_h.axi4_master_write_data_analysis_port.connect(axi4_scoreboard_h.axi4_master_write_data_analysis_fifo.analysis_export);
     axi4_master_agent_h[i].axi4_master_mon_proxy_h.axi4_master_write_response_analysis_port.connect(axi4_scoreboard_h.axi4_master_write_response_analysis_fifo.analysis_export);
-    axi4_master_agent_h[i].axi4_master_drv_proxy_h.write_read_mode_h = axi4_env_cfg_h.write_read_mode_h;
+    //axi4_master_agent_h[i].axi4_master_drv_proxy_h.write_read_mode_h = axi4_env_cfg_h.write_read_mode_h;
   end
 
   foreach(axi4_slave_agent_h[i]) begin

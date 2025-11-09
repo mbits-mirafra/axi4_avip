@@ -106,7 +106,7 @@ endif
 
 # Setting the default uvm_verbosity to UVM_MEDIUM
 ifndef uvm_verbosity
-override uvm_verbosity = UVM_MEDIUM
+override uvm_verbosity = UVM_LOW
 endif
 
 ifndef args

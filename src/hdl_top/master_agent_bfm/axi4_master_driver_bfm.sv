@@ -103,10 +103,10 @@ interface axi4_master_driver_bfm(input bit                      aclk,
 
   clocking axiMasterCb @(posedge aclk);
     default input #1step output #1step;
-     output awid,awaddr, awlen,awsize,awburst, awlock, awcache, awprot,awqos, awregion,   awuser,  awvalid ,wdata, wstrb, wlast, wuser, wvalid,bready, arid, araddr, arlen, arsize, arburst,
+    output awid,awaddr, awlen,awsize,awburst, awlock, awcache, awprot,awqos, awregion,   awuser,  awvalid ,wdata, wstrb, wlast, wuser, wvalid,bready, arid, araddr, arlen, arsize, arburst,
               arlock, arcache, arprot, arqos, arregion, aruser,   arvalid, rready;
-        input awready, wready, bid, bresp, buser, bvalid, arready, rid, rdata, rresp, rlast,ruser, rvalid;
-   endclocking 
+    input awready, wready, bid, bresp, buser, bvalid, arready, rid, rdata, rresp, rlast,ruser, rvalid;
+  endclocking 
 
   //--------------------------------------------------------------------------------------------
   // Tasks written for all 5 channels in BFM are given below

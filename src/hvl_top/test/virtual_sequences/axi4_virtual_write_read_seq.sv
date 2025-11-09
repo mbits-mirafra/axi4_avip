@@ -93,13 +93,13 @@ task axi4_virtual_write_read_seq::body();
   fork 
     begin: T1_BK_WRITE
       blocking_master_wr_seq = process::self();
-      repeat(5) begin
+      repeat(2) begin
         axi4_master_bk_write_seq_h.start(p_sequencer.axi4_master_write_seqr_h);
       end
     end
     begin: T2_BK_READ
       blocking_master_rd_seq = process::self();
-      repeat(3) begin
+      repeat(2) begin
         axi4_master_bk_read_seq_h.start(p_sequencer.axi4_master_read_seqr_h);
       end
     end

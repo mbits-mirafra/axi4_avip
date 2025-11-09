@@ -41,7 +41,7 @@ task axi4_master_nbk_read_32b_transfer_seq::body();
 
     `uvm_fatal("axi4","Rand failed");
   end
-  req.print();
+  //req.print();
   finish_item(req);
 
 endtask : body

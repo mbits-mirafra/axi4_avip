@@ -33,7 +33,7 @@ package axi4_globals_pkg;
   `define DATA_WIDTH 32
   //Parameter: DATA_WIDTH
   //Used to set the data width 
-  parameter int DATA_WIDTH = `DATA_WIDTH;
+  parameter int DATA_WIDTH = 64;
 
   //Parameter: SLAVE_MEMORY_SIZE
   //Sets the memory size of the slave in KB
@@ -63,7 +63,7 @@ package axi4_globals_pkg;
   //Indicates the fifo depth of outstanding transaction
   parameter int OUTSTANDING_FIFO_DEPTH = 16;
   parameter blocking = 1; 
-
+  parameter writeReadOrdering = 1;
   parameter activeTransactionCapacity = 2;
  
   //-------------------------------------------------------

@@ -37,7 +37,7 @@ task axi4_master_bk_read_32b_transfer_seq::body();
   start_item(req);
   if(!req.randomize() with {req.arsize == READ_4_BYTES;
                             req.tx_type == READ;
-                            req.arburst == READ_INCR;
+                            req.arburst == READ_WRAP;
                             req.transfer_type == BLOCKING_READ;}) begin
 
     `uvm_fatal("axi4","Rand failed");

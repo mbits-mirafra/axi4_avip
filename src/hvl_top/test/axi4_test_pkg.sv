@@ -35,7 +35,7 @@ package axi4_test_pkg;
   `include "axi4_blocking_okay_response_write_test.sv"
   `include "axi4_blocking_incr_burst_write_test.sv"
   `include "axi4_blocking_wrap_burst_write_test.sv"
-  
+  `include "axi4_32b_ordered_write_read_test.sv"  
   `include "axi4_non_blocking_8b_write_data_test.sv"
   `include "axi4_non_blocking_16b_write_data_test.sv"
   `include "axi4_non_blocking_32b_write_data_test.sv"

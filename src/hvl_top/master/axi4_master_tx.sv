@@ -220,7 +220,7 @@ class axi4_master_tx extends uvm_sequence_item;
   //Used to generate the alligned address with respect to size
    constraint awaddr_c0 {soft awaddr == (awaddr%(2**awsize)) == 0;}
   // constraint set_set{awaddr inside {[100:110]};}
-  constraint set_set{awaddr == 1004;}
+  constraint set_set{awaddr == 3901;}
   //Constraint : awburst_c1
   //Restricting write burst to select only FIXED, INCR and WRAP types
   constraint awburst_c1 {awburst != WRITE_RESERVED;}
@@ -281,7 +281,7 @@ class axi4_master_tx extends uvm_sequence_item;
   //Constraint : araddr
   //Used to generate the alligned address with respect to size
 //  constraint araddr_c0 {soft araddr == (araddr%(2**arsize)) == 0;}
-  constraint set_araddr {araddr == 1004;}
+  constraint set_araddr {araddr == 3901;}
   //Constraint : arburst_c1
   //Restricting read burst to select only FIXED, INCR and WRAP types
   constraint arburst_c1 { arburst != READ_RESERVED;}

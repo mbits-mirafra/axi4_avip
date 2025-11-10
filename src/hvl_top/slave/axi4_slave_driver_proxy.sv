@@ -303,7 +303,6 @@ task axi4_slave_driver_proxy::axi4_write_task();
         else 
           wait(axiSlaveDataQueue.size()>0);
            
-        $display("the main array is %p",axiSlaveIdQueue);
         axiSlaveIdDynamicArray = new[numberOfDataTransaction];
         axiSlaveIdDynamicArray = axiSlaveIdQueue[0:numberOfDataTransaction-1];
         axiSlaveIdDynamicArray.shuffle();
@@ -314,13 +313,6 @@ task axi4_slave_driver_proxy::axi4_write_task();
         local_slave_data_tx = axiSlaveDataQueue[indexTracker[0]];
         axiSlaveDataQueue.delete(indexTracker[0]);
         bid_local = local_slave_addr_tx.awid;
-        $display("\N\N\N\N");
-        $display("THE DYNAMIC ARRAY IS %p",axiSlaveIdDynamicArray);
-        $display("the main array is %p",axiSlaveIdQueue);
-        $display("THE INDEX IS %0d ",indexTracker[0]); 
-        $display("dataTemp is %p ",local_slave_data_tx.wdata);
-        $display("THE ADDR id IS %d",local_slave_addr_tx.awid);
-        $display("\N\N\N");
         if(local_slave_addr_tx.awburst == WRITE_FIXED) begin : ib7
           end_wrap_addr =  local_slave_addr_tx.awaddr + ((2**local_slave_addr_tx.awsize));
         end : ib7
@@ -493,7 +485,6 @@ task axi4_slave_driver_proxy::axi4_read_task();
 
       if(((axi4_slave_agent_cfg_h.read_data_mode == RANDOM_DATA_MODE) || (write_read_mode_h == ONLY_READ_DATA)) && (axi4_slave_agent_cfg_h.read_data_mode !== SLAVE_MEM_MODE)) begin : if6
        
-        $display("HHHH");
         //Converting transactions into struct data type
         axi4_slave_seq_item_converter::from_read_class(local_slave_rdata_tx,struct_read_packet);
         `uvm_info(get_type_name(), $sformatf("from_read_class:: struct_read_packet = \n %0p",struct_read_packet), UVM_HIGH); 
@@ -507,15 +498,11 @@ task axi4_slave_driver_proxy::axi4_read_task();
       end : if6
       else if (axi4_slave_agent_cfg_h.read_data_mode == SLAVE_MEM_MODE || axi4_slave_agent_cfg_h.read_data_mode == SLAVE_ERR_RESP_MODE && write_read_mode_h != ONLY_READ_DATA) begin : ef2
         if(((axi4_slave_agent_cfg_h.slave_response_mode == ONLY_READ_RESP_OUT_OF_ORDER) || (axi4_slave_agent_cfg_h.slave_response_mode == WRITE_READ_RESP_OUT_OF_ORDER) ) &&(local_slave_rdata_tx.transfer_type == NON_BLOCKING_READ)==0) begin : if8
-          $display("DUCK");   
           //wait(completed_initial_txn==1);
-          $display("SWASTHIK unlocked at%0t",$time());
-          $display("THE WAIT STATE COUNT IS %0t",$time());
           if(readFlag ==0)
             wait(waitStates >= activeTransactionCapacity);
           else
             wait(axiReadSlaveAddressQueue.size()>0);
-             $display("UNLOCKED AT %0t",$time());
           axiReadSlaveIdDynamicArray = new[waitStates];
           axiReadSlaveIdDynamicArray = axiReadSlaveIdQueue[0:waitStates-1];
           axiReadSlaveIdDynamicArray.shuffle();
@@ -531,9 +518,6 @@ task axi4_slave_driver_proxy::axi4_read_task();
           `uvm_info(get_type_name(), $sformatf("from_read_class:: struct_read_packet = \n %0p",struct_read_packet), UVM_HIGH); 
         end :if8
         else if((axi4_slave_agent_cfg_h.slave_response_mode == RESP_IN_ORDER || axi4_slave_agent_cfg_h.slave_response_mode == ONLY_WRITE_RESP_OUT_OF_ORDER) || local_slave_rdata_tx.transfer_type==BLOCKING_READ) begin 
-          $display("SWASTHIKkk");
-        //  wait(completed_initial_txn==1);
-          $display("SWASTHIK");
           wait(axiReadSlaveAddressQueue.size()>0);
           local_slave_raddr_tx  = axiReadSlaveAddressQueue[0];
         //Converting transactions into struct data type
@@ -543,10 +527,12 @@ task axi4_slave_driver_proxy::axi4_read_task();
           axi4_slave_cfg_converter::from_class(axi4_slave_agent_cfg_h,struct_cfg);
           `uvm_info(get_type_name(), $sformatf("from_read_class:: struct_cfg =  \n %0p",struct_cfg),UVM_HIGH);
         end  
-      
+        for(int i=0;i<struct_read_packet.arlen;i++)
+           struct_read_packet.rdata[i] ='0;
+
+ 
         total_bytes = (local_slave_raddr_tx.arlen+1)*(2**(local_slave_raddr_tx.arsize));
         if(local_slave_raddr_tx.araddr inside {[axi4_slave_agent_cfg_h.min_address : axi4_slave_agent_cfg_h.max_address]} && axi4_slave_agent_cfg_h.read_data_mode != SLAVE_ERR_RESP_MODE )begin : ADDR_INSIDE_SLAVE_MEM_RANGE
-          $display("SATHWIK");
           if(local_slave_raddr_tx.arburst == READ_FIXED) begin : if9
             task_memory_read(local_slave_raddr_tx,struct_read_packet);
             if(crossed_read_addr) begin  : if10
@@ -593,9 +579,8 @@ task axi4_slave_driver_proxy::axi4_read_task();
           end : ef4 
         end :ADDR_INSIDE_SLAVE_MEM_RANGE
         else begin : ADDR_NOT_INSIDE_SLAVE_MEM_RANGE
-          $display("SATHWIK1");
           for(int depth=0;depth<(((axi4_slave_agent_cfg_h.slave_response_mode == WRITE_READ_RESP_OUT_OF_ORDER)|| (axi4_slave_agent_cfg_h.slave_response_mode == ONLY_READ_RESP_OUT_OF_ORDER) ||(axi4_slave_agent_cfg_h.qos_mode_type == ONLY_READ_QOS_MODE_ENABLE) ||(axi4_slave_agent_cfg_h.qos_mode_type == WRITE_READ_QOS_MODE_ENABLE))  ? (struct_read_packet.arlen+1) : (local_slave_raddr_tx.arlen+1));depth++) begin
-            struct_read_packet.rresp[depth] = READ_SLVERR; 
+            struct_read_packet.rresp[depth] = READ_SLVERR;
           end
 
           //read data task
@@ -654,49 +639,64 @@ task axi4_slave_driver_proxy::task_memory_write(input axi4_slave_tx struct_write
   int lower_addr,end_addr,k_t;
  automatic int addr=struct_write_packet.awaddr;
  struct_write_packet.print(); 
- $display("\n\n\n writing into mem \n\n\n");
  if(struct_write_packet.awburst == WRITE_FIXED) begin
     for(int j=0;j<(struct_write_packet.awlen+1);j++)begin
       `uvm_info("DEBUG_MEMORY_WRITE",$sformatf("memory_task_awlen=%d",struct_write_packet.awlen),UVM_HIGH)
         for(int strb=0;strb<STROBE_WIDTH;strb++) begin
         `uvm_info("DEBUG_MEMORY_WRITE", $sformatf("task_memory_write inside for loop wstrb = %0h",struct_write_packet.wstrb[strb]), UVM_HIGH);
         if(struct_write_packet.wstrb[j][strb] == 1) begin
-         if(axi4_slave_mem_h == null) 
-            $display("ITS NULL");
-         else 
           axi4_slave_mem_h.fifo_write(struct_write_packet.wdata[j][8*strb+7 -: 8]);
         end
       end
     end
   end
   if(struct_write_packet.awburst == WRITE_INCR) begin
-   $display("HEY STROBE IS %p",struct_write_packet);
+    bit unalign;
+    int amount;
+       if(addr % (2**struct_write_packet.awsize) != 0) begin
+             amount = addr - ((addr/(2**struct_write_packet.awsize))*(2**struct_write_packet.awsize));
+              $display("DIV AMOUNT IS %0d",(addr/(2**struct_write_packet.awsize)));
+             unalign=1;      
+       end
     for(int j=0,int k=0;j<(struct_write_packet.awlen+1);j++)begin
       `uvm_info("DEBUG_MEMORY_WRITE",$sformatf("memory_task_awlen=%d",struct_write_packet.awlen),UVM_HIGH)
-       $display("\n \n THE PACKET Number is %0d and strobe is %0b \n \n",j,struct_write_packet.wstrb[j]);
-    $display("THE START ADDRESS IS %0d and size of transfer is %0d",addr,struct_write_packet.awsize);
-     for(int strb=(addr)%(DATA_WIDTH/8),k=0;strb<((addr)%(DATA_WIDTH/8))+(2**struct_write_packet.awsize);strb++) begin
-        $display("ENTERED THE STAGE STROBE Is %0b index is %0d",struct_write_packet.wstrb[j][strb],strb);
-        `uvm_info("DEBUG_MEMORY_WRITE", $sformatf("task_memory_write inside for loop wstrb = %0h,k=%0d",struct_write_packet.wstrb[strb],k), UVM_HIGH);
+       $display("THE AMOUNT IS %0d when addr is %0d",amount,addr); 
+        for(int strb=(addr)%(DATA_WIDTH/8),k=0;strb<((unalign==1) ?( ((addr)%(DATA_WIDTH/8))+(2**struct_write_packet.awsize)-amount) :( ((addr)%(DATA_WIDTH/8))+(2**struct_write_packet.awsize)));strb++) begin
+          $display("THE DATA IS wriiteh to mem %0d when addr is %0d and k is %0d",addr+k,addr,k);
+          $display("COND IS %0d", ((addr)%(DATA_WIDTH/8))+(2**struct_write_packet.awsize)-amount); 
+          $display("STRB IS %0d and addr =%0d",strb,addr+k);
+           `uvm_info("DEBUG_MEMORY_WRITE", $sformatf("task_memory_write inside for loop wstrb = %0h,k=%0d",struct_write_packet.wstrb[strb],k), UVM_HIGH);
           if(struct_write_packet.wstrb[j][strb] == 1) begin
-            $display("TESTED");
             axi4_slave_mem_h.mem_write(addr+k,struct_write_packet.wdata[j][8*strb+7 -: 8]);
           end
           k++;
       end
+      if(unalign)  begin 
+       addr = addr+(2**struct_write_packet.awsize)- amount;
+       unalign=0;
+     end
+     else 
       addr = addr + (2**struct_write_packet.awsize);
     end
   end
   if(struct_write_packet.awburst == WRITE_WRAP) begin
+    bit unalign;
+    int amount;
+       if(addr % (2**struct_write_packet.awsize) != 0) begin
+             amount = addr - ((addr/(2**struct_write_packet.awsize))*(2**struct_write_packet.awsize));
+              $display("AMOUNT IS %0d",amount);
+             unalign=1;
+       end
+
+
     lower_addr = struct_write_packet.awaddr - int'(struct_write_packet.awaddr%((struct_write_packet.awlen+1)*(2**struct_write_packet.awsize)));
     end_addr = lower_addr + ((struct_write_packet.awlen+1)*(2**struct_write_packet.awsize));
-     $display("LOWER ADDR OF BOUND IS %0d and UPPER ADDR IS %0d",lower_addr,end_addr);
 
     for(int j=0,int k=0;j<(struct_write_packet.awlen+1);j++)begin
-      `uvm_info("DEBUG_MEMORY_WRITE",$sformatf("memory_task_awlen=%d",struct_write_packet.awlen),UVM_HIGH) 
-         $display("\n \n THE PACKET Number is %0d start address is %0d,end is %0d\n \n",j,((addr)%(DATA_WIDTH/8)),((addr)%(DATA_WIDTH/8) + (2**struct_write_packet.awsize)));
-        for(int strb=(addr)%(DATA_WIDTH/8),k=0;k<(2**struct_write_packet.awsize);k++) begin
-         $display("ADDR IS %0d and strb is %0d",addr,struct_write_packet.wstrb[j][strb]);
+      `uvm_info("DEBUG_MEMORY_WRITE",$sformatf("memory_task_awlen=%d",struct_write_packet.awlen),UVM_HIGH)
+          $display("NEXT PACK"); 
+        for(int strb=(addr)%(DATA_WIDTH/8),k=0;k<((unalign==1) ?((2**struct_write_packet.awsize)-amount):(2**struct_write_packet.awsize));k++) begin
+         $display("TEH STRB IS %0d and address is %0d limiter is%0d",strb,addr,k);
          `uvm_info("DEBUG_MEMORY_WRITE", $sformatf("task_memory_write inside for loop wstrb = %0h,k=%0d",struct_write_packet.wstrb[strb],k), UVM_HIGH);
           if(struct_write_packet.wstrb[j][strb] == 1) begin
             if(addr < end_addr)  begin
@@ -708,7 +708,8 @@ task axi4_slave_driver_proxy::task_memory_write(input axi4_slave_tx struct_write
             addr = lower_addr;
           strb = (addr)%(DATA_WIDTH/8);
         end
-        $display("TRANSFER COMPLETE ");
+        $display("UNALIGN IS MADE 0");
+        unalign=0;
     end
   end
 
@@ -731,26 +732,50 @@ task axi4_slave_driver_proxy::task_memory_read(input axi4_slave_tx read_pkt,ref 
     else crossed_read_addr = 0;
   end
   if(read_pkt.arburst == READ_INCR) begin
+    bit unalign;
+    int amount;
+       if(read_pkt.araddr % (2**read_pkt.arsize) != 0) begin
+             amount = read_pkt.araddr - ((read_pkt.araddr/(2**read_pkt.arsize))*(2**read_pkt.arsize));
+              $display("DIV AMOUNT IS %0d",(read_pkt.araddr/(2**read_pkt.arsize)));
+             unalign=1;
+       end
+     
     for(int j=0,int k=0;j<(read_pkt.arlen+1);j++)begin
-      `uvm_info("DEBUG_MEMORY_WRITE",$sformatf("memory_task_arlen=%d",read_pkt.arlen),UVM_HIGH)
-        for(int strb=0;strb<(2**(read_pkt.arsize));strb++) begin
-          axi4_slave_mem_h.mem_read(read_pkt.araddr+k,struct_read_packet.rdata[j][8*strb+7 -: 8]);
+       $display("NEXT PACK");
+       `uvm_info("DEBUG_MEMORY_WRITE",$sformatf("memory_task_arlen=%d",read_pkt.arlen),UVM_HIGH)
+        for(int strb=0;strb<((unalign==1)?((2**(read_pkt.arsize))-amount):(2**(read_pkt.arsize)));strb++) begin
+         $display("THE ADDRESS DATA READ FROM IS %0d",read_pkt.araddr+k); 
+        axi4_slave_mem_h.mem_read(read_pkt.araddr+k,struct_read_packet.rdata[j][8*strb+7 -: 8]);
           if(read_pkt.araddr+k > axi4_slave_agent_cfg_h.max_address && flag ==0) begin 
             crossed_read_addr = read_pkt.araddr+k;
              flag =1;
+             $display("CROSSED ADDRESS IS %0d",crossed_read_addr);
           end
           k++;
         end
+
+       unalign=0;
       end
-    end
+  end
   if(read_pkt.arburst == READ_WRAP) begin
+         bit unalign;
+    int amount;
+
     lower_addr = read_pkt.araddr - int'(read_pkt.araddr%((read_pkt.arlen+1)*(2**read_pkt.arsize)));
     end_addr = lower_addr + ((read_pkt.arlen+1)*(2**read_pkt.arsize));
     k_t = read_pkt.araddr;
+       if(k_t % (2**read_pkt.arsize) != 0) begin
+             amount = k_t - ((k_t/(2**read_pkt.arsize))*(2**read_pkt.arsize));
+              $display("DIV AMOUNT IS %0d",(k_t/(2**read_pkt.arsize)));
+             unalign=1;
+       end
+
     for(int j=0,int k=0;j<(read_pkt.arlen+1);j++)begin
       struct_read_packet.rresp[j] = READ_OKAY;
+         $display("NEXT");
       `uvm_info("DEBUG_MEMORY_WRITE",$sformatf("memory_task_arlen=%d",read_pkt.arlen),UVM_HIGH)
-        for(int strb=0;strb<(2**(read_pkt.arsize));strb++) begin
+        for(int strb=0;strb<((unalign==1)?((2**(read_pkt.arsize))-amount):(2**(read_pkt.arsize)));strb++) begin
+          $display("READ TEH STRB IS %0d and address is %0d",strb,k_t);
           if(k_t < end_addr)  begin
              if(k_t >axi4_slave_agent_cfg_h.max_address)
               struct_read_packet.rresp[j] = READ_SLVERR; 
@@ -764,7 +789,10 @@ task axi4_slave_driver_proxy::task_memory_read(input axi4_slave_tx read_pkt,ref 
                  flag =1;
               end 
           end
+
         end
+        unalign=0;
+          
       end
     end
 endtask : task_memory_read

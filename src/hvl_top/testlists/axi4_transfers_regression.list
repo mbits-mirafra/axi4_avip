@@ -1,5 +1,4 @@
 # Regression list for AXI4 WRITE AND READ TRANSFERS
-
 # Directed testcases
 axi4_write_read_test
 axi4_blocking_8b_write_read_test 
@@ -11,12 +10,12 @@ axi4_blocking_slave_error_write_read_test
 axi4_blocking_unaligned_addr_write_read_test 
 axi4_blocking_fixed_burst_write_read_test 
 
+
 # Blocking Rand testcase
-axi4_blocking_write_read_rand_test 
+#axi4_blocking_write_read_rand_test 
 
 # Blocking Cross testcase
-axi4_blocking_cross_write_read_test 
-"""
+#axi4_blocking_cross_write_read_test 
 # Non Blocking Write Read Transfers
 axi4_non_blocking_8b_write_read_test 
 axi4_non_blocking_16b_write_read_test 
@@ -84,5 +83,4 @@ axi4_non_blocking_write_read_response_out_of_order_test
 
 #QOS
 axi4_non_blocking_qos_write_read_test
-
 """

@@ -21,7 +21,7 @@ class axi4_master_tx extends uvm_sequence_item;
 
   //Variable : awaddr
   //Used to send the write address
-  randc bit [ADDRESS_WIDTH-1:0] awaddr;
+  rand bit [ADDRESS_WIDTH-1:0] awaddr;
 
   //Variable : awlen
   //Used to send the write address length
@@ -218,34 +218,31 @@ class axi4_master_tx extends uvm_sequence_item;
   //-------------------------------------------------------
   //Constraint : awaddr
   //Used to generate the alligned address with respect to size
-   constraint awaddr_c0 {soft awaddr == (awaddr%(2**awsize)) == 0;}
-  // constraint set_set{awaddr inside {[100:110]};}
-  constraint set_set{awaddr == 3901;}
+  constraint awaddr_c0 {soft awaddr == (awaddr%(2**awsize)) == 0;}
+
   //Constraint : awburst_c1
   //Restricting write burst to select only FIXED, INCR and WRAP types
   constraint awburst_c1 {awburst != WRITE_RESERVED;}
 
   //Constraint : awlength_c2
   //Adding constraint for restricting write trasnfers
-  constraint awlength_c2 {//if(awburst==WRITE_FIXED || WRITE_WRAP)
-                          //    awlen inside {[0:15]};
-                        //  else if(awburst == WRITE_INCR) 
-                              awlen ==10;
-                             // awlen inside {[0:10]};
-                              } // 255
+  constraint awlength_c2 {if(awburst==WRITE_FIXED || WRITE_WRAP)
+                              awlen inside {[0:15]};
+                          else if(awburst == WRITE_INCR) 
+                              awlen inside {[0:255]};}
 
   //Constraint : awlength_c3
   //Adding constraint for restricting to get multiples of 2 in wrap burst
-  /*constraint awlength_c3 {if(awburst == WRITE_WRAP)
+  constraint awlength_c3 {if(awburst == WRITE_WRAP)
                           awlen + 1 inside {2,4,8,16};}
-  */
+  
   //Constraint : awlock_c4
   //Adding constraint to select the lock transfer type
   constraint awlock_c4 {soft awlock == WRITE_NORMAL_ACCESS;}
 
   //Constraint : awburst_c5
   //Adding a soft constraint to detrmine the burst type
- constraint awburst_c5 {soft awburst == WRITE_INCR;}
+  constraint awburst_c5 {soft awburst == WRITE_INCR;}
 
   //Constraint : awsize_c6
   //Adding a soft constraint to detrmine the awsize
@@ -264,12 +261,12 @@ class axi4_master_tx extends uvm_sequence_item;
 
   //Constraint : wstrb_c3
   //wstrb shouldn't be zero
-  //constraint wstrb_c3 {foreach(wstrb[i]) wstrb[i]!=0; }
+  constraint wstrb_c3 {foreach(wstrb[i]) wstrb[i]!=0; }
 
   //Constraint: wstrb_c4
   //based on size setting the strobe values
-  //constraint wstrb_c4 {foreach(wstrb[i]) $countones(wstrb[i]) == 2**awsize;}
-  constraint w_strb_c5{foreach(wstrb[i]) wstrb[i]==8'hff;}
+  constraint wstrb_c4 {foreach(wstrb[i]) $countones(wstrb[i]) == 2**awsize;}
+
   //Constraint : no_of_wait_states_c3
   //Adding constraint to restrict the number of wait states for response
   constraint no_of_wait_states_c3 {no_of_wait_states inside {[0:3]};}
@@ -280,34 +277,33 @@ class axi4_master_tx extends uvm_sequence_item;
   
   //Constraint : araddr
   //Used to generate the alligned address with respect to size
-//  constraint araddr_c0 {soft araddr == (araddr%(2**arsize)) == 0;}
-  constraint set_araddr {araddr == 3901;}
+  constraint araddr_c0 {soft araddr == (araddr%(2**arsize)) == 0;}
+  
   //Constraint : arburst_c1
   //Restricting read burst to select only FIXED, INCR and WRAP types
   constraint arburst_c1 { arburst != READ_RESERVED;}
 
   //Constraint : arlength_c2
   //Adding constraint for restricting read trasnfers
-  constraint arlength_c2 { //if(arburst==READ_FIXED || READ_WRAP)
-                            //arlen inside {[0:15]};
-                           //else if(arburst == READ_INCR) 
-                            arlen == 10;
-                            //arlen inside {[0:255]};
+  constraint arlength_c2 { if(arburst==READ_FIXED || READ_WRAP)
+                            arlen inside {[0:15]};
+                           else if(arburst == READ_INCR) 
+                            arlen inside {[0:255]};
                          }
   
   //Constraint : arlength_c3
   //Adding constraint for restricting to get multiples of 2 in wrap burst
-/*  constraint arlength_c3 { if(arburst == READ_WRAP)
+  constraint arlength_c3 { if(arburst == READ_WRAP)
                             arlen + 1 inside {2,4,8,16};
                          }
-*/
+
   //Constraint : arlock_c9
   //Adding constraint to select the lock transfer type
   constraint arlock_c4 { soft arlock == READ_NORMAL_ACCESS;}
 
   //Constraint : arburst_c5
   //Adding a soft constraint to detrmine the burst type
-  
+  constraint arburst_c5 { soft arburst == READ_INCR;}
 
   //Constraint : arsize_c6
   //Adding a soft constraint to detrmine the arsize
@@ -350,7 +346,7 @@ function void axi4_master_tx::post_randomize();
 // Strobes for alligned with narrow transfers and
 // Unalligned transfers
 //-------------------------------------------------------
-/* begin //{
+begin //{
   bit[STROBE_WIDTH-1:0]  remainder_check;
   // strobe_data provides you the strobe for starting addr
   bit [STROBE_WIDTH-1:0] strobe_data[int][1];
@@ -492,7 +488,7 @@ function void axi4_master_tx::post_randomize();
       end
     end
   end
-end //}*/
+end //}
 endfunction : post_randomize
 
 //--------------------------------------------------------------------------------------------
@@ -665,5 +661,4 @@ function void axi4_master_tx::do_print(uvm_printer printer);
 endfunction : do_print
 
 `endif
-
 

@@ -297,7 +297,6 @@ task axi4_slave_driver_proxy::axi4_write_task();
 
       `uvm_info("slave_driver_proxy",$sformatf("min_tx=%0d",axi4_slave_agent_cfg_h.get_minimum_transactions),UVM_HIGH)
       if((axi4_slave_agent_cfg_h.slave_response_mode == WRITE_READ_RESP_OUT_OF_ORDER || axi4_slave_agent_cfg_h.slave_response_mode == ONLY_WRITE_RESP_OUT_OF_ORDER)&& (local_slave_response_tx.transfer_type == NON_BLOCKING_WRITE)) begin : ib6    
-        $display("THE FLAG IS %0d",flag);
         if( flag ==0) 
           wait(numberOfDataTransaction >= activeTransactionCapacity );  
         else 
@@ -354,9 +353,6 @@ task axi4_slave_driver_proxy::axi4_write_task();
 
       `uvm_info("DEBUG_SLAVE_WDATA_PROXY_TO_CLASS", $sformatf("AFTER TO CLASS :: Received req packet \n %s", local_slave_response_tx.sprint()), UVM_NONE);
      
-
-      //axi4_slave_write_data_out_fifo_h.get(local_slave_data_tx);
-
      //Calling combined data packet from converter class
       axi4_slave_seq_item_converter::tx_write_packet(local_slave_addr_tx,local_slave_data_tx,local_slave_response_tx,packet);
       `uvm_info("DEBUG_SLAVE_WDATA_PROXY", $sformatf("AFTER :: COMBINED WRITE CHANNEL PACKET \n%s",packet.sprint()), UVM_NONE);
@@ -489,14 +485,14 @@ task axi4_slave_driver_proxy::axi4_read_task();
         axi4_slave_seq_item_converter::from_read_class(local_slave_rdata_tx,struct_read_packet);
         `uvm_info(get_type_name(), $sformatf("from_read_class:: struct_read_packet = \n %0p",struct_read_packet), UVM_HIGH); 
  
-        //Converting configurations into struct config type
+        //Convertingconfigurations into struct config type
         axi4_slave_cfg_converter::from_class(axi4_slave_agent_cfg_h,struct_cfg);
         `uvm_info(get_type_name(), $sformatf("from_read_class:: struct_cfg =  \n %0p",struct_cfg),UVM_HIGH);
        
         axi4_slave_drv_bfm_h.axi4_read_data_phase(struct_read_packet,struct_cfg,axi4_slave_agent_cfg_h.slave_response_mode);
         `uvm_info("READ DATA CHANNEL PACKET", $sformatf("AFTER :: READ CHANNEL PACKET \n %p",struct_read_packet), UVM_NONE);
       end : if6
-      else if (axi4_slave_agent_cfg_h.read_data_mode == SLAVE_MEM_MODE || axi4_slave_agent_cfg_h.read_data_mode == SLAVE_ERR_RESP_MODE && write_read_mode_h != ONLY_READ_DATA) begin : ef2
+      else if ((axi4_slave_agent_cfg_h.read_data_mode == SLAVE_MEM_MODE || axi4_slave_agent_cfg_h.read_data_mode == SLAVE_ERR_RESP_MODE)&& write_read_mode_h != ONLY_READ_DATA) begin : ef2
         if(((axi4_slave_agent_cfg_h.slave_response_mode == ONLY_READ_RESP_OUT_OF_ORDER) || (axi4_slave_agent_cfg_h.slave_response_mode == WRITE_READ_RESP_OUT_OF_ORDER) ) &&(local_slave_rdata_tx.transfer_type == NON_BLOCKING_READ)==0) begin : if8
           //wait(completed_initial_txn==1);
           if(readFlag ==0)
@@ -567,6 +563,7 @@ task axi4_slave_driver_proxy::axi4_read_task();
               `uvm_info("DEBUG_SLAVE_RDATA_PROXY", $sformatf("AFTER :: READ_DATA_CHANNEL_PACKET \n%p",struct_read_packet), UVM_NONE);
             end : if11
             else begin : ef5
+             $display("ERROR");
               axi4_slave_agent_cfg_h.user_rdata = (local_slave_raddr_tx.arsize ==READ_1_BYTE)?32'ha:((local_slave_raddr_tx.arsize ==READ_2_BYTES)?32'haa:((local_slave_raddr_tx.arsize ==READ_4_BYTES)?32'hdead_beaf:{DATA_WIDTH{16'habcd}}));
               for(int i=0;i<local_slave_raddr_tx.arlen+1;i++) begin
                 struct_read_packet.rdata[i] =  axi4_slave_agent_cfg_h.user_rdata;
@@ -582,7 +579,11 @@ task axi4_slave_driver_proxy::axi4_read_task();
           for(int depth=0;depth<(((axi4_slave_agent_cfg_h.slave_response_mode == WRITE_READ_RESP_OUT_OF_ORDER)|| (axi4_slave_agent_cfg_h.slave_response_mode == ONLY_READ_RESP_OUT_OF_ORDER) ||(axi4_slave_agent_cfg_h.qos_mode_type == ONLY_READ_QOS_MODE_ENABLE) ||(axi4_slave_agent_cfg_h.qos_mode_type == WRITE_READ_QOS_MODE_ENABLE))  ? (struct_read_packet.arlen+1) : (local_slave_raddr_tx.arlen+1));depth++) begin
             struct_read_packet.rresp[depth] = READ_SLVERR;
           end
-
+          
+          axi4_slave_agent_cfg_h.user_rdata = (local_slave_raddr_tx.arsize ==READ_1_BYTE)?32'ha:((local_slave_raddr_tx.arsize ==READ_2_BYTES)?32'haa:((local_slave_raddr_tx.arsize ==READ_4_BYTES)?32'hdead_beaf:{DATA_WIDTH{16'habcd}}));
+          for(int i=0;i<(local_slave_raddr_tx.arlen+1);i++) begin
+             struct_read_packet.rdata[i] =  axi4_slave_agent_cfg_h.user_rdata;
+          end
           //read data task
           axi4_slave_drv_bfm_h.axi4_read_data_phase(struct_read_packet,struct_cfg,axi4_slave_agent_cfg_h.slave_response_mode);
           `uvm_info("DEBUG_SLAVE_RDATA_PROXY", $sformatf("AFTER :: READ CHANNEL PACKET \n %p",struct_read_packet), UVM_HIGH);
@@ -592,14 +593,11 @@ task axi4_slave_driver_proxy::axi4_read_task();
         wait(axiReadSlaveAddressQueue.size()>0);
         local_slave_raddr_tx = axiReadSlaveAddressQueue[0];
         axi4_slave_agent_cfg_h.user_rdata = (local_slave_raddr_tx.arsize ==READ_1_BYTE)?32'ha:((local_slave_raddr_tx.arsize ==READ_2_BYTES)?32'haa:((local_slave_raddr_tx.arsize ==READ_4_BYTES)?32'hdead_beaf:{DATA_WIDTH{16'habcd}}));
-        for(int i=0;i<local_slave_raddr_tx.arlen+1;i++) begin
+        for(int i=0;i<(local_slave_raddr_tx.arlen+1);i++) begin
             struct_read_packet.rdata[i] =  axi4_slave_agent_cfg_h.user_rdata;
          end
               //read data task
          axi4_slave_drv_bfm_h.axi4_read_data_phase(struct_read_packet,struct_cfg,axi4_slave_agent_cfg_h.slave_response_mode);
-
-
-
       end 
       //Calling converter class for reads to convert struct to req
       axi4_slave_seq_item_converter::to_read_class(struct_read_packet,local_slave_rdata_tx);

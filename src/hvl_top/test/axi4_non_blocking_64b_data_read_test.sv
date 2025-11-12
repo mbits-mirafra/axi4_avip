@@ -35,7 +35,10 @@ endfunction : new
 
 function void axi4_non_blocking_64b_data_read_test::setup_axi4_env_cfg();
   super.setup_axi4_env_cfg();
-//  axi4_env_cfg_h.write_read_mode_h = ONLY_READ_DATA;
+  axi4_env_cfg_h.write_read_mode_h = ONLY_READ_DATA;
+  foreach(axi4_env_cfg_h.axi4_slave_agent_cfg_h[i])begin
+   axi4_env_cfg_h.axi4_slave_agent_cfg_h[i].read_data_mode = RANDOM_DATA_MODE;
+  end
 endfunction:setup_axi4_env_cfg
 //--------------------------------------------------------------------------------------------
 // Task: run_phase

@@ -40,13 +40,14 @@ endfunction : new
 //  phase - uvm phase
 //--------------------------------------------------------------------------------------------
 task axi4_blocking_32b_write_read_test::run_phase(uvm_phase phase);
-
+  uvm_objection phase_done;
+   phase_done  = phase.get_objection() ;
   axi4_virtual_bk_32b_write_read_seq_h=axi4_virtual_bk_32b_write_read_seq::type_id::create("axi4_virtual_bk_32b_write_read_seq_h");
   `uvm_info(get_type_name(),$sformatf("axi4_blocking_32b_write_read_test"),UVM_LOW);
   phase.raise_objection(this);
   axi4_virtual_bk_32b_write_read_seq_h.start(axi4_env_h.axi4_virtual_seqr_h);
   phase.drop_objection(this);
-
+  phase_done.set_drain_time(this, 5000ns) ;
 endtask : run_phase
 
 `endif

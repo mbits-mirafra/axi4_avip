@@ -373,20 +373,28 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
   //-------------------------------------------------------
   task axi4_read_data_phase (inout axi4_read_transfer_char_s data_read_packet, input axi4_transfer_cfg_s cfg_packet,response_mode_e out_of_order_enable);
     int j1;
-    @(axiSlaveCb);
+    int amount;
+   amount = data_read_packet.araddr % (2**(data_read_packet.arsize));
+   $display("THE AMONT IS %0d and size is %0d",amount,(2**(data_read_packet.arsize)));
+     @(axiSlaveCb);
+     $display("THE READ DATA IN BFM zerot data is %0h",data_read_packet.rdata[0]);
     if((out_of_order_enable == RESP_IN_ORDER || out_of_order_enable ==
       ONLY_WRITE_RESP_OUT_OF_ORDER) && (cfg_packet.qos_mode_type == ONLY_WRITE_QOS_MODE_ENABLE ||
       cfg_packet.qos_mode_type == QOS_MODE_DISABLE)) begin
       data_read_packet.rid <= mem_arid[j1];
       
-      for(int i1=0, k1=0; i1<mem_rlen[j1] + 1; i1++) begin
+      for(int i1=0, k1=((data_read_packet.araddr % (DATA_WIDTH/8))); i1<data_read_packet.arlen+1; i1++) begin
         if(k1 == DATA_WIDTH/8) k1 = 0;
+          $display("THE K1 USED IS %0d",k1);
+        if(i1 != 0) 
+           amount =0;
         axiSlaveCb.rid  <= mem_arid[j1];
         //Sending the rdata based on each byte lane
         //RHS: Is used to send Byte by Byte
         //LHS: Is used to shift the location for each Byte
-        for(int l1=0; l1<(2**mem_rsize[j1]); l1++) begin
-          axiSlaveCb.rdata[8*k1+7 -: 8]<=data_read_packet.rdata[i1][8*l1+7 -: 8];
+       /*for(int l1=k1; l1< (i1==0)?(2**(data_read_packet.arsize))-amount : (2**(data_read_packet.arsize)); l1++) begin*/
+       for(int l1=0; l1<((2**(data_read_packet.arsize))-amount) ; l1++) begin
+          axiSlaveCb.rdata[8*k1+7 -: 8]<=data_read_packet.rdata[i1][8*k1+7 -: 8];
           k1++;
         end
         axiSlaveCb.rresp<=data_read_packet.rresp[i1];

@@ -1,3 +1,4 @@
+
 #-----------------------------------------------------------------------
 #Description : Opening a file and searching for a pattern in read mode
 #Function Used : search()
@@ -45,3 +46,4 @@ for testname in reg_list_array:
   if debug:
     print(line)
   os.system(line)
+

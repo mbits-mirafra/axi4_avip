@@ -268,6 +268,7 @@ function void axi4_slave_tx::do_copy (uvm_object rhs);
   //WRITE DATA CHANNEL
   wdata   = axi_slave_tx_copy_obj.wdata;
   wstrb   = axi_slave_tx_copy_obj.wstrb;
+  wlast =   axi_slave_tx_copy_obj.wlast;
   //WRITE RESPONSE CHANNEL
   bid     = axi_slave_tx_copy_obj.bid;
   bresp   = axi_slave_tx_copy_obj.bresp;
@@ -287,6 +288,7 @@ function void axi4_slave_tx::do_copy (uvm_object rhs);
   rid   = axi_slave_tx_copy_obj.rid;
   rdata = axi_slave_tx_copy_obj.rdata;
   rresp = axi_slave_tx_copy_obj.rresp;
+  rlast = axi_slave_tx_copy_obj.rlast;
   //OTHERS
   tx_type = axi_slave_tx_copy_obj.tx_type;
   transfer_type = axi_slave_tx_copy_obj.transfer_type;

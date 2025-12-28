@@ -208,9 +208,9 @@ function void axi4_slave_seq_item_converter::to_write_class(input axi4_write_tra
   output_conv_h.awqos = input_conv_h.awqos;
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("after writnig awqos =  %0h",output_conv_h.awqos),UVM_FULL);
 
-  while(input_conv_h.wdata[i]!==0) begin
+  
+  for(int i=0;i<input_conv_h.wdata[i];i++) begin
       output_conv_h.wdata[i] = input_conv_h.wdata[i];
-      i++;
   end
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("after writnig wdata to class = \n %0s",output_conv_h.sprint()),UVM_FULL);
 
@@ -307,9 +307,8 @@ function  void axi4_slave_seq_item_converter::tx_write_packet(input axi4_slave_t
   packet_h.awcache=input_addr_h.awcache;
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("combined addr packet=\n%s",packet_h.sprint),UVM_FULL);
 
-  while(input_data_h.wdata[i]!==0) begin
-    packet_h.wdata[i]= input_data_h.wdata[i];
-    i++;
+  for(int i=0;i<input_data_h.wdata[i];i++) begin
+    packet_h.wdata[i] = input_data_h.wdata[i];
   end
 
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("combined data packet after writing wdata= %0p",packet_h.wdata[i]),UVM_FULL);

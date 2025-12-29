@@ -144,6 +144,7 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
 
     do begin
       @(axiSlaveCb);
+       $display("I AM STUCK HERE @%0t",$time());
     end while(axiSlaveCb.awvalid === 0);
 
     `uvm_info("SLAVE_DRIVER_WADDR_PHASE", $sformatf("outside of awvalid"), UVM_MEDIUM);
@@ -383,9 +384,9 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
       cfg_packet.qos_mode_type == QOS_MODE_DISABLE)) begin
       data_read_packet.rid <= mem_arid[j1];
       
-      for(int i1=0, k1=((data_read_packet.araddr % (DATA_WIDTH/8))); i1<data_read_packet.arlen+1; i1++) begin
+      for(int i1=0, k1=((data_read_packet.araddr % (DATA_WIDTH/8))); i1<(data_read_packet.arlen+1); i1++) begin
         if(k1 == DATA_WIDTH/8) k1 = 0;
-          $display("THE K1 USED IS %0d",k1);
+          $display("THE K1 USED IS %0d and len is %0d",k1,(data_read_packet.arlen+1));
         if(i1 != 0) 
            amount =0;
         axiSlaveCb.rid  <= mem_arid[j1];
@@ -402,13 +403,15 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
         axiSlaveCb.ruser<=data_read_packet.ruser;
         axiSlaveCb.rvalid<=1'b1;
         
-        if((mem_rlen[j1]) == i1)begin
+        if((i1 == data_read_packet.arlen))begin
           axiSlaveCb.rlast <= 1'b1;
         end
         
-        do begin
-          @(axiSlaveCb);
-        end while(axiSlaveCb.rready===0);
+       do begin
+    $display("Time=%0t: Waiting for rready. Current rready=%b, rvalid=%b", 
+             $time, axiSlaveCb.rready, axiSlaveCb.rvalid);
+    @(axiSlaveCb);
+end while(axiSlaveCb.rready===0);
         axiSlaveCb.rlast <= 1'b0;
         axiSlaveCb.rvalid <= 1'b0;
       end

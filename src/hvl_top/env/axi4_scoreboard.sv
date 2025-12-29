@@ -394,7 +394,7 @@ fork
   disable fork;*/
 
   
-   axi4_master_write_response_analysis_fifo.try_get(temp);
+   axi4_master_write_response_analysis_fifo.get(temp);
   
      `uvm_info("CHECK","ENTERED FOR WRITE CHECK ",UVM_NONE) 
     
@@ -408,7 +408,7 @@ fork
      tempAddress = axi_master_address_tx.awaddr;
      masterWriteAddressQueue.delete(index);
      slaveWriteAddressQueue.delete(index);
- 
+     $display("THE BURST IN SCB IS %0d",axi_master_address_tx.awburst); 
      wrapStartAddress =tempAddress - int'(tempAddress % ((2**(axi_master_address_tx.awsize))* (axi_master_address_tx.awlen +1)));
      wrapEndAddress = wrapStartAddress + (((2**(axi_master_address_tx.awsize))* (axi_master_address_tx.awlen +1)));
      axi4_write_address_comparision(axi_master_address_tx,axi_slave_address_tx); //address check done 
@@ -419,10 +419,11 @@ fork
      else begin 
       align=1;
      end 
-     for(int i=0;i < masterArrayDataQueue[index].size();i++) begin 
-     
+     for(int i=0;i < masterArrayDataQueue[index].size();i++) begin    
        int count =0; 
        int j=0;
+         $display("Processing beat i=%0d out of %0d total beats", i, masterArrayDataQueue[index].size());
+         $display("ENTERED FOR LOOP");
         if(i !=0)
           alignAmount =0;
     
@@ -442,10 +443,12 @@ fork
             end  
           end  
           2'b 01: begin 
+                $display("ENTERED THE BURST");
             for(int k=0;k< ((2**(axi_master_address_tx.awsize) - (alignAmount)));k++) begin   
               if(!(tempAddress inside{[axi4_slave_agent_cfg_h.min_address :axi4_slave_agent_cfg_h.max_address]})) begin 
                 slave_err = 1;
               end 
+              $display("ENTERED THE BIRST LOOP");
               j =tempAddress % (DATA_WIDTH/8);
               if(masterArrayDataQueue[index][i].data[8*j+7 -: 8] != slaveArrayDataQueue[index][i].data[8*j+7 -: 8])begin 
      `uvm_error("CHECK",$sformatf("THE BYTE %0D is not equal the byte in expected is %0b and in actual is %0b",j,masterArrayDataQueue[index][i].data[8*j+7 -: 8],slaveArrayDataQueue[index][i].data[8*j+7 -: 8]))
@@ -492,10 +495,11 @@ end
 
   forever begin 
     //axi4_master_read_data_analysis_fifo.try_get(t))  
-     `uvm_info("CHECK","ENTERED READ CHECK",UVM_NONE)
+     //`uvm_info("CHECK","ENTERED READ CHECK",UVM_NONE)
      
       //axi4_master_read_data_analysis_fifo.get(t);
     axi4_slave_read_data_analysis_fifo.get(t1);
+    `uvm_info("CHECK","ENTERED READ CHECK",UVM_NONE)
      //readError = new[axi4_slave_read_data_analysis_fifo.used()];
      
      if(flag ==0) begin 

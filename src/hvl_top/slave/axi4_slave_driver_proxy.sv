@@ -487,7 +487,7 @@ task axi4_slave_driver_proxy::axi4_read_task();
         //Convertingconfigurations into struct config type
         axi4_slave_cfg_converter::from_class(axi4_slave_agent_cfg_h,struct_cfg);
         `uvm_info(get_type_name(), $sformatf("from_read_class:: struct_cfg =  \n %0p",struct_cfg),UVM_HIGH);
-       
+        `uvm_info(get_type_name(), $sformatf("number of wait states = %0d",struct_read_packet.no_of_wait_states), UVM_NONE);
         axi4_slave_drv_bfm_h.axi4_read_data_phase(struct_read_packet,struct_cfg,axi4_slave_agent_cfg_h.slave_response_mode);
        // `uvm_info("READ DATA CHANNEL PACKET", $sformatf("AFTER :: READ CHANNEL PACKET \n %p",struct_read_packet), UVM_NONE);
       end : if6

@@ -295,7 +295,7 @@ task axi4_slave_driver_proxy::axi4_write_task();
       end : ib5
 
       `uvm_info("slave_driver_proxy",$sformatf("min_tx=%0d",axi4_slave_agent_cfg_h.get_minimum_transactions),UVM_HIGH)
-      if((axi4_slave_agent_cfg_h.slave_response_mode == WRITE_READ_RESP_OUT_OF_ORDER || axi4_slave_agent_cfg_h.slave_response_mode == ONLY_WRITE_RESP_OUT_OF_ORDER)&& (local_slave_response_tx.transfer_type == NON_BLOCKING_WRITE)) begin : ib6    
+      if((axi4_slave_agent_cfg_h.slave_response_mode == WRITE_READ_RESP_OUT_OF_ORDER || axi4_slave_agent_cfg_h.slave_response_mode == ONLY_WRITE_RESP_OUT_OF_ORDER)) begin : ib6    
         if( flag ==0) 
           wait(numberOfDataTransaction >= activeTransactionCapacity );  
         else 
@@ -492,7 +492,7 @@ task axi4_slave_driver_proxy::axi4_read_task();
        // `uvm_info("READ DATA CHANNEL PACKET", $sformatf("AFTER :: READ CHANNEL PACKET \n %p",struct_read_packet), UVM_NONE);
       end : if6
       else if ((axi4_slave_agent_cfg_h.read_data_mode == SLAVE_MEM_MODE || axi4_slave_agent_cfg_h.read_data_mode == SLAVE_ERR_RESP_MODE)&& write_read_mode_h != ONLY_READ_DATA) begin : ef2
-        if(((axi4_slave_agent_cfg_h.slave_response_mode == ONLY_READ_RESP_OUT_OF_ORDER) || (axi4_slave_agent_cfg_h.slave_response_mode == WRITE_READ_RESP_OUT_OF_ORDER) ) &&(local_slave_rdata_tx.transfer_type == NON_BLOCKING_READ)) begin : if8
+        if(((axi4_slave_agent_cfg_h.slave_response_mode == ONLY_READ_RESP_OUT_OF_ORDER) || (axi4_slave_agent_cfg_h.slave_response_mode == WRITE_READ_RESP_OUT_OF_ORDER) )) begin : if8
           //wait(completed_initial_txn==1);
           if(readFlag ==0)
             wait(waitStates >= activeTransactionCapacity);
@@ -512,7 +512,7 @@ task axi4_slave_driver_proxy::axi4_read_task();
          // `uvm_info(get_type_name(), $sformatf("from_read_class:: struct_read_packet = \n %0p",struct_read_packet), UVM_NONE);
           `uvm_info(get_type_name(), $sformatf("from_read_class:: struct_read_packet = \n %0p",struct_read_packet), UVM_HIGH); 
         end :if8
-        else if((axi4_slave_agent_cfg_h.slave_response_mode == RESP_IN_ORDER || axi4_slave_agent_cfg_h.slave_response_mode == ONLY_WRITE_RESP_OUT_OF_ORDER) || local_slave_rdata_tx.transfer_type==BLOCKING_READ) begin 
+        else if((axi4_slave_agent_cfg_h.slave_response_mode == RESP_IN_ORDER || axi4_slave_agent_cfg_h.slave_response_mode == ONLY_WRITE_RESP_OUT_OF_ORDER)) begin 
           wait(axiReadSlaveAddressQueue.size()>0);
           local_slave_raddr_tx  = axiReadSlaveAddressQueue[0];
         //Converting transactions into struct data type

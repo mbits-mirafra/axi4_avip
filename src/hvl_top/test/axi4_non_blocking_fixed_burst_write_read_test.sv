@@ -17,8 +17,15 @@ class axi4_non_blocking_fixed_burst_write_read_test extends axi4_base_test;
   //-------------------------------------------------------
   extern function new(string name = "axi4_non_blocking_fixed_burst_write_read_test", uvm_component parent = null);
   extern virtual task run_phase(uvm_phase phase);
-
+  extern virtual function void build_phase(uvm_phase phase);
 endclass : axi4_non_blocking_fixed_burst_write_read_test
+
+function void axi4_non_blocking_fixed_burst_write_read_test :: build_phase(uvm_phase phase);
+ super.build_phase(phase);
+ axi4_env_cfg_h.axi4_slave_agent_cfg_h[0].slave_response_mode = WRITE_READ_RESP_OUT_OF_ORDER;
+endfunction
+
+
 
 //--------------------------------------------------------------------------------------------
 // Construct: new

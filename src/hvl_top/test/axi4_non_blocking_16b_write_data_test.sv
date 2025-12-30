@@ -17,7 +17,7 @@ class axi4_non_blocking_16b_write_data_test extends axi4_base_test;
   //-------------------------------------------------------
   extern function new(string name = "axi4_non_blocking_16b_write_data_test", uvm_component parent = null);
 
-  
+  extern virtual function void build_phase(uvm_phase phase);
   extern function void setup_axi4_env_cfg();
   extern virtual task run_phase(uvm_phase phase);
 
@@ -35,10 +35,15 @@ function axi4_non_blocking_16b_write_data_test::new(string name = "axi4_non_bloc
   super.new(name, parent);
 endfunction : new
 
+function void axi4_non_blocking_16b_write_data_test :: build_phase(uvm_phase phase);
+ super.build_phase(phase);
+ axi4_env_cfg_h.axi4_slave_agent_cfg_h[0].slave_response_mode = ONLY_WRITE_RESP_OUT_OF_ORDER;
+endfunction
 
 function void axi4_non_blocking_16b_write_data_test::setup_axi4_env_cfg();
   super.setup_axi4_env_cfg();
   axi4_env_cfg_h.write_read_mode_h = ONLY_WRITE_DATA;
+ 
 endfunction:setup_axi4_env_cfg
 
 //--------------------------------------------------------------------------------------------

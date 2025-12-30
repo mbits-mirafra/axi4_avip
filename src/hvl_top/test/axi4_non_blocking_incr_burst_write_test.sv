@@ -19,7 +19,7 @@ class axi4_non_blocking_incr_burst_write_test extends axi4_base_test;
 
 extern function void setup_axi4_env_cfg();
   extern virtual task run_phase(uvm_phase phase);
-
+  extern virtual function void build_phase(uvm_phase phase);
 endclass : axi4_non_blocking_incr_burst_write_test
 
 //--------------------------------------------------------------------------------------------
@@ -33,6 +33,11 @@ function axi4_non_blocking_incr_burst_write_test::new(string name = "axi4_non_bl
                                  uvm_component parent = null);
   super.new(name, parent);
 endfunction : new
+
+function void axi4_non_blocking_incr_burst_write_test :: build_phase(uvm_phase phase);
+ super.build_phase(phase);
+ axi4_env_cfg_h.axi4_slave_agent_cfg_h[0].slave_response_mode = ONLY_WRITE_RESP_OUT_OF_ORDER;
+endfunction
 
 
 function void axi4_non_blocking_incr_burst_write_test::setup_axi4_env_cfg();

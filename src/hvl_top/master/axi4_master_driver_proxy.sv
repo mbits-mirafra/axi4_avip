@@ -207,11 +207,11 @@ task axi4_master_driver_proxy::axi4_write_task();
       
       //Calling 3 write tasks from axi4_master_drv_bfm in HDL side
      
-       $display("********************************************************************************************************************************MASTER SIGNALS BEING SENT*********************************************************************************************************************************\n");
+      // $display("********************************************************************************************************************************MASTER SIGNALS BEING SENT*********************************************************************************************************************************\n");
           `uvm_info(get_type_name(),$sformatf("WRITE_ADDRESS_THREAD::Received_req_write_packet = \n %s",req_wr.sprint()),UVM_NONE);
-          $display("****************************************************************************************************\n");
+         // $display("****************************************************************************************************\n");
 
-      $display(" WRITE SEQ "); 
+     // $display(" WRITE SEQ "); 
       axi4_master_drv_bfm_h.axi4_write_address_channel_task(struct_write_packet,struct_cfg);
       axi4_master_drv_bfm_h.axi4_write_data_channel_task(struct_write_packet,struct_cfg);
       axi4_master_drv_bfm_h.axi4_write_response_channel_task(struct_write_packet,struct_cfg);
@@ -240,9 +240,9 @@ task axi4_master_driver_proxy::axi4_write_task();
       process write_response_process;
 
 
-      $display("********************************************************************************************************************************MASTER SIGNALS BEING SENT*********************************************************************************************************************************\n");
+      //$display("********************************************************************************************************************************MASTER SIGNALS BEING SENT*********************************************************************************************************************************\n");
           `uvm_info(get_type_name(),$sformatf("WRITE_ADDRESS_THREAD::Received_req_write_packet = \n %s",req_wr.sprint()),UVM_NONE);
-          $display("****************************************************************************************************\n");
+          //$display("****************************************************************************************************\n");
 
       //Keeping the req packet into the write fifo 
       //This fifo is used if the transfer_type is NON_BLOCKING_WRITE
@@ -616,12 +616,12 @@ task axi4_master_driver_proxy::axi4_read_task();
 
       //Calling read address channel and read data channel tasks declared in bfm to drive the
       //read address channel signals and to sample the read data channel siganls
-      $display("\n\n\n address sending out \n\n\n");
-      $display(" READ SEQ ");
+      //$display("\n\n\n address sending out \n\n\n");
+      //$display(" READ SEQ ");
       axi4_master_drv_bfm_h.axi4_read_address_channel_task(struct_read_packet,struct_cfg);
-      $display("READ SEQ ADDRESS SENT");
+      //$display("READ SEQ ADDRESS SENT");
       axi4_master_drv_bfm_h.axi4_read_data_channel_task(struct_read_packet,struct_cfg);
-      $display("READ SEQ END "); 
+      //$display("READ SEQ END "); 
       //Converting transactions into struct data type
       axi4_master_seq_item_converter::to_read_class(struct_read_packet,req_rd);
 

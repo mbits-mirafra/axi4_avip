@@ -83,7 +83,7 @@ task axi4_virtual_bk_32b_write_read_seq::body();
       end
     end
   join
- $display("THE SEQ IS BEING ENDED AT %0t",$time());
+ //$display("THE SEQ IS BEING ENDED AT %0t",$time());
  endtask : body
 
 `endif

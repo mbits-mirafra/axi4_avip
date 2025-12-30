@@ -89,7 +89,7 @@ module axi_master (
         if (!ARESETn)
             axi_ps <= IDLE;
         else begin
-                $display("THE NEST STATE IS %s @%0t",axi_ns.name(),$time()); 
+               // $display("THE NEST STATE IS %s @%0t",axi_ns.name(),$time()); 
             axi_ps <= axi_ns;
          end 
     end
@@ -100,7 +100,7 @@ module axi_master (
           IDLE: begin
             if(wr_trn_en == 1'b1) begin
               axi_ns = WRITE_ADDRESS;
-                 $display("NS IS address @%0t",$time());
+                // $display("NS IS address @%0t",$time());
             end
             else if (rd_trn_en == 1'b1) begin 
               axi_ns = READ_ADDRESS;

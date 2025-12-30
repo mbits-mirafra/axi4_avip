@@ -144,7 +144,7 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
 
     do begin
       @(axiSlaveCb);
-       $display("I AM STUCK HERE @%0t",$time());
+      // $display("I AM STUCK HERE @%0t",$time());
     end while(axiSlaveCb.awvalid === 0);
 
     `uvm_info("SLAVE_DRIVER_WADDR_PHASE", $sformatf("outside of awvalid"), UVM_MEDIUM);
@@ -233,7 +233,7 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
         `uvm_info("SLAVE_DEBUG",$sformatf("mem_length = %0d",mem_wlen[a]),UVM_HIGH)
          data_write_packet.wdata[s]=axiSlaveCb.wdata;
          `uvm_info("slave_wdata",$sformatf("sampled_slave_wdata[%0d] = %0h",s,data_write_packet.wdata[s]),UVM_HIGH);
-          $display("CAPTURED STRB IS %b",axiSlaveCb.wstrb);
+          //$display("CAPTURED STRB IS %b",axiSlaveCb.wstrb);
          data_write_packet.wstrb[s]=axiSlaveCb.wstrb;
          `uvm_info("slave_wstrb",$sformatf("sampled_slave_wstrb[%0d] = %0d",s,data_write_packet.wstrb[s]),UVM_HIGH);
          

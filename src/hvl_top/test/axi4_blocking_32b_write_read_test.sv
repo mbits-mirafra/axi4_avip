@@ -46,7 +46,7 @@ task axi4_blocking_32b_write_read_test::run_phase(uvm_phase phase);
   `uvm_info(get_type_name(),$sformatf("axi4_blocking_32b_write_read_test"),UVM_LOW);
   phase.raise_objection(this);
   axi4_virtual_bk_32b_write_read_seq_h.start(axi4_env_h.axi4_virtual_seqr_h);
-  $display("THE OBJECTION DROPPED AT %0t",$time());
+  //$display("THE OBJECTION DROPPED AT %0t",$time());
   phase.drop_objection(this);
  
 //  phase_done.set_drain_time(this, 500ns) ;

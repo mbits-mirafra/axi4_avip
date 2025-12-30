@@ -408,7 +408,7 @@ fork
      tempAddress = axi_master_address_tx.awaddr;
      masterWriteAddressQueue.delete(index);
      slaveWriteAddressQueue.delete(index);
-     $display("THE BURST IN SCB IS %0d",axi_master_address_tx.awburst); 
+     //$display("THE BURST IN SCB IS %0d",axi_master_address_tx.awburst); 
      wrapStartAddress =tempAddress - int'(tempAddress % ((2**(axi_master_address_tx.awsize))* (axi_master_address_tx.awlen +1)));
      wrapEndAddress = wrapStartAddress + (((2**(axi_master_address_tx.awsize))* (axi_master_address_tx.awlen +1)));
      axi4_write_address_comparision(axi_master_address_tx,axi_slave_address_tx); //address check done 
@@ -422,8 +422,8 @@ fork
      for(int i=0;i < masterArrayDataQueue[index].size();i++) begin    
        int count =0; 
        int j=0;
-         $display("Processing beat i=%0d out of %0d total beats", i, masterArrayDataQueue[index].size());
-         $display("ENTERED FOR LOOP");
+         //$display("Processing beat i=%0d out of %0d total beats", i, masterArrayDataQueue[index].size());
+         //$display("ENTERED FOR LOOP");
         if(i !=0)
           alignAmount =0;
     
@@ -443,12 +443,12 @@ fork
             end  
           end  
           2'b 01: begin 
-                $display("ENTERED THE BURST");
+                //$display("ENTERED THE BURST");
             for(int k=0;k< ((2**(axi_master_address_tx.awsize) - (alignAmount)));k++) begin   
               if(!(tempAddress inside{[axi4_slave_agent_cfg_h.min_address :axi4_slave_agent_cfg_h.max_address]})) begin 
                 slave_err = 1;
               end 
-              $display("ENTERED THE BIRST LOOP");
+              //$display("ENTERED THE BIRST LOOP");
               j =tempAddress % (DATA_WIDTH/8);
               if(masterArrayDataQueue[index][i].data[8*j+7 -: 8] != slaveArrayDataQueue[index][i].data[8*j+7 -: 8])begin 
      `uvm_error("CHECK",$sformatf("THE BYTE %0D is not equal the byte in expected is %0b and in actual is %0b",j,masterArrayDataQueue[index][i].data[8*j+7 -: 8],slaveArrayDataQueue[index][i].data[8*j+7 -: 8]))
@@ -1540,11 +1540,11 @@ endfunction : check_phase
 function void axi4_scoreboard::report_phase(uvm_phase phase);
   super.report_phase(phase);
   
-  $display(" ");
-  $display("-------------------------------------------- ");
-  $display("SCOREBOARD REPORT PHASE");
-  $display("-------------------------------------------- ");
-  $display(" ");
+  //$display(" ");
+  //$display("-------------------------------------------- ");
+    $display("SCOREBOARD REPORT PHASE");
+  //$display("-------------------------------------------- ");
+  //$display(" ");
   
   $display("WRITE_ADDRESS_PHASE");
 
@@ -1626,29 +1626,29 @@ function void axi4_scoreboard::report_phase(uvm_phase phase);
   `uvm_info (get_type_name(),$sformatf("Total no. of byte wise bresp failed comparisions:%0d",byte_data_cmp_failed_bresp_count ),UVM_HIGH);
   `uvm_info (get_type_name(),$sformatf("Total no. of byte wise bresp verified comparisions:%0d",byte_data_cmp_verified_bresp_count ),UVM_HIGH);
 
-  $display(" ");
-  $display("-------------------------------------------- ");
+  // $display(" ");
+  //$display("-------------------------------------------- ");
   $display("SCOREBOARD WRITE ADDRESS PACKETS");
-  $display("-------------------------------------------- ");
-  $display(" ");
+  //$display("-------------------------------------------- ");
+  //$display(" ");
     `uvm_info(get_type_name(),$sformatf("scoreboard's write address packets count  from master   \n %0d",axi4_master_tx_awaddr_count),UVM_HIGH)
     `uvm_info(get_type_name(),$sformatf("scoreboard's write address packets count  from slave    \n %0d",axi4_slave_tx_awaddr_count),UVM_HIGH)
     //`uvm_info (get_type_name(),$sformatf("Total no. of byte wise awaddr verified comparisions:%0d",byte_data_cmp_verified_awaddr_count ),UVM_NONE);
   //`uvm_info (get_type_name(),$sformatf("Total no. of byte wise awaddr failed comparisions:%0d",byte_data_cmp_failed_awaddr_count ),UVM_NONE);
  
-  $display(" ");
-  $display("-------------------------------------------- ");
+  //$display(" ");
+  //$display("-------------------------------------------- ");
   $display("SCOREBOARD WRITE DATA PACKETS");
-  $display("-------------------------------------------- ");
-  $display(" ");
+  //$display("-------------------------------------------- ");
+  //$display(" ");
     `uvm_info(get_type_name(),$sformatf("scoreboard's  write data packets count from master \n %0d",axi4_master_tx_wdata_count),UVM_HIGH)
     `uvm_info(get_type_name(),$sformatf("scoreboard's  write data packets count from slave   \n %0d",axi4_slave_tx_wdata_count),UVM_HIGH)
   
-  $display(" ");
+  //$display(" ");
   $display("-------------------------------------------- ");
   $display("SCOREBOARD WRITE RESPONSE PACKETS");
   $display("-------------------------------------------- ");
-  $display(" ");
+  //$display(" ");
     `uvm_info(get_type_name(),$sformatf("scoreboard's write response packets count from master \n %0d",axi4_master_tx_bresp_count),UVM_HIGH)
     `uvm_info(get_type_name(),$sformatf("scoreboard's write response packets count from slave  \n %0d",axi4_slave_tx_bresp_count),UVM_HIGH)
   
@@ -1742,27 +1742,27 @@ function void axi4_scoreboard::report_phase(uvm_phase phase);
   `uvm_info (get_type_name(),$sformatf("Total no. of byte wise ruser failed comparisions:%0d",byte_data_cmp_failed_ruser_count ),UVM_HIGH);
   `uvm_info (get_type_name(),$sformatf("Total no. of byte wise ruser verified comparisions:%0d",byte_data_cmp_verified_ruser_count ),UVM_HIGH);
   
-  $display(" ");
+  //$display(" ");
   $display("-------------------------------------------- ");
   $display("SCOREBOARD READ ADDRESS PACKETS");
   $display("-------------------------------------------- ");
-  $display(" ");
+  //$display(" ");
     `uvm_info(get_type_name(),$sformatf("scoreboard's read address packets count from master \n %0d",axi4_master_tx_araddr_count),UVM_HIGH)
     `uvm_info(get_type_name(),$sformatf("scoreboard's read address packets count from slave  \n %0d",axi4_slave_tx_araddr_count),UVM_HIGH)
   
-  $display(" ");
+  //$display(" ");
   $display("-------------------------------------------- ");
   $display("SCOREBOARD READ DATA PACKETS");
   $display("-------------------------------------------- ");
-  $display(" ");
+  //$display(" ");
     `uvm_info(get_type_name(),$sformatf("scoreboard's  read data packets count from master \n %0d",axi4_master_tx_rdata_count),UVM_HIGH)
     `uvm_info(get_type_name(),$sformatf("scoreboard's  read data packets count from slave  \n %0d",axi4_slave_tx_rdata_count),UVM_HIGH)
   
-  $display(" ");
+  //$display(" ");
   $display("-------------------------------------------- ");
   $display("SCOREBOARD READ RESPONSE PACKETS");
   $display("-------------------------------------------- ");
-  $display(" ");
+  //$display(" ");
     `uvm_info(get_type_name(),$sformatf("scoreboard's read response packets count from master \n %0d",axi4_master_tx_rresp_count),UVM_HIGH)
     `uvm_info(get_type_name(),$sformatf("scoreboard's read response packets count from slave   \n %0d",axi4_slave_tx_rresp_count),UVM_HIGH)
 

@@ -109,7 +109,7 @@ interface axi4_master_monitor_bfm(input bit aclk, input bit aresetn,
     end    
     `uvm_info("FROM MASTER MON BFM",$sformatf("after while loop ......."),UVM_HIGH)
       
-    $display("SWASTHI ADDRESS CAPTURED AT TIME %0t",$time());
+    //$display("SWASTHI ADDRESS CAPTURED AT TIME %0t",$time());
     req.awid    = masterMonCb.awid ;
     req.awaddr  = masterMonCb.awaddr;
     req.awlen   = masterMonCb.awlen;
@@ -175,7 +175,7 @@ interface axi4_master_monitor_bfm(input bit aclk, input bit aresetn,
     req.araddr  = araddr;
     req.arlen   = arlen;
     req.arsize  = arsize;
-    $display("SWASTHI READ BURST IS %0d",arburst);
+    //$display("SWASTHI READ BURST IS %0d",arburst);
     req.arburst = arburst;
     req.arlock  = arlock;
     req.arcache = arcache;

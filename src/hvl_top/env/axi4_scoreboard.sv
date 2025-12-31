@@ -465,10 +465,11 @@ end
 
           2'b10:begin 
             
-            for(int j=((tempAddress)%(DATA_WIDTH/8));j< ((align==0) ? ((tempAddress)%(DATA_WIDTH/8)+(2**(axi_master_address_tx.awsize) - (alignAmount))) : ((tempAddress)%(DATA_WIDTH/8)+(2**(axi_master_address_tx.awsize))));j++) begin     
+            for(int k=0;k< ((2**(axi_master_address_tx.awsize) - (alignAmount)));k++) begin
               if(!(tempAddress inside{[axi4_slave_agent_cfg_h.min_address :axi4_slave_agent_cfg_h.max_address]})) begin 
                 slave_err = 1;
               end 
+             j =tempAddress % (DATA_WIDTH/8);
               if(masterArrayDataQueue[index][i].data[8*j+7 -: 8] != slaveArrayDataQueue[index][i].data[8*j+7 -: 8])begin 
                  `uvm_error("CHECK",$sformatf("THE BYTE %0D is not equal the byte in expected is %0b and in actual is %0b",j,masterArrayDataQueue[index][i].data[8*j+7 -: 8],slaveArrayDataQueue[index][i].data[8*j+7 -: 8]))
             

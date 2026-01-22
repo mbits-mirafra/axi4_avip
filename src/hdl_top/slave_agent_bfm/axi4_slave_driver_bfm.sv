@@ -322,37 +322,13 @@ data_write_packet.awqos = axiSlaveCb.awqos;
       axiSlaveCb.buser <= data_write_packet.buser;
       axiSlaveCb.bvalid <= 1;
     end
-/*    else if((struct_cfg.slave_response_mode == ONLY_WRITE_RESP_OUT_OF_ORDER) || (struct_cfg.slave_response_mode == WRITE_READ_RESP_OUT_OF_ORDER)) begin 
-      axiSlaveCb.bid <= bid_local; 
-      data_write_packet.bid <= bid_local; 
-      axiSlaveCb.bresp <= data_write_packet.bresp;
-      axiSlaveCb.buser <= data_write_packet.buser;
-      axiSlaveCb.bvalid <= 1;
-    end
     else begin 
-     data_write_packet.bid <= mem_awid[j]; 
-     `uvm_info("DEBUG_BRESP",$sformatf("BID = %0d",data_write_packet.bid),UVM_HIGH)
-     `uvm_info(name,"INSIDE WRITE_RESPONSE_PHASE",UVM_LOW)
-
-     axiSlaveCb.bid  <= mem_awid[j];
-     `uvm_info("DEBUG_BRESP",$sformatf("MEM_BID[%0d] = %0d",j,mem_awid[j]),UVM_HIGH)
-     `uvm_info("DEBUG_BRESP_WLAST",$sformatf("wlast = %0d,j=%0d",mem_wlast[j],j),UVM_HIGH)
-     while(mem_wlast[j]!=1) begin
-       @(axiSlaveCb);
-     end
-     axiSlaveCb.bresp <= data_write_packet.bresp;
-     axiSlaveCb.buser<=data_write_packet.buser;
-     axiSlaveCb.bvalid <= 1;
-     j++;
-     `uvm_info("DEBUG_BRESP",$sformatf("BID = %0d",bid),UVM_HIGH)
-   end*/
-   else begin 
-        axiSlaveCb.bid <= bid_local;
+      axiSlaveCb.bid <= bid_local;
       data_write_packet.bid <= bid_local;
       axiSlaveCb.bresp <= data_write_packet.bresp;
       axiSlaveCb.buser <= data_write_packet.buser;
       axiSlaveCb.bvalid <= 1;
-   end 
+    end 
     
     @(axiSlaveCb);
     while(axiSlaveCb.bready === 0) begin
@@ -393,13 +369,6 @@ data_write_packet.awqos = axiSlaveCb.awqos;
     `uvm_info("SLAVE_DRIVER_RADDR_PHASE", $sformatf("outside of arvalid"), UVM_NONE); 
     
     // Sample the values
-    /*mem_arid 	[j]	  = axiSlaveCb.arid;	
-	  mem_raddr	[j] 	= axiSlaveCb.araddr;
-	  mem_rlen 	[j]	  = axiSlaveCb.arlen;	
-	  mem_rsize	[j] 	= axiSlaveCb.arsize;	
-	  mem_rburst[j] 	= axiSlaveCb.arburst;	
-	  mem_rqos[j] 	  = axiSlaveCb.arqos;
-    */	
     arready         <= 1      ;
 
     data_read_packet.arid    = axiSlaveCb.arid     ;
@@ -408,7 +377,6 @@ data_write_packet.awqos = axiSlaveCb.awqos;
     data_read_packet.arsize  = axiSlaveCb.arsize   ;
     data_read_packet.arburst = axiSlaveCb.arburst  ;
     data_read_packet.arqos   = axiSlaveCb.arqos    ;
-//	  j = j+1                                    ;
 
     `uvm_info("mem_arid",$sformatf("mem_arid[%0d]=%0d",j,mem_arid[j]),UVM_HIGH)
     `uvm_info("mem_arid",$sformatf("arid=%0d",axiSlaveCb.arid),UVM_HIGH)
@@ -426,72 +394,6 @@ data_write_packet.awqos = axiSlaveCb.awqos;
   task axi4_read_data_phase (inout axi4_read_transfer_char_s data_read_packet);
     int j1;
     int amount;
- /*
-   amount = data_read_packet.araddr % (2**(data_read_packet.arsize));
-     @(axiSlaveCb);
-    if((out_of_order_enable == RESP_IN_ORDER || out_of_order_enable ==
-      ONLY_WRITE_RESP_OUT_OF_ORDER) && (cfg_packet.qos_mode_type == ONLY_WRITE_QOS_MODE_ENABLE ||
-      cfg_packet.qos_mode_type == QOS_MODE_DISABLE)) begin
-      data_read_packet.rid <= mem_arid[j1];
-      
-      for(int i1=0, k1=((data_read_packet.araddr % (DATA_WIDTH/8))); i1<(data_read_packet.arlen+1); i1++) begin
-        if(k1 == DATA_WIDTH/8) k1 = 0;
-        if(i1 != 0) 
-           amount =0;
-        axiSlaveCb.rid  <= mem_arid[j1];
-        //Sending the rdata based on each byte lane
-        //RHS: Is used to send Byte by Byte
-        //LHS: Is used to shift the location for each Byte
-       for(int l1=k1; l1< (i1==0)?(2**(data_read_packet.arsize))-amount : (2**(data_read_packet.arsize)); l1++) begin
-       for(int l1=0; l1<((2**(data_read_packet.arsize))-amount) ; l1++) begin
-          axiSlaveCb.rdata[8*k1+7 -: 8]<=data_read_packet.rdata[i1][8*k1+7 -: 8];
-          k1++;
-        end
-        axiSlaveCb.rresp<=data_read_packet.rresp[i1];
-       
-        axiSlaveCb.ruser<=data_read_packet.ruser;
-        axiSlaveCb.rvalid<=1'b1;
-        
-        if((i1 == data_read_packet.arlen))begin
-          axiSlaveCb.rlast <= 1'b1;
-        end
-        
-       do begin
-    $display("Time=%0t: Waiting for rready. Current rready=%b, rvalid=%b", 
-             $time, axiSlaveCb.rready, axiSlaveCb.rvalid);
-    @(axiSlaveCb);
-end while(axiSlaveCb.rready===0);
-        axiSlaveCb.rlast <= 1'b0;
-        axiSlaveCb.rvalid <= 1'b0;
-      end
-     end
-     else begin
-      for(int i1=0, k1=0; i1<data_read_packet.arlen + 1; i1++) begin
-        if(k1 == DATA_WIDTH/8) k1 = 0;
-        axiSlaveCb.rid  <= data_read_packet.arid;
-        //Sending the rdata based on each byte lane
-        //RHS: Is used to send Byte by Byte
-        //LHS: Is used to shift the location for each Byte
-        for(int l1=0; l1<(2**data_read_packet.arsize); l1++) begin
-          axiSlaveCb.rdata[8*k1+7 -: 8]<=data_read_packet.rdata[i1][8*l1+7 -: 8];
-          k1++;
-        end
-        axiSlaveCb.rresp<=data_read_packet.rresp[i1];
-       
-        axiSlaveCb.ruser<=data_read_packet.ruser;
-        axiSlaveCb.rvalid<=1'b1;
-        
-        if((data_read_packet.arlen) == i1)begin
-          axiSlaveCb.rlast <= 1'b1;
-        end
-        
-        do begin
-          @(axiSlaveCb);
-        end while(axiSlaveCb.rready===0);
-        axiSlaveCb.rlast <= 1'b0;
-        axiSlaveCb.rvalid <= 1'b0;
-      end
-     end*/
       axiSlaveCb.rdata<=data_read_packet.rdata[0];
       axiSlaveCb.rresp<=data_read_packet.rresp[0];
 

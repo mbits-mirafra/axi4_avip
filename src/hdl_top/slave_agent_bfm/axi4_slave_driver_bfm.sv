@@ -159,14 +159,6 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
 	  data_write_packet.awsize	= axiSlaveCb.awsize;	
 	 data_write_packet.awburst = axiSlaveCb.awburst;	
 data_write_packet.awqos = axiSlaveCb.awqos;
-   /*
-   data_write_packet.awid    = mem_awid   [i] ;
-   data_write_packet.awaddr  = mem_waddr  [i] ;
-   data_write_packet.awlen   = mem_wlen   [i] ;
-   data_write_packet.awsize  = mem_wsize  [i] ;
-   data_write_packet.awburst = mem_wburst [i] ;
-   data_write_packet.awqos   = mem_wqos   [i] ;
-   */
    `uvm_info("struct_pkt_debug",$sformatf("struct_pkt_wr_addr_phase = \n %0p",data_write_packet),UVM_FULL)
 
    //i = i+1;
@@ -210,98 +202,25 @@ data_write_packet.awqos = axiSlaveCb.awqos;
 
     axiSlaveCb.wready <= 1 ;
     
-      forever begin
-        do begin
-          @(axiSlaveCb);
-        end while(axiSlaveCb.wvalid === 1'b0);
+    forever begin
+      do begin
+        @(axiSlaveCb);
+      end while(axiSlaveCb.wvalid === 1'b0);
 
-        data_write_packet.wdata[i] = axiSlaveCb.wdata;
-        data_write_packet.wstrb[i] = axiSlaveCb.wstrb;
-        if(axiSlaveCb.wlast === 1'b1)begin
-          i=0;
-          break;
-        end
-        i++;
+      data_write_packet.wdata[i] = axiSlaveCb.wdata;
+      data_write_packet.wstrb[i] = axiSlaveCb.wstrb;
+      if(axiSlaveCb.wlast === 1'b1)begin
+        i=0;
+        break;
       end
+      i++;
+     end
          
-           `uvm_info("slave_wlast",$sformatf("slave_wlast = %0b ,a=%0d",axiSlaveCb.wlast,a),UVM_HIGH);
-           `uvm_info("slave_wlast",$sformatf("sampled_slave_wlast = %0b",data_write_packet.wlast),UVM_HIGH);
+    `uvm_info("slave_wlast",$sformatf("slave_wlast = %0b ,a=%0d",axiSlaveCb.wlast,a),UVM_HIGH);
+    `uvm_info("slave_wlast",$sformatf("sampled_slave_wlast = %0b",data_write_packet.wlast),UVM_HIGH);
 
-   @(axiSlaveCb);
-   axiSlaveCb.wready <= 0;
-
-
-
-/*
-     static reg [7:0]i =0;
-    @(posedge aclk);
-    `uvm_info(name,$sformatf("data_write_packet=\n%p",data_write_packet),UVM_HIGH)
-    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_HIGH)
-    `uvm_info(name,$sformatf("INSIDE WRITE DATA CHANNEL"),UVM_NONE)
-    
-    wready <= 0;
-
-   do begin
-     @(posedge aclk);
-   end while(wvalid === 1'b0);
-
-   // based on the wait_cycles we can choose to drive the wready
-    `uvm_info("SLAVE_BFM_WDATA_PHASE",$sformatf("Before DRIVING WRITE DATA WAIT STATES :: %0d",data_write_packet.no_of_wait_states),UVM_HIGH);
-    repeat(data_write_packet.no_of_wait_states)begin
-      `uvm_info(name,$sformatf("DRIVING_WRITE_DATA_WAIT_STATES :: %0d",data_write_packet.no_of_wait_states),UVM_HIGH);
-      @(posedge aclk);
-      wready<=0;
-    end
-
-    wready <= 1 ;
-    
-    if(cfg_packet.qos_mode_type == ONLY_WRITE_QOS_MODE_ENABLE || cfg_packet.qos_mode_type == WRITE_READ_QOS_MODE_ENABLE) begin 
-      forever begin
-        do begin
-          @(posedge aclk);
-        end while(wvalid === 1'b0);
-
-        data_write_packet.wdata[i] = wdata;
-        data_write_packet.wstrb[i] = wstrb;
-        i++;  
-        if(wlast === 1'b1)begin
-          i=0;
-          break;
-        end
-      end
-    end
-    else begin
-      for(int s = 0;s<(mem_wlen[a]+1);s = s+1)begin
-        do begin
-          @(posedge aclk);
-        end while(wvalid === 1'b0);
-        `uvm_info("SLAVE_DEBUG",$sformatf("mem_length = %0d",mem_wlen[a]),UVM_HIGH)
-         data_write_packet.wdata[s]=wdata;
-         `uvm_info("slave_wdata",$sformatf("sampled_slave_wdata[%0d] = %0h",s,data_write_packet.wdata[s]),UVM_HIGH);
-         data_write_packet.wstrb[s]=wstrb;
-         `uvm_info("slave_wstrb",$sformatf("sampled_slave_wstrb[%0d] = %0d",s,data_write_packet.wstrb[s]),UVM_HIGH);
-         
-         // Used to sample the wlast at the end of transfer
-         // and come out of the loop if wlast == 1
-         if(s == mem_wlen[a]) begin
-           mem_wlast[a] = wlast;
-           `uvm_info("slave_wlast",$sformatf("slave1_wlast = %0b",wlast),UVM_HIGH);
-           data_write_packet.wlast = wlast;
-           if(!data_write_packet.wlast)begin
-             @(posedge aclk);
-             wready<=0;
-             break;
-           end
-           `uvm_info("slave_wlast",$sformatf("slave_wlast = %0b ,a=%0d",wlast,a),UVM_HIGH);
-           `uvm_info("slave_wlast",$sformatf("sampled_slave_wlast = %0b",data_write_packet.wlast),UVM_HIGH);
-         end
-       end
-      `uvm_info(name,$sformatf("OUTSIDE WRITE DATA CHANNEL"),UVM_NONE)
-      a++;
-    end
-
-   @(posedge aclk);
-   wready <= 0;*/
+    @(axiSlaveCb);
+    axiSlaveCb.wready <= 0;
   endtask : axi4_write_data_phase
 
   //-------------------------------------------------------

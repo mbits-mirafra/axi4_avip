@@ -198,7 +198,7 @@ task axi4_master_driver_proxy::axi4_write_task();
 
     `uvm_info(get_type_name(),$sformatf("WRITE_TASK::Checking transfer type outside if = %s",req_wr.transfer_type),UVM_FULL); 
     
-    //Checking if the tranfer type is blocking write 
+    //Checking if the tranfer type is outstanding write 
    if(req_wr.transfer_type==OUTSTANDING_WRITE) begin
      
       axi4_master_tx local_master_write_tx; 
@@ -221,7 +221,7 @@ task axi4_master_driver_proxy::axi4_write_task();
                                            local_master_write_tx.sprint()),UVM_MEDIUM);
     end
 
-    //Checking if the tranfer type is non blocking write 
+    //Checking if the tranfer type is non outstanding write 
     else if(req_wr.transfer_type==NON_OUTSTANDING_WRITE )begin
 
       //Variable : write_address_process

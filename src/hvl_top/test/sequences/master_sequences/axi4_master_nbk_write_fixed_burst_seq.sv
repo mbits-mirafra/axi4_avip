@@ -37,7 +37,7 @@ task axi4_master_nbk_write_fixed_burst_seq::body();
   if(!req.randomize() with {req.awsize == WRITE_2_BYTES;
                               req.tx_type == WRITE;
                               req.awburst == WRITE_FIXED;
-                              req.transfer_type == NON_BLOCKING_WRITE;}) begin
+                              req.transfer_type == NON_OUTSTANDING_WRITE;}) begin
     `uvm_fatal("axi4","Rand failed");
   end
   

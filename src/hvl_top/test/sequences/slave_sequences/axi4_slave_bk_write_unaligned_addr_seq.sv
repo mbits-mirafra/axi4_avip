@@ -32,7 +32,7 @@ endfunction : new
 //--------------------------------------------------------------------------------------------
 task axi4_slave_bk_write_unaligned_addr_seq::body();
   super.body();
-  req.transfer_type = BLOCKING_WRITE;
+  req.transfer_type = OUTSTANDING_WRITE;
 
   start_item(req);
   if(!req.randomize())begin

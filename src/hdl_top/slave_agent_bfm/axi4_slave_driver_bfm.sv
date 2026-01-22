@@ -144,7 +144,6 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
 
     do begin
       @(axiSlaveCb);
-      // $display("I AM STUCK HERE @%0t",$time());
     end while(axiSlaveCb.awvalid === 0);
 
     `uvm_info("SLAVE_DRIVER_WADDR_PHASE", $sformatf("outside of awvalid"), UVM_MEDIUM);
@@ -168,7 +167,7 @@ data_write_packet.awqos = axiSlaveCb.awqos;
    data_write_packet.awburst = mem_wburst [i] ;
    data_write_packet.awqos   = mem_wqos   [i] ;
    */
-   `uvm_info("struct_pkt_debug",$sformatf("struct_pkt_wr_addr_phase = \n %0p",data_write_packet),UVM_HIGH)
+   `uvm_info("struct_pkt_debug",$sformatf("struct_pkt_wr_addr_phase = \n %0p",data_write_packet),UVM_FULL)
 
    //i = i+1;
 
@@ -191,8 +190,8 @@ data_write_packet.awqos = axiSlaveCb.awqos;
     
    static reg [7:0]i =0;
     @(axiSlaveCb);
-    `uvm_info(name,$sformatf("data_write_packet=\n%p",data_write_packet),UVM_HIGH)
-    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_HIGH)
+    `uvm_info(name,$sformatf("data_write_packet=\n%p",data_write_packet),UVM_FULL)
+    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_FULL)
     `uvm_info(name,$sformatf("INSIDE WRITE DATA CHANNEL"),UVM_NONE)
     
     axiSlaveCb.wready <= 0;
@@ -372,8 +371,8 @@ data_write_packet.awqos = axiSlaveCb.awqos;
   //-------------------------------------------------------
   task axi4_read_address_phase (inout axi4_read_transfer_char_s data_read_packet, input axi4_transfer_cfg_s cfg_packet);
     @(axiSlaveCb);
-    `uvm_info(name,$sformatf("data_read_packet=\n%p",data_read_packet),UVM_HIGH);
-    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_HIGH);
+    `uvm_info(name,$sformatf("data_read_packet=\n%p",data_read_packet),UVM_FULL);
+    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_FULL);
     `uvm_info(name,$sformatf("INSIDE READ ADDRESS CHANNEL"),UVM_HIGH);
     
     // Ready can be HIGH even before we start to check 
@@ -413,7 +412,7 @@ data_write_packet.awqos = axiSlaveCb.awqos;
 
     `uvm_info("mem_arid",$sformatf("mem_arid[%0d]=%0d",j,mem_arid[j]),UVM_HIGH)
     `uvm_info("mem_arid",$sformatf("arid=%0d",axiSlaveCb.arid),UVM_HIGH)
-    `uvm_info(name,$sformatf("struct_pkt_rd_addr_phase = \n %0p",data_read_packet),UVM_HIGH)
+    `uvm_info(name,$sformatf("struct_pkt_rd_addr_phase = \n %0p",data_read_packet),UVM_FULL)
     
     @(axiSlaveCb);
     axiSlaveCb.arready <= 0;
@@ -429,9 +428,7 @@ data_write_packet.awqos = axiSlaveCb.awqos;
     int amount;
  /*
    amount = data_read_packet.araddr % (2**(data_read_packet.arsize));
-   $display("THE AMONT IS %0d and size is %0d",amount,(2**(data_read_packet.arsize)));
      @(axiSlaveCb);
-     $display("THE READ DATA IN BFM zerot data is %0h",data_read_packet.rdata[0]);
     if((out_of_order_enable == RESP_IN_ORDER || out_of_order_enable ==
       ONLY_WRITE_RESP_OUT_OF_ORDER) && (cfg_packet.qos_mode_type == ONLY_WRITE_QOS_MODE_ENABLE ||
       cfg_packet.qos_mode_type == QOS_MODE_DISABLE)) begin
@@ -439,7 +436,6 @@ data_write_packet.awqos = axiSlaveCb.awqos;
       
       for(int i1=0, k1=((data_read_packet.araddr % (DATA_WIDTH/8))); i1<(data_read_packet.arlen+1); i1++) begin
         if(k1 == DATA_WIDTH/8) k1 = 0;
-          $display("THE K1 USED IS %0d and len is %0d",k1,(data_read_packet.arlen+1));
         if(i1 != 0) 
            amount =0;
         axiSlaveCb.rid  <= mem_arid[j1];
@@ -496,24 +492,19 @@ end while(axiSlaveCb.rready===0);
         axiSlaveCb.rvalid <= 1'b0;
       end
      end*/
-   @(axiSlaveCb);
       axiSlaveCb.rdata<=data_read_packet.rdata[0];
-        axiSlaveCb.rresp<=data_read_packet.rresp[0];
+      axiSlaveCb.rresp<=data_read_packet.rresp[0];
 
-        axiSlaveCb.ruser<=data_read_packet.ruser;
-        axiSlaveCb.rvalid<=1'b1;
+      axiSlaveCb.ruser<=data_read_packet.ruser;
+      axiSlaveCb.rvalid<=1'b1;
 
-        axiSlaveCb.rlast <= data_read_packet.rlast;
-
-       do begin
-       $display("Time=%0t: Waiting for rready. Current rready=%b, rvalid=%b",
-             $time, axiSlaveCb.rready, axiSlaveCb.rvalid);
+      axiSlaveCb.rlast <= data_read_packet.rlast;
+      axiSlaveCb.rid <= data_read_packet.rid;
+      do begin
          @(axiSlaveCb);
-       end while(axiSlaveCb.rready===0);
-          axiSlaveCb.rlast <= 1'b0;
-          axiSlaveCb.rvalid <= 1'b0;
-
-   // j1++;
+      end while(axiSlaveCb.rready===0);
+      axiSlaveCb.rlast <= 1'b0;
+      axiSlaveCb.rvalid <= 1'b0;
        
   endtask : axi4_read_data_phase
 

@@ -32,7 +32,7 @@ endfunction : new
 //--------------------------------------------------------------------------------------------
 task axi4_slave_nbk_read_wrap_burst_seq::body();
   super.body();
-  req.transfer_type=NON_BLOCKING_READ;
+  req.transfer_type=NON_OUTSTANDING_READ;
   
   start_item(req);
   if(!req.randomize())begin

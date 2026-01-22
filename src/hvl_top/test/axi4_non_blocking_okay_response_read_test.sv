@@ -1,5 +1,5 @@
-`ifndef AXI4_NON_BLOCKING_OKAY_RESPONSE_READ_TEST_INCLUDED_
-`define AXI4_NON_BLOCKING_OKAY_RESPONSE_READ_TEST_INCLUDED_
+`ifndef AXI4_NON_OUTSTANDING_OKAY_RESPONSE_READ_TEST_INCLUDED_
+`define AXI4_NON_OUTSTANDING_OKAY_RESPONSE_READ_TEST_INCLUDED_
 
 //--------------------------------------------------------------------------------------------
 // Class: axi4_okay_response_read_test

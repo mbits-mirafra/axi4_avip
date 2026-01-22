@@ -44,8 +44,6 @@ endfunction : new
 //data          - bit [DATA_WIDTH-1:0]
 //--------------------------------------------------------------------------------------------
 function void axi4_slave_memory::mem_write(input bit [ADDRESS_WIDTH-1 :0]slave_address, bit [DATA_WIDTH-1:0]data);
-  
-  $display("THE ADDRESS is %0d and data is %0h",slave_address,data);
   slave_memory[slave_address] = data;
 endfunction : mem_write
 
@@ -58,7 +56,6 @@ endfunction : mem_write
 //--------------------------------------------------------------------------------------------
 function void axi4_slave_memory::mem_read(input bit [ADDRESS_WIDTH-1 :0]slave_address, output bit [DATA_WIDTH-1:0]data);
    data = slave_memory[slave_address];
-   $display("THE READ DATA IS %0h from add %0d",data,slave_address);
 endfunction : mem_read
 
 //--------------------------------------------------------------------------------------------

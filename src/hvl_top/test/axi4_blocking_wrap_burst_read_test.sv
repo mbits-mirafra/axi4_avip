@@ -1,5 +1,5 @@
-`ifndef AXI4_BLOCKING_WRAP_BURST_READ_TEST_INCLUDED_
-`define AXI4_BLOCKING_WRAP_BURST_READ_TEST_INCLUDED_
+`ifndef AXI4_OUTSTANDING_WRAP_BURST_READ_TEST_INCLUDED_
+`define AXI4_OUTSTANDING_WRAP_BURST_READ_TEST_INCLUDED_
 
 //--------------------------------------------------------------------------------------------
 // Class: axi4_wrap_burst_read_test

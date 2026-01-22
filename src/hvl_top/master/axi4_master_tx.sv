@@ -218,7 +218,7 @@ class axi4_master_tx extends uvm_sequence_item;
   //-------------------------------------------------------
   //Constraint : awaddr
   //Used to generate the alligned address with respect to size
-  constraint awaddr_c0 {soft awaddr inside {107};}
+  constraint awaddr_c0 {soft awaddr inside {104};}
 
   //Constraint : awburst_c1
   //Restricting write burst to select only FIXED, INCR and WRAP types

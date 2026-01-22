@@ -57,12 +57,6 @@ module hdl_top;
     logic       wr_trn_en;
     logic       rd_trn_en;
 
-
-
- 
-  
-
-
   //-------------------------------------------------------
   // System Reset Generation
   // Active low reset
@@ -104,49 +98,6 @@ module hdl_top;
     end
   endgenerate
  
-/*
-  
-  initial begin 
-    #45;
-    repeat(2) begin 
-     repeat(1) @(posedge intf.aclk);
-       randomize(wr_trn_en) with{wr_trn_en== 1;};
-       randomize(rd_trn_en) with{rd_trn_en== 0;};
-       randomize(TXN_ID_W_dec);
-       randomize(AWADDR_dec) with{AWADDR_dec inside {100,180,260};};
-       randomize(AWBURST_dec) with {AWBURST_dec == 1;};
-       randomize(AWLEN_dec) with{AWLEN_dec == 10;};
-       randomize(AWSIZE_dec) with{AWSIZE_dec == 2;};
-       randomize(WSTRB_dec) with{$countones(WSTRB_dec)== 2**AWSIZE_dec;};  
-       wait(intf.wvalid ==1);
-       $display("GOT IT");   
-       repeat(AWLEN_dec+1) begin 
-         @(negedge intf.aclk);
-           
-            randomize(WDATA_dec) with{WDATA_dec inside {[64'h a1234568a1232288 : 64'h b246288474893039]};};
-          wait(intf.wready == 1);
-       end    
-      wait(dut1.axi_ns == 6);
-      @(negedge intf.aclk);
-      $display("HEY RANDOMIZED AT %0t",$time());
-       randomize(TXN_ID_R_dec)  with{TXN_ID_R_dec == 10;};
-       randomize(wr_trn_en) with{wr_trn_en== 0;}; 
-       randomize(rd_trn_en) with{rd_trn_en== 1;};
-       randomize(ARADDR_dec) with {ARADDR_dec == AWADDR_dec;};
-       randomize(ARBURST_dec) with { ARBURST_dec== AWBURST_dec;};
-
-       randomize(ARLEN_dec)with{ARLEN_dec == AWLEN_dec;}; 
-
-       randomize(ARSIZE_dec) with{ARSIZE_dec == AWSIZE_dec;};
-        wait(dut1.axi_ns == 5);
-        wait(dut1.axi_ns == 6); 
-            @(negedge intf.aclk);
-       randomize(rd_trn_en) with{rd_trn_en== 0;};
-      
-   end 
-  end 
-
-*/
 
 endmodule : hdl_top
 

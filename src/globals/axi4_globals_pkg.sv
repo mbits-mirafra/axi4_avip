@@ -291,10 +291,10 @@ package axi4_globals_pkg;
   //Enum : transfer_type_e
   //Used to the determine the type of the transfer
   typedef enum bit[1:0] {
-    BLOCKING_WRITE      = 2'b00, 
-    BLOCKING_READ       = 2'b01, 
-    NON_BLOCKING_WRITE  = 2'b10, 
-    NON_BLOCKING_READ   = 2'b11 
+    OUTSTANDING_WRITE      = 2'b00, 
+    OUTSTANDING_READ       = 2'b01, 
+    NON_OUTSTANDING_WRITE  = 2'b10, 
+    NON_OUTSTANDING_READ   = 2'b11 
   }transfer_type_e;
 
   //Enum : read_data_type_mode_e

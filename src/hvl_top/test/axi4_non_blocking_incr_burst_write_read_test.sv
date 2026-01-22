@@ -1,5 +1,5 @@
-`ifndef AXI4_NON_BLOCKING_INCR_BURST_WRITE_READ_TEST_INCLUDED_
-`define AXI4_NON_BLOCKING_INCR_BURST_WRITE_READ_TEST_INCLUDED_
+`ifndef AXI4_NON_OUTSTANDING_INCR_BURST_WRITE_READ_TEST_INCLUDED_
+`define AXI4_NON_OUTSTANDING_INCR_BURST_WRITE_READ_TEST_INCLUDED_
 
 //--------------------------------------------------------------------------------------------
 // Class: axi4_non_blocking_incr_burst_write_read_test

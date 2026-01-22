@@ -1,5 +1,5 @@
-`ifndef AXI4_NON_BLOCKING_ONLY_WRITE_RESPONSE_OUT_OF_ORDER_SEQ_INCLUDED_
-`define AXI4_NON_BLOCKING_ONLY_WRITE_RESPONSE_OUT_OF_ORDER_SEQ_INCLUDED_ 
+`ifndef AXI4_NON_OUTSTANDING_ONLY_WRITE_RESPONSE_OUT_OF_ORDER_SEQ_INCLUDED_
+`define AXI4_NON_OUTSTANDING_ONLY_WRITE_RESPONSE_OUT_OF_ORDER_SEQ_INCLUDED_ 
 
 //--------------------------------------------------------------------------------------------
 // Class axi4_non_blocking_only_write_response_out_of_order_test

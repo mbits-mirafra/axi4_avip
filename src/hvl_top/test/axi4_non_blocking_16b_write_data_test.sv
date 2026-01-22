@@ -1,5 +1,5 @@
-`ifndef AXI4_NON_BLOCKING_16B_WRITE_DATA_TEST_INCLUDED_
-`define AXI4_NON_BLOCKING_16B_WRITE_DATA_TEST_INCLUDED_
+`ifndef AXI4_NON_OUTSTANDING_16B_WRITE_DATA_TEST_INCLUDED_
+`define AXI4_NON_OUTSTANDING_16B_WRITE_DATA_TEST_INCLUDED_
 
 //--------------------------------------------------------------------------------------------
 // Class: axi4_non_blocking_16b_write_data_test

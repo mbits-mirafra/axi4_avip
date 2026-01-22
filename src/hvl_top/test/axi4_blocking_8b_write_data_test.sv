@@ -1,5 +1,5 @@
-`ifndef AXI4_BLOCKING_8B_WRITE_DATA_TEST_INCLUDED_
-`define AXI4_BLOCKING_8B_WRITE_DATA_TEST_INCLUDED_
+`ifndef AXI4_OUTSTANDING_8B_WRITE_DATA_TEST_INCLUDED_
+`define AXI4_OUTSTANDING_8B_WRITE_DATA_TEST_INCLUDED_
 
 //--------------------------------------------------------------------------------------------
 // Class: axi4_blocking_8b_write_data_test

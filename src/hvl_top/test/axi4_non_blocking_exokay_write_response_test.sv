@@ -1,5 +1,5 @@
-`ifndef _AXI4_NON_BLOCKING_EXOKAY_WRITE_RESPONSE_TEST_INCLUDED_
-`define _AXI4_NON_BLOCKING_EXOKAY_WRITE_RESPONSE_TEST_INCLUDED_
+`ifndef _AXI4_NON_OUTSTANDING_EXOKAY_WRITE_RESPONSE_TEST_INCLUDED_
+`define _AXI4_NON_OUTSTANDING_EXOKAY_WRITE_RESPONSE_TEST_INCLUDED_
 
 //--------------------------------------------------------------------------------------------
 // Class: axi4_non_blocking_exokay_write_response_test

@@ -119,8 +119,8 @@ interface axi4_master_driver_bfm(input bit                      aclk,
 task axi4_write_address_channel_task (inout axi4_write_transfer_char_s data_write_packet, axi4_transfer_cfg_s cfg_packet);
     @(axiMasterCb);
 
-    `uvm_info(name,$sformatf("data_write_packet=\n%p",data_write_packet),UVM_HIGH)
-    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_HIGH)
+    `uvm_info(name,$sformatf("data_write_packet=\n%p",data_write_packet),UVM_FULL)
+    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_FULL)
     `uvm_info(name,$sformatf("DRIVING_WRITE_ADDRESS_CHANNEL"),UVM_HIGH)
     
     axiMasterCb.awid     <= data_write_packet.awid;
@@ -155,8 +155,8 @@ task axi4_write_address_channel_task (inout axi4_write_transfer_char_s data_writ
   //-------------------------------------------------------
   task axi4_write_data_channel_task (inout axi4_write_transfer_char_s data_write_packet, input axi4_transfer_cfg_s cfg_packet);
     
-    `uvm_info(name,$sformatf("data_write_packet=\n%p",data_write_packet),UVM_HIGH)
-    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_HIGH)
+    `uvm_info(name,$sformatf("data_write_packet=\n%p",data_write_packet),UVM_FULL)
+    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_FULL)
     `uvm_info(name,$sformatf("DRIVE TO WRITE DATA CHANNEL"),UVM_HIGH)
 
     @(axiMasterCb);
@@ -190,8 +190,8 @@ task axi4_write_address_channel_task (inout axi4_write_transfer_char_s data_writ
   //-------------------------------------------------------
   task axi4_write_response_channel_task (inout axi4_write_transfer_char_s data_write_packet, input axi4_transfer_cfg_s cfg_packet);
 
-    `uvm_info(name,$sformatf("WRITE_RESP data_write_packet=\n%p",data_write_packet),UVM_HIGH)
-    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_HIGH)
+    `uvm_info(name,$sformatf("WRITE_RESP data_write_packet=\n%p",data_write_packet),UVM_FULL)
+    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_FULL)
     `uvm_info(name,$sformatf("DRIVE TO WRITE RESPONSE CHANNEL"),UVM_HIGH)
     
     do begin
@@ -223,8 +223,6 @@ task axi4_write_address_channel_task (inout axi4_write_transfer_char_s data_writ
   task axi4_read_address_channel_task (inout axi4_read_transfer_char_s data_read_packet, input axi4_transfer_cfg_s cfg_packet);
     @(axiMasterCb);
     
-    `uvm_info(name,$sformatf("data_read_packet=\n%p",data_read_packet),UVM_HIGH)
-    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_HIGH)
     `uvm_info(name,$sformatf("DRIVE TO READ ADDRESS CHANNEL"),UVM_HIGH)
 
     axiMasterCb.arid     <= data_read_packet.arid;
@@ -258,8 +256,8 @@ task axi4_write_address_channel_task (inout axi4_write_transfer_char_s data_writ
   task axi4_read_data_channel_task (inout axi4_read_transfer_char_s data_read_packet, input axi4_transfer_cfg_s cfg_packet);
     
     static reg [7:0]i =0;
-    `uvm_info(name,$sformatf("data_read_packet in read data Channel=\n%p",data_read_packet),UVM_HIGH)
-    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_HIGH)
+    `uvm_info(name,$sformatf("data_read_packet in read data Channel=\n%p",data_read_packet),UVM_FULL)
+    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_FULL)
     `uvm_info(name,$sformatf("DRIVE TO READ DATA CHANNEL"),UVM_HIGH)
     
     do begin

@@ -1,5 +1,5 @@
-`ifndef AXI4_BLOCKING_CROSS_WRITE_READ_TEST_INCLUDED_
-`define AXI4_BLOCKING_CROSS_WRITE_READ_TEST_INCLUDED_
+`ifndef AXI4_OUTSTANDING_CROSS_WRITE_READ_TEST_INCLUDED_
+`define AXI4_OUTSTANDING_CROSS_WRITE_READ_TEST_INCLUDED_
 
 //--------------------------------------------------------------------------------------------
 // Class: axi4_blocking_cross_write_read_test

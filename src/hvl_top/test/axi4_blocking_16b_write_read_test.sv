@@ -1,5 +1,5 @@
-`ifndef AXI4_BLOCKING_16B_WRITE_READ_TEST_INCLUDED_
-`define AXI4_BLOCKING_16B_WRITE_READ_TEST_INCLUDED_
+`ifndef AXI4_OUTSTANDING_16B_WRITE_READ_TEST_INCLUDED_
+`define AXI4_OUTSTANDING_16B_WRITE_READ_TEST_INCLUDED_
 
 //--------------------------------------------------------------------------------------------
 // Class: axi4_blocking_16b_write_read_test
@@ -45,7 +45,8 @@ task axi4_blocking_16b_write_read_test::run_phase(uvm_phase phase);
   `uvm_info(get_type_name(),$sformatf("axi4_blocking_16b_write_read_test"),UVM_LOW);
   phase.raise_objection(this);
   axi4_virtual_bk_16b_write_read_seq_h.start(axi4_env_h.axi4_virtual_seqr_h);
-  phase.drop_objection(this);
+   #1000;
+   phase.drop_objection(this);
 
 endtask : run_phase
 

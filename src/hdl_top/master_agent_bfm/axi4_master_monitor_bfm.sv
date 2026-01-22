@@ -109,7 +109,6 @@ interface axi4_master_monitor_bfm(input bit aclk, input bit aresetn,
     end    
     `uvm_info("FROM MASTER MON BFM",$sformatf("after while loop ......."),UVM_HIGH)
       
-    //$display("SWASTHI ADDRESS CAPTURED AT TIME %0t",$time());
     req.awid    = masterMonCb.awid ;
     req.awaddr  = masterMonCb.awaddr;
     req.awlen   = masterMonCb.awlen;
@@ -118,7 +117,7 @@ interface axi4_master_monitor_bfm(input bit aclk, input bit aresetn,
     req.awlock  = masterMonCb.awlock;
     req.awcache = masterMonCb.awcache;
     req.awprot  = masterMonCb.awprot;
-    `uvm_info("FROM MASTER MON BFM",$sformatf("datapacket =%p",req),UVM_HIGH)
+    `uvm_info("FROM MASTER MON BFM",$sformatf("datapacket =%p",req),UVM_FULL)
   endtask
   
   //-------------------------------------------------------
@@ -136,10 +135,10 @@ interface axi4_master_monitor_bfm(input bit aclk, input bit aresetn,
       end while((masterMonCb.wvalid!==1 || masterMonCb.wready!==1));
       `uvm_info("FROM MASTER MON BFM",$sformatf("After while loop write data......"),UVM_HIGH)
   
-      req.wdata[0] = wdata;
-      req.wstrb[0] = wstrb;
-      req.wuser[0] = wuser;
-      req.wlast    = wlast;
+      req.wdata[0] = masterMonCb.wdata;
+      req.wstrb[0] = masterMonCb.wstrb;
+      req.wuser[0] = masterMonCb.wuser;
+      req.wlast    = masterMonCb.wlast;
   
       `uvm_info("FROM MASTER MON BFM write data",$sformatf("write datapacket wdata[%0d] = 'h%0x",i,req.wdata[i]),UVM_HIGH)
       `uvm_info("FROM MASTER MON BFM write data",$sformatf("write datapacket wstrb[%0d] = 'h%0x",i,req.wstrb[i]),UVM_HIGH)
@@ -156,9 +155,9 @@ interface axi4_master_monitor_bfm(input bit aclk, input bit aresetn,
     do begin
       @(masterMonCb);
     end while((masterMonCb.bvalid!==1 || masterMonCb.bready!==1));
-    req.bid      = bid;
-    req.bresp    = bresp;
-    `uvm_info("FROM MASTER MON BFM::WRITE RESPONSE",$sformatf("WRITE RESPONSE PACKET: \n %p",req),UVM_HIGH)
+    req.bid      = masterMonCb.bid;
+    req.bresp    = masterMonCb.bresp;
+    `uvm_info("FROM MASTER MON BFM::WRITE RESPONSE",$sformatf("WRITE RESPONSE PACKET: \n %p",req),UVM_FULL)
   endtask
   
   //-------------------------------------------------------
@@ -171,19 +170,18 @@ interface axi4_master_monitor_bfm(input bit aclk, input bit aresetn,
       @(masterMonCb);
     end while((masterMonCb.arvalid!==1 || masterMonCb.arready!==1));
 
-    req.arid    = arid;
-    req.araddr  = araddr;
-    req.arlen   = arlen;
-    req.arsize  = arsize;
-    //$display("SWASTHI READ BURST IS %0d",arburst);
-    req.arburst = arburst;
-    req.arlock  = arlock;
-    req.arcache = arcache;
-    req.arprot  = arprot;
-    req.arqos   = arqos;
-    req.arregion = arregion;
-    req.aruser     = aruser;
-    `uvm_info("FROM MASTER MON BFM",$sformatf("datapacket =%p",req),UVM_HIGH)
+    req.arid    = masterMonCb.arid;
+    req.araddr  = masterMonCb.araddr;
+    req.arlen   = masterMonCb.arlen;
+    req.arsize  = masterMonCb.arsize;
+    req.arburst = masterMonCb.arburst;
+    req.arlock  = masterMonCb.arlock;
+    req.arcache = masterMonCb.arcache;
+    req.arprot  = masterMonCb.arprot;
+    req.arqos   = masterMonCb.arqos;
+    req.arregion = masterMonCb.arregion;
+    req.aruser     = masterMonCb.aruser;
+    `uvm_info("FROM MASTER MON BFM",$sformatf("datapacket =%p",req),UVM_FULL)
   endtask
   
   //-------------------------------------------------------
@@ -198,11 +196,11 @@ interface axi4_master_monitor_bfm(input bit aclk, input bit aresetn,
         @(masterMonCb);
       end while((masterMonCb.rvalid!==1 || masterMonCb.rready!==1));
   
-      req.rid      = rid;
-      req.rdata[0] = rdata;
-      req.ruser    = ruser;
-      req.rresp    = rresp;
-      req.rlast    = rlast;
+      req.rid      = masterMonCb.rid;
+      req.rdata[0] = masterMonCb.rdata;
+      req.ruser    = masterMonCb.ruser;
+      req.rresp    = masterMonCb.rresp;
+      req.rlast    = masterMonCb.rlast;
       i++;
       
      

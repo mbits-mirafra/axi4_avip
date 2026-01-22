@@ -1,5 +1,5 @@
-`ifndef AXI4_NON_BLOCKING_ONLY_READ_RESPONSE_OUT_OF_ORDER_TEST_INCLUDED_
-`define AXI4_NON_BLOCKING_ONLY_READ_RESPONSE_OUT_OF_ORDER_TEST_INCLUDED_
+`ifndef AXI4_NON_OUTSTANDING_ONLY_READ_RESPONSE_OUT_OF_ORDER_TEST_INCLUDED_
+`define AXI4_NON_OUTSTANDING_ONLY_READ_RESPONSE_OUT_OF_ORDER_TEST_INCLUDED_
 
 //--------------------------------------------------------------------------------------------
 // Class: axi4_wrap_burst_read_test

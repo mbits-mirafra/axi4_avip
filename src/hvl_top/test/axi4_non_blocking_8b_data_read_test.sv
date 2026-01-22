@@ -1,5 +1,5 @@
-`ifndef AXI4_NON_BLOCKING_8B_DATA_READ_TEST_INCLUDED_
-`define AXI4_NON_BLOCKING_8B_DATA_READ_TEST_INCLUDED_
+`ifndef AXI4_NON_OUTSTANDING_8B_DATA_READ_TEST_INCLUDED_
+`define AXI4_NON_OUTSTANDING_8B_DATA_READ_TEST_INCLUDED_
 
 //--------------------------------------------------------------------------------------------
 // Class: axi4_8b_data_read_test

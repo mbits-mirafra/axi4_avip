@@ -1,5 +1,5 @@
-`ifndef AXI4_BLOCKING_SLAVE_ERROR_WRITE_READ_TEST_INCLUDED_
-`define AXI4_BLOCKING_SLAVE_ERROR_WRITE_READ_TEST_INCLUDED_
+`ifndef AXI4_OUTSTANDING_SLAVE_ERROR_WRITE_READ_TEST_INCLUDED_
+`define AXI4_OUTSTANDING_SLAVE_ERROR_WRITE_READ_TEST_INCLUDED_
 
 //--------------------------------------------------------------------------------------------
 // Class: axi4_blocking_slave_error_write_read_test

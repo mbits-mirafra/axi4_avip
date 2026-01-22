@@ -199,19 +199,17 @@ task axi4_master_driver_proxy::axi4_write_task();
     `uvm_info(get_type_name(),$sformatf("WRITE_TASK::Checking transfer type outside if = %s",req_wr.transfer_type),UVM_FULL); 
     
     //Checking if the tranfer type is blocking write 
-   if(req_wr.transfer_type==BLOCKING_WRITE) begin
-      
+   if(req_wr.transfer_type==OUTSTANDING_WRITE) begin
+     
       axi4_master_tx local_master_write_tx; 
       axi4_master_seq_item_converter::from_write_class(req_wr,struct_write_packet);
-      `uvm_info(get_type_name(),$sformatf("WRITE_TASK::Checking transfer type = %s",req_wr.transfer_type),UVM_MEDIUM); 
+     `uvm_info("MASTER DRIVER PROXY","MASTER INITIATES A NON OUTSTANDING TRANSACTION",UVM_HIGH)
+       `uvm_info(get_type_name(),$sformatf("WRITE_TASK::Checking transfer type = %s",req_wr.transfer_type),UVM_MEDIUM); 
       
       //Calling 3 write tasks from axi4_master_drv_bfm in HDL side
      
-      // $display("********************************************************************************************************************************MASTER SIGNALS BEING SENT*********************************************************************************************************************************\n");
           `uvm_info(get_type_name(),$sformatf("WRITE_ADDRESS_THREAD::Received_req_write_packet = \n %s",req_wr.sprint()),UVM_NONE);
-         // $display("****************************************************************************************************\n");
 
-     // $display(" WRITE SEQ "); 
       axi4_master_drv_bfm_h.axi4_write_address_channel_task(struct_write_packet,struct_cfg);
       axi4_master_drv_bfm_h.axi4_write_data_channel_task(struct_write_packet,struct_cfg);
       axi4_master_drv_bfm_h.axi4_write_response_channel_task(struct_write_packet,struct_cfg);
@@ -224,7 +222,7 @@ task axi4_master_driver_proxy::axi4_write_task();
     end
 
     //Checking if the tranfer type is non blocking write 
-    else if(req_wr.transfer_type==NON_BLOCKING_WRITE )begin
+    else if(req_wr.transfer_type==NON_OUTSTANDING_WRITE )begin
 
       //Variable : write_address_process
       //Used to control the fork_join process
@@ -239,13 +237,12 @@ task axi4_master_driver_proxy::axi4_write_task();
       //Used to control the fork_join process
       process write_response_process;
 
+      `uvm_info("MASTER DRIVER PROXY","MASTER INIATES A OUTSTANDING TRANSACTION",UVM_HIGH)
 
-      //$display("********************************************************************************************************************************MASTER SIGNALS BEING SENT*********************************************************************************************************************************\n");
-          `uvm_info(get_type_name(),$sformatf("WRITE_ADDRESS_THREAD::Received_req_write_packet = \n %s",req_wr.sprint()),UVM_NONE);
-          //$display("****************************************************************************************************\n");
+      `uvm_info(get_type_name(),$sformatf("WRITE_ADDRESS_THREAD::Received_req_write_packet = \n %s",req_wr.sprint()),UVM_NONE);
 
       //Keeping the req packet into the write fifo 
-      //This fifo is used if the transfer_type is NON_BLOCKING_WRITE
+      //This fifo is used if the transfer_type is NON_OUTSTANDING_WRITE
       //Throws the error if the write fifo reaches the limit
       if(!axi4_master_write_fifo_h.is_full()) begin
         axi4_master_write_fifo_h.write(req_wr);
@@ -608,7 +605,7 @@ task axi4_master_driver_proxy::axi4_read_task();
     `uvm_info(get_type_name(),$sformatf("READ_TASK::Checking transfer type outside if= %s",req_rd.transfer_type),UVM_FULL); 
     `uvm_info(get_type_name(),$sformatf("READ_TASK::Checking transfer type outside if= %s",req_rd.transfer_type),UVM_FULL); 
     
-    if(req_rd.transfer_type== BLOCKING_READ) begin
+    if(req_rd.transfer_type== OUTSTANDING_READ) begin
       
       //Converts the req read packet to struct read packet
       axi4_master_seq_item_converter::from_read_class(req_rd,struct_read_packet);
@@ -616,19 +613,15 @@ task axi4_master_driver_proxy::axi4_read_task();
 
       //Calling read address channel and read data channel tasks declared in bfm to drive the
       //read address channel signals and to sample the read data channel siganls
-      //$display("\n\n\n address sending out \n\n\n");
-      //$display(" READ SEQ ");
       axi4_master_drv_bfm_h.axi4_read_address_channel_task(struct_read_packet,struct_cfg);
-      //$display("READ SEQ ADDRESS SENT");
       axi4_master_drv_bfm_h.axi4_read_data_channel_task(struct_read_packet,struct_cfg);
-      //$display("READ SEQ END "); 
       //Converting transactions into struct data type
       axi4_master_seq_item_converter::to_read_class(struct_read_packet,req_rd);
 
       `uvm_info(get_type_name(),$sformatf("READ_TASK::Response_received_req_read_packet = \n %s",req_rd.sprint()),UVM_MEDIUM);
     end
 
-    else if(req_rd.transfer_type==NON_BLOCKING_READ) begin
+    else if(req_rd.transfer_type==NON_OUTSTANDING_READ) begin
 
       //Variable : read_addr_process
       //Used to control the fork_join process
@@ -640,7 +633,7 @@ task axi4_master_driver_proxy::axi4_read_task();
       process read_data_process;
 
       //Keeping the req packet into the read fifo 
-      //This fifo is used if the transfer_type is NON_BLOCKING_READ
+      //This fifo is used if the transfer_type is NON_OUTSTANDING_READ
       //Throws the error when it reaches the limit of the fifo
       if(!axi4_master_read_fifo_h.is_full()) begin
         axi4_master_read_fifo_h.write(req_rd);

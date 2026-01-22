@@ -38,7 +38,7 @@ task axi4_master_read_nbk_write_read_response_out_of_order_seq::body();
                             req.tx_type == READ;
                             req.arlen < 3;
                             req.arsize == READ_4_BYTES;
-                            req.transfer_type == NON_BLOCKING_READ;}) begin
+                            req.transfer_type == NON_OUTSTANDING_READ;}) begin
 
     `uvm_fatal("axi4","Rand failed");
   end

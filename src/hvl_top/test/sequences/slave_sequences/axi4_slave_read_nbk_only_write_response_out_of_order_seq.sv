@@ -32,7 +32,7 @@ endfunction : new
 //--------------------------------------------------------------------------------------------
 task axi4_slave_read_nbk_only_write_response_out_of_order_seq::body();
   super.body();
-  req.transfer_type=NON_BLOCKING_WRITE;
+  req.transfer_type=NON_OUTSTANDING_WRITE;
   
   start_item(req);
   if(!req.randomize())begin

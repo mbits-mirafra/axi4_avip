@@ -62,6 +62,9 @@ class axi4_scoreboard extends uvm_scoreboard;
   uvm_analysis_imp_slave_write_data#(axi4_slave_tx,axi4_scoreboard) axi4_slave_write_data_analysis_fifo;
   uvm_tlm_analysis_fifo#(axi4_slave_tx) axi4_slave_write_response_analysis_fifo;
 
+  //field to keep track of non existing mem read
+  int nonExistantMemRead;
+
   //master tx_count
   int axi4_master_tx_awaddr_count;
   //slave tx count
@@ -559,7 +562,8 @@ end
                 tempAddress++;
               end 
               else begin 
-               `uvm_info("READ_SLVERR ",$sformatf("READING FROM LOCATION %0h which doesnt exist so read slaver os %0s",tempAddress,t1.rresp),UVM_HIGH)
+               nonExistantMemRead++;
+               `uvm_info("NON EXISTANT READ",$sformatf("READING FROM LOCATION %0h which doesnt exist so read slaver os %0s",tempAddress,t1.rresp),UVM_HIGH)
                 tempAddress++;
               end
             end
@@ -587,7 +591,8 @@ end
                 tempAddress++;
               end
               else begin 
-               `uvm_info("READ_SLVERR ",$sformatf("READING FROM LOCATION %0h which doesnt exist so read slaver os %0s",tempAddress,t1.rresp),UVM_HIGH)
+               nonExistantMemRead++;
+               `uvm_info("NON EXISTANT READ",$sformatf("READING FROM LOCATION %0h which doesnt exist so read slaver os %0s",tempAddress,t1.rresp),UVM_HIGH)
                 tempAddress++;
               end 
               if(tempAddress == wrapEndAddress)
@@ -1531,7 +1536,8 @@ function void axi4_scoreboard::report_phase(uvm_phase phase);
   //$display(" ");
     `uvm_info(get_type_name(),$sformatf("scoreboard's  read data packets count from master \n %0d",axi4_master_tx_rdata_count),UVM_HIGH)
     `uvm_info(get_type_name(),$sformatf("scoreboard's  read data packets count from slave  \n %0d",axi4_slave_tx_rdata_count),UVM_HIGH)
-  
+
+    `uvm_info(get_type_name(),$sformatf("scoreboard's  non existant memory read count is \n %0d",nonExistantMemRead),UVM_HIGH)
   //$display(" ");
   $display("-------------------------------------------- ");
   $display("SCOREBOARD READ RESPONSE PACKETS");

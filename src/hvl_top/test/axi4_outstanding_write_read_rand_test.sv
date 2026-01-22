@@ -3,14 +3,14 @@
 
 //--------------------------------------------------------------------------------------------
 // Class: axi4_outstanding_write_read_rand_test
-// Extends the base test and starts the virtual sequence of random  write and read sequences
+// Extends the base test and starts the virtual sequence of random write and read sequences
 //--------------------------------------------------------------------------------------------
 class axi4_outstanding_write_read_rand_test extends axi4_base_test;
   `uvm_component_utils(axi4_outstanding_write_read_rand_test)
 
-  //Variable : axi4_virtual_bk_write_read_rand_seq_h
-  //Instatiation of axi4_virtual_bk_write_read_rand_seq
-  axi4_virtual_bk_write_read_rand_seq axi4_virtual_bk_write_read_rand_seq_h;
+  //Variable : axi4_virtual_nbk_write_read_rand_seq_h
+  //Instatiation of axi4_virtual_nbk_write_read_rand_seq
+  axi4_virtual_nbk_write_read_rand_seq axi4_virtual_nbk_write_read_rand_seq_h;
   
   //-------------------------------------------------------
   // Externally defined Tasks and Functions
@@ -34,17 +34,17 @@ endfunction : new
 
 //--------------------------------------------------------------------------------------------
 // Task: run_phase
-// Creates the axi4_virtual_32b_write_read_seq sequence and starts the write and read virtual sequences
+// Creates the axi4_virtual_32b_write_read_rand_seq sequence and starts the write and read virtual sequences
 //
 // Parameters:
 //  phase - uvm phase
 //--------------------------------------------------------------------------------------------
 task axi4_outstanding_write_read_rand_test::run_phase(uvm_phase phase);
 
-  axi4_virtual_bk_write_read_rand_seq_h=axi4_virtual_bk_write_read_rand_seq::type_id::create("axi4_virtual_bk_write_read_rand_seq_h");
+  axi4_virtual_nbk_write_read_rand_seq_h=axi4_virtual_nbk_write_read_rand_seq::type_id::create("axi4_virtual_nbk_write_read_rand_seq_h");
   `uvm_info(get_type_name(),$sformatf("axi4_outstanding_write_read_rand_test"),UVM_LOW);
   phase.raise_objection(this);
-  axi4_virtual_bk_write_read_rand_seq_h.start(axi4_env_h.axi4_virtual_seqr_h);
+  axi4_virtual_nbk_write_read_rand_seq_h.start(axi4_env_h.axi4_virtual_seqr_h);
   phase.drop_objection(this);
 
 endtask : run_phase

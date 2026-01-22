@@ -8,9 +8,9 @@
 class axi4_outstanding_okay_response_read_test extends axi4_base_test;
   `uvm_component_utils(axi4_outstanding_okay_response_read_test)
 
-  //Variable : axi4_virtual_write_seq_h
-  //Instatiation of axi4_virtual_write_seq
-  axi4_virtual_bk_okay_response_read_seq axi4_virtual_bk_okay_response_read_seq_h;
+  //Variable : axi4_virtual_nbk_okay_response_read_seq_h
+  //Instatiation of axi4_virtual_nbk_okay_response_read_seq
+  axi4_virtual_nbk_okay_response_read_seq axi4_virtual_nbk_okay_response_read_seq_h;
   
   //-------------------------------------------------------
   // Externally defined Tasks and Functions
@@ -33,12 +33,10 @@ function axi4_outstanding_okay_response_read_test::new(string name = "axi4_outst
   super.new(name, parent);
 endfunction : new
 
-
 function void axi4_outstanding_okay_response_read_test::setup_axi4_env_cfg();
   super.setup_axi4_env_cfg();
   axi4_env_cfg_h.write_read_mode_h = ONLY_READ_DATA;
 endfunction:setup_axi4_env_cfg
-
 //--------------------------------------------------------------------------------------------
 // Task: run_phase
 // Creates the axi4_virtual_write_read_seq sequence and starts the write virtual sequences
@@ -48,10 +46,10 @@ endfunction:setup_axi4_env_cfg
 //--------------------------------------------------------------------------------------------
 task axi4_outstanding_okay_response_read_test::run_phase(uvm_phase phase);
 
-  axi4_virtual_bk_okay_response_read_seq_h=axi4_virtual_bk_okay_response_read_seq::type_id::create("axi4_virtual_bk_okay_response_read_seq_h");
+  axi4_virtual_nbk_okay_response_read_seq_h=axi4_virtual_nbk_okay_response_read_seq::type_id::create("axi4_virtual_nbk_okay_response_read_seq_h");
   `uvm_info(get_type_name(),$sformatf("axi4_outstanding_okay_response_read_test"),UVM_LOW);
   phase.raise_objection(this);
-  axi4_virtual_bk_okay_response_read_seq_h.start(axi4_env_h.axi4_virtual_seqr_h);
+  axi4_virtual_nbk_okay_response_read_seq_h.start(axi4_env_h.axi4_virtual_seqr_h);
   phase.drop_objection(this);
 
 endtask : run_phase

@@ -3,14 +3,14 @@
 
 //--------------------------------------------------------------------------------------------
 // Class: axi4_outstanding_okay_response_write_read_test
-// Extends the base test and starts the virtual sequenceof write
+// Extends the base test and starts the virtual sequence of okay response write and read sequences
 //--------------------------------------------------------------------------------------------
 class axi4_outstanding_okay_response_write_read_test extends axi4_base_test;
   `uvm_component_utils(axi4_outstanding_okay_response_write_read_test)
 
-  //Variable : axi4_virtual_write_seq_h
-  //Instatiation of axi4_virtual_write_seq
-  axi4_virtual_bk_okay_response_write_read_seq axi4_virtual_bk_okay_response_write_read_seq_h;
+  //Variable : axi4_virtual_nbk_okay_response_write_read_seq_h
+  //Instatiation of axi4_virtual_nbk_okay_response_write_read_seq
+  axi4_virtual_nbk_okay_response_write_read_seq axi4_virtual_nbk_okay_response_write_read_seq_h;
   
   //-------------------------------------------------------
   // Externally defined Tasks and Functions
@@ -34,17 +34,17 @@ endfunction : new
 
 //--------------------------------------------------------------------------------------------
 // Task: run_phase
-// Creates the axi4_virtual_okay_response_write_seq sequence and starts the write virtual sequences
+// Creates the axi4_virtual_okay_response_write_seq sequence and starts the write and read virtual sequences
 //
 // Parameters:
 //  phase - uvm phase
 //--------------------------------------------------------------------------------------------
 task axi4_outstanding_okay_response_write_read_test::run_phase(uvm_phase phase);
 
-  axi4_virtual_bk_okay_response_write_read_seq_h=axi4_virtual_bk_okay_response_write_read_seq::type_id::create("axi4_virtual_bk_okay_response_write_read_seq_h");
+  axi4_virtual_nbk_okay_response_write_read_seq_h=axi4_virtual_nbk_okay_response_write_read_seq::type_id::create("axi4_virtual_nbk_okay_response_write_read_seq_h");
   `uvm_info(get_type_name(),$sformatf("axi4_outstanding_okay_response_write_read_test"),UVM_LOW);
   phase.raise_objection(this);
-  axi4_virtual_bk_okay_response_write_read_seq_h.start(axi4_env_h.axi4_virtual_seqr_h);
+  axi4_virtual_nbk_okay_response_write_read_seq_h.start(axi4_env_h.axi4_virtual_seqr_h);
   phase.drop_objection(this);
 
 endtask : run_phase

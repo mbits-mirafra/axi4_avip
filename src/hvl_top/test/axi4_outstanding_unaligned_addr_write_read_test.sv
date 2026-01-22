@@ -3,14 +3,14 @@
 
 //--------------------------------------------------------------------------------------------
 // Class: axi4_outstanding_unaligned_addr_write_read_test
-// Extends the base test and starts the virtual sequence of unaligned address of  write and read sequences
+// Extends the base test and starts the virtual sequence of unaligned address write and read sequences
 //--------------------------------------------------------------------------------------------
 class axi4_outstanding_unaligned_addr_write_read_test extends axi4_base_test;
   `uvm_component_utils(axi4_outstanding_unaligned_addr_write_read_test)
 
-  //Variable : axi4_virtual_bk_unaligned_addr_write_read_seq_h
-  //Instatiation of axi4_virtual_bk_unaligned_addr_write_read_seq
-  axi4_virtual_bk_unaligned_addr_write_read_seq axi4_virtual_bk_unaligned_addr_write_read_seq_h;
+  //Variable : axi4_virtual_nbk_unaligned_addr_write_read_seq_h
+  //Instatiation of axi4_virtual_nbk_unaligned_addr_write_read_seq
+  axi4_virtual_nbk_unaligned_addr_write_read_seq axi4_virtual_nbk_unaligned_addr_write_read_seq_h;
   
   //-------------------------------------------------------
   // Externally defined Tasks and Functions
@@ -41,10 +41,10 @@ endfunction : new
 //--------------------------------------------------------------------------------------------
 task axi4_outstanding_unaligned_addr_write_read_test::run_phase(uvm_phase phase);
 
-  axi4_virtual_bk_unaligned_addr_write_read_seq_h=axi4_virtual_bk_unaligned_addr_write_read_seq::type_id::create("axi4_virtual_bk_unaligned_addr_write_read_seq_h");
+  axi4_virtual_nbk_unaligned_addr_write_read_seq_h=axi4_virtual_nbk_unaligned_addr_write_read_seq::type_id::create("axi4_virtual_nbk_unaligned_addr_write_read_seq_h");
   `uvm_info(get_type_name(),$sformatf("axi4_outstanding_unaligned_addr_write_read_test"),UVM_LOW);
   phase.raise_objection(this);
-  axi4_virtual_bk_unaligned_addr_write_read_seq_h.start(axi4_env_h.axi4_virtual_seqr_h);
+  axi4_virtual_nbk_unaligned_addr_write_read_seq_h.start(axi4_env_h.axi4_virtual_seqr_h);
   phase.drop_objection(this);
 
 endtask : run_phase

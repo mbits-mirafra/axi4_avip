@@ -1,5 +1,5 @@
-`ifndef AXI4_non_outstanding_WRAP_BURST_READ_TEST_INCLUDED_
-`define AXI4_non_outstanding_WRAP_BURST_READ_TEST_INCLUDED_
+`ifndef AXI4_NON_OUTSTANDING_WRAP_BURST_READ_TEST_INCLUDED_
+`define AXI4_NON_OUTSTANDING_WRAP_BURST_READ_TEST_INCLUDED_
 
 //--------------------------------------------------------------------------------------------
 // Class: axi4_wrap_burst_read_test
@@ -8,9 +8,9 @@
 class axi4_non_outstanding_wrap_burst_read_test extends axi4_base_test;
   `uvm_component_utils(axi4_non_outstanding_wrap_burst_read_test)
 
-  //Variable : axi4_virtual_nbk_wrap_burst_read_seq_h
-  //Instatiation of axi4_virtual_nbk_wrap_burst_read_seq
-  axi4_virtual_nbk_wrap_burst_read_seq axi4_virtual_nbk_wrap_burst_read_seq_h;
+  //Variable : axi4_virtual_write_seq_h
+  //Instatiation of axi4_virtual_write_seq
+  axi4_virtual_bk_wrap_burst_read_seq axi4_virtual_bk_wrap_burst_read_seq_h;
   
   //-------------------------------------------------------
   // Externally defined Tasks and Functions
@@ -18,7 +18,7 @@ class axi4_non_outstanding_wrap_burst_read_test extends axi4_base_test;
   extern function new(string name = "axi4_non_outstanding_wrap_burst_read_test", uvm_component parent = null);
   extern function void setup_axi4_env_cfg();
   extern virtual task run_phase(uvm_phase phase);
-  extern virtual function void build_phase(uvm_phase phase);
+
 endclass : axi4_non_outstanding_wrap_burst_read_test
 
 //--------------------------------------------------------------------------------------------
@@ -33,12 +33,6 @@ function axi4_non_outstanding_wrap_burst_read_test::new(string name = "axi4_non_
   super.new(name, parent);
 endfunction : new
 
-function void axi4_non_outstanding_wrap_burst_read_test :: build_phase(uvm_phase phase);
- super.build_phase(phase);
- axi4_env_cfg_h.axi4_slave_agent_cfg_h[0].slave_response_mode = ONLY_READ_RESP_OUT_OF_ORDER;
-endfunction
-
-
 function void axi4_non_outstanding_wrap_burst_read_test::setup_axi4_env_cfg();
   super.setup_axi4_env_cfg();
   axi4_env_cfg_h.write_read_mode_h = ONLY_READ_DATA;
@@ -52,10 +46,10 @@ endfunction:setup_axi4_env_cfg
 //--------------------------------------------------------------------------------------------
 task axi4_non_outstanding_wrap_burst_read_test::run_phase(uvm_phase phase);
 
-  axi4_virtual_nbk_wrap_burst_read_seq_h=axi4_virtual_nbk_wrap_burst_read_seq::type_id::create("axi4_virtual_nbk_wrap_burst_read_seq_h");
+  axi4_virtual_bk_wrap_burst_read_seq_h=axi4_virtual_bk_wrap_burst_read_seq::type_id::create("axi4_virtual_bk_wrap_burst_read_seq_h");
   `uvm_info(get_type_name(),$sformatf("axi4_non_outstanding_wrap_burst_read_test"),UVM_LOW);
   phase.raise_objection(this);
-  axi4_virtual_nbk_wrap_burst_read_seq_h.start(axi4_env_h.axi4_virtual_seqr_h);
+  axi4_virtual_bk_wrap_burst_read_seq_h.start(axi4_env_h.axi4_virtual_seqr_h);
   phase.drop_objection(this);
 
 endtask : run_phase

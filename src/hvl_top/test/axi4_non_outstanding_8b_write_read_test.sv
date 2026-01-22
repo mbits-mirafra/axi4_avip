@@ -8,16 +8,16 @@
 class axi4_non_outstanding_8b_write_read_test extends axi4_base_test;
   `uvm_component_utils(axi4_non_outstanding_8b_write_read_test)
 
-  //Variable : axi4_virtual_nbk_8b_write_read_seq_h
-  //Instatiation of axi4_virtual_nbk_8b_write_read_seq
-  axi4_virtual_nbk_8b_write_read_seq axi4_virtual_nbk_8b_write_read_seq_h;
+  //Variable : axi4_virtual_bk_8b_write_read_seq_h
+  //Instatiation of axi4_virtual_bk_8b_write_read_seq
+  axi4_virtual_bk_8b_write_read_seq axi4_virtual_bk_8b_write_read_seq_h;
   
   //-------------------------------------------------------
   // Externally defined Tasks and Functions
   //-------------------------------------------------------
   extern function new(string name = "axi4_non_outstanding_8b_write_read_test", uvm_component parent = null);
   extern virtual task run_phase(uvm_phase phase);
-  extern virtual function void build_phase(uvm_phase phase);
+
 endclass : axi4_non_outstanding_8b_write_read_test
 
 //--------------------------------------------------------------------------------------------
@@ -32,13 +32,6 @@ function axi4_non_outstanding_8b_write_read_test::new(string name = "axi4_non_ou
   super.new(name, parent);
 endfunction : new
 
-function void axi4_non_outstanding_8b_write_read_test :: build_phase(uvm_phase phase);
- super.build_phase(phase);
- axi4_env_cfg_h.axi4_slave_agent_cfg_h[0].slave_response_mode = WRITE_READ_RESP_OUT_OF_ORDER;
-endfunction
-
-
-
 //--------------------------------------------------------------------------------------------
 // Task: run_phase
 // Creates the axi4_virtual_8b_write_read_seq sequence and starts the write and read virtual sequences
@@ -48,10 +41,11 @@ endfunction
 //--------------------------------------------------------------------------------------------
 task axi4_non_outstanding_8b_write_read_test::run_phase(uvm_phase phase);
 
-  axi4_virtual_nbk_8b_write_read_seq_h=axi4_virtual_nbk_8b_write_read_seq::type_id::create("axi4_virtual_nbk_8b_write_read_seq_h");
+  axi4_virtual_bk_8b_write_read_seq_h=axi4_virtual_bk_8b_write_read_seq::type_id::create("axi4_virtual_bk_8b_write_read_seq_h");
   `uvm_info(get_type_name(),$sformatf("axi4_non_outstanding_8b_write_read_test"),UVM_LOW);
   phase.raise_objection(this);
-  axi4_virtual_nbk_8b_write_read_seq_h.start(axi4_env_h.axi4_virtual_seqr_h);
+  axi4_virtual_bk_8b_write_read_seq_h.start(axi4_env_h.axi4_virtual_seqr_h);
+  #10000;
   phase.drop_objection(this);
 
 endtask : run_phase

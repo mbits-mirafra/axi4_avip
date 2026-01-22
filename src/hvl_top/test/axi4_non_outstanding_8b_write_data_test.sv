@@ -10,7 +10,7 @@ class axi4_non_outstanding_8b_write_data_test extends axi4_base_test;
 
   //Variable : axi4_virtual_write_seq_h
   //Instatiation of axi4_virtual_write_seq
-  axi4_virtual_nbk_8b_write_data_seq axi4_virtual_nbk_8b_write_data_seq_h;
+  axi4_virtual_bk_8b_write_data_seq axi4_virtual_bk_8b_write_data_seq_h;
   
   //-------------------------------------------------------
   // Externally defined Tasks and Functions
@@ -19,7 +19,7 @@ class axi4_non_outstanding_8b_write_data_test extends axi4_base_test;
 
   extern function void setup_axi4_env_cfg();
   extern virtual task run_phase(uvm_phase phase);
-  extern virtual function void build_phase(uvm_phase phase);
+
 endclass : axi4_non_outstanding_8b_write_data_test
 
 //--------------------------------------------------------------------------------------------
@@ -34,10 +34,6 @@ function axi4_non_outstanding_8b_write_data_test::new(string name = "axi4_non_ou
   super.new(name, parent);
 endfunction : new
 
-function void axi4_non_outstanding_8b_write_data_test :: build_phase(uvm_phase phase);
- super.build_phase(phase);
- axi4_env_cfg_h.axi4_slave_agent_cfg_h[0].slave_response_mode = ONLY_WRITE_RESP_OUT_OF_ORDER;
-endfunction
 
 
 function void axi4_non_outstanding_8b_write_data_test::setup_axi4_env_cfg();
@@ -53,14 +49,11 @@ endfunction:setup_axi4_env_cfg
 //--------------------------------------------------------------------------------------------
 task axi4_non_outstanding_8b_write_data_test::run_phase(uvm_phase phase);
 
-  axi4_virtual_nbk_8b_write_data_seq_h=axi4_virtual_nbk_8b_write_data_seq::type_id::create("axi4_virtual_nbk_8b_write_data_seq_h");
+  axi4_virtual_bk_8b_write_data_seq_h=axi4_virtual_bk_8b_write_data_seq::type_id::create("axi4_virtual_bk_8b_write_data_seq_h");
   `uvm_info(get_type_name(),$sformatf("axi4_non_outstanding_8b_write_data_test"),UVM_LOW);
-
   phase.raise_objection(this);
-  axi4_virtual_nbk_8b_write_data_seq_h.start(axi4_env_h.axi4_virtual_seqr_h);
-    #10000000; 
-  
- phase.drop_objection(this);
+  axi4_virtual_bk_8b_write_data_seq_h.start(axi4_env_h.axi4_virtual_seqr_h);
+  phase.drop_objection(this);
 
 endtask : run_phase
 

@@ -695,6 +695,7 @@ struct_read_packet.rid = read_pkt.arid;
        end
      
     for(int j=0,int k=0;j<(read_pkt.arlen+1);j++)begin
+       struct_read_packet.rresp[0] = READ_OKAY;
        if(j!=0) begin 
          amount =0;
        end 
@@ -707,7 +708,6 @@ struct_read_packet.rid = read_pkt.arid;
 
              axi4_slave_mem_h.mem_read(addr,struct_read_packet.rdata[0][8*k+7 -: 8]);
               addr++;
-             struct_read_packet.rresp[j] = READ_OKAY;
              `uvm_info("SLAVE DRIVER PROXY",$sformatf("SLAVE WRAP READ THE DATA EXISTS READ FROM %0d AND READ DATA IS %0d",addr,struct_read_packet.rdata[0][8*k+7 -: 8]),UVM_HIGH)
 
           end 
@@ -743,7 +743,7 @@ struct_read_packet.rid = read_pkt.arid;
        end
 
     for(int j=0,int k=0;j<(read_pkt.arlen+1);j++)begin
-      struct_read_packet.rresp[j] = READ_OKAY;
+      struct_read_packet.rresp[0] = READ_OKAY;
        if(j !=0)
          amount =0;
 
@@ -754,7 +754,6 @@ struct_read_packet.rid = read_pkt.arid;
            k = k_t % (DATA_WIDTH/8);
            if(axi4_slave_mem_h.is_slave_addr_exists(k_t))begin  
              axi4_slave_mem_h.mem_read(k_t,struct_read_packet.rdata[0][8*k+7 -: 8]);
-             struct_read_packet.rresp[0] = READ_OKAY;
              `uvm_info("SLAVE DRIVER PROXY",$sformatf("SLAVE WRAP READ THE DATA EXISTS READ FROM %0d AND READ DATA IS %0d",k_t,struct_read_packet.rdata[0][8*k+7 -: 8]),UVM_HIGH)
              k_t++;
            end 

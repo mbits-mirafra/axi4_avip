@@ -268,6 +268,7 @@ function void axi4_slave_tx::do_copy (uvm_object rhs);
   //WRITE DATA CHANNEL
   wdata   = axi_slave_tx_copy_obj.wdata;
   wstrb   = axi_slave_tx_copy_obj.wstrb;
+  wlast =   axi_slave_tx_copy_obj.wlast;
   //WRITE RESPONSE CHANNEL
   bid     = axi_slave_tx_copy_obj.bid;
   bresp   = axi_slave_tx_copy_obj.bresp;
@@ -287,6 +288,7 @@ function void axi4_slave_tx::do_copy (uvm_object rhs);
   rid   = axi_slave_tx_copy_obj.rid;
   rdata = axi_slave_tx_copy_obj.rdata;
   rresp = axi_slave_tx_copy_obj.rresp;
+  rlast = axi_slave_tx_copy_obj.rlast;
   //OTHERS
   tx_type = axi_slave_tx_copy_obj.tx_type;
   transfer_type = axi_slave_tx_copy_obj.transfer_type;
@@ -388,9 +390,9 @@ function void axi4_slave_tx::do_print(uvm_printer printer);
     printer.print_field("arqos",arqos,$bits(arqos),UVM_HEX);
     //`uvm_info("------------------------------------------READ_DATA_CHANNEL","----------------------------------------",UVM_LOW);
     printer.print_string("rid",rid.name());
-    foreach(rdata[i])begin
+    /*foreach(rdata[i])begin
       printer.print_field($sformatf("rdata[%0d]",i),rdata[i],$bits(rdata[i]),UVM_HEX);
-    end
+    end*/
     printer.print_string("rresp",rresp.name());
     printer.print_field("ruser",ruser,$bits(ruser),UVM_HEX);
     printer.print_field("no_of_wait_states",no_of_wait_states,$bits(no_of_wait_states),UVM_HEX);

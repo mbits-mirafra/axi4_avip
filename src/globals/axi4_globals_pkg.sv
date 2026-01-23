@@ -33,7 +33,7 @@ package axi4_globals_pkg;
   `define DATA_WIDTH 32
   //Parameter: DATA_WIDTH
   //Used to set the data width 
-  parameter int DATA_WIDTH = `DATA_WIDTH;
+  parameter int DATA_WIDTH = 64;
 
   //Parameter: SLAVE_MEMORY_SIZE
   //Sets the memory size of the slave in KB
@@ -62,7 +62,10 @@ package axi4_globals_pkg;
   //Variable: OUTSTANDING_FIFO_DEPTH
   //Indicates the fifo depth of outstanding transaction
   parameter int OUTSTANDING_FIFO_DEPTH = 16;
-  
+  parameter outstanding = 1; 
+  parameter writeReadOrdering = 1;
+  parameter activeTransactionCapacity = 2;
+ 
   //-------------------------------------------------------
   // Enums used in axi4_avip are given below
   //-------------------------------------------------------
@@ -288,10 +291,10 @@ package axi4_globals_pkg;
   //Enum : transfer_type_e
   //Used to the determine the type of the transfer
   typedef enum bit[1:0] {
-    BLOCKING_WRITE      = 2'b00, 
-    BLOCKING_READ       = 2'b01, 
-    NON_BLOCKING_WRITE  = 2'b10, 
-    NON_BLOCKING_READ   = 2'b11 
+    OUTSTANDING_WRITE      = 2'b00, 
+    OUTSTANDING_READ       = 2'b01, 
+    NON_OUTSTANDING_WRITE  = 2'b10, 
+    NON_OUTSTANDING_READ   = 2'b11 
   }transfer_type_e;
 
   //Enum : read_data_type_mode_e

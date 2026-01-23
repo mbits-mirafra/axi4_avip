@@ -37,8 +37,8 @@ task axi4_master_bk_write_unaligned_addr_seq::body();
   if(!req.randomize() with {req.awaddr % 4 !=0;
                               req.awsize == WRITE_2_BYTES;
                               req.tx_type == WRITE;
-                              req.awburst == WRITE_FIXED;
-                              req.transfer_type == BLOCKING_WRITE;}) begin
+                              req.awburst == WRITE_INCR;
+                              req.transfer_type == OUTSTANDING_WRITE;}) begin
     `uvm_fatal("axi4","Rand failed");
   end
   finish_item(req);

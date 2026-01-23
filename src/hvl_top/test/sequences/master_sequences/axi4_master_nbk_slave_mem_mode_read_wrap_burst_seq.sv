@@ -36,7 +36,7 @@ task axi4_master_nbk_slave_mem_mode_read_wrap_burst_seq::body();
   if(!req.randomize() with {
                             req.tx_type == READ;
                             req.arburst == READ_WRAP;
-                            req.transfer_type == NON_BLOCKING_READ;}) begin
+                            req.transfer_type == NON_OUTSTANDING_READ;}) begin
 
     `uvm_fatal("axi4","Rand failed");
   end

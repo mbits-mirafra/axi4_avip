@@ -35,7 +35,7 @@ task axi4_master_bk_write_rand_seq::body();
   
   start_item(req);
   if(!req.randomize() with { req.tx_type == WRITE;
-                             req.transfer_type == BLOCKING_WRITE;
+                             req.transfer_type == OUTSTANDING_WRITE;
                            }) begin
 
     `uvm_fatal("axi4","Rand failed");

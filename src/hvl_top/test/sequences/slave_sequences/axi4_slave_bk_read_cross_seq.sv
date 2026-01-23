@@ -32,7 +32,7 @@ endfunction : new
 //--------------------------------------------------------------------------------------------
 task axi4_slave_bk_read_cross_seq::body();
   super.body();
-  req.transfer_type=BLOCKING_READ;
+  req.transfer_type=OUTSTANDING_READ;
   
   start_item(req);
   if(!req.randomize())begin

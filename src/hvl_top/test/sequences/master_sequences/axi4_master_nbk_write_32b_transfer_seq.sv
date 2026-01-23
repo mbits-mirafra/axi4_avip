@@ -36,12 +36,12 @@ task axi4_master_nbk_write_32b_transfer_seq::body();
   start_item(req);
   if(!req.randomize() with {req.awsize == WRITE_4_BYTES;
                               req.tx_type == WRITE;
-                              req.awburst == WRITE_FIXED;
-                              req.transfer_type == NON_BLOCKING_WRITE;}) begin
+                              req.awburst == WRITE_INCR;
+                              req.transfer_type == NON_OUTSTANDING_WRITE;}) begin
     `uvm_fatal("axi4","Rand failed");
   end
   
-  `uvm_info(get_type_name(), $sformatf("DEBUG_MSHA :: master_seq \n%s",req.sprint()), UVM_NONE); 
+  //`uvm_info(get_type_name(), $sformatf("DEBUG_MSHA :: master_seq \n%s",req.sprint()), UVM_NONE); 
   finish_item(req);
 
 endtask : body

@@ -32,7 +32,7 @@ endfunction : new
 //--------------------------------------------------------------------------------------------
 task axi4_slave_nbk_slave_mem_mode_write_wrap_burst_seq::body();
   super.body();
-  req.transfer_type=NON_BLOCKING_WRITE;
+  req.transfer_type=NON_OUTSTANDING_WRITE;
 
   start_item(req);
   if(!req.randomize)begin

@@ -34,8 +34,8 @@ endfunction : new
 task axi4_slave_bk_base_seq::body();
   req = axi4_slave_tx::type_id::create("req");
   
-  req.transfer_type=BLOCKING_WRITE;
-  req.transfer_type=BLOCKING_READ;
+  req.transfer_type=OUTSTANDING_WRITE;
+  req.transfer_type=OUTSTANDING_READ;
 
 endtask : body
 

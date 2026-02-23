@@ -64,7 +64,6 @@ class axi4_scoreboard extends uvm_scoreboard;
 
   //field to keep track of non existing mem read
   int nonExistantMemRead;
-
   //master tx_count
   int axi4_master_tx_awaddr_count;
   //slave tx count

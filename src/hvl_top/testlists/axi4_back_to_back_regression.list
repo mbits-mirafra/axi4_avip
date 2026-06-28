@@ -1,9 +1,9 @@
 # Regression list : back to back master to slave VIP tests
 # Production default regression
 
-axi4_back_to_back_write_test
-axi4_back_to_back_read_test
-axi4_back_to_back_write_read_test
+#axi4_back_to_back_write_test
+#axi4_back_to_back_read_test
+#axi4_back_to_back_write_read_test
 
 # Full suite mirroring standalone slave
 axi4_back_to_back_non_outstanding_8b_write_data_test

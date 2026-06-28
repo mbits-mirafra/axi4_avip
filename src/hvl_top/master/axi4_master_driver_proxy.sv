@@ -415,6 +415,7 @@ task axi4_master_driver_proxy::axi4_read_task();
     axi4_transfer_cfg_s       struct_cfg;
 
     axi_read_seq_item_port.get_next_item(req_rd);
+    $display("STARTING READ DATA TASK with req_rd type is %s",req_rd.transfer_type); 
     `uvm_info(get_type_name(),$sformatf("READ_TASK:: Before Sending_req_read_packet = \n %s",req_rd.sprint()),UVM_FULL); 
 
     //Converting configurations into struct config type
@@ -437,6 +438,7 @@ task axi4_master_driver_proxy::axi4_read_task();
       //Calling read address channel and read data channel tasks declared in bfm to drive the
       //read address channel signals and to sample the read data channel siganls
       axi4_master_drv_bfm_h.axi4_read_address_channel_task(struct_read_packet,struct_cfg);
+      $display("STARTING READ DATA TASK");
       axi4_master_drv_bfm_h.axi4_read_data_channel_task(struct_read_packet,struct_cfg);
       //Converting transactions into struct data type
       axi4_master_seq_item_converter::to_read_class(struct_read_packet,req_rd);

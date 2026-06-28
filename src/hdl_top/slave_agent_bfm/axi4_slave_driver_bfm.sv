@@ -144,7 +144,7 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
 
     do begin
       @(axiSlaveCb);
-    end while(axiSlaveCb.awvalid === 0);
+    end while(axiSlaveCb.awvalid === 0 || $isunknown(axiSlaveCb.awvalid));
 
     `uvm_info("SLAVE_DRIVER_WADDR_PHASE", $sformatf("outside of awvalid"), UVM_MEDIUM);
     
@@ -190,7 +190,7 @@ data_write_packet.awqos = axiSlaveCb.awqos;
 
    do begin
      @(axiSlaveCb);
-   end while(axiSlaveCb.wvalid === 1'b0);
+   end while(axiSlaveCb.wvalid === 1'b0 || $isunknown(axiSlaveCb.wvalid));
 
    // based on the wait_cycles we can choose to drive the wready
     `uvm_info("SLAVE_BFM_WDATA_PHASE",$sformatf("Before DRIVING WRITE DATA WAIT STATES :: %0d",data_write_packet.no_of_wait_states),UVM_HIGH);
@@ -205,7 +205,7 @@ data_write_packet.awqos = axiSlaveCb.awqos;
     forever begin
       do begin
         @(axiSlaveCb);
-      end while(axiSlaveCb.wvalid === 1'b0);
+      end while(axiSlaveCb.wvalid === 1'b0 || $isunknown(axiSlaveCb.wvalid));
 
       data_write_packet.wdata[i] = axiSlaveCb.wdata;
       data_write_packet.wstrb[i] = axiSlaveCb.wstrb;
@@ -242,7 +242,7 @@ data_write_packet.awqos = axiSlaveCb.awqos;
       axiSlaveCb.bvalid <= 1;
     
     @(axiSlaveCb);
-    while(axiSlaveCb.bready === 0) begin
+    while(axiSlaveCb.bready === 0 || $isunknown(axiSlaveCb.bready)) begin
       @(axiSlaveCb);
       data_write_packet.wait_count_write_response_channel++;
       `uvm_info(name,$sformatf("inside_detect_bready = %0d",axiSlaveCb.bready),UVM_HIGH)
@@ -267,7 +267,7 @@ data_write_packet.awqos = axiSlaveCb.awqos;
     // Can make arready to zero 
      axiSlaveCb.arready <= 0;
 
-    while(axiSlaveCb.arvalid === 0) begin
+    while(axiSlaveCb.arvalid === 0 ||($isunknown(axiSlaveCb.arvalid))) begin
       @(axiSlaveCb);
     end
    
@@ -315,7 +315,7 @@ data_write_packet.awqos = axiSlaveCb.awqos;
       axiSlaveCb.rid <= data_read_packet.rid;
       do begin
          @(axiSlaveCb);
-      end while(axiSlaveCb.rready===0);
+      end while(axiSlaveCb.rready===0 || $isunknown(axiSlaveCb.rready));
       axiSlaveCb.rlast <= 1'b0;
       axiSlaveCb.rvalid <= 1'b0;
        

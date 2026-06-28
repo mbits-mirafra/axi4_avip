@@ -94,7 +94,6 @@ interface axi4_master_driver_bfm(input bit                      aclk,
   task wait_for_aresetn();
     @(negedge aresetn);
     `uvm_info(name,$sformatf("SYSTEM RESET DETECTED"),UVM_HIGH)
-
     @(posedge aresetn);
     `uvm_info(name,$sformatf("SYSTEM RESET DEACTIVATED"),UVM_HIGH)
   endtask : wait_for_aresetn
@@ -140,7 +139,7 @@ task axi4_write_address_channel_task (inout axi4_write_transfer_char_s data_writ
       @(axiMasterCb);
       data_write_packet.wait_count_write_address_channel++;
     end
-    while(axiMasterCb.awready !== 1);
+    while(axiMasterCb.awready !== 1 || $isunknown(axiMasterCb.awready));
 
     `uvm_info(name,$sformatf("After_loop_of_Detecting_awready = %0d, awvalid = %0d",awready,awvalid),UVM_HIGH)
     axiMasterCb.awvalid <= 1'b0;
@@ -173,7 +172,7 @@ task axi4_write_address_channel_task (inout axi4_write_transfer_char_s data_writ
 
       do begin
         @(axiMasterCb);
-      end while(axiMasterCb.wready===0);
+      end while(axiMasterCb.wready===0 || $isunknown(axiMasterCb.wready));
       `uvm_info(name,$sformatf("DEBUG_NA:WDATA[%0d]=%0h",i,data_write_packet.wdata[i]),UVM_HIGH)
     end
 
@@ -194,7 +193,7 @@ task axi4_write_address_channel_task (inout axi4_write_transfer_char_s data_writ
     
     do begin
       @(axiMasterCb);
-    end while(axiMasterCb.bvalid !== 1'b1); 
+    end while(axiMasterCb.bvalid !== 1'b1 || $isunknown(axiMasterCb.bvalid)); 
 
     repeat(data_write_packet.no_of_wait_states)begin
       `uvm_info(name,$sformatf("DRIVING WAIT STATES in write response:: %0d",data_write_packet.no_of_wait_states),UVM_HIGH);
@@ -222,7 +221,7 @@ task axi4_write_address_channel_task (inout axi4_write_transfer_char_s data_writ
     @(axiMasterCb);
     
     `uvm_info(name,$sformatf("DRIVE TO READ ADDRESS CHANNEL"),UVM_HIGH)
-
+    $display("SENT ADDRESS REQ");
     axiMasterCb.arid     <= data_read_packet.arid;
     axiMasterCb.araddr   <= data_read_packet.araddr;
     axiMasterCb.arlen    <= data_read_packet.arlen;
@@ -241,8 +240,8 @@ task axi4_write_address_channel_task (inout axi4_write_transfer_char_s data_writ
       @(axiMasterCb);
       data_read_packet.wait_count_read_address_channel++;
     end
-    while(axiMasterCb.arready !== 1);
-
+    while(axiMasterCb.arready !== 1 || $isunknown(axiMasterCb.arready));
+    $display("OBTAINED ADDRESS RESP");
     `uvm_info(name,$sformatf("After_loop_of_Detecting_awready = %0d, awvalid = %0d",awready,awvalid),UVM_HIGH)
     axiMasterCb.arvalid <= 1'b0;
   endtask : axi4_read_address_channel_task
@@ -262,20 +261,22 @@ task axi4_write_address_channel_task (inout axi4_write_transfer_char_s data_writ
       @(axiMasterCb);
       //Driving rready as low initially
       axiMasterCb.rready  <= 0;
-    end while(axiMasterCb.rvalid === 1'b0);
-    
+    end while(axiMasterCb.rvalid === 1'b0 || $isunknown(axiMasterCb.rvalid));
+   
+    $display("RVALID OBTAINED");
     repeat(data_read_packet.no_of_wait_states)begin
       `uvm_info(name,$sformatf("DRIVING WAIT STATES in read data channel :: %0d",data_read_packet.no_of_wait_states),UVM_HIGH);
       @(axiMasterCb);
     end
 
     //Driving ready as high
+    $display("DRIVEN RREADY AS HIGH");
     axiMasterCb.rready <= 1'b1;
 
     forever begin
       do begin
         @(axiMasterCb);
-      end while(axiMasterCb.rvalid === 1'b0);
+      end while(axiMasterCb.rvalid === 1'b0 || $isunknown(axiMasterCb.rvalid));
 
       data_read_packet.rid      = axiMasterCb.rid;
       data_read_packet.rdata[i] = axiMasterCb.rdata;
@@ -301,7 +302,6 @@ task axi4_write_address_channel_task (inout axi4_write_transfer_char_s data_writ
     axiMasterCb.wvalid   <= 1'b0;
     axiMasterCb.bready   <= 1'b0;
     axiMasterCb.arvalid  <= 1'b0;
-    axiMasterCb.rready   <= 1'b0;
 
     axiMasterCb.awid     <= 'b0;
     axiMasterCb.awaddr   <= 'b0;

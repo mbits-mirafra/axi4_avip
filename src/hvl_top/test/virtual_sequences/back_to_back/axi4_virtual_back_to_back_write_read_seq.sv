@@ -60,21 +60,17 @@ task axi4_virtual_back_to_back_write_read_seq::body();
   fork
     begin : SLAVE_WRITE_RESP
       axi4_slave_base_seq axi4_slave_write_seq_h;
-      forever begin
         axi4_slave_write_seq_h = axi4_slave_base_seq::type_id::create("axi4_slave_write_seq_h");
         axi4_slave_write_seq_h.writeOrRead       = WRITE;
         axi4_slave_write_seq_h.writeTransferType = writeTransferType;
         axi4_slave_write_seq_h.start(p_sequencer.axi4_slave_write_seqr_h);
-      end
     end
     begin : SLAVE_READ_RESP
       axi4_slave_base_seq axi4_slave_read_seq_h;
-      forever begin
         axi4_slave_read_seq_h = axi4_slave_base_seq::type_id::create("axi4_slave_read_seq_h");
         axi4_slave_read_seq_h.writeOrRead      = READ;
         axi4_slave_read_seq_h.readTransferType = readTransferType;
         axi4_slave_read_seq_h.start(p_sequencer.axi4_slave_read_seqr_h);
-      end
     end
   join_none
 

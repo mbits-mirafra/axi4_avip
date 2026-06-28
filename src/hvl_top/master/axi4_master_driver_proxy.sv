@@ -44,8 +44,6 @@ class axi4_master_driver_proxy extends uvm_driver#(axi4_master_tx);
   //Variable: req_wr, req_rd
   //Declaration of REQ handles
   REQ req_wr, req_rd;
-
-  bit completeSingleWrite;
   
   //Variable: rsp_wr, rsp_rd
   //Declaration of RSP handles
@@ -198,31 +196,26 @@ task axi4_master_driver_proxy::axi4_write_task();
 
     `uvm_info(get_type_name(),$sformatf("WRITE_TASK::Checking transfer type outside if = %s",req_wr.transfer_type),UVM_FULL); 
     
-    //Checking if the tranfer type is outstanding write 
-   if(req_wr.transfer_type==OUTSTANDING_WRITE) begin
-     
+    //Checking if the tranfer type is blocking write 
+    if(req_wr.transfer_type == BLOCKING_WRITE) begin
+      
       axi4_master_tx local_master_write_tx; 
       axi4_master_seq_item_converter::from_write_class(req_wr,struct_write_packet);
-     `uvm_info("MASTER DRIVER PROXY","MASTER INITIATES A NON OUTSTANDING TRANSACTION",UVM_HIGH)
-       `uvm_info(get_type_name(),$sformatf("WRITE_TASK::Checking transfer type = %s",req_wr.transfer_type),UVM_MEDIUM); 
+      `uvm_info(get_type_name(),$sformatf("WRITE_TASK::Checking transfer type = %s",req_wr.transfer_type),UVM_MEDIUM); 
       
       //Calling 3 write tasks from axi4_master_drv_bfm in HDL side
-     
-          `uvm_info(get_type_name(),$sformatf("WRITE_ADDRESS_THREAD::Received_req_write_packet = \n %s",req_wr.sprint()),UVM_NONE);
-
       axi4_master_drv_bfm_h.axi4_write_address_channel_task(struct_write_packet,struct_cfg);
       axi4_master_drv_bfm_h.axi4_write_data_channel_task(struct_write_packet,struct_cfg);
       axi4_master_drv_bfm_h.axi4_write_response_channel_task(struct_write_packet,struct_cfg);
 
-      completeSingleWrite = 1;
       //Converts the struct packet to req packet
       axi4_master_seq_item_converter::to_write_class(struct_write_packet,local_master_write_tx);
       `uvm_info(get_type_name(),$sformatf("WRITE_TASK::Response Received_req_write_packet = \n %s",
                                            local_master_write_tx.sprint()),UVM_MEDIUM);
     end
 
-    //Checking if the tranfer type is non outstanding write 
-    else if(req_wr.transfer_type==NON_OUTSTANDING_WRITE )begin
+    //Checking if the tranfer type is non blocking write 
+    else if(req_wr.transfer_type == NON_BLOCKING_WRITE) begin
 
       //Variable : write_address_process
       //Used to control the fork_join process
@@ -237,12 +230,8 @@ task axi4_master_driver_proxy::axi4_write_task();
       //Used to control the fork_join process
       process write_response_process;
 
-      `uvm_info("MASTER DRIVER PROXY","MASTER INIATES A OUTSTANDING TRANSACTION",UVM_HIGH)
-
-      `uvm_info(get_type_name(),$sformatf("WRITE_ADDRESS_THREAD::Received_req_write_packet = \n %s",req_wr.sprint()),UVM_NONE);
-
       //Keeping the req packet into the write fifo 
-      //This fifo is used if the transfer_type is NON_OUTSTANDING_WRITE
+      //This fifo is used if the transfer_type is NON_BLOCKING_WRITE
       //Throws the error if the write fifo reaches the limit
       if(!axi4_master_write_fifo_h.is_full()) begin
         axi4_master_write_fifo_h.write(req_wr);
@@ -265,14 +254,20 @@ task axi4_master_driver_proxy::axi4_write_task();
 
           //Added the write_address_process to keep track of this write address channel thread
           //self is a static method which creates the write_address_process of type process
-          write_address_process = process::self();    
+          write_address_process = process::self();
+
           //Converting the req packet to struct packet
-           axi4_master_seq_item_converter::from_write_class(req_wr,struct_write_addr_packet);
-          `uvm_info(get_type_name(),$sformatf("WRITE_ADDRESS_THREAD::Checking write address struct packet = %p",struct_write_addr_packet),UVM_MEDIUM); 
+          axi4_master_seq_item_converter::from_write_class(req_wr,struct_write_addr_packet);
+          `uvm_info(get_type_name(),$sformatf("WRITE_ADDRESS_THREAD::Checking write address struct packet = %p",
+                                               struct_write_addr_packet),UVM_MEDIUM); 
+
           //Calling the bfm task which drives write address channel signals
           axi4_master_drv_bfm_h.axi4_write_address_channel_task(struct_write_addr_packet,struct_cfg);
+
           //Converting the write data struct packet to req packet
           axi4_master_seq_item_converter::to_write_class(struct_write_addr_packet,req_wr);
+          `uvm_info(get_type_name(),$sformatf("WRITE_ADDRESS_THREAD::Received_req_write_packet = \n %s",
+                                               req_wr.sprint()),UVM_MEDIUM);
 
           if((axi4_master_agent_cfg_h.qos_mode_type == ONLY_WRITE_QOS_MODE_ENABLE) || (axi4_master_agent_cfg_h.qos_mode_type == WRITE_READ_QOS_MODE_ENABLE)) begin
             qos_queue.push_front(req_wr);
@@ -417,16 +412,9 @@ task axi4_master_driver_proxy::axi4_write_task();
           axi4_master_drv_bfm_h.axi4_write_data_channel_task(struct_write_data_packet,struct_cfg);
          
           //Converting the write data struct packet to req packet
-         
-
-
-
-         axi4_master_seq_item_converter::to_write_class(struct_write_data_packet,local_master_data_tx);
+          axi4_master_seq_item_converter::to_write_class(struct_write_data_packet,local_master_data_tx);
           `uvm_info(get_type_name(),$sformatf("WRITE_DATA_THREAD::Received_req_write_packet = \n %s",
-                                               local_master_data_tx.sprint()),UVM_MEDIUM);  
-      
-
-
+                                               local_master_data_tx.sprint()),UVM_MEDIUM);
           
                                                //Returns the number of packets written into fifo
           `uvm_info(get_type_name(),$sformatf("WRITE_DATA_THREAD::Checking fifo size used= %0d",
@@ -528,14 +516,6 @@ task axi4_master_driver_proxy::axi4_write_task();
                                                struct_write_response_packet),UVM_FULL);
 
           //Converting the write data struct packet to req packet
-
-
-
-
-                  axi4_master_seq_item_converter::to_write_class(struct_write_response_packet,local_master_response_tx);
-          `uvm_info(get_type_name(),$sformatf("WRITE_RESPONSE_THREAD::Received_req_write_packet = \n %s",
-                                               local_master_response_tx.sprint()),UVM_MEDIUM);
-
           axi4_master_seq_item_converter::to_write_class(struct_write_response_packet,local_master_response_tx);
           `uvm_info(get_type_name(),$sformatf("WRITE_RESPONSE_THREAD::Received_req_write_packet = \n %s",
                                                local_master_response_tx.sprint()),UVM_MEDIUM);
@@ -544,7 +524,7 @@ task axi4_master_driver_proxy::axi4_write_task();
                                                axi4_master_write_resp_fifo_h.used()),UVM_FULL); 
 
           `uvm_info(get_type_name(), $sformatf("WRITE_RESPONSE_THREAD :: Out of response task"), UVM_FULL); 
-          completeSingleWrite = 1;
+          
           //Getting the key from the write_response_channel so that 
           //the other transaction should start after completion of the previous transaction
           write_response_channel_key.put(1);
@@ -554,13 +534,16 @@ task axi4_master_driver_proxy::axi4_write_task();
 
       //fine-grain control
       //status returns whether the process is FINISHED or WAITING or RUNNING.
-      `uvm_info(get_type_name(), $sformatf("WRITE_TASK :: Out of fork_join : Before await write_address.status()=%s",write_address_process.status()), UVM_NONE); 
+      `uvm_info(get_type_name(), $sformatf("WRITE_TASK :: Out of fork_join : Before await write_address.status()=%s",
+                                            write_address_process.status()), UVM_NONE); 
       //Waiting for write address channel to complete 
       //As we don't have control on fork-join_any or fork-join_none processes,
       //the await method makes sure that it waits for the write address to complete
       write_address_process.await();
+      
       //status returns whether the process is FINISHED or WAITING or RUNNING.
-      `uvm_info(get_type_name(), $sformatf("WRITE_TASK :: Out of fork_join : After await write_address.status()=%s",write_address_process.status()), UVM_NONE); 
+      `uvm_info(get_type_name(), $sformatf("WRITE_TASK :: Out of fork_join : After await write_address.status()=%s",
+                                            write_address_process.status()), UVM_NONE); 
     end
 
     wait_for_wr_addr = 1;
@@ -582,17 +565,15 @@ task axi4_master_driver_proxy::axi4_read_task();
     axi4_transfer_cfg_s       struct_cfg;
 
     axi_read_seq_item_port.get_next_item(req_rd);
-    `uvm_info(get_type_name(),$sformatf("READ_TASK:: Before Sending_req_read_packet = \n %s",req_rd.sprint()),UVM_FULL); 
+    `uvm_info(get_type_name(),$sformatf("READ_TASK:: Before Sending_req_read_packet = \n %s",req_rd.sprint()),UVM_NONE); 
 
-
-  /*
     if(axi4_master_agent_cfg_h.read_data_mode == SLAVE_MEM_MODE && write_read_mode_h != ONLY_READ_DATA) begin 
       wait(wait_for_wr_addr);
       req_rd.araddr = address;
       req_rd.arlen  = length;
       req_rd.arsize = arsize_e'(size);
     end
-*/
+
     //Converting configurations into struct config type
     axi4_master_cfg_converter::from_class(axi4_master_agent_cfg_h,struct_cfg);
 
@@ -605,7 +586,7 @@ task axi4_master_driver_proxy::axi4_read_task();
     `uvm_info(get_type_name(),$sformatf("READ_TASK::Checking transfer type outside if= %s",req_rd.transfer_type),UVM_FULL); 
     `uvm_info(get_type_name(),$sformatf("READ_TASK::Checking transfer type outside if= %s",req_rd.transfer_type),UVM_FULL); 
     
-    if(req_rd.transfer_type== OUTSTANDING_READ) begin
+    if(req_rd.transfer_type == BLOCKING_READ) begin
       
       //Converts the req read packet to struct read packet
       axi4_master_seq_item_converter::from_read_class(req_rd,struct_read_packet);
@@ -615,13 +596,14 @@ task axi4_master_driver_proxy::axi4_read_task();
       //read address channel signals and to sample the read data channel siganls
       axi4_master_drv_bfm_h.axi4_read_address_channel_task(struct_read_packet,struct_cfg);
       axi4_master_drv_bfm_h.axi4_read_data_channel_task(struct_read_packet,struct_cfg);
+      
       //Converting transactions into struct data type
       axi4_master_seq_item_converter::to_read_class(struct_read_packet,req_rd);
 
       `uvm_info(get_type_name(),$sformatf("READ_TASK::Response_received_req_read_packet = \n %s",req_rd.sprint()),UVM_MEDIUM);
     end
 
-    else if(req_rd.transfer_type==NON_OUTSTANDING_READ) begin
+    else if(req_rd.transfer_type ==  NON_BLOCKING_READ) begin
 
       //Variable : read_addr_process
       //Used to control the fork_join process
@@ -633,7 +615,7 @@ task axi4_master_driver_proxy::axi4_read_task();
       process read_data_process;
 
       //Keeping the req packet into the read fifo 
-      //This fifo is used if the transfer_type is NON_OUTSTANDING_READ
+      //This fifo is used if the transfer_type is NON_BLOCKING_READ
       //Throws the error when it reaches the limit of the fifo
       if(!axi4_master_read_fifo_h.is_full()) begin
         axi4_master_read_fifo_h.write(req_rd);
@@ -731,3 +713,4 @@ task axi4_master_driver_proxy::axi4_read_task();
 endtask : axi4_read_task
 
 `endif
+

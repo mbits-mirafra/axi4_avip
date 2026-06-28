@@ -6,16 +6,17 @@ The idea of using Accelerated VIP is to push the synthesizable part of the testb
 # Features:
 1. Support read and write Independent channels
 2. Separate address/control and data phases
-3. Outstanding and Non Outstanding Transfers
+3. Blocking and Non Blocking Transfers
 4. Parallel write and read transfer
-5. No strict timing relationship between address and data operations
-6. Support different types of Burst based transactions (fixed, incr, wrap)
-7. Support okay and slave error response
-8. Support for Out-of-order transaction
-9. Support for Quality of service(QOS)
-10. Support for Unaligned address transfers
-11. Support for Custom Slave memory 
-12. Support for Narrow transfers 
+5. Support outstanding transfer
+6. No strict timing relationship between address and data operations
+7. Support different types of Burst based transactions (fixed, incr, wrap)
+8. Support okay and slave error response
+9. Support for Out-of-order transaction
+10. Support for Quality of service(QOS)
+11. Support for Unaligned address transfers
+12. Support for Custom Slave memory 
+13. Support for Narrow transfers 
 
 # Architecture Diagram  
 ![AXI4](https://user-images.githubusercontent.com/15922511/183240262-b28b57cd-bda3-4cd8-ae2b-620d07f7a92b.jpg)

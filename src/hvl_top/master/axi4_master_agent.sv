@@ -90,10 +90,6 @@ endfunction : build_phase
 //--------------------------------------------------------------------------------------------
 function void axi4_master_agent::connect_phase(uvm_phase phase);
   super.connect_phase(phase);
-
-
- 
-
   if(axi4_master_agent_cfg_h.is_active == UVM_ACTIVE) begin
     axi4_master_drv_proxy_h.axi4_master_agent_cfg_h = axi4_master_agent_cfg_h;
     axi4_master_write_seqr_h.axi4_master_agent_cfg_h = axi4_master_agent_cfg_h;

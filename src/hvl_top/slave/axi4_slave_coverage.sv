@@ -171,10 +171,10 @@ class axi4_slave_coverage extends uvm_subscriber#(axi4_slave_tx);
     
     TRANSFER_TYPE_CP : coverpoint packet.transfer_type {
       option.comment = "transfer type";
-      bins OUTSTANDING_WRITE     = {0};
-      bins OUTSTANDING_READ      = {1};
-      bins NON_OUTSTANDING_WRITE = {2};
-      bins NON_OUTSTANDING_READ  = {3};
+      bins BLOCKING_WRITE     = {0};
+      bins BLOCKING_READ      = {1};
+      bins NON_BLOCKING_WRITE = {2};
+      bins NON_BLOCKING_READ  = {3};
     }
 
     //-------------------------------------------------------

@@ -40,7 +40,7 @@ begin
                               req.awlen == 10;
                               req.tx_type == WRITE;
                               req.awburst == WRITE_FIXED;
-                              req.transfer_type == OUTSTANDING_WRITE;}) begin
+                              req.transfer_type == BLOCKING_WRITE;}) begin
     `uvm_fatal("axi4","Rand failed");
   end
   
@@ -53,7 +53,7 @@ begin
                               req.awlen == 14;
                               req.tx_type == WRITE;
                               req.awburst == WRITE_INCR;
-                              req.transfer_type == OUTSTANDING_WRITE;}) begin
+                              req.transfer_type == BLOCKING_WRITE;}) begin
     `uvm_fatal("axi4","Rand failed");
   end
   
@@ -65,7 +65,7 @@ begin
                               req.awlen == 15;
                               req.tx_type == WRITE;
                               req.awburst == WRITE_WRAP;
-                              req.transfer_type == OUTSTANDING_WRITE;}) begin
+                              req.transfer_type == BLOCKING_WRITE;}) begin
     `uvm_fatal("axi4","Rand failed");
   end
   

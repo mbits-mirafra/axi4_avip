@@ -55,13 +55,11 @@ task axi4_virtual_read_seq::body();
       axi4_slave_nbk_read_seq_h.start(p_sequencer.axi4_slave_read_seqr_h);
     end
   join_none
-/*
+
   repeat(5) begin
     axi4_master_bk_read_seq_h.start(p_sequencer.axi4_master_read_seqr_h);
     axi4_master_nbk_read_seq_h.start(p_sequencer.axi4_master_read_seqr_h);
   end
-
-*/
  endtask : body
 
 `endif

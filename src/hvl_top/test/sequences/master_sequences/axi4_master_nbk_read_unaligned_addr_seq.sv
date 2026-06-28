@@ -37,7 +37,7 @@ task axi4_master_nbk_read_unaligned_addr_seq::body();
   if(!req.randomize() with {req.araddr % 4 !=0;
                               req.tx_type == READ;
                               req.arburst == READ_FIXED;
-                              req.transfer_type == NON_OUTSTANDING_READ;}) begin
+                              req.transfer_type == NON_BLOCKING_READ;}) begin
     `uvm_fatal("axi4","Rand failed");
   end
   

@@ -47,11 +47,12 @@ task axi4_virtual_bk_64b_data_read_seq::body();
 
   fork 
     begin : T2_SL_RD
-      forever begin 
+      forever begin
         axi4_slave_bk_read_64b_transfer_seq_h.start(p_sequencer.axi4_slave_read_seqr_h);
       end
     end
   join_none
+
 
   fork 
     begin: T2_READ
@@ -60,7 +61,6 @@ task axi4_virtual_bk_64b_data_read_seq::body();
       end
     end
   join
-
  endtask : body
 
 `endif

@@ -38,7 +38,7 @@ begin
                             req.arlen  == 4; 
                             req.tx_type == READ;
                             req.arburst == READ_INCR;
-                            req.transfer_type == OUTSTANDING_READ;}) begin
+                            req.transfer_type == BLOCKING_READ;}) begin
 
     `uvm_fatal("axi4","Rand failed");
   end
@@ -51,7 +51,7 @@ begin
                             req.arlen  == 10; 
                             req.tx_type == READ;
                             req.arburst == READ_FIXED;
-                            req.transfer_type == OUTSTANDING_READ;}) begin
+                            req.transfer_type == BLOCKING_READ;}) begin
 
     `uvm_fatal("axi4","Rand failed");
   end

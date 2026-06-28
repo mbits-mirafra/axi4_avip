@@ -81,15 +81,6 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
   reg [7: 0] j = 0;
   reg [7: 0] a = 0;
 
-
-  clocking axiSlaveCb @(posedge aclk);
-    default input #1step output #1step;
-
-    input awid,awaddr, awlen,awsize,awburst, awlock, awcache, awprot,awqos, awvalid, wdata, wstrb, wlast, wuser, wvalid, bready, arid, araddr, arlen, arsize, arburst,arlock, arcache, arprot, arqos, arregion, aruser, arvalid, rready;
- output awready, wready, bid, bresp, buser, bvalid, arready, rid, rdata, rresp, rlast, ruser, rvalid;
-  endclocking 
-
-
   initial begin
     `uvm_info("axi4 slave driver bfm",$sformatf("AXI4 SLAVE DRIVER BFM"),UVM_LOW);
   end
@@ -98,9 +89,9 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
 
   // Creating Memories for each signal to store each transaction attributes
 
-  reg [	3 : 0] mem_awid [2**LENGTH];
-  reg [	ADDRESS_WIDTH-1: 0] mem_waddr [2**LENGTH];
-  reg [	7 : 0] mem_wlen	  [2**LENGTH];
+  reg [	3 : 0] 	            mem_awid	  [2**LENGTH];
+  reg [	ADDRESS_WIDTH-1: 0]	mem_waddr	  [2**LENGTH];
+  reg [	7 : 0]	            mem_wlen	  [2**LENGTH];
   reg [	2 : 0]	            mem_wsize	  [2**LENGTH];
   reg [ 1	: 0]	            mem_wburst  [2**LENGTH];
   reg [ 3	: 0]	            mem_wqos    [2**LENGTH];
@@ -134,17 +125,17 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
   //-------------------------------------------------------
 
   task axi4_write_address_phase(inout axi4_write_transfer_char_s data_write_packet);
-    @(axiSlaveCb);
+    @(posedge aclk);
     `uvm_info(name,"INSIDE WRITE_ADDRESS_PHASE",UVM_LOW)
 
     // Ready can be HIGH even before we start to check 
     // based on wait_cycles variable
     // Can make awready to zero 
-    axiSlaveCb.awready <= 0;
+    awready <= 0;
 
     do begin
-      @(axiSlaveCb);
-    end while(axiSlaveCb.awvalid === 0);
+      @(posedge aclk);
+    end while(awvalid===0);
 
     `uvm_info("SLAVE_DRIVER_WADDR_PHASE", $sformatf("outside of awvalid"), UVM_MEDIUM);
     
@@ -153,24 +144,32 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
     end 
       
    // Sample the values
-            data_write_packet.awid= axiSlaveCb.awid;	
-	 data_write_packet.awaddr 	= axiSlaveCb.awaddr;
-	   data_write_packet.awlen  = axiSlaveCb.awlen;	
-	  data_write_packet.awsize	= axiSlaveCb.awsize;	
-	 data_write_packet.awburst = axiSlaveCb.awburst;	
-data_write_packet.awqos = axiSlaveCb.awqos;
-   `uvm_info("struct_pkt_debug",$sformatf("struct_pkt_wr_addr_phase = \n %0p",data_write_packet),UVM_FULL)
+   mem_awid 	[i]	  = awid  	;	
+	 mem_waddr	[i] 	= awaddr	;
+	 mem_wlen 	[i]	  = awlen	  ;	
+	 mem_wsize	[i] 	= awsize	;	
+	 mem_wburst [i]   = awburst ;	
+	 mem_wqos   [i]   = awqos   ;	
+   
+   data_write_packet.awid    = mem_awid   [i] ;
+   data_write_packet.awaddr  = mem_waddr  [i] ;
+   data_write_packet.awlen   = mem_wlen   [i] ;
+   data_write_packet.awsize  = mem_wsize  [i] ;
+   data_write_packet.awburst = mem_wburst [i] ;
+   data_write_packet.awqos   = mem_wqos   [i] ;
+   
+   `uvm_info("struct_pkt_debug",$sformatf("struct_pkt_wr_addr_phase = \n %0p",data_write_packet),UVM_HIGH)
 
-   //i = i+1;
+   i = i+1;
 
    // based on the wait_cycles we can choose to drive the awready
     `uvm_info(name,$sformatf("Before DRIVING WRITE ADDRS WAIT STATES :: %0d",data_write_packet.no_of_wait_states),UVM_HIGH);
     repeat(data_write_packet.no_of_wait_states)begin
       `uvm_info(name,$sformatf("DRIVING_WRITE_ADDRS_WAIT_STATES :: %0d",data_write_packet.no_of_wait_states),UVM_HIGH);
-      @(axiSlaveCb);
-      axiSlaveCb.awready<=0;
+      @(posedge aclk);
+      awready<=0;
     end
-    axiSlaveCb.awready <= 1;
+    awready <= 1;
    
   endtask: axi4_write_address_phase 
 
@@ -179,48 +178,76 @@ data_write_packet.awqos = axiSlaveCb.awqos;
   // This task will sample the write data signals
   //-------------------------------------------------------
   task axi4_write_data_phase (inout axi4_write_transfer_char_s data_write_packet, input axi4_transfer_cfg_s cfg_packet);
-    
-   static reg [7:0]i =0;
-    @(axiSlaveCb);
-    `uvm_info(name,$sformatf("data_write_packet=\n%p",data_write_packet),UVM_FULL)
-    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_FULL)
+    static reg [7:0]i =0;
+    @(posedge aclk);
+    `uvm_info(name,$sformatf("data_write_packet=\n%p",data_write_packet),UVM_HIGH)
+    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_HIGH)
     `uvm_info(name,$sformatf("INSIDE WRITE DATA CHANNEL"),UVM_NONE)
     
-    axiSlaveCb.wready <= 0;
+    wready <= 0;
 
    do begin
-     @(axiSlaveCb);
-   end while(axiSlaveCb.wvalid === 1'b0);
+     @(posedge aclk);
+   end while(wvalid === 1'b0);
 
    // based on the wait_cycles we can choose to drive the wready
     `uvm_info("SLAVE_BFM_WDATA_PHASE",$sformatf("Before DRIVING WRITE DATA WAIT STATES :: %0d",data_write_packet.no_of_wait_states),UVM_HIGH);
     repeat(data_write_packet.no_of_wait_states)begin
       `uvm_info(name,$sformatf("DRIVING_WRITE_DATA_WAIT_STATES :: %0d",data_write_packet.no_of_wait_states),UVM_HIGH);
-      @(axiSlaveCb);
-      axiSlaveCb.wready<=0;
+      @(posedge aclk);
+      wready<=0;
     end
 
-    axiSlaveCb.wready <= 1 ;
+    wready <= 1 ;
     
-    forever begin
-      do begin
-        @(axiSlaveCb);
-      end while(axiSlaveCb.wvalid === 1'b0);
+    if(cfg_packet.qos_mode_type == ONLY_WRITE_QOS_MODE_ENABLE || cfg_packet.qos_mode_type == WRITE_READ_QOS_MODE_ENABLE) begin 
+      forever begin
+        do begin
+          @(posedge aclk);
+        end while(wvalid === 1'b0);
 
-      data_write_packet.wdata[i] = axiSlaveCb.wdata;
-      data_write_packet.wstrb[i] = axiSlaveCb.wstrb;
-      if(axiSlaveCb.wlast === 1'b1)begin
-        i=0;
-        break;
+        data_write_packet.wdata[i] = wdata;
+        data_write_packet.wstrb[i] = wstrb;
+        i++;  
+        if(wlast === 1'b1)begin
+          i=0;
+          break;
+        end
       end
-      i++;
-     end
+    end
+    else begin
+      for(int s = 0;s<(mem_wlen[a]+1);s = s+1)begin
+        do begin
+          @(posedge aclk);
+        end while(wvalid === 1'b0);
+        `uvm_info("SLAVE_DEBUG",$sformatf("mem_length = %0d",mem_wlen[a]),UVM_HIGH)
+         data_write_packet.wdata[s]=wdata;
+         `uvm_info("slave_wdata",$sformatf("sampled_slave_wdata[%0d] = %0h",s,data_write_packet.wdata[s]),UVM_HIGH);
+         data_write_packet.wstrb[s]=wstrb;
+         `uvm_info("slave_wstrb",$sformatf("sampled_slave_wstrb[%0d] = %0d",s,data_write_packet.wstrb[s]),UVM_HIGH);
          
-    `uvm_info("slave_wlast",$sformatf("slave_wlast = %0b ,a=%0d",axiSlaveCb.wlast,a),UVM_HIGH);
-    `uvm_info("slave_wlast",$sformatf("sampled_slave_wlast = %0b",data_write_packet.wlast),UVM_HIGH);
+         // Used to sample the wlast at the end of transfer
+         // and come out of the loop if wlast == 1
+         if(s == mem_wlen[a]) begin
+           mem_wlast[a] = wlast;
+           `uvm_info("slave_wlast",$sformatf("slave1_wlast = %0b",wlast),UVM_HIGH);
+           data_write_packet.wlast = wlast;
+           if(!data_write_packet.wlast)begin
+             @(posedge aclk);
+             wready<=0;
+             break;
+           end
+           `uvm_info("slave_wlast",$sformatf("slave_wlast = %0b ,a=%0d",wlast,a),UVM_HIGH);
+           `uvm_info("slave_wlast",$sformatf("sampled_slave_wlast = %0b",data_write_packet.wlast),UVM_HIGH);
+         end
+       end
+      `uvm_info(name,$sformatf("OUTSIDE WRITE DATA CHANNEL"),UVM_NONE)
+      a++;
+    end
 
-    @(axiSlaveCb);
-    axiSlaveCb.wready <= 0;
+   @(posedge aclk);
+   wready <= 0;
+
   endtask : axi4_write_data_phase
 
   //-------------------------------------------------------
@@ -232,31 +259,48 @@ data_write_packet.awqos = axiSlaveCb.awqos;
     axi4_transfer_cfg_s struct_cfg,bit[3:0] bid_local);
     
     int j;
-    @(axiSlaveCb);
+    @(posedge aclk);
 
     
     if((struct_cfg.qos_mode_type == ONLY_WRITE_QOS_MODE_ENABLE) || (struct_cfg.qos_mode_type == WRITE_READ_QOS_MODE_ENABLE)) begin
-      axiSlaveCb.bid <= data_write_packet.bid; 
-      axiSlaveCb.bresp <= data_write_packet.bresp;
-      axiSlaveCb.buser <= data_write_packet.buser;
-      axiSlaveCb.bvalid <= 1;
+      bid <= data_write_packet.bid; 
+      bresp <= data_write_packet.bresp;
+      buser <= data_write_packet.buser;
+      bvalid <= 1;
+    end
+    else if((struct_cfg.slave_response_mode == ONLY_WRITE_RESP_OUT_OF_ORDER) || (struct_cfg.slave_response_mode == WRITE_READ_RESP_OUT_OF_ORDER)) begin 
+      bid <= bid_local; 
+      data_write_packet.bid <= bid_local; 
+      bresp <= data_write_packet.bresp;
+      buser <= data_write_packet.buser;
+      bvalid <= 1;
     end
     else begin 
-      axiSlaveCb.bid <= bid_local;
-      data_write_packet.bid <= bid_local;
-      axiSlaveCb.bresp <= data_write_packet.bresp;
-      axiSlaveCb.buser <= data_write_packet.buser;
-      axiSlaveCb.bvalid <= 1;
-    end 
+     data_write_packet.bid <= mem_awid[j]; 
+     `uvm_info("DEBUG_BRESP",$sformatf("BID = %0d",data_write_packet.bid),UVM_HIGH)
+     `uvm_info(name,"INSIDE WRITE_RESPONSE_PHASE",UVM_LOW)
+
+     bid  <= mem_awid[j];
+     `uvm_info("DEBUG_BRESP",$sformatf("MEM_BID[%0d] = %0d",j,mem_awid[j]),UVM_HIGH)
+     `uvm_info("DEBUG_BRESP_WLAST",$sformatf("wlast = %0d,j=%0d",mem_wlast[j],j),UVM_HIGH)
+     while(mem_wlast[j]!=1) begin
+       @(posedge aclk);
+     end
+     bresp <= data_write_packet.bresp;
+     buser<=data_write_packet.buser;
+     bvalid <= 1;
+     j++;
+     `uvm_info("DEBUG_BRESP",$sformatf("BID = %0d",bid),UVM_HIGH)
+   end
     
-    @(axiSlaveCb);
-    while(axiSlaveCb.bready === 0) begin
-      @(axiSlaveCb);
+    @(posedge aclk);
+    while(bready === 0) begin
+      @(posedge aclk);
       data_write_packet.wait_count_write_response_channel++;
-      `uvm_info(name,$sformatf("inside_detect_bready = %0d",axiSlaveCb.bready),UVM_HIGH)
+      `uvm_info(name,$sformatf("inside_detect_bready = %0d",bready),UVM_HIGH)
     end
-    `uvm_info(name,$sformatf("After_loop_of_Detecting_bready = %0d",axiSlaveCb.bready),UVM_HIGH)
-    axiSlaveCb.bvalid <= 1'b0;
+    `uvm_info(name,$sformatf("After_loop_of_Detecting_bready = %0d",bready),UVM_HIGH)
+    bvalid <= 1'b0;
   
   endtask : axi4_write_response_phase
 
@@ -265,44 +309,51 @@ data_write_packet.awqos = axiSlaveCb.awqos;
   // This task will sample the read address signals
   //-------------------------------------------------------
   task axi4_read_address_phase (inout axi4_read_transfer_char_s data_read_packet, input axi4_transfer_cfg_s cfg_packet);
-    @(axiSlaveCb);
-    `uvm_info(name,$sformatf("data_read_packet=\n%p",data_read_packet),UVM_FULL);
-    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_FULL);
+    @(posedge aclk);
+    `uvm_info(name,$sformatf("data_read_packet=\n%p",data_read_packet),UVM_HIGH);
+    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_HIGH);
     `uvm_info(name,$sformatf("INSIDE READ ADDRESS CHANNEL"),UVM_HIGH);
     
     // Ready can be HIGH even before we start to check 
     // based on wait_cycles variable
     // Can make arready to zero 
-     axiSlaveCb.arready <= 0;
+     arready <= 0;
 
-    while(axiSlaveCb.arvalid === 0) begin
-      @(axiSlaveCb);
+    while(arvalid === 0) begin
+      @(posedge aclk);
     end
    
     repeat(data_read_packet.no_of_wait_states)begin
       `uvm_info(name,$sformatf("DRIVING_READ_ADDRS_WAIT_STATES :: %0d",data_read_packet.no_of_wait_states),UVM_HIGH);
-      @(axiSlaveCb);
-      axiSlaveCb.arready<=0;
+      @(posedge aclk);
+      arready<=0;
     end
 
     `uvm_info("SLAVE_DRIVER_RADDR_PHASE", $sformatf("outside of arvalid"), UVM_NONE); 
     
     // Sample the values
+    mem_arid 	[j]	  = arid  	;	
+	  mem_raddr	[j] 	= araddr	;
+	  mem_rlen 	[j]	  = arlen	  ;	
+	  mem_rsize	[j] 	= arsize	;	
+	  mem_rburst[j] 	= arburst ;	
+	  mem_rqos[j] 	  = arqos   ;	
     arready         <= 1      ;
 
-    data_read_packet.arid    = axiSlaveCb.arid     ;
-    data_read_packet.araddr  = axiSlaveCb.araddr   ;
-    data_read_packet.arlen   = axiSlaveCb.arlen    ;
-    data_read_packet.arsize  = axiSlaveCb.arsize   ;
-    data_read_packet.arburst = axiSlaveCb.arburst  ;
-    data_read_packet.arqos   = axiSlaveCb.arqos    ;
+    data_read_packet.arid    = mem_arid[j]     ;
+    data_read_packet.araddr  = mem_raddr[j]    ;
+    data_read_packet.arlen   = mem_rlen[j]     ;
+    data_read_packet.arsize  = mem_rsize[j]    ;
+    data_read_packet.arburst = mem_rburst[j]   ;
+    data_read_packet.arqos   = mem_rqos[j]     ;
+	  j = j+1                                    ;
 
     `uvm_info("mem_arid",$sformatf("mem_arid[%0d]=%0d",j,mem_arid[j]),UVM_HIGH)
-    `uvm_info("mem_arid",$sformatf("arid=%0d",axiSlaveCb.arid),UVM_HIGH)
-    `uvm_info(name,$sformatf("struct_pkt_rd_addr_phase = \n %0p",data_read_packet),UVM_FULL)
+    `uvm_info("mem_arid",$sformatf("arid=%0d",arid),UVM_HIGH)
+    `uvm_info(name,$sformatf("struct_pkt_rd_addr_phase = \n %0p",data_read_packet),UVM_HIGH)
     
-    @(axiSlaveCb);
-    axiSlaveCb.arready <= 0;
+    @(posedge aclk);
+    arready <= 0;
   
   endtask: axi4_read_address_phase
     
@@ -310,44 +361,89 @@ data_write_packet.awqos = axiSlaveCb.awqos;
   // Task: axi4_read_data_channel_task
   // This task will drive the read data signals
   //-------------------------------------------------------
-  task axi4_read_data_phase (inout axi4_read_transfer_char_s data_read_packet);
+  task axi4_read_data_phase (inout axi4_read_transfer_char_s data_read_packet, input axi4_transfer_cfg_s cfg_packet,response_mode_e out_of_order_enable);
     int j1;
-    int amount;
-      axiSlaveCb.rdata<=data_read_packet.rdata[0];
-      axiSlaveCb.rresp<=data_read_packet.rresp[0];
-
-      axiSlaveCb.ruser<=data_read_packet.ruser;
-      axiSlaveCb.rvalid<=1'b1;
-
-      axiSlaveCb.rlast <= data_read_packet.rlast;
-      axiSlaveCb.rid <= data_read_packet.rid;
-      do begin
-         @(axiSlaveCb);
-      end while(axiSlaveCb.rready===0);
-      axiSlaveCb.rlast <= 1'b0;
-      axiSlaveCb.rvalid <= 1'b0;
+    @(posedge aclk);
+    if((out_of_order_enable == RESP_IN_ORDER || out_of_order_enable ==
+      ONLY_WRITE_RESP_OUT_OF_ORDER) && (cfg_packet.qos_mode_type == ONLY_WRITE_QOS_MODE_ENABLE ||
+      cfg_packet.qos_mode_type == QOS_MODE_DISABLE)) begin
+      data_read_packet.rid <= mem_arid[j1];
+      
+      for(int i1=0, k1=0; i1<mem_rlen[j1] + 1; i1++) begin
+        if(k1 == DATA_WIDTH/8) k1 = 0;
+        rid  <= mem_arid[j1];
+        //Sending the rdata based on each byte lane
+        //RHS: Is used to send Byte by Byte
+        //LHS: Is used to shift the location for each Byte
+        for(int l1=0; l1<(2**mem_rsize[j1]); l1++) begin
+          rdata[8*k1+7 -: 8]<=data_read_packet.rdata[i1][8*l1+7 -: 8];
+          k1++;
+        end
+        rresp<=data_read_packet.rresp[i1];
+       
+        ruser<=data_read_packet.ruser;
+        rvalid<=1'b1;
+        
+        if((mem_rlen[j1]) == i1)begin
+          rlast <= 1'b1;
+        end
+        
+        do begin
+          @(posedge aclk);
+        end while(rready===0);
+        rlast <= 1'b0;
+        rvalid <= 1'b0;
+      end
+     end
+     else begin
+      for(int i1=0, k1=0; i1<data_read_packet.arlen + 1; i1++) begin
+        if(k1 == DATA_WIDTH/8) k1 = 0;
+        rid  <= data_read_packet.arid;
+        //Sending the rdata based on each byte lane
+        //RHS: Is used to send Byte by Byte
+        //LHS: Is used to shift the location for each Byte
+        for(int l1=0; l1<(2**data_read_packet.arsize); l1++) begin
+          rdata[8*k1+7 -: 8]<=data_read_packet.rdata[i1][8*l1+7 -: 8];
+          k1++;
+        end
+        rresp<=data_read_packet.rresp[i1];
+       
+        ruser<=data_read_packet.ruser;
+        rvalid<=1'b1;
+        
+        if((data_read_packet.arlen) == i1)begin
+          rlast <= 1'b1;
+        end
+        
+        do begin
+          @(posedge aclk);
+        end while(rready===0);
+        rlast <= 1'b0;
+        rvalid <= 1'b0;
+      end
+     end
+    j1++;
        
   endtask : axi4_read_data_phase
 
   task default_values();
-    axiSlaveCb.awready <= 0;
-    axiSlaveCb.wready  <= 0;
-    axiSlaveCb.rvalid  <= 0;
-    axiSlaveCb.bvalid  <= 0;
-    axiSlaveCb.arready <= 0;
+    awready <= 0;
+    wready  <= 0;
+    rvalid  <= 0;
+    bvalid  <= 0;
+    arready <= 0;
 
-    axiSlaveCb.bid     <= 'b0;
-    axiSlaveCb.bresp   <= 'b0;
-    axiSlaveCb.buser   <= 'b0;
+    bid     <= 'b0;
+    bresp   <= 'b0;
+    buser   <= 'b0;
 
-    axiSlaveCb.rid     <= 'b0;
-    axiSlaveCb.rdata   <= 'b0;
-    axiSlaveCb.rresp   <= 'b0;
-    axiSlaveCb.ruser   <= 'b0;
-    axiSlaveCb.rlast   <= 'b0;
+    rid     <= 'b0;
+    rdata   <= 'b0;
+    rresp   <= 'b0;
+    ruser   <= 'b0;
+    rlast   <= 'b0;
   endtask : default_values
 
 endinterface : axi4_slave_driver_bfm
 
 `endif
-

@@ -46,7 +46,7 @@ task axi4_master_nbk_slave_mem_mode_write_fixed_burst_seq::body();
                             req.awaddr inside {[min_addr:max_addr]};
                             req.tx_type == WRITE;
                             req.awburst == WRITE_FIXED;
-                            req.transfer_type == NON_OUTSTANDING_WRITE;}) begin
+                            req.transfer_type == NON_BLOCKING_WRITE;}) begin
 
     `uvm_fatal("axi4","Rand failed");
   end

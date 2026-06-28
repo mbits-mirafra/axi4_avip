@@ -32,12 +32,12 @@ endfunction : new
 //--------------------------------------------------------------------------------------------
 task axi4_master_bk_read_seq::body();
   super.body();
-  req.transfer_type=OUTSTANDING_READ;
+  req.transfer_type=BLOCKING_READ;
   
   start_item(req);
   if(!req.randomize() with {
                             req.tx_type == READ;
-                            req.transfer_type == OUTSTANDING_READ;}) begin
+                            req.transfer_type == BLOCKING_READ;}) begin
 
     `uvm_fatal("axi4","Rand failed");
   end

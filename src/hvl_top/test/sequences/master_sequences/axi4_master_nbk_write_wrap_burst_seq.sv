@@ -38,7 +38,7 @@ task axi4_master_nbk_write_wrap_burst_seq::body();
                               req.awaddr[1:0] == 0;
                               req.tx_type == WRITE;
                               req.awburst == WRITE_WRAP;
-                              req.transfer_type == NON_OUTSTANDING_WRITE;}) begin
+                              req.transfer_type == NON_BLOCKING_WRITE;}) begin
     `uvm_fatal("axi4","Rand failed");
   end
   

@@ -38,8 +38,8 @@ task axi4_master_nbk_base_seq::body();
   req = axi4_master_tx::type_id::create("req");
 //  axi4_master_agent_h = axi4_master_agent_config::type_id::create("axi4_master_agent_h");
  // req.axi4_master_agent_cfg_h = axi4_master_agent_h;
-  req.transfer_type = NON_OUTSTANDING_WRITE ;
-  req.transfer_type = NON_OUTSTANDING_READ ;
+  req.transfer_type = NON_BLOCKING_WRITE ;
+  req.transfer_type = NON_BLOCKING_READ ;
 
 endtask : body
 

@@ -118,7 +118,7 @@ module axi4_slave_agent_bfm #(parameter int SLAVE_ID = 0)(axi4_if intf);
                                                .rready   (intf.rready)   
                                                );
 
-  bind axi4_slave_driver_bfm slave_assertions S_A (.aclk(aclk),
+  bind axi4_slave_monitor_bfm slave_assertions S_A (.aclk(aclk),
                                                    .aresetn(aresetn),
                                                    .awid(awid),
                                                    .awaddr(awaddr),
@@ -130,12 +130,12 @@ module axi4_slave_agent_bfm #(parameter int SLAVE_ID = 0)(axi4_if intf);
                                                    .awprot(awprot),
                                                    .awvalid(awvalid),
                                                    .awready(awready),
-                                                   .wdata(intf.wdata),
-                                                   .wstrb(intf.wstrb),
-                                                   .wlast(intf.wlast),
-                                                   .wuser(intf.wuser),
-                                                   .wvalid(intf.wvalid),
-                                                   .wready(intf.wready),
+                                                   .wdata(wdata),
+                                                   .wstrb(wstrb),
+                                                   .wlast(wlast),
+                                                   .wuser(wuser),
+                                                   .wvalid(wvalid),
+                                                   .wready(wready),
                                                    .bid(bid),
                                                    .buser(buser),
                                                    .bvalid(bvalid),

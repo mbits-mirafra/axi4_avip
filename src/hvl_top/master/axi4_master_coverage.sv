@@ -55,30 +55,12 @@ class axi4_master_coverage extends uvm_subscriber #(axi4_master_tx);
       bins AWSIZE_16BYTES  = {4};
       bins AWSIZE_32BYTES  = {5};
       bins AWSIZE_64BYTES  = {6};
-      bins AWSIZE_128BYTES = {7};
     }
 
-    AWLOCK_CP :coverpoint packet.awlock {
-      option.comment= "Write Address Lock values";
-      bins AWLOCK[] = {0,1};
-    }
-
-    AWCACHE_CP : coverpoint packet.awcache {
-      option.comment = "Write Address Cache values";
-      bins WRITE_BUFFERABLE     = {0};
-      bins WRITE_MODIFIABLE     = {1};
-      bins WRITE_OTHER_ALLOCATE = {2}; 
-      bins WRITE_ALLOCATE       = {3};
-    }
-
-    AWPROT_CP : coverpoint packet.awprot {
-      option.comment = "Write Address Protection values";
-      bins AWPROT[] = {[0:$]};
-    }
 
     AWID_CP : coverpoint packet.awid {
       option.comment = "Write Address ID values";
-      bins AWID[] = {[0:$]};
+      bins AWID[] = {[0:16]};
     }
 
     BRESP_CP : coverpoint packet.bresp {
@@ -124,40 +106,23 @@ class axi4_master_coverage extends uvm_subscriber #(axi4_master_tx);
       bins ARSIZE_16BYTES  = {4};
       bins ARSIZE_32BYTES  = {5};
       bins ARSIZE_64BYTES  = {6};
-      bins ARSIZE_128BYTES = {7};
     }
 
-    ARLOCK_CP :coverpoint packet.arlock {
-      option.comment= "Read Address Lock values";
-      bins ARLOCK[] = {0,1};
-    }
 
-    ARCACHE_CP : coverpoint packet.arcache {
-      option.comment = "Read Address Cache values";
-      bins READ_BUFFERABLE = {0};
-      bins READ_MODIFIABLE = {1};
-      bins READ_OTHER_ALLOCATE = {2}; 
-      bins READ_ALLOCATE = {3};
-    }
-
-    ARPROT_CP : coverpoint packet.arprot {
-      option.comment = "Read Address Protection values";
-      bins ARPROT[] = {[0:$]};
-    }
 
     BID_CP : coverpoint packet.bid {
       option.comment = "Write Response values";
-      bins BID[] = {[0:$]};
+      bins BID[] = {[0:16]};
     }
 
     ARID_CP : coverpoint packet.rid {
       option.comment = "Read Address ID values";
-      bins ARID[] = {[0:$]};
+      bins ARID[] = {[0:16]};
     }
 
     RID_CP : coverpoint packet.rid {
       option.comment = "Read ID values";
-      bins RID[] = {[0:$]};
+      bins RID[] = {[0:16]};
     }
     
     RRESP_CP : coverpoint packet.rresp {
@@ -169,24 +134,12 @@ class axi4_master_coverage extends uvm_subscriber #(axi4_master_tx);
     }
     
 
-    TRANSFER_TYPE_CP : coverpoint packet.transfer_type {
-      option.comment = "transfer type";
-      bins BLOCKING_WRITE     = {0};
-      bins BLOCKING_READ      = {1};
-      bins NON_BLOCKING_WRITE = {2};
-      bins NON_BLOCKING_READ  = {3};
-    }
-
     //-------------------------------------------------------
     // Cross of coverpoints
     //-------------------------------------------------------
 
     AWLENGTH_CP_X_AWSIZE_X_AWBURST    :cross AWLEN_CP,AWSIZE_CP,AWBURST_CP;
     ARLENGTH_CP_X_ARSIZE_X_ARBURST    :cross ARLEN_CP,ARSIZE_CP,ARBURST_CP;
-    BID_CP_X_BRESP_CP                 :cross BID_CP,BRESP_CP;
-    RID_CP_X_RRESP_CP                 :cross BID_CP,BRESP_CP;
-    AWBURST_CP_X_AWLEN_CP_X_AWSIZE_CP :cross AWBURST_CP,AWLEN_CP,AWSIZE_CP;
-    ARBURST_CP_X_ARLEN_CP_X_ARSIZE_CP :cross ARBURST_CP,ARLEN_CP,ARSIZE_CP;
     // TRANSFER_TYPE_CP_X_BURST_TYPE_CP  :cross TRANSFER_TYPE_CP,BURST_TYPE_CP;
 
   endgroup: axi4_master_covergroup

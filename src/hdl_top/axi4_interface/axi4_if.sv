@@ -13,7 +13,7 @@ interface axi4_if(input aclk, input aresetn);
   //Write_address_channel
   logic     [3: 0] awid     ;
   logic     [ADDRESS_WIDTH-1: 0] awaddr ;
-  logic     [3: 0] awlen     ;
+  logic     [7: 0] awlen     ;
   logic     [2: 0] awsize    ;
   logic     [1: 0] awburst   ;
   logic     [1: 0] awlock    ;

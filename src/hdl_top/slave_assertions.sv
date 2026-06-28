@@ -99,7 +99,9 @@ interface slave_assertions (input                     aclk,
     @(posedge aclk) disable iff (!aresetn)
     $rose(awvalid) |-> awvalid s_until_with awready;
   endproperty : axi_write_address_channel_valid_stable_check
-  AXI_WA_VALID_STABLE_CHECK : assert property (axi_write_address_channel_valid_stable_check);
+  AXI_WA_VALID_STABLE_CHECK : assert property (axi_write_address_channel_valid_stable_check) begin
+    $display("ASSERTION PASS @%t",$time);
+  end 
 
 
   //--------------------------------------------------------------------------------------------

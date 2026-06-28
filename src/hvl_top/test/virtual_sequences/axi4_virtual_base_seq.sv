@@ -13,6 +13,21 @@ class axi4_virtual_base_seq extends uvm_sequence;
    `uvm_declare_p_sequencer(axi4_virtual_sequencer)
  
    axi4_env_config env_cfg_h;
+  
+  awsize_e writeTranSize;
+
+  transfer_type_e writeTransferType;
+  
+  awburst_e writeBurstType;
+  
+
+  arsize_e readTranSize;
+
+  transfer_type_e readTransferType;
+  
+  arburst_e readBurstType;
+  
+
 
   //--------------------------------------------------------------------------------------------
   // Externally defined tasks and functions

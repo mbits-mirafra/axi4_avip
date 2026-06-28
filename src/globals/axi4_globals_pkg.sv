@@ -26,14 +26,19 @@ package axi4_globals_pkg;
   //Used to set number of slaves required
   parameter int NO_OF_SLAVES = 1;
 
+
+  parameter int MASTER_TRANSACTION_WRITE_ISSUE_COUNT =25;
+
+  parameter int MASTER_TRANSACTION_READ_ISSUE_COUNT =25;
+
+
   //Parameter: ADDRESS_WIDTH
   //Used to set the address width to the address bus
   parameter int ADDRESS_WIDTH = 32;
 
-  `define DATA_WIDTH 32
   //Parameter: DATA_WIDTH
-  //Used to set the data width 
-  parameter int DATA_WIDTH = `DATA_WIDTH;
+  //Used to set the data width
+  parameter int DATA_WIDTH =512;
 
   //Parameter: SLAVE_MEMORY_SIZE
   //Sets the memory size of the slave in KB
@@ -57,12 +62,15 @@ package axi4_globals_pkg;
 
   //Variable: LENGTH
   //Indicates the length of the address write and read channels
-  parameter int LENGTH = 8;
+  parameter int LENGTH = 4;
 
   //Variable: OUTSTANDING_FIFO_DEPTH
   //Indicates the fifo depth of outstanding transaction
   parameter int OUTSTANDING_FIFO_DEPTH = 16;
-  
+  parameter outstanding = 1; 
+  parameter writeReadOrdering = 1;
+  parameter activeTransactionCapacity = 1;
+ 
   //-------------------------------------------------------
   // Enums used in axi4_avip are given below
   //-------------------------------------------------------
@@ -288,20 +296,11 @@ package axi4_globals_pkg;
   //Enum : transfer_type_e
   //Used to the determine the type of the transfer
   typedef enum bit[1:0] {
-    BLOCKING_WRITE      = 2'b00, 
-    BLOCKING_READ       = 2'b01, 
-    NON_BLOCKING_WRITE  = 2'b10, 
-    NON_BLOCKING_READ   = 2'b11 
+    OUTSTANDING_WRITE      = 2'b00, 
+    OUTSTANDING_READ       = 2'b01, 
+    NON_OUTSTANDING_WRITE  = 2'b10, 
+    NON_OUTSTANDING_READ   = 2'b11 
   }transfer_type_e;
-
-  //Enum : read_data_type_mode_e
-  //Used to the determine the type of the read data
-  typedef enum bit[1:0] {
-    RANDOM_DATA_MODE = 2'b00,
-    SLAVE_MEM_MODE   = 2'b01,
-    USER_DATA_MODE   = 2'b10,
-    SLAVE_ERR_RESP_MODE = 2'b11
-  } read_data_type_mode_e;
 
   //Enum : transfer_type_e  
   //Used to determine the mode for score board check 
@@ -315,21 +314,10 @@ package axi4_globals_pkg;
   //Used to determine the mode of response to send
   typedef enum bit[1:0] {
     RESP_IN_ORDER                 = 2'b00,
-    ONLY_READ_RESP_OUT_OF_ORDER   = 2'b01,
-    WRITE_READ_RESP_OUT_OF_ORDER  = 2'b10,
-    ONLY_WRITE_RESP_OUT_OF_ORDER  = 2'b11
+    RESP_OUT_OF_ORDER  = 2'b11
   } response_mode_e;
 
-  //Enum : QoS_mode_e
-  typedef enum bit[1:0] {
-    QOS_MODE_DISABLE            = 2'b00,
-    ONLY_READ_QOS_MODE_ENABLE   = 2'b01,
-    WRITE_READ_QOS_MODE_ENABLE  = 2'b10,
-    ONLY_WRITE_QOS_MODE_ENABLE  = 2'b11
-  } qos_mode_e;
-
   //Used to store the awid for Qos mode
-  awid_e awid_queue_for_qos[$];
 
   //-------------------------------------------------------
   // Structs used in axi_avip are given below
@@ -411,8 +399,6 @@ package axi4_globals_pkg;
     int                     wait_count_read_data_channel;
     int                     outstanding_write_tx;
     int                     outstanding_read_tx;
-    response_mode_e         slave_response_mode;
-    qos_mode_e              qos_mode_type;
   } axi4_transfer_cfg_s;
 
 endpackage : axi4_globals_pkg

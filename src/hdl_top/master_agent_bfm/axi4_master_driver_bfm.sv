@@ -16,7 +16,7 @@ interface axi4_master_driver_bfm(input bit                      aclk,
                                  //Write Address Channel Signals
                                  output reg               [3:0] awid,
                                  output reg [ADDRESS_WIDTH-1:0] awaddr,
-                                 output reg               [3:0] awlen,
+                                 output reg               [7:0] awlen,
                                  output reg               [2:0] awsize,
                                  output reg               [1:0] awburst,
                                  output reg               [1:0] awlock,
@@ -95,11 +95,16 @@ interface axi4_master_driver_bfm(input bit                      aclk,
     @(negedge aresetn);
     `uvm_info(name,$sformatf("SYSTEM RESET DETECTED"),UVM_HIGH)
 
-    default_values();
- 
     @(posedge aresetn);
     `uvm_info(name,$sformatf("SYSTEM RESET DEACTIVATED"),UVM_HIGH)
   endtask : wait_for_aresetn
+
+  clocking axiMasterCb @(posedge aclk);
+    default input #1step output #1step;
+    output awid,awaddr, awlen,awsize,awburst, awlock, awcache, awprot,awqos, awregion,   awuser,  awvalid ,wdata, wstrb, wlast, wuser, wvalid,bready, arid, araddr, arlen, arsize, arburst,
+              arlock, arcache, arprot, arqos, arregion, aruser,   arvalid, rready;
+    input awready, wready, bid, bresp, buser, bvalid, arready, rid, rdata, rresp, rlast,ruser, rvalid;
+  endclocking 
 
   //--------------------------------------------------------------------------------------------
   // Tasks written for all 5 channels in BFM are given below
@@ -110,35 +115,35 @@ interface axi4_master_driver_bfm(input bit                      aclk,
   // This task will drive the write address signals
   //-------------------------------------------------------
 task axi4_write_address_channel_task (inout axi4_write_transfer_char_s data_write_packet, axi4_transfer_cfg_s cfg_packet);
-    @(posedge aclk);
+    @(axiMasterCb);
 
-    `uvm_info(name,$sformatf("data_write_packet=\n%p",data_write_packet),UVM_HIGH)
-    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_HIGH)
+    `uvm_info(name,$sformatf("data_write_packet=\n%p",data_write_packet),UVM_FULL)
+    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_FULL)
     `uvm_info(name,$sformatf("DRIVING_WRITE_ADDRESS_CHANNEL"),UVM_HIGH)
     
-    awid     <= data_write_packet.awid;
-    awaddr   <= data_write_packet.awaddr;
-    awlen    <= data_write_packet.awlen;
-    awsize   <= data_write_packet.awsize;
-    awburst  <= data_write_packet.awburst;
-    awlock   <= data_write_packet.awlock;
-    awcache  <= data_write_packet.awcache;
-    awprot   <= data_write_packet.awprot;
-    awqos    <= data_write_packet.awqos;
-    awregion <= data_write_packet.awregion;
-    awuser   <= data_write_packet.awuser;
-    awvalid  <= 1'b1;
+    axiMasterCb.awid     <= data_write_packet.awid;
+    axiMasterCb.awaddr   <= data_write_packet.awaddr;
+    axiMasterCb.awlen    <= data_write_packet.awlen;
+    axiMasterCb.awsize   <= data_write_packet.awsize;
+    axiMasterCb.awburst  <= data_write_packet.awburst;
+    axiMasterCb.awlock   <= data_write_packet.awlock;
+    axiMasterCb.awcache  <= data_write_packet.awcache;
+    axiMasterCb.awprot   <= data_write_packet.awprot;
+    axiMasterCb.awqos    <= data_write_packet.awqos;
+    axiMasterCb.awregion <= data_write_packet.awregion;
+    axiMasterCb.awuser   <= data_write_packet.awuser;
+    axiMasterCb.awvalid  <= 1'b1;
     
     `uvm_info(name,$sformatf("detect_awready = %0d",awready),UVM_HIGH)
     
     do begin
-      @(posedge aclk);
+      @(axiMasterCb);
       data_write_packet.wait_count_write_address_channel++;
     end
-    while(awready !== 1);
+    while(axiMasterCb.awready !== 1);
 
     `uvm_info(name,$sformatf("After_loop_of_Detecting_awready = %0d, awvalid = %0d",awready,awvalid),UVM_HIGH)
-    awvalid <= 1'b0;
+    axiMasterCb.awvalid <= 1'b0;
 
   endtask : axi4_write_address_channel_task
 
@@ -148,32 +153,32 @@ task axi4_write_address_channel_task (inout axi4_write_transfer_char_s data_writ
   //-------------------------------------------------------
   task axi4_write_data_channel_task (inout axi4_write_transfer_char_s data_write_packet, input axi4_transfer_cfg_s cfg_packet);
     
-    `uvm_info(name,$sformatf("data_write_packet=\n%p",data_write_packet),UVM_HIGH)
-    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_HIGH)
+    `uvm_info(name,$sformatf("data_write_packet=\n%p",data_write_packet),UVM_FULL)
+    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_FULL)
     `uvm_info(name,$sformatf("DRIVE TO WRITE DATA CHANNEL"),UVM_HIGH)
 
-    @(posedge aclk);
+    @(axiMasterCb);
 
     for(int i=0; i<data_write_packet.awlen + 1; i++) begin
-      wdata  <= data_write_packet.wdata[i];
-      wstrb  <= data_write_packet.wstrb[i];
-      wuser  <= data_write_packet.wuser;
-      wlast  <= 1'b0;
-      wvalid <= 1'b1;
+      axiMasterCb.wdata  <= data_write_packet.wdata[i];
+      axiMasterCb.wstrb  <= data_write_packet.wstrb[i];
+      axiMasterCb.wuser  <= data_write_packet.wuser;
+      axiMasterCb.wlast  <= 1'b0;
+      axiMasterCb.wvalid <= 1'b1;
       `uvm_info(name,$sformatf("DETECT_WRITE_DATA_WAIT_STATE"),UVM_HIGH)
         
       if(data_write_packet.awlen == i)begin  
-        wlast  <= 1'b1;
+        axiMasterCb.wlast  <= 1'b1;
       end
 
       do begin
-        @(posedge aclk);
-      end while(wready===0);
+        @(axiMasterCb);
+      end while(axiMasterCb.wready===0);
       `uvm_info(name,$sformatf("DEBUG_NA:WDATA[%0d]=%0h",i,data_write_packet.wdata[i]),UVM_HIGH)
     end
 
-    wlast <= 1'b0;
-    wvalid<= 1'b0;
+    axiMasterCb.wlast <= 1'b0;
+    axiMasterCb.wvalid<= 1'b0;
     `uvm_info(name,$sformatf("WRITE_DATA_COMP data_write_packet=\n%p",data_write_packet),UVM_HIGH)
   endtask : axi4_write_data_channel_task
 
@@ -183,29 +188,29 @@ task axi4_write_address_channel_task (inout axi4_write_transfer_char_s data_writ
   //-------------------------------------------------------
   task axi4_write_response_channel_task (inout axi4_write_transfer_char_s data_write_packet, input axi4_transfer_cfg_s cfg_packet);
 
-    `uvm_info(name,$sformatf("WRITE_RESP data_write_packet=\n%p",data_write_packet),UVM_HIGH)
-    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_HIGH)
+    `uvm_info(name,$sformatf("WRITE_RESP data_write_packet=\n%p",data_write_packet),UVM_FULL)
+    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_FULL)
     `uvm_info(name,$sformatf("DRIVE TO WRITE RESPONSE CHANNEL"),UVM_HIGH)
     
     do begin
-      @(posedge aclk);
-    end while(bvalid !== 1'b1); 
+      @(axiMasterCb);
+    end while(axiMasterCb.bvalid !== 1'b1); 
 
     repeat(data_write_packet.no_of_wait_states)begin
       `uvm_info(name,$sformatf("DRIVING WAIT STATES in write response:: %0d",data_write_packet.no_of_wait_states),UVM_HIGH);
-      @(posedge aclk);
-      bready <= 0;
+      @(axiMasterCb);
+      axiMasterCb.bready <= 0;
     end
 
-    data_write_packet.bvalid = bvalid;
-    data_write_packet.bid    = bid;
-    data_write_packet.bresp  = bresp;
-    data_write_packet.buser  = buser;
-    bready <= 1'b1;
+    data_write_packet.bvalid = axiMasterCb.bvalid;
+    data_write_packet.bid    = axiMasterCb.bid;
+    data_write_packet.bresp  = axiMasterCb.bresp;
+    data_write_packet.buser  = axiMasterCb.buser;
+    axiMasterCb.bready <= 1'b1;
 
     `uvm_info(name,$sformatf("CHECKING WRITE RESPONSE :: %p",data_write_packet),UVM_HIGH);
-    @(posedge aclk);
-    bready <= 1'b0;
+    @(axiMasterCb);
+    axiMasterCb.bready <= 1'b0;
 
   endtask : axi4_write_response_channel_task
 
@@ -214,34 +219,32 @@ task axi4_write_address_channel_task (inout axi4_write_transfer_char_s data_writ
   // This task will drive the read address signals
   //-------------------------------------------------------
   task axi4_read_address_channel_task (inout axi4_read_transfer_char_s data_read_packet, input axi4_transfer_cfg_s cfg_packet);
-    @(posedge aclk);
+    @(axiMasterCb);
     
-    `uvm_info(name,$sformatf("data_read_packet=\n%p",data_read_packet),UVM_HIGH)
-    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_HIGH)
     `uvm_info(name,$sformatf("DRIVE TO READ ADDRESS CHANNEL"),UVM_HIGH)
 
-    arid     <= data_read_packet.arid;
-    araddr   <= data_read_packet.araddr;
-    arlen    <= data_read_packet.arlen;
-    arsize   <= data_read_packet.arsize;
-    arburst  <= data_read_packet.arburst;
-    arlock   <= data_read_packet.arlock;
-    arcache  <= data_read_packet.arcache;
-    arprot   <= data_read_packet.arprot;
-    arqos    <= data_read_packet.arqos;
-    aruser   <= data_read_packet.aruser;
-    arregion <= data_read_packet.arregion;
-    arvalid  <= 1'b1;
+    axiMasterCb.arid     <= data_read_packet.arid;
+    axiMasterCb.araddr   <= data_read_packet.araddr;
+    axiMasterCb.arlen    <= data_read_packet.arlen;
+    axiMasterCb.arsize   <= data_read_packet.arsize;
+    axiMasterCb.arburst  <= data_read_packet.arburst;
+    axiMasterCb.arlock   <= data_read_packet.arlock;
+    axiMasterCb.arcache  <= data_read_packet.arcache;
+    axiMasterCb.arprot   <= data_read_packet.arprot;
+    axiMasterCb.arqos    <= data_read_packet.arqos;
+    axiMasterCb.aruser   <= data_read_packet.aruser;
+    axiMasterCb.arregion <= data_read_packet.arregion;
+    axiMasterCb.arvalid  <= 1'b1;
 
     `uvm_info(name,$sformatf("detect_awready = %0d",arready),UVM_HIGH)
     do begin
-      @(posedge aclk);
+      @(axiMasterCb);
       data_read_packet.wait_count_read_address_channel++;
     end
-    while(arready !== 1);
+    while(axiMasterCb.arready !== 1);
 
     `uvm_info(name,$sformatf("After_loop_of_Detecting_awready = %0d, awvalid = %0d",awready,awvalid),UVM_HIGH)
-    arvalid <= 1'b0;
+    axiMasterCb.arvalid <= 1'b0;
   endtask : axi4_read_address_channel_task
 
   //-------------------------------------------------------
@@ -251,83 +254,83 @@ task axi4_write_address_channel_task (inout axi4_write_transfer_char_s data_writ
   task axi4_read_data_channel_task (inout axi4_read_transfer_char_s data_read_packet, input axi4_transfer_cfg_s cfg_packet);
     
     static reg [7:0]i =0;
-    `uvm_info(name,$sformatf("data_read_packet in read data Channel=\n%p",data_read_packet),UVM_HIGH)
-    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_HIGH)
+    `uvm_info(name,$sformatf("data_read_packet in read data Channel=\n%p",data_read_packet),UVM_FULL)
+    `uvm_info(name,$sformatf("cfg_packet=\n%p",cfg_packet),UVM_FULL)
     `uvm_info(name,$sformatf("DRIVE TO READ DATA CHANNEL"),UVM_HIGH)
     
     do begin
-      @(posedge aclk);
+      @(axiMasterCb);
       //Driving rready as low initially
-      rready  <= 0;
-    end while(rvalid === 1'b0);
+      axiMasterCb.rready  <= 0;
+    end while(axiMasterCb.rvalid === 1'b0);
     
     repeat(data_read_packet.no_of_wait_states)begin
       `uvm_info(name,$sformatf("DRIVING WAIT STATES in read data channel :: %0d",data_read_packet.no_of_wait_states),UVM_HIGH);
-      @(posedge aclk);
+      @(axiMasterCb);
     end
 
     //Driving ready as high
-    rready <= 1'b1;
+    axiMasterCb.rready <= 1'b1;
 
     forever begin
       do begin
-        @(posedge aclk);
-      end while(rvalid === 1'b0);
+        @(axiMasterCb);
+      end while(axiMasterCb.rvalid === 1'b0);
 
-      data_read_packet.rid      = rid;
-      data_read_packet.rdata[i] = rdata;
-      data_read_packet.ruser    = ruser;
-      data_read_packet.rresp    = rresp;
+      data_read_packet.rid      = axiMasterCb.rid;
+      data_read_packet.rdata[i] = axiMasterCb.rdata;
+      data_read_packet.ruser    = axiMasterCb.ruser;
+      data_read_packet.rresp    = axiMasterCb.rresp;
       `uvm_info(name,$sformatf("DEBUG_NA:RDATA[%0d]=%0h",i,data_read_packet.rdata[i]),UVM_HIGH)
       
       i++;  
 
-      if(rlast === 1'b1)begin
+      if(axiMasterCb.rlast === 1'b1)begin
         i=0;
         break;
       end
     end
    
-    @(posedge aclk);
-    rready <= 1'b0;
+    @(axiMasterCb);
+    axiMasterCb.rready <= 1'b0;
 
   endtask : axi4_read_data_channel_task
 
   task default_values();
-    awvalid  <= 1'b0;
-    wvalid   <= 1'b0;
-    bready   <= 1'b0;
-    arvalid  <= 1'b0;
-    rready   <= 1'b0;
+    axiMasterCb.awvalid  <= 1'b0;
+    axiMasterCb.wvalid   <= 1'b0;
+    axiMasterCb.bready   <= 1'b0;
+    axiMasterCb.arvalid  <= 1'b0;
+    axiMasterCb.rready   <= 1'b0;
 
-    awid     <= 'b0;
-    awaddr   <= 'b0;
-    awlen    <= 'b0;
-    awsize   <= 'b0;
-    awburst  <= 'b0;
-    awlock   <= 'b0;
-    awcache  <= 'b0;
-    awprot   <= 'b0;
-    awqos    <= 'b0;
-    awregion <= 'b0;
-    awuser   <= 'b0;
+    axiMasterCb.awid     <= 'b0;
+    axiMasterCb.awaddr   <= 'b0;
+    axiMasterCb.awlen    <= 'b0;
+    axiMasterCb.awsize   <= 'b0;
+    axiMasterCb.awburst  <= 'b0;
+    axiMasterCb.awlock   <= 'b0;
+    axiMasterCb.awcache  <= 'b0;
+    axiMasterCb.awprot   <= 'b0;
+    axiMasterCb.awqos    <= 'b0;
+    axiMasterCb.awregion <= 'b0;
+    axiMasterCb.awuser   <= 'b0;
     
-    wdata    <= 'b0;
-    wstrb    <= 'b0;
-    wlast    <= 'b0;
-    wuser    <= 'b0;
+    axiMasterCb.wdata    <= 'b0;
+    axiMasterCb.wstrb    <= 'b0;
+    axiMasterCb.wlast    <= 'b0;
+    axiMasterCb.wuser    <= 'b0;
 
-    arid     <= 'b0;
-    araddr   <= 'b0;
-    arlen    <= 'b0;
-    arsize   <= 'b0;
-    arburst  <= 'b0;
-    arlock   <= 'b0;
-    arcache  <= 'b0;
-    arprot   <= 'b0;
-    arqos    <= 'b0;
-    arregion <= 'b0;
-    aruser   <= 'b0;
+    axiMasterCb.arid     <= 'b0;
+    axiMasterCb.araddr   <= 'b0;
+    axiMasterCb.arlen    <= 'b0;
+    axiMasterCb.arsize   <= 'b0;
+    axiMasterCb.arburst  <= 'b0;
+    axiMasterCb.arlock   <= 'b0;
+    axiMasterCb.arcache  <= 'b0;
+    axiMasterCb.arprot   <= 'b0;
+    axiMasterCb.arqos    <= 'b0;
+    axiMasterCb.arregion <= 'b0;
+    axiMasterCb.aruser   <= 'b0;
   endtask : default_values
 
 endinterface : axi4_master_driver_bfm

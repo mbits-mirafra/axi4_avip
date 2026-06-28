@@ -1,4 +1,4 @@
-`ifndef AXI4_MASTER_TX_INCLUDED_
+`ifndef XI4_MASTER_TX_INCLUDED_
 `define AXI4_MASTER_TX_INCLUDED_
 
 //--------------------------------------------------------------------------------------------
@@ -218,24 +218,22 @@ class axi4_master_tx extends uvm_sequence_item;
   //-------------------------------------------------------
   //Constraint : awaddr
   //Used to generate the alligned address with respect to size
-  constraint awaddr_c0 {soft awaddr == (awaddr%(2**awsize)) == 0;}
+  constraint awaddr_c0 {soft awaddr < 1024 && awaddr > 0;}
 
   //Constraint : awburst_c1
   //Restricting write burst to select only FIXED, INCR and WRAP types
-  constraint awburst_c1 {awburst != WRITE_RESERVED;}
+
+  constraint relation_c1{solve awburst before awlen;}
 
   //Constraint : awlength_c2
   //Adding constraint for restricting write trasnfers
-  constraint awlength_c2 {if(awburst==WRITE_FIXED || WRITE_WRAP)
-                              awlen inside {[0:15]};
-                          else if(awburst == WRITE_INCR) 
-                              awlen inside {[0:255]};}
+  constraint awlength_c2 {(awburst == WRITE_FIXED || awburst == WRITE_WRAP) -> awlen dist {0:=2,1:=2,3:=2,7:=2,15:=2};}
+  constraint awlen_c3{(awburst == WRITE_INCR) -> awlen dist {0:=2,1:=2,3:=2,7:=2,15:=2,31:=2,63:=2,127:=2,255:=2};}
 
-  //Constraint : awlength_c3
-  //Adding constraint for restricting to get multiples of 2 in wrap burst
-  constraint awlength_c3 {if(awburst == WRITE_WRAP)
-                          awlen + 1 inside {2,4,8,16};}
-  
+     constraint arlength_c1 {(arburst == WRITE_FIXED || arburst == WRITE_WRAP) -> arlen dist {0:=2,1:=2,3:=2,7:=2,15:=2};}
+  constraint arlen_c3{(arburst == WRITE_INCR) -> arlen dist {0:=2,1:=2,3:=2,7:=2,15:=2,31:=2,63:=2,127:=2,255:=2};}
+
+
   //Constraint : awlock_c4
   //Adding constraint to select the lock transfer type
   constraint awlock_c4 {soft awlock == WRITE_NORMAL_ACCESS;}
@@ -246,7 +244,7 @@ class axi4_master_tx extends uvm_sequence_item;
 
   //Constraint : awsize_c6
   //Adding a soft constraint to detrmine the awsize
-  constraint awsize_c6 {soft awsize inside {[0:2]};}
+  //constraint awsize_c6 {soft awsize inside {[0:2]};}
 
   //-------------------------------------------------------
   // WRITE DATA Constraints
@@ -277,37 +275,16 @@ class axi4_master_tx extends uvm_sequence_item;
   
   //Constraint : araddr
   //Used to generate the alligned address with respect to size
-  constraint araddr_c0 {soft araddr == (araddr%(2**arsize)) == 0;}
+  constraint araddr_c0 {soft araddr >0 && araddr <1024;}
   
   //Constraint : arburst_c1
   //Restricting read burst to select only FIXED, INCR and WRAP types
-  constraint arburst_c1 { arburst != READ_RESERVED;}
-
-  //Constraint : arlength_c2
-  //Adding constraint for restricting read trasnfers
-  constraint arlength_c2 { if(arburst==READ_FIXED || READ_WRAP)
-                            arlen inside {[0:15]};
-                           else if(arburst == READ_INCR) 
-                            arlen inside {[0:255]};
-                         }
-  
-  //Constraint : arlength_c3
-  //Adding constraint for restricting to get multiples of 2 in wrap burst
-  constraint arlength_c3 { if(arburst == READ_WRAP)
-                            arlen + 1 inside {2,4,8,16};
-                         }
+  constraint arburst_c1 { soft arburst != READ_RESERVED;}
 
   //Constraint : arlock_c9
   //Adding constraint to select the lock transfer type
   constraint arlock_c4 { soft arlock == READ_NORMAL_ACCESS;}
 
-  //Constraint : arburst_c5
-  //Adding a soft constraint to detrmine the burst type
-  constraint arburst_c5 { soft arburst == READ_INCR;}
-
-  //Constraint : arsize_c6
-  //Adding a soft constraint to detrmine the arsize
-  constraint arsize_c6 { soft arsize inside {[0:2]};}
 
   //-------------------------------------------------------
   // Memory Constraints
@@ -520,6 +497,7 @@ function void axi4_master_tx::do_copy(uvm_object rhs);
   wdata = axi4_master_tx_copy_obj.wdata;
   wstrb = axi4_master_tx_copy_obj.wstrb;
   wuser = axi4_master_tx_copy_obj.wuser;
+  wlast = axi4_master_tx_copy_obj.wlast;
   //WRITE RESPONSE CHANNEL
   bid   = axi4_master_tx_copy_obj.bid;
   bresp = axi4_master_tx_copy_obj.bresp;
@@ -541,6 +519,7 @@ function void axi4_master_tx::do_copy(uvm_object rhs);
   rdata = axi4_master_tx_copy_obj.rdata;
   rresp = axi4_master_tx_copy_obj.rresp;
   ruser = axi4_master_tx_copy_obj.ruser;
+   rlast = axi4_master_tx_copy_obj.rlast;
   //OTHERS
   tx_type       = axi4_master_tx_copy_obj.tx_type;
   transfer_type = axi4_master_tx_copy_obj.transfer_type;
@@ -661,4 +640,3 @@ function void axi4_master_tx::do_print(uvm_printer printer);
 endfunction : do_print
 
 `endif
-

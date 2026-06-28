@@ -15,8 +15,8 @@ class axi4_slave_seq_item_converter extends uvm_object;
   extern function new(string name = "axi4_slave_seq_item_converter");
   extern static function void from_write_class(input axi4_slave_tx input_conv_h, output axi4_write_transfer_char_s output_conv);
   extern static function void from_read_class(input axi4_slave_tx input_conv_h, output axi4_read_transfer_char_s output_conv);
-  extern static function void to_write_class(input axi4_write_transfer_char_s input_conv_h, output axi4_slave_tx output_conv_h);
-  extern static function void to_read_class(input axi4_read_transfer_char_s input_conv_h, output axi4_slave_tx output_conv_h);
+  extern static function void to_write_class(input axi4_write_transfer_char_s input_conv_h, inout axi4_slave_tx output_conv_h);
+  extern static function void to_read_class(input axi4_read_transfer_char_s input_conv_h, inout axi4_slave_tx output_conv_h);
   
   extern static function void tx_write_packet(input axi4_slave_tx input_addr_h, input axi4_slave_tx input_data_h,input axi4_slave_tx input_resp_h,output axi4_slave_tx packet_h);
   extern static function void tx_read_packet(input axi4_slave_tx input_addr_h, input axi4_slave_tx input_data_h,output axi4_slave_tx packet_h);
@@ -47,7 +47,7 @@ endfunction : new
 //--------------------------------------------------------------------------------------------      
 function void axi4_slave_seq_item_converter::from_write_class(input axi4_slave_tx input_conv_h,output axi4_write_transfer_char_s output_conv);
 
-  `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("----------------------------------------------------------------------"),UVM_HIGH);
+  `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("----------------------------------------------------------------------"),UVM_FULL);
    
   $cast(output_conv.awid,input_conv_h.awid); 
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("After randomize awid =  %b",output_conv.awid),UVM_FULL);
@@ -166,10 +166,9 @@ endfunction : from_read_class
 //--------------------------------------------------------------------------------------------      
 
 
-function void axi4_slave_seq_item_converter::to_write_class(input axi4_write_transfer_char_s input_conv_h, output axi4_slave_tx output_conv_h);
+function void axi4_slave_seq_item_converter::to_write_class(input axi4_write_transfer_char_s input_conv_h, inout axi4_slave_tx output_conv_h);
 
   int i;
-  output_conv_h = new();
 
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("----------------------------------------------------------------------"),UVM_FULL);
   
@@ -196,6 +195,7 @@ function void axi4_slave_seq_item_converter::to_write_class(input axi4_write_tra
   $cast(output_conv_h.awprot,input_conv_h.awprot);
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("After randomizing awprot =  %b",output_conv_h.awprot),UVM_FULL);
 
+  $display("write bid in seq conv is %d",input_conv_h.bid);
   $cast(output_conv_h.bid,input_conv_h.bid);
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("After randomize bid =  %b",output_conv_h.bid),UVM_FULL);
 
@@ -208,9 +208,9 @@ function void axi4_slave_seq_item_converter::to_write_class(input axi4_write_tra
   output_conv_h.awqos = input_conv_h.awqos;
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("after writnig awqos =  %0h",output_conv_h.awqos),UVM_FULL);
 
-  while(input_conv_h.wdata[i]!==0) begin
+  
+  for(int i=0;i<input_conv_h.wdata[i];i++) begin
       output_conv_h.wdata[i] = input_conv_h.wdata[i];
-      i++;
   end
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("after writnig wdata to class = \n %0s",output_conv_h.sprint()),UVM_FULL);
 
@@ -230,9 +230,8 @@ endfunction : to_write_class
 // Parameters:                                                                                      
 // name - axi4_slave_tx, axi4_read_transfer_char_s                                                      
 //--------------------------------------------------------------------------------------------      
-function void axi4_slave_seq_item_converter::to_read_class( input axi4_read_transfer_char_s input_conv_h, output axi4_slave_tx output_conv_h);
+function void axi4_slave_seq_item_converter::to_read_class( input axi4_read_transfer_char_s input_conv_h, inout axi4_slave_tx output_conv_h);
  int i;
-  output_conv_h = new();
 
   $cast(output_conv_h.arid,input_conv_h.arid);
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("After randomize arid =  %b",output_conv_h.arid),UVM_FULL);
@@ -258,9 +257,7 @@ function void axi4_slave_seq_item_converter::to_read_class( input axi4_read_tran
   $cast(output_conv_h.arprot,input_conv_h.arprot);
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("After randomize arprot =  %b",output_conv_h.arprot),UVM_FULL);
 
-  foreach(input_conv_h.rresp[i]) begin
-    $cast(output_conv_h.rresp,input_conv_h.rresp[i]);
-  end
+    $cast(output_conv_h.rresp,input_conv_h.rresp[0]);
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("After randomize rresp =  %b",output_conv_h.rresp),UVM_FULL);
 
   output_conv_h.araddr = input_conv_h.araddr;
@@ -280,6 +277,9 @@ function void axi4_slave_seq_item_converter::to_read_class( input axi4_read_tran
   output_conv_h.araddr = input_conv_h.araddr;
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("after reading araddr =  %0h",output_conv_h.araddr),UVM_FULL);
 
+
+ output_conv_h.rlast = input_conv_h.rlast; 
+ $display("CLONED RLAST IS %d",output_conv_h.rlast);
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("----------------------------------------------------------------------"),UVM_FULL);
 endfunction : to_read_class
 
@@ -307,9 +307,8 @@ function  void axi4_slave_seq_item_converter::tx_write_packet(input axi4_slave_t
   packet_h.awcache=input_addr_h.awcache;
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("combined addr packet=\n%s",packet_h.sprint),UVM_FULL);
 
-  while(input_data_h.wdata[i]!==0) begin
-    packet_h.wdata[i]= input_data_h.wdata[i];
-    i++;
+  for(int i=0;i<input_data_h.wdata[i];i++) begin
+    packet_h.wdata[i] = input_data_h.wdata[i];
   end
 
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("combined data packet after writing wdata= %0p",packet_h.wdata[i]),UVM_FULL);
@@ -380,7 +379,7 @@ function void axi4_slave_seq_item_converter::to_write_addr_data_class(input axi4
   
   output_conv_h = new();
 
-  `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("----------------------------------------------------------------------"),UVM_HIGH);
+  `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("----------------------------------------------------------------------"),UVM_FULL);
  
 
   output_conv_h.tx_type = WRITE; 
@@ -398,14 +397,14 @@ function void axi4_slave_seq_item_converter::to_write_addr_data_class(input axi4
   foreach(input_conv_h.wdata[i]) begin
     if(input_conv_h.wdata[i] != 0)begin
       output_conv_h.wdata.push_front(input_conv_h.wdata[i]);
-      `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("After converting wdata[%0d] =  %0h",i,output_conv_h.wdata[i]),UVM_HIGH);
+      `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("After converting wdata[%0d] =  %0h",i,output_conv_h.wdata[i]),UVM_FULL);
     end
   end
 
   foreach(input_conv_h.wdata[i]) begin
     if(input_conv_h.wdata[i] != 0)begin
       output_conv_h.wstrb.push_front(input_conv_h.wstrb[i]);
-      `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("After converting wstrb[%0d] =  %0d",i,output_conv_h.wstrb[i]),UVM_HIGH);
+      `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("After converting wstrb[%0d] =  %0d",i,output_conv_h.wstrb[i]),UVM_FULL);
     end
   end
 
@@ -413,7 +412,7 @@ function void axi4_slave_seq_item_converter::to_write_addr_data_class(input axi4
   output_conv_h.wuser = input_conv_h.wuser;
   $cast(output_conv_h.bid,input_conv_h.bid);
   $cast(output_conv_h.bresp,input_conv_h.bresp);
-  `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("After converting =  %s",output_conv_h.sprint()),UVM_HIGH);
+  `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("After converting =  %s",output_conv_h.sprint()),UVM_FULL);
 
 endfunction : to_write_addr_data_class
 
@@ -429,7 +428,7 @@ function void axi4_slave_seq_item_converter::to_write_addr_data_resp_class(input
   
   output_conv_h = new();
 
-  `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("----------------------------------------------------------------------"),UVM_HIGH);
+  `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("----------------------------------------------------------------------"),UVM_FULL);
  
 
   output_conv_h.tx_type = WRITE; 
@@ -447,14 +446,14 @@ function void axi4_slave_seq_item_converter::to_write_addr_data_resp_class(input
   foreach(waddr_data_packet.wdata[i]) begin
     if(waddr_data_packet.wdata[i] != 0)begin
       output_conv_h.wdata.push_back(waddr_data_packet.wdata[i]);
-      `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("After converting wdata[%0d] =  %0h",i,output_conv_h.wdata[i]),UVM_HIGH);
+      `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("After converting wdata[%0d] =  %0h",i,output_conv_h.wdata[i]),UVM_FULL);
     end
   end
 
   foreach(waddr_data_packet.wdata[i]) begin
     if(waddr_data_packet.wdata[i] != 0)begin
       output_conv_h.wstrb.push_back(waddr_data_packet.wstrb[i]);
-      `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("After converting wstrb[%0d] =  %0d",i,output_conv_h.wstrb[i]),UVM_HIGH);
+      `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("After converting wstrb[%0d] =  %0d",i,output_conv_h.wstrb[i]),UVM_FULL);
     end
   end
 
@@ -462,7 +461,7 @@ function void axi4_slave_seq_item_converter::to_write_addr_data_resp_class(input
   output_conv_h.wuser = waddr_data_packet.wuser;
   $cast(output_conv_h.bid,input_conv_h.bid);
   $cast(output_conv_h.bresp,input_conv_h.bresp);
-  `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("After converting =  %s",output_conv_h.sprint()),UVM_HIGH);
+  `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("After converting =  %s",output_conv_h.sprint()),UVM_FULL);
 
 endfunction : to_write_addr_data_resp_class
 
@@ -496,9 +495,9 @@ function void axi4_slave_seq_item_converter::to_read_addr_data_class(input axi4_
   
   $cast(output_conv_h.rresp,input_conv_h.rresp);
 
-  `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("After converting read_addr_data_packet =  %s",output_conv_h.sprint()),UVM_HIGH);
+  `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("After converting read_addr_data_packet =  %s",output_conv_h.sprint()),UVM_FULL);
 
-  `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("----------------------------------------------------------------------"),UVM_HIGH);
+  `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("----------------------------------------------------------------------"),UVM_FULL);
 endfunction : to_read_addr_data_class
 
 //--------------------------------------------------------------------------------------------

@@ -35,7 +35,8 @@ endfunction : new
 // Runs the slave write responder in the background and drives the master write
 //--------------------------------------------------------------------------------------------
 task axi4_virtual_back_to_back_write_seq::body();
-
+ 
+  super.body();
   axi4_master_write_seq_h = axi4_master_base_seq::type_id::create("axi4_master_write_seq_h");
   axi4_master_write_seq_h.writeTranSize     = writeTranSize;
   axi4_master_write_seq_h.writeTransferType = writeTransferType;

@@ -36,6 +36,7 @@ endfunction : new
 //--------------------------------------------------------------------------------------------
 task axi4_virtual_back_to_back_read_seq::body();
 
+  super.body();
   axi4_master_read_seq_h = axi4_master_base_seq::type_id::create("axi4_master_read_seq_h");
   axi4_master_read_seq_h.readTranSize     = readTranSize;
   axi4_master_read_seq_h.readTransferType = readTransferType;

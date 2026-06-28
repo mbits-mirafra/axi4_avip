@@ -39,7 +39,7 @@ endfunction : new
 // Runs the slave responders in the background and drives master write and read in parallel
 //--------------------------------------------------------------------------------------------
 task axi4_virtual_back_to_back_write_read_seq::body();
-
+  super.body();
   axi4_master_write_seq_h = axi4_master_base_seq::type_id::create("axi4_master_write_seq_h");
   axi4_master_read_seq_h  = axi4_master_base_seq::type_id::create("axi4_master_read_seq_h");
 

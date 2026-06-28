@@ -205,10 +205,6 @@
           `uvm_info(get_type_name(), $sformatf("from_write_class:: struct_cfg =  \n %0p",struct_cfg),UVM_HIGH); 
           axi4_slave_drv_bfm_h.axi4_write_address_phase(struct_write_packet);
           axi4_slave_seq_item_converter::to_write_class(struct_write_packet,req_wr);
-          `uvm_info(get_type_name(), $sformatf("AW accepted | awid=%0d awaddr=0x%0h awlen=%0d awsize=%s awburst=%s",
-                    local_slave_addr_tx.awid, local_slave_addr_tx.awaddr, local_slave_addr_tx.awlen,
-                    local_slave_addr_tx.awsize.name(), local_slave_addr_tx.awburst.name()), UVM_MEDIUM)
-          `uvm_info(get_type_name(), $sformatf("Write address packet:\n%s",local_slave_addr_tx.sprint()), UVM_HIGH)
           axiSlaveAddressQueue.push_back(req_wr);
           $display("req wr got awid is %d",req_wr.awid);
           axiSlaveIdQueue.push_back(req_wr.awid);
@@ -406,10 +402,6 @@
           axiReadSlaveAddressQueue.push_back(req_rd);
           axiReadSlaveIdQueue.push_back(req_rd.arid);
           waitStates++; 
-          `uvm_info(get_type_name(), $sformatf("AR accepted | arid=%0d araddr=0x%0h arlen=%0d arsize=%s arburst=%s",
-                    local_slave_tx.arid, local_slave_tx.araddr, local_slave_tx.arlen,
-                    local_slave_tx.arsize.name(), local_slave_tx.arburst.name()), UVM_MEDIUM)
-          `uvm_info(get_type_name(), $sformatf("Read address packet:\n%s",local_slave_tx.sprint()), UVM_HIGH)
 
         end : READ_ADDRESS_CHANNEL
 

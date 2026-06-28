@@ -21,8 +21,8 @@ package axi4_back_to_back_test_pkg;
   import axi4_slave_seq_pkg::*;
   import axi4_back_to_back_vseq_pkg::*;
 
-  //including base_test for testing
-  `include "axi4_base_test.sv"
+  //base test comes from the shared base package
+  import axi4_test_base_pkg::*;
 
   //-------------------------------------------------------
   // Back to back tests

@@ -21,7 +21,7 @@ package axi4_standalone_slave_vseq_pkg;
   //-------------------------------------------------------
   // Importing the required packages
   //-------------------------------------------------------
-  `include "axi4_virtual_base_seq.sv"
+  import axi4_vseq_base_pkg::*;
   `include "axi4_virtual_write_followed_by_read_seq.sv"
   `include "axi4_virtual_write_seq.sv"
   `include "axi4_virtual_read_seq.sv"

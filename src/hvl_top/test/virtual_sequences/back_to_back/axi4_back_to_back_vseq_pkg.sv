@@ -23,7 +23,7 @@ package axi4_back_to_back_vseq_pkg;
   //-------------------------------------------------------
   // Importing the required virtual sequences
   //-------------------------------------------------------
-  `include "axi4_virtual_base_seq.sv"
+  import axi4_vseq_base_pkg::*;
   `include "axi4_virtual_back_to_back_write_seq.sv"
   `include "axi4_virtual_back_to_back_read_seq.sv"
   `include "axi4_virtual_back_to_back_write_read_seq.sv"

@@ -20,8 +20,8 @@ package axi4_standalone_slave_test_pkg;
   import axi4_master_seq_pkg::*;
   import axi4_standalone_slave_vseq_pkg::*;
 
-  //including base_test for testing
-  `include "axi4_base_test.sv"
+  //base test comes from the shared base package
+  import axi4_test_base_pkg::*;
   `include "axi4_non_outstanding_8b_write_data_test.sv"
   `include "axi4_non_outstanding_16b_write_data_test.sv"
   `include "axi4_non_outstanding_32b_write_data_test.sv"

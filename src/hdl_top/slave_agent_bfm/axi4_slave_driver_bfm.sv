@@ -20,7 +20,7 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
                                 input [2: 0]              awprot  ,
                                 input [3: 0]              awqos   ,  
                                 input                     awvalid ,
-                                output reg	              awready ,
+                                output reg               awready ,
 
                                 //Write_data_channel
                                 input [DATA_WIDTH-1: 0]     wdata  ,
@@ -28,14 +28,14 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
                                 input                       wlast  ,
                                 input [3: 0]                wuser  ,
                                 input                       wvalid ,
-                                output reg	                wready ,
+                                output reg                 wready ,
 
                                 //Write Response Channel
                                 output reg [3:0]            bid    ,
                                 output reg [1:0]            bresp  ,
                                 output reg [3:0]            buser  ,
                                 output reg                  bvalid ,
-                                input		                    bready ,
+                                input                      bready ,
 
                                 //Read Address Channel
                                 input [3: 0]                arid    ,
@@ -59,7 +59,7 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
                                 output reg                      rlast  ,
                                 output reg [3:0]                ruser  ,
                                 output reg                      rvalid ,
-                                input		                        rready  
+                                input                          rready  
                               ); 
                               
   //-------------------------------------------------------
@@ -98,20 +98,20 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
 
   // Creating Memories for each signal to store each transaction attributes
 
-  reg [	3 : 0] mem_awid [2**LENGTH];
-  reg [	ADDRESS_WIDTH-1: 0] mem_waddr [2**LENGTH];
-  reg [	7 : 0] mem_wlen	  [2**LENGTH];
-  reg [	2 : 0]	            mem_wsize	  [2**LENGTH];
-  reg [ 1	: 0]	            mem_wburst  [2**LENGTH];
-  reg [ 3	: 0]	            mem_wqos    [2**LENGTH];
+  reg [ 3 : 0] mem_awid [2**LENGTH];
+  reg [ ADDRESS_WIDTH-1: 0] mem_waddr [2**LENGTH];
+  reg [ 7 : 0] mem_wlen   [2**LENGTH];
+  reg [ 2 : 0]             mem_wsize   [2**LENGTH];
+  reg [ 1 : 0]             mem_wburst  [2**LENGTH];
+  reg [ 3 : 0]             mem_wqos    [2**LENGTH];
   bit                       mem_wlast   [2**LENGTH];
   
-  reg [	3 : 0]	            mem_arid	  [2**LENGTH];
-  reg [	ADDRESS_WIDTH-1: 0]	mem_raddr	  [2**LENGTH];
-  reg [	7	: 0]	            mem_rlen	  [2**LENGTH];
-  reg [	2	: 0]	            mem_rsize	  [2**LENGTH];
-  reg [ 1	: 0]	            mem_rburst  [2**LENGTH];
-  reg [ 3	: 0]	            mem_rqos    [2**LENGTH];
+  reg [ 3 : 0]             mem_arid   [2**LENGTH];
+  reg [ ADDRESS_WIDTH-1: 0] mem_raddr   [2**LENGTH];
+  reg [ 7 : 0]             mem_rlen   [2**LENGTH];
+  reg [ 2 : 0]             mem_rsize   [2**LENGTH];
+  reg [ 1 : 0]             mem_rburst  [2**LENGTH];
+  reg [ 3 : 0]             mem_rqos    [2**LENGTH];
   
   //-------------------------------------------------------
   // Task: wait_for_system_reset
@@ -153,11 +153,11 @@ interface axi4_slave_driver_bfm(input                     aclk    ,
     end 
       
    // Sample the values
-            data_write_packet.awid= axiSlaveCb.awid;	
-	 data_write_packet.awaddr 	= axiSlaveCb.awaddr;
-	   data_write_packet.awlen  = axiSlaveCb.awlen;	
-	  data_write_packet.awsize	= axiSlaveCb.awsize;	
-	 data_write_packet.awburst = axiSlaveCb.awburst;	
+            data_write_packet.awid= axiSlaveCb.awid; 
+   data_write_packet.awaddr  = axiSlaveCb.awaddr;
+     data_write_packet.awlen  = axiSlaveCb.awlen; 
+    data_write_packet.awsize = axiSlaveCb.awsize; 
+   data_write_packet.awburst = axiSlaveCb.awburst; 
 data_write_packet.awqos = axiSlaveCb.awqos;
    `uvm_info("struct_pkt_debug",$sformatf("struct_pkt_wr_addr_phase = \n %0p",data_write_packet),UVM_FULL)
 

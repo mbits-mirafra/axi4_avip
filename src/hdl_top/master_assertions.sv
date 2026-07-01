@@ -49,7 +49,7 @@ interface master_assertions (input                     aclk,
                              input               [3:0] arregion,   
                              input               [3:0] aruser,     
                              input                     arvalid,
-                             input	                   arready,
+                             input                    arready,
                              //Read Data Channel Signals
                              input            [3:0] rid,
                              input [DATA_WIDTH-1:0] rdata,

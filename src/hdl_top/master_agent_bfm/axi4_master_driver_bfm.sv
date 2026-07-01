@@ -26,7 +26,7 @@ interface axi4_master_driver_bfm(input bit                      aclk,
                                  output reg               [3:0] awregion,
                                  output reg                     awuser,
                                  output reg                     awvalid,
-                                 input    	                    awready,
+                                 input                         awready,
                                  //Write Data Channel Signals
                                  output reg    [DATA_WIDTH-1: 0] wdata,
                                  output reg [(DATA_WIDTH/8)-1:0] wstrb,
@@ -39,7 +39,7 @@ interface axi4_master_driver_bfm(input bit                      aclk,
                                  input      [1:0] bresp,
                                  input      [3:0] buser,
                                  input            bvalid,
-                                 output	reg       bready,
+                                 output reg       bready,
                                  //Read Address Channel Signals
                                  output reg               [3:0] arid,
                                  output reg [ADDRESS_WIDTH-1:0] araddr,
@@ -61,7 +61,7 @@ interface axi4_master_driver_bfm(input bit                      aclk,
                                  input                        rlast,
                                  input                  [3:0] ruser,
                                  input                        rvalid,
-                                 output	reg                   rready  
+                                 output reg                   rready  
                                 );  
   
   //-------------------------------------------------------
@@ -221,7 +221,6 @@ task axi4_write_address_channel_task (inout axi4_write_transfer_char_s data_writ
     @(axiMasterCb);
     
     `uvm_info(name,$sformatf("DRIVE TO READ ADDRESS CHANNEL"),UVM_HIGH)
-    $display("SENT ADDRESS REQ");
     axiMasterCb.arid     <= data_read_packet.arid;
     axiMasterCb.araddr   <= data_read_packet.araddr;
     axiMasterCb.arlen    <= data_read_packet.arlen;
@@ -241,7 +240,6 @@ task axi4_write_address_channel_task (inout axi4_write_transfer_char_s data_writ
       data_read_packet.wait_count_read_address_channel++;
     end
     while(axiMasterCb.arready !== 1 || $isunknown(axiMasterCb.arready));
-    $display("OBTAINED ADDRESS RESP");
     `uvm_info(name,$sformatf("After_loop_of_Detecting_awready = %0d, awvalid = %0d",awready,awvalid),UVM_HIGH)
     axiMasterCb.arvalid <= 1'b0;
   endtask : axi4_read_address_channel_task
@@ -262,15 +260,13 @@ task axi4_write_address_channel_task (inout axi4_write_transfer_char_s data_writ
       //Driving rready as low initially
       axiMasterCb.rready  <= 0;
     end while(axiMasterCb.rvalid === 1'b0 || $isunknown(axiMasterCb.rvalid));
-   
-    $display("RVALID OBTAINED");
+
     repeat(data_read_packet.no_of_wait_states)begin
       `uvm_info(name,$sformatf("DRIVING WAIT STATES in read data channel :: %0d",data_read_packet.no_of_wait_states),UVM_HIGH);
       @(axiMasterCb);
     end
 
     //Driving ready as high
-    $display("DRIVEN RREADY AS HIGH");
     axiMasterCb.rready <= 1'b1;
 
     forever begin

@@ -372,8 +372,8 @@ task axi4_master_driver_proxy::axi4_write_task();
 
            rsp_wr = RSP :: type_id :: create("RSP OBJECT"); 
            rsp_wr.set_id_info(local_master_response_tx);
-           axi_write_seq_item_port.put_response(local_master_response_tx); 
-           $display("SENDING RESP FROM MASTER for id is %d",local_master_response_tx.get_transaction_id());
+           axi_write_seq_item_port.put_response(local_master_response_tx);
+          `uvm_info(get_type_name(),$sformatf("WRITE_RESPONSE_THREAD::Sending response from master for transaction id = %0d",local_master_response_tx.get_transaction_id()),UVM_MEDIUM)
           `uvm_info(get_type_name(),$sformatf("WRITE_RESPONSE_THREAD::Received_req_write_packet = \n %s",local_master_response_tx.sprint()),UVM_MEDIUM);
 
           `uvm_info(get_type_name(),$sformatf("WRITE_RESPONSE_THREAD::Checking fifo size used= %0d",axi4_master_write_resp_fifo_h.used()),UVM_FULL); 
@@ -415,7 +415,7 @@ task axi4_master_driver_proxy::axi4_read_task();
     axi4_transfer_cfg_s       struct_cfg;
 
     axi_read_seq_item_port.get_next_item(req_rd);
-    $display("STARTING READ DATA TASK with req_rd type is %s",req_rd.transfer_type); 
+    `uvm_info(get_type_name(),$sformatf("READ_TASK::Starting read data task, req_rd transfer_type = %s",req_rd.transfer_type),UVM_MEDIUM)
     `uvm_info(get_type_name(),$sformatf("READ_TASK:: Before Sending_req_read_packet = \n %s",req_rd.sprint()),UVM_FULL); 
 
     //Converting configurations into struct config type
@@ -438,7 +438,6 @@ task axi4_master_driver_proxy::axi4_read_task();
       //Calling read address channel and read data channel tasks declared in bfm to drive the
       //read address channel signals and to sample the read data channel siganls
       axi4_master_drv_bfm_h.axi4_read_address_channel_task(struct_read_packet,struct_cfg);
-      $display("STARTING READ DATA TASK");
       axi4_master_drv_bfm_h.axi4_read_data_channel_task(struct_read_packet,struct_cfg);
       //Converting transactions into struct data type
       axi4_master_seq_item_converter::to_read_class(struct_read_packet,req_rd);

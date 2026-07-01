@@ -195,7 +195,7 @@ function void axi4_slave_seq_item_converter::to_write_class(input axi4_write_tra
   $cast(output_conv_h.awprot,input_conv_h.awprot);
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("After randomizing awprot =  %b",output_conv_h.awprot),UVM_FULL);
 
-  $display("write bid in seq conv is %d",input_conv_h.bid);
+  `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("Converting write response: input bid = %0d",input_conv_h.bid),UVM_MEDIUM)
   $cast(output_conv_h.bid,input_conv_h.bid);
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("After randomize bid =  %b",output_conv_h.bid),UVM_FULL);
 
@@ -278,8 +278,8 @@ function void axi4_slave_seq_item_converter::to_read_class( input axi4_read_tran
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("after reading araddr =  %0h",output_conv_h.araddr),UVM_FULL);
 
 
- output_conv_h.rlast = input_conv_h.rlast; 
- $display("CLONED RLAST IS %d",output_conv_h.rlast);
+ output_conv_h.rlast = input_conv_h.rlast;
+  `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("Converting read data: rlast = %0d",output_conv_h.rlast),UVM_MEDIUM)
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("----------------------------------------------------------------------"),UVM_FULL);
 endfunction : to_read_class
 

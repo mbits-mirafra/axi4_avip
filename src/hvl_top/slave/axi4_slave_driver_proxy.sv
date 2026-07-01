@@ -206,7 +206,7 @@
           axi4_slave_drv_bfm_h.axi4_write_address_phase(struct_write_packet);
           axi4_slave_seq_item_converter::to_write_class(struct_write_packet,req_wr);
           axiSlaveAddressQueue.push_back(req_wr);
-          $display("req wr got awid is %d",req_wr.awid);
+          `uvm_info(get_type_name(),$sformatf("WRITE_ADDRESS_CHANNEL::Received write address packet, awid = %0d",req_wr.awid),UVM_MEDIUM)
           axiSlaveIdQueue.push_back(req_wr.awid);
         end:WRITE_ADDRESS_CHANNEL
 
@@ -282,7 +282,7 @@
             axiSlaveAddressQueue.delete(indexTracker[0]);
             local_slave_data_tx = axiSlaveDataQueue[indexTracker[0]];
             axiSlaveDataQueue.delete(indexTracker[0]);
-            $display("slave driver sent out bid %d",local_slave_addr_tx.awid);
+            `uvm_info(get_type_name(),$sformatf("WRITE_RESPONSE_CHANNEL::Slave driver sending out bid = %0d",local_slave_addr_tx.awid),UVM_MEDIUM)
             bid_local = local_slave_addr_tx.awid;
             if(local_slave_addr_tx.awburst == WRITE_FIXED) begin 
               end_wrap_addr =  local_slave_addr_tx.awaddr + ((2**local_slave_addr_tx.awsize));
@@ -304,7 +304,7 @@
           else begin
             local_slave_addr_tx = axiSlaveAddressQueue.pop_front();
             local_slave_data_tx = axiSlaveDataQueue.pop_front();
-            $display("slave driver sent out bid %d",local_slave_addr_tx.awid);
+            `uvm_info(get_type_name(),$sformatf("WRITE_RESPONSE_CHANNEL::Slave driver sending out bid = %0d",local_slave_addr_tx.awid),UVM_MEDIUM)
             bid_local = local_slave_addr_tx.awid;
             if(local_slave_addr_tx.awburst == WRITE_FIXED) begin
               end_wrap_addr =  local_slave_addr_tx.awaddr + ((2**local_slave_addr_tx.awsize));

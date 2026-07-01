@@ -288,7 +288,6 @@ function void axi4_master_seq_item_converter::to_read_class( input axi4_read_tra
   $cast(output_conv_h.arburst,input_conv_h.arburst);
   `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting arburst =  %b",output_conv_h.arburst),UVM_FULL);
 
-   $display("converted arburst is %d",output_conv_h.arburst);
   $cast(output_conv_h.arlock,input_conv_h.arlock);
   `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting arlock =  %b",output_conv_h.arlock),UVM_FULL);
 

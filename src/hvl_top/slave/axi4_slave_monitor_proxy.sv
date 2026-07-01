@@ -192,8 +192,8 @@ task axi4_slave_monitor_proxy::axi4_slave_write_response();
     axi4_slave_mon_bfm_h.axi4_write_response_sampling(struct_write_packet,struct_cfg);
     axi4_slave_seq_item_converter::to_write_class(struct_write_packet,req_wr);
     
-    $display("SENDING OUT RESP ID IS %D",req_wr.bid);
-    //clone and publish the clone to the analysis port 
+    `uvm_info(get_type_name(),$sformatf("Sending out write response, bid = %0d",req_wr.bid),UVM_MEDIUM)
+    //clone and publish the clone to the analysis port
     $cast(axi4_slave_tx_clone_packet,req_wr.clone());
     `uvm_info(get_type_name(),$sformatf("Packet received from axi4_slave_write_response is \n %s",axi4_slave_tx_clone_packet.sprint()),UVM_HIGH);
     

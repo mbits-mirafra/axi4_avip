@@ -339,7 +339,7 @@ package axi4_globals_pkg;
     bit                     awuser;
     bit [2:0]               awprot;
     bit                     awvalid;
-    bit	                    awready;
+    bit                     awready;
     //Write Data Channel Signals
     bit     [2**LENGTH:0][DATA_WIDTH-1:0] wdata;
     bit [2**LENGTH:0][(DATA_WIDTH/8)-1:0] wstrb;

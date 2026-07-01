@@ -252,7 +252,7 @@ task axi4_master_monitor_proxy::axi4_read_address();
 
     //clone and publish the clone to the analysis port 
     $cast(req_rd_clone_packet,req_rd.clone());
-    $display("READ ADDRESS SENT BURST IS %d from proxy",req_rd_clone_packet.arburst);
+    `uvm_info(get_type_name(),$sformatf("Read address channel: publishing clone packet, arburst = %0d",req_rd_clone_packet.arburst),UVM_MEDIUM)
     `uvm_info(get_type_name(),$sformatf("Packet received from axi4_read_address clone packet is \n %s",req_rd_clone_packet.sprint()),UVM_HIGH)
     axi4_master_read_address_analysis_port.write(req_rd_clone_packet);
   end

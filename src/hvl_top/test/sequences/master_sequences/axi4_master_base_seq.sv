@@ -27,6 +27,15 @@
     static int transCount;
 
     static int totalCount;
+
+    //Runtime write tracker shared across write & read seq instances.
+    //A write id lives in inflight_* from issue until its get_response(id)
+    //returns (BRESP done); then its base moves to committed_base (safe to read).
+    static int inflight_base[int];   //id -> base address, still outstanding
+    static int inflight_span[int];   //id -> byte span
+    static int committed_base[$];    //bases whose BRESP has returned
+    static int addr_guard = 64;      //"close to" band in bytes
+
     //-------------------------------------------------------
     // Externally defined Function
     //-------------------------------------------------------
@@ -65,15 +74,22 @@
             `uvm_fatal(get_type_name(), $sformatf("Randomization failed for WRITE axi4_master_tx (size=%s burst=%s type=%s)",writeTranSize.name(), writeBurstType.name(), writeTransferType.name()))
         end
         finish_item(req);
+        //mark this write in-flight the moment it is issued
+        inflight_base[req.get_transaction_id()] = req.awaddr;
+        inflight_span[req.get_transaction_id()] = (req.awlen+1)*(2**req.awsize);
         fork
-          begin  
+          begin
             automatic int id = req.get_transaction_id();
             RSP rsp;
             `uvm_info(get_type_name(),$sformatf("Waiting for response of transaction id = %0d",id),UVM_MEDIUM)
             get_response(rsp,id);
+            //BRESP received -> this address is committed and safe to read back
+            committed_base.push_back(inflight_base[id]);
+            inflight_base.delete(id);
+            inflight_span.delete(id);
             transCount++;
             `uvm_info(get_type_name(),$sformatf("Response received, response count = %0d",transCount),UVM_MEDIUM)
-          end 
+          end
         join_none;
       end 
     end
@@ -83,8 +99,18 @@
         req = axi4_master_tx :: type_id :: create("req");
         start_item(req);
         `uvm_info(get_type_name(), $sformatf("Generating READ transaction | size=%s burst=%s type=%s",writeTranSize.name(), writeBurstType.name(), writeTransferType.name()), UVM_LOW)
-     
-        if(!req.randomize() with {req.arsize == readTranSize; 
+
+        //snapshot the live write tracker so the read avoids in-flight writes
+        //and can only read back already-committed addresses
+        req.avoid_base = {};
+        req.avoid_span = {};
+        foreach(inflight_base[id]) begin
+          req.avoid_base.push_back(inflight_base[id]);
+          req.avoid_span.push_back(inflight_span[id] + 2*addr_guard);
+        end
+        req.readback_base = committed_base;
+
+        if(!req.randomize() with {req.arsize == readTranSize;
                                   req.tx_type == writeOrRead;
                                   req.transfer_type == readTransferType;
                                   req.arburst == readBurstType;}) begin

@@ -305,6 +305,7 @@ data_write_packet.awqos = axiSlaveCb.awqos;
   task axi4_read_data_phase (inout axi4_read_transfer_char_s data_read_packet);
     int j1;
     int amount;
+     @(axiSlaveCb);
       axiSlaveCb.rdata<=data_read_packet.rdata[0];
       axiSlaveCb.rresp<=data_read_packet.rresp[0];
 

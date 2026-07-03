@@ -73,8 +73,9 @@ task axi4_slave_base_seq::body();
 
          fork
            begin 
+             RSP rsp;
              int id = writeIdQueue[writeCnt++];
-             get_response(rsp,id);
+             get_response(rsp);
              numWriteGotResp++;
              $display("write num got resp");
            end 
@@ -95,15 +96,14 @@ task axi4_slave_base_seq::body();
          end
 
          finish_item(req);
-          $display("STARTED SLAVE SEq");
          readIdQueue[readCnt] = req.get_transaction_id();
 
          fork
            begin
+             RSP rsp;
              int id = readIdQueue[readCnt++];
-             get_response(rsp,id);
+             get_response(rsp);
              numReadGotResp++;
-             $display("read num got resp");
            end 
          join_none 
       end

@@ -204,14 +204,14 @@ function void axi4_slave_seq_item_converter::to_write_class(input axi4_write_tra
   output_conv_h.awqos = input_conv_h.awqos;
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("after writnig awqos =  %0h",output_conv_h.awqos),UVM_FULL);
 
-   foreach(input_conv_h.wdata[i]) begin
+  for(int i=0;i<$size(input_conv_h.wdata);i++) begin
     output_conv_h.wdata[i] = input_conv_h.wdata[i];
     `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("after writnig wdata = %0h",output_conv_h.wdata[i]),UVM_FULL);
    end
   
    `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("after writnig wdata to class = \n %0s",output_conv_h.sprint()),UVM_FULL);
 
-   foreach(input_conv_h.wstrb[i]) begin
+  for(int i=0;i<$size(input_conv_h.wstrb);i++) begin
     output_conv_h.wstrb[i] = input_conv_h.wstrb[i];
     `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("after writnig wdata = %0h",output_conv_h.wdata[i]),UVM_FULL);
    end
@@ -269,7 +269,7 @@ function void axi4_slave_seq_item_converter::to_read_class( input axi4_read_tran
 
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("after reading arlength = \n %0d",input_conv_h.arlen),UVM_FULL);
 
-  foreach(input_conv_h.rdata[i])begin
+  for(int i=0;i<$size(input_conv_h.rdata);i++)begin
     if(input_conv_h.rdata!=0)
       output_conv_h.rdata[i] = input_conv_h.rdata[i];
   end

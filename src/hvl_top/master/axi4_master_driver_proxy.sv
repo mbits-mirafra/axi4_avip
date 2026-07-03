@@ -119,9 +119,9 @@ function axi4_master_driver_proxy::new(string name = "axi4_master_driver_proxy",
   axi_read_seq_item_port     = new("axi_read_seq_item_port",this);
   axi_write_rsp_port         = new("axi_write_rsp_port",this);
   axi_read_rsp_port          = new("axi_read_rsp_port",this);
-  axi4_master_write_fifo_h   = new("axi4_master_write_fifo_h",this,16);
-  axi4_master_write_resp_fifo_h   = new("axi4_master_write_resp_fifo_h",this,16);
-  axi4_master_read_fifo_h    = new("axi4_master_read_fifo_h",this,16);
+  axi4_master_write_fifo_h   = new("axi4_master_write_fifo_h",this,1600);
+  axi4_master_write_resp_fifo_h   = new("axi4_master_write_resp_fifo_h",this,1600);
+  axi4_master_read_fifo_h    = new("axi4_master_read_fifo_h",this,1600);
   read_channel_key           = new(1);
   write_data_channel_key     = new(1);
   write_response_channel_key = new(1);
@@ -267,7 +267,7 @@ task axi4_master_driver_proxy::axi4_write_task();
           //Calling the bfm task which drives write address channel signals
           axi4_master_drv_bfm_h.axi4_write_address_channel_task(struct_write_addr_packet,struct_cfg);
           //Converting the write data struct packet to req packet
-          axi4_master_seq_item_converter::to_write_class(struct_write_addr_packet,req_wr);
+          //axi4_master_seq_item_converter::to_write_class(struct_write_addr_packet,req_wr);
 
           //Returns the number of packets written to fifo
           `uvm_info(get_type_name(),$sformatf("WRITE_ADDRESS_THREAD::Checking fifo size used= %0d",axi4_master_write_fifo_h.used()),UVM_FULL);
@@ -317,7 +317,7 @@ task axi4_master_driver_proxy::axi4_write_task();
          
           //Converting the write data struct packet to req packet
          
-          axi4_master_seq_item_converter::to_write_class(struct_write_data_packet,local_master_data_tx);
+         // axi4_master_seq_item_converter::to_write_class(struct_write_data_packet,local_master_data_tx);
           `uvm_info(get_type_name(),$sformatf("WRITE_DATA_THREAD::Received_req_write_packet = \n %s",local_master_data_tx.sprint()),UVM_MEDIUM);  
           
           //Returns the number of packets written into fifo
@@ -527,12 +527,12 @@ struct_read_data_packet),UVM_MEDIUM);
           
           //Getting the key from the write_response_channel so that 
           //the other transaction should start after completion of the previous transaction
-          read_channel_key.put(1);
 
           rsp_rd = RSP :: type_id :: create("RSP OBJECT");  
           rsp_rd.set_id_info(local_master_read_data_tx);
           axi_read_seq_item_port.put_response(rsp_rd);
-          
+ 
+          read_channel_key.put(1);
           //Converting transactions into struct data type
           axi4_master_seq_item_converter::to_read_class(struct_read_data_packet,local_master_read_data_tx);
 

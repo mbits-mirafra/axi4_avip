@@ -122,12 +122,12 @@
     axi_read_seq_item_port                    = new("axi_read_seq_item_port", this);
     axi_write_rsp_port                        = new("axi_write_rsp_port", this);
     axi_read_rsp_port                         = new("axi_read_rsp_port", this);
-    axi4_slave_write_addr_fifo_h              = new("axi4_slave_write_addr_fifo_h",this,16);
-    axi4_slave_write_data_in_fifo_h           = new("axi4_slave_write_data_in_fifo_h",this,16);
-    axi4_slave_write_response_fifo_h          = new("axi4_slave_write_response_fifo_h",this,16);
-    axi4_slave_write_data_out_fifo_h          = new("axi4_slave_write_data_out_fifo_h",this,16);
-    axi4_slave_read_addr_fifo_h               = new("axi4_slave_read_addr_fifo_h",this,16);
-    axi4_slave_read_data_in_fifo_h            = new("axi4_slave_read_data_in_fifo_h",this,16);
+    axi4_slave_write_addr_fifo_h              = new("axi4_slave_write_addr_fifo_h",this,1600);
+    axi4_slave_write_data_in_fifo_h           = new("axi4_slave_write_data_in_fifo_h",this,1600);
+    axi4_slave_write_response_fifo_h          = new("axi4_slave_write_response_fifo_h",this,1600);
+    axi4_slave_write_data_out_fifo_h          = new("axi4_slave_write_data_out_fifo_h",this,1600);
+    axi4_slave_read_addr_fifo_h               = new("axi4_slave_read_addr_fifo_h",this,1600);
+    axi4_slave_read_data_in_fifo_h            = new("axi4_slave_read_data_in_fifo_h",this,1600);
     semaphore_write_key                       = new(1);
     semaphore_rsp_write_key                   = new(1);
     semaphore_read_key                        = new(1);
@@ -499,7 +499,7 @@
           `uvm_info("DEBUG_MEMORY_WRITE", $sformatf("task_memory_write inside for loop wstrb = %0h,k=%0d",struct_write_packet.wstrb[strb],k), UVM_HIGH);
           k = addr % (DATA_WIDTH/8);
           if(struct_write_packet.wstrb[j][k] == 1) begin
-            axi4_slave_mem_h.fifo_write(struct_write_packet.wdata[j][8*k+7 -: 8]);
+            axi4_slave_mem_h.fifo_write(struct_write_packet.wdata[j][8*k +: 8]);
           end
           addr++;
         end
@@ -521,7 +521,7 @@
           k = addr % (DATA_WIDTH/8);
           if(struct_write_packet.wstrb[j][k] == 1) begin
             `uvm_info(get_type_name(),$sformatf("THE BYTE WRITTEN TO THE MEMORY IS %h AND THE ADDRESS IS %0d",struct_write_packet.wdata[j][8*k+7 -: 8],addr),UVM_HIGH)
-            axi4_slave_mem_h.mem_write(addr,struct_write_packet.wdata[j][8*k+7 -: 8]);
+            axi4_slave_mem_h.mem_write(addr,struct_write_packet.wdata[j][8*k +: 8]);
           end
           addr++;
         end
@@ -548,7 +548,7 @@
           if(struct_write_packet.wstrb[j][k] == 1) begin
             if(addr < end_addr)  begin
               `uvm_info(get_type_name(),$sformatf("THE BYTE WRITTEN TO THE MEMORY IS %h AND THE ADDRESS IS %0d",struct_write_packet.wdata[j][8*k+7 -: 8],addr),UVM_HIGH) 
-              axi4_slave_mem_h.mem_write(addr,struct_write_packet.wdata[j][8*k+7 -: 8]);
+              axi4_slave_mem_h.mem_write(addr,struct_write_packet.wdata[j][8*k +: 8]);
             end 
           end
           addr++;
@@ -574,7 +574,7 @@
         `uvm_info("DEBUG_MEMORY_WRITE",$sformatf("memory_task_arlen=%d",read_pkt.arlen),UVM_HIGH)
         for(int strb=0;strb<((2**(read_pkt.arsize)));strb++) begin
           k = addr % (DATA_WIDTH/8);
-          axi4_slave_mem_h.fifo_read(struct_read_packet.rdata[0][8*k+7 -: 8]);
+          axi4_slave_mem_h.fifo_read(struct_read_packet.rdata[0][8*k +: 8]);
         end 
 
         if((read_pkt.araddr+((2**(read_pkt.arsize))))> axi4_slave_agent_cfg_h.max_address) begin
@@ -606,7 +606,7 @@
 
           if(axi4_slave_mem_h.is_slave_addr_exists(addr) && read_pkt.araddr inside {[axi4_slave_agent_cfg_h.min_address :axi4_slave_agent_cfg_h.max_address]})begin
 
-            axi4_slave_mem_h.mem_read(addr,struct_read_packet.rdata[0][8*k+7 -: 8]);
+            axi4_slave_mem_h.mem_read(addr,struct_read_packet.rdata[0][8*k +: 8]);
             addr++;
             `uvm_info(get_type_name(),$sformatf("SLAVE WRAP READ THE DATA EXISTS READ FROM %0d AND READ DATA IS %0d",addr,struct_read_packet.rdata[0][8*k+7 -: 8]),UVM_HIGH)
 
@@ -614,7 +614,7 @@
           else begin 
             struct_read_packet.rresp[0] = READ_SLVERR;
             `uvm_info(get_type_name(),$sformatf("SLAVE WRAP READ THE DATA DOESNT EXIST READ FROM %0d",addr),UVM_HIGH)
-            struct_read_packet.rdata[0][8*k+7 -:8] = '0;
+            struct_read_packet.rdata[0][8*k +:8] = '0;
             addr++;
           end 
         end
@@ -645,7 +645,7 @@
               struct_read_packet.rresp[0] = READ_SLVERR; 
             k = k_t % (DATA_WIDTH/8);
             if(axi4_slave_mem_h.is_slave_addr_exists(k_t))begin  
-              axi4_slave_mem_h.mem_read(k_t,struct_read_packet.rdata[0][8*k+7 -: 8]);
+              axi4_slave_mem_h.mem_read(k_t,struct_read_packet.rdata[0][8*k +: 8]);
               `uvm_info(get_type_name(),$sformatf("SLAVE WRAP READ THE DATA EXISTS READ FROM %0d AND READ DATA IS %0d",k_t,struct_read_packet.rdata[0][8*k+7 -: 8]),UVM_HIGH)
               k_t++;
             end 
@@ -653,7 +653,7 @@
               `uvm_info(get_type_name(),$sformatf("SLAVE WRAP READ THE DATA DOESNT EXIST READ FROM %0d",k_t),UVM_HIGH)
 
               struct_read_packet.rresp[0] = READ_SLVERR;
-              struct_read_packet.rdata[0][8*k+7 -:8] = '0;
+              struct_read_packet.rdata[0][8*k +:8] = '0;
               k_t++;
             end 
             if(k_t == end_addr) 

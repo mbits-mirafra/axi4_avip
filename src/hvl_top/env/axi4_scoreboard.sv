@@ -437,7 +437,7 @@
                 read_txn_failed = 1;
               end
               else begin 
-                `uvm_info("READ CHECK PASS",$sformatf("THE READ DATA MATCHES  %h",readCompare),UVM_HIGH);
+                `uvm_info("READ CHECK PASS",$sformatf("THE READ DATA MATCHES  %h",readCompare),UVM_NONE);
                 byte_data_cmp_verified_rdata_count++;
               end              
               tempAddress++;
@@ -459,7 +459,7 @@
                 end   
                 else begin 
                   byte_data_cmp_verified_rdata_count++;
-                  `uvm_info("READ CHECK PASS",$sformatf("THE BYTE MATCHES IN POSITION %0d and reference byte is %0h",j,referenceData[tempAddress]),UVM_HIGH);
+                  `uvm_info("READ CHECK PASS",$sformatf("THE BYTE MATCHES IN POSITION %0d and reference byte is %0h",j,referenceData[tempAddress]),UVM_NONE);
                 end  
                 tempAddress++;
               end 
@@ -492,7 +492,7 @@
                 end   
                 else begin 
                   byte_data_cmp_verified_rdata_count++;
-                  `uvm_info("READ CHECK PASS",$sformatf("THE BYTE MATCHES IN POSITION %0d",j),UVM_HIGH);
+                  `uvm_info("READ CHECK PASS",$sformatf("THE BYTE MATCHES IN POSITION %0d",j),UVM_NONE);
                 end 
                 tempAddress++;
               end
@@ -588,7 +588,7 @@
                   write_txn_failed = 1;
                 end 
                 else begin 
-                  `uvm_info("WRITE CHECK PASS",$sformatf("THE BYTE MATCHES IN POSITION %0d reference data is %0h",j,masterArrayDataQueue[index][i].data[8*k +: 8]),UVM_HIGH);
+                  `uvm_info("WRITE CHECK PASS",$sformatf("THE BYTE MATCHES IN POSITION %0d reference data is %0h",j,masterArrayDataQueue[index][i].data[8*k +: 8]),UVM_NONE);
 
                   byte_data_cmp_verified_wdata_count++;
                 end
@@ -611,7 +611,7 @@
                   write_txn_failed = 1; 
                 end
                 else begin 
-                  `uvm_info("WRITE CHECK PASS",$sformatf("THE BYTE MATCHES IN POSITION %0d reference data is %0h",j,masterArrayDataQueue[index][i].data[8*j +: 8]),UVM_HIGH);
+                  `uvm_info("WRITE CHECK PASS",$sformatf("THE BYTE MATCHES IN POSITION %0d reference data is %0h",j,masterArrayDataQueue[index][i].data[8*j +: 8]),UVM_NONE);
 
                   byte_data_cmp_verified_wdata_count++;
                 end 
@@ -634,7 +634,7 @@
                   write_txn_failed = 1;
                 end
                 else begin 
-                  `uvm_info("WRITE CHECK PASS",$sformatf("THE BYTE MATCHES IN POSITION %0d reference data is %0h",j,masterArrayDataQueue[index][i].data[8*j +: 8]),UVM_HIGH);
+                  `uvm_info("WRITE CHECK PASS",$sformatf("THE BYTE MATCHES IN POSITION %0d reference data is %0h",j,masterArrayDataQueue[index][i].data[8*j +: 8]),UVM_NONE);
                   byte_data_cmp_verified_wdata_count++;
                 end 
                 if(masterArrayDataQueue[index][i].strobe[j]==1)      begin                                             referenceData[tempAddress]=(masterArrayDataQueue[index][i].data[8*j +:8]);

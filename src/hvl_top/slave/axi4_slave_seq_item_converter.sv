@@ -77,10 +77,8 @@ function void axi4_slave_seq_item_converter::from_write_class(input axi4_slave_t
    `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("after writnig awqos =  %0h",output_conv.awqos),UVM_FULL);
    
    foreach(input_conv_h.wdata[i]) begin
-     if(input_conv_h.wdata[i] != 0)begin
       output_conv.wdata[i] = input_conv_h.wdata[i];
       `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("after writnig wdata = %0h",output_conv.wdata[i]),UVM_FULL);
-    end
    end
    
    foreach(input_conv_h.wstrb[i]) begin
@@ -142,10 +140,8 @@ function void axi4_slave_seq_item_converter::from_read_class(input axi4_slave_tx
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("after writnig arqos =  %0h",output_conv.arqos),UVM_FULL);
 
   foreach(input_conv_h.rdata[i]) begin
-    if(input_conv_h.rdata[i] != 0)begin
       output_conv.rdata[i] = input_conv_h.rdata[i];
       `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("after writnig rdata = %0p",output_conv.rdata[i]),UVM_FULL);
-    end
   end
 
   output_conv.araddr = input_conv_h.araddr;
@@ -208,15 +204,20 @@ function void axi4_slave_seq_item_converter::to_write_class(input axi4_write_tra
   output_conv_h.awqos = input_conv_h.awqos;
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("after writnig awqos =  %0h",output_conv_h.awqos),UVM_FULL);
 
+   foreach(input_conv_h.wdata[i]) begin
+    output_conv_h.wdata[i] = input_conv_h.wdata[i];
+    `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("after writnig wdata = %0h",output_conv_h.wdata[i]),UVM_FULL);
+   end
   
-  for(int i=0;i<input_conv_h.wdata[i];i++) begin
-      output_conv_h.wdata[i] = input_conv_h.wdata[i];
-  end
-  `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("after writnig wdata to class = \n %0s",output_conv_h.sprint()),UVM_FULL);
+   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("after writnig wdata to class = \n %0s",output_conv_h.sprint()),UVM_FULL);
 
-  for(int i=0;i<input_conv_h.wdata[i];i++) begin
-      output_conv_h.wstrb[i] = input_conv_h.wstrb[i];
-  end
+   foreach(input_conv_h.wstrb[i]) begin
+    output_conv_h.wstrb[i] = input_conv_h.wstrb[i];
+    `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("after writnig wdata = %0h",output_conv_h.wdata[i]),UVM_FULL);
+   end
+  
+
+   
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("after writnig wstrb to class = \n %0s",output_conv_h.sprint()),UVM_FULL);
   
   output_conv_h.wlast = input_conv_h.wlast;
@@ -268,10 +269,10 @@ function void axi4_slave_seq_item_converter::to_read_class( input axi4_read_tran
 
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("after reading arlength = \n %0d",input_conv_h.arlen),UVM_FULL);
 
-  while(input_conv_h.rdata[i] != 0)begin
+  foreach(input_conv_h.rdata[i])begin
+    if(input_conv_h.rdata!=0)
       output_conv_h.rdata[i] = input_conv_h.rdata[i];
-      i++;
-    end
+  end
     `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("after reading rdata = \n %0s",output_conv_h.sprint()),UVM_FULL);
 
   output_conv_h.araddr = input_conv_h.araddr;

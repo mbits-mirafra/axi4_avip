@@ -99,6 +99,7 @@
             RSP rsp;
             get_response(rsp);
             transCount++;
+            $display("MASTER GOT RESP");
           end 
         join_none;
       end 

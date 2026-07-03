@@ -27,9 +27,9 @@ package axi4_globals_pkg;
   parameter int NO_OF_SLAVES = 1;
 
 
-  parameter int MASTER_TRANSACTION_WRITE_ISSUE_COUNT =1;
+  parameter int MASTER_TRANSACTION_WRITE_ISSUE_COUNT =20;
 
-  parameter int MASTER_TRANSACTION_READ_ISSUE_COUNT =1;
+  parameter int MASTER_TRANSACTION_READ_ISSUE_COUNT =15;
 
 
   //Parameter: ADDRESS_WIDTH

@@ -195,8 +195,6 @@ function void axi4_master_seq_item_converter::to_write_class( input axi4_write_t
 
   output_conv_h.tx_type = WRITE; 
 
-  output_conv_h.wdata.delete();
-  output_conv_h.wstrb.delete();
   $cast(output_conv_h.awid,input_conv_h.awid); 
   `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting awid =  %b",output_conv_h.awid),UVM_FULL);
 

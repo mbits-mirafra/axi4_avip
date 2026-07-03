@@ -249,7 +249,6 @@ data_write_packet.awqos = axiSlaveCb.awqos;
     end
     `uvm_info(name,$sformatf("After_loop_of_Detecting_bready = %0d",axiSlaveCb.bready),UVM_HIGH)
     axiSlaveCb.bvalid <= 1'b0;
-  
   endtask : axi4_write_response_phase
 
   //-------------------------------------------------------

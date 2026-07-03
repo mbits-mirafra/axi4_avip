@@ -180,7 +180,20 @@ class axi4_master_tx extends uvm_sequence_item;
   //Variable: transfer_type
   //Used to the determine the type of the transfer
   rand transfer_type_e transfer_type;
-  
+
+  //-------------------------------------------------------
+  // Read-vs-write address coordination (RAW-safe readback)
+  //-------------------------------------------------------
+  //Static history of committed write bursts, shared across all tx instances.
+  //A READ either lands exactly on a previously written base (readback) or is
+  //randomised to fall entirely outside every written burst range (clean miss).
+  static bit [ADDRESS_WIDTH-1:0] wr_base [$];
+  static int                     wr_span [$];   //byte span = (awlen+1)*(2**awsize)
+
+  //Knobs used by the solver for READ transactions
+  rand bit read_from_written;   //1 = read back a written addr, 0 = clean miss
+  rand int sel;                 //index of the written burst chosen for readback
+
   //Variable : no_of_wait_states
   //Used to count number of wait states
   rand int no_of_wait_states;
@@ -285,6 +298,28 @@ class axi4_master_tx extends uvm_sequence_item;
   //Adding constraint to select the lock transfer type
   constraint arlock_c4 { soft arlock == READ_NORMAL_ACCESS;}
 
+  //-------------------------------------------------------
+  // Read address selection : readback a written addr, else a non-overlapping miss
+  //-------------------------------------------------------
+  //Keep 'sel' solvable for writes and when no history exists yet
+  constraint read_sel_c {
+    if (tx_type == READ && read_from_written && wr_base.size() > 0)
+      sel inside {[0 : wr_base.size()-1]};
+    else
+      sel == 0;
+  }
+
+  constraint read_addr_c {
+    solve arsize, arlen before araddr;   //read burst span known before placing addr
+    if (tx_type == READ) {
+      if (read_from_written && wr_base.size() > 0)
+        araddr == wr_base[sel];          //readback : exactly a written base address
+      else
+        foreach (wr_base[i])             //miss : whole read burst avoids every write
+          (araddr + (arlen+1)*(2**arsize) <= wr_base[i]) ||
+          (araddr >= wr_base[i] + wr_span[i]);
+    }
+  }
 
   //-------------------------------------------------------
   // Memory Constraints
@@ -466,6 +501,13 @@ begin //{
     end
   end
 end //}
+
+//Record every committed write so later READ transactions can target it
+//(readback) or deliberately avoid its address range (clean miss).
+if (tx_type == WRITE) begin
+  wr_base.push_back(awaddr);
+  wr_span.push_back((awlen+1)*(2**awsize));
+end
 endfunction : post_randomize
 
 //--------------------------------------------------------------------------------------------

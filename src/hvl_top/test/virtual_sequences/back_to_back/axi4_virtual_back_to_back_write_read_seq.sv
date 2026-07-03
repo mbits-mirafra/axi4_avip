@@ -75,14 +75,14 @@ task axi4_virtual_back_to_back_write_read_seq::body();
   join_none
 
   //master drives the write and read stimulus
-  fork
-    begin : T1_WRITE
+//  fork
+    //begin : T1_WRITE
       axi4_master_write_seq_h.start(p_sequencer.axi4_master_write_seqr_h);
-    end
-    begin : T2_READ
+    //end
+    //begin : T2_READ
       axi4_master_read_seq_h.start(p_sequencer.axi4_master_read_seqr_h);
-    end
-  join
+    //end
+  //join
 
 endtask : body
 

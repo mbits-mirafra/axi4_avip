@@ -302,6 +302,7 @@
             axi4_slave_drv_bfm_h.axi4_write_response_phase(struct_write_packet,struct_cfg,bid_local);
           end 
           else begin
+            wait(axiSlaveDataQueue.size()>0);
             local_slave_addr_tx = axiSlaveAddressQueue.pop_front();
             local_slave_data_tx = axiSlaveDataQueue.pop_front();
             `uvm_info(get_type_name(),$sformatf("WRITE_RESPONSE_CHANNEL::Slave driver sending out bid = %0d",local_slave_addr_tx.awid),UVM_MEDIUM)
@@ -493,15 +494,23 @@
     automatic int addr=struct_write_packet.awaddr;
     struct_write_packet.print(); 
     if(struct_write_packet.awburst == WRITE_FIXED) begin
+      int unalignedAmount;
+      if(addr % (2**struct_write_packet.awsize) != 0) begin
+        unalignedAmount = addr - ((addr/(2**struct_write_packet.awsize))*(2**struct_write_packet.awsize));
+        `uvm_info(get_type_name(),$sformatf("THE WRITE ADDRESS IS UNALIGNED BY AN AMOUNT %0d WHEN THE ARSIZE IS %0d AND ADDRESS IS %0d",unalignedAmount,struct_write_packet.awsize,addr),UVM_HIGH)
+      end
+
       for(int j=0;j<(struct_write_packet.awlen+1);j++)begin
         `uvm_info("DEBUG_MEMORY_WRITE",$sformatf("memory_task_awlen=%d",struct_write_packet.awlen),UVM_HIGH)
-        for(int strb=0,k=0;strb<((2**struct_write_packet.awsize));strb++) begin
+        if(j!=0 )
+          unalignedAmount =0;
+        for(int strb=0,k=0;strb<((2**(struct_write_packet.awsize))-unalignedAmount);strb++) begin
           `uvm_info("DEBUG_MEMORY_WRITE", $sformatf("task_memory_write inside for loop wstrb = %0h,k=%0d",struct_write_packet.wstrb[strb],k), UVM_HIGH);
           k = addr % (DATA_WIDTH/8);
           if(struct_write_packet.wstrb[j][k] == 1) begin
+            addr++;
             axi4_slave_mem_h.fifo_write(struct_write_packet.wdata[j][8*k +: 8]);
           end
-          addr++;
         end
       end
     end 
@@ -570,11 +579,22 @@
     struct_read_packet.arlen = read_pkt.arlen;
     struct_read_packet.rid = read_pkt.arid;
     if(read_pkt.arburst == READ_FIXED) begin
+      int unalignedAmount;
       for(int j=0,int k=0;j<(read_pkt.arlen+1);j++)begin
+        if(read_pkt.araddr % (2**read_pkt.arsize) != 0) begin
+          unalignedAmount = read_pkt.araddr - ((read_pkt.araddr/(2**read_pkt.arsize))*(2**read_pkt.arsize));
+          `uvm_info(get_type_name(),$sformatf("THE READ ADDRESS IS UNALIGNED BY AN AMOUNT %0d WHEN THE ARSIZE IS %0d AND ADDRESS IS %0d",unalignedAmount,read_pkt.arsize,addr),UVM_HIGH)
+
+         end
+          
+        if(j != 0)
+          unalignedAmount =0;
+
         `uvm_info("DEBUG_MEMORY_WRITE",$sformatf("memory_task_arlen=%d",read_pkt.arlen),UVM_HIGH)
-        for(int strb=0;strb<((2**(read_pkt.arsize)));strb++) begin
+        for(int strb=0;strb<((2**(read_pkt.arsize))-unalignedAmount);strb++) begin
           k = addr % (DATA_WIDTH/8);
           axi4_slave_mem_h.fifo_read(struct_read_packet.rdata[0][8*k +: 8]);
+          addr++;
         end 
 
         if((read_pkt.araddr+((2**(read_pkt.arsize))))> axi4_slave_agent_cfg_h.max_address) begin

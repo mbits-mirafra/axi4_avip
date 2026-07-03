@@ -190,9 +190,8 @@ class axi4_master_tx extends uvm_sequence_item;
   static bit [ADDRESS_WIDTH-1:0] wr_base [$];
   static int                     wr_span [$];   //byte span = (awlen+1)*(2**awsize)
 
-  //Knobs used by the solver for READ transactions
+  //Knob used by the solver for READ transactions
   rand bit read_from_written;   //1 = read back a written addr, 0 = clean miss
-  rand int sel;                 //index of the written burst chosen for readback
 
   //Variable : no_of_wait_states
   //Used to count number of wait states
@@ -301,19 +300,11 @@ class axi4_master_tx extends uvm_sequence_item;
   //-------------------------------------------------------
   // Read address selection : readback a written addr, else a non-overlapping miss
   //-------------------------------------------------------
-  //Keep 'sel' solvable for writes and when no history exists yet
-  constraint read_sel_c {
-    if (tx_type == READ && read_from_written && wr_base.size() > 0)
-      sel inside {[0 : wr_base.size()-1]};
-    else
-      sel == 0;
-  }
-
   constraint read_addr_c {
     solve arsize, arlen before araddr;   //read burst span known before placing addr
     if (tx_type == READ) {
       if (read_from_written && wr_base.size() > 0)
-        araddr == wr_base[sel];          //readback : exactly a written base address
+        araddr inside {wr_base};         //readback : one of the written base addresses
       else
         foreach (wr_base[i])             //miss : whole read burst avoids every write
           (araddr + (arlen+1)*(2**arsize) <= wr_base[i]) ||

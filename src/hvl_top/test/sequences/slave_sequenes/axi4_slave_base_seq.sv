@@ -75,7 +75,7 @@ task axi4_slave_base_seq::body();
            begin 
              RSP rsp;
              int id = writeIdQueue[writeCnt++];
-             get_response(rsp);
+             get_response(rsp,id);
              numWriteGotResp++;
              $display("write num got resp");
            end 
@@ -102,7 +102,7 @@ task axi4_slave_base_seq::body();
            begin
              RSP rsp;
              int id = readIdQueue[readCnt++];
-             get_response(rsp);
+             get_response(rsp,id);
              numReadGotResp++;
            end 
          join_none 

@@ -70,7 +70,7 @@
             automatic int id = req.get_transaction_id();
             RSP rsp;
             `uvm_info(get_type_name(),$sformatf("Waiting for response of transaction id = %0d",id),UVM_MEDIUM)
-            get_response(rsp);
+            get_response(rsp,id);
             transCount++;
             `uvm_info(get_type_name(),$sformatf("Response received, response count = %0d",transCount),UVM_MEDIUM)
           end 
@@ -97,7 +97,7 @@
           begin  
             automatic int id = req.get_transaction_id();
             RSP rsp;
-            get_response(rsp);
+            get_response(rsp,id);
             transCount++;
           end 
         join_none;

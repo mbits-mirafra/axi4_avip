@@ -508,9 +508,9 @@
           `uvm_info("DEBUG_MEMORY_WRITE", $sformatf("task_memory_write inside for loop wstrb = %0h,k=%0d",struct_write_packet.wstrb[strb],k), UVM_HIGH);
           k = addr % (DATA_WIDTH/8);
           if(struct_write_packet.wstrb[j][k] == 1) begin
-            addr++;
             axi4_slave_mem_h.fifo_write(struct_write_packet.wdata[j][8*k +: 8]);
           end
+          addr++;
         end
       end
     end 

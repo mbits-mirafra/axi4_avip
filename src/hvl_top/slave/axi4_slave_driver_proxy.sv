@@ -330,7 +330,6 @@
 
           //Calling combined data packet from converter class
           axi4_slave_seq_item_converter::tx_write_packet(local_slave_addr_tx,local_slave_data_tx,local_slave_response_tx,packet);
-          $display("THE WRITE PACKET IS %p",packet);
           task_memory_write(packet);
           rsp_wr = RSP :: type_id :: create("RSP OBJECT"); 
           rsp_wr.set_id_info(local_slave_addr_tx);

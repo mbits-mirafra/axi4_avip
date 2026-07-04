@@ -51,6 +51,13 @@ usage:
 	echo "To compile use:";
 	echo "make compile";
 	echo "";
+	echo "To select which test-package family to compile (edits compile.f in place):";
+	echo "make compile MODE=<b2b|slave|master>   (default: b2b)";
+	echo "";
+	echo "  b2b    - back-to-back master<->slave VIP";
+	echo "  slave  - standalone slave RTL test package only";
+	echo "  master - standalone master RTL test package only";
+	echo "";
 	echo "To provide compilation argument:";
 	echo "make compile args=+<macro_name>=<macro_value>";
 	echo "";
@@ -78,12 +85,32 @@ usage:
 all:
 	make clean; make compile; make simulate;
 
+# Select which test-package family is active in the shared filelist.
+# Edits the EXISTING ../axi4_compile.f in place (no new file is generated):
+#   - comments every //@MODE= tagged line, then re-enables only MODE's lines
+#   - points hvl_top at the matching test package
+select_mode:
+	case "$(MODE)" in \
+	  slave|master|b2b) ;; \
+	  *) echo "ERROR: invalid MODE '$(MODE)'. Use MODE=slave|master|b2b"; exit 1 ;; \
+	esac
+	echo "Selecting compile MODE = $(MODE) (editing ../axi4_compile.f + hvl_top.sv in place)";
+	sed -i -E '/@MODE=/ { /^\/\// ! s|^|//| }' ../axi4_compile.f
+	sed -i -E '/@MODE=$(MODE)/ s|^//||' ../axi4_compile.f
+	case "$(MODE)" in \
+	  slave)  pkg=axi4_standalone_slave_test_pkg ;; \
+	  master) pkg=axi4_standalone_master_test_pkg ;; \
+	  b2b)    pkg=axi4_back_to_back_test_pkg ;; \
+	esac; \
+	sed -i -E "s|import axi4_[a-z0-9_]*_test_pkg::\*;|import $$pkg::*;|" ../../src/hvl_top/hvl_top.sv
+
 # For Assertions use +acc options
 #  +cover=becstf
 compile:
 	make clean_compile;
 	make clean_simulate;
-	vlib work; 
+	make select_mode MODE=$(MODE);
+	vlib work;
 	vlog -sv \
 	+acc \
 	+cover \
@@ -111,6 +138,15 @@ endif
 
 ifndef args
 override args = +DATA_WIDTH=32
+endif
+
+# Setting the default compile MODE (which test-package family to build)
+# Valid values:
+#   b2b    - back-to-back master<->slave VIP (default)
+#   slave  - standalone slave RTL test package only
+#   master - standalone master RTL test package only
+ifndef MODE
+override MODE = b2b
 endif
 
 

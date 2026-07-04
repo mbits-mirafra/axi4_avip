@@ -259,6 +259,7 @@
             axi4_slave_write_response_fifo_h.get(local_slave_response_tx);
           end 
 
+          local_slave_response_tx = axi4_slave_tx :: type_id :: create("slave tx");
           //Converting transactions into struct data type
           axi4_slave_seq_item_converter::from_write_class(local_slave_response_tx,struct_write_packet);
 
@@ -273,6 +274,7 @@
             else 
               wait(axiSlaveDataQueue.size()>0);
 
+            wait(axiSlaveAddressQueue.size()>0);
             axiSlaveIdDynamicArray = new[numberOfDataTransaction];
             axiSlaveIdDynamicArray = axiSlaveIdQueue[0:numberOfDataTransaction-1];
             axiSlaveIdDynamicArray.shuffle();
@@ -303,6 +305,7 @@
           end 
           else begin
             wait(axiSlaveDataQueue.size()>0);
+            wait(axiSlaveAddressQueue.size()>0);
             local_slave_addr_tx = axiSlaveAddressQueue.pop_front();
             local_slave_data_tx = axiSlaveDataQueue.pop_front();
             `uvm_info(get_type_name(),$sformatf("WRITE_RESPONSE_CHANNEL::Slave driver sending out bid = %0d",local_slave_addr_tx.awid),UVM_MEDIUM)
@@ -323,22 +326,19 @@
             end
             axi4_slave_drv_bfm_h.axi4_write_response_phase(struct_write_packet,struct_cfg,bid_local);
           end 
-
-
-          //Converting struct into transaction data type
           axi4_slave_seq_item_converter::to_write_class(struct_write_packet,local_slave_response_tx);
-
 
           //Calling combined data packet from converter class
           axi4_slave_seq_item_converter::tx_write_packet(local_slave_addr_tx,local_slave_data_tx,local_slave_response_tx,packet);
+          $display("THE WRITE PACKET IS %p",packet);
           task_memory_write(packet);
           rsp_wr = RSP :: type_id :: create("RSP OBJECT"); 
-          rsp_wr.set_id_info(local_slave_response_tx);
+          rsp_wr.set_id_info(local_slave_addr_tx);
           axi_write_seq_item_port.put_response(rsp_wr); 
           wr_resp_cnt++;
           completed_initial_txn=1;
           flag =1;
-          numberOfDataTransaction--; 
+          numberOfDataTransaction--;
           semaphore_rsp_write_key.put(1);
         end : WRITE_RESPONSE_CHANNEL
 
@@ -585,7 +585,7 @@
           unalignedAmount = read_pkt.araddr - ((read_pkt.araddr/(2**read_pkt.arsize))*(2**read_pkt.arsize));
           `uvm_info(get_type_name(),$sformatf("THE READ ADDRESS IS UNALIGNED BY AN AMOUNT %0d WHEN THE ARSIZE IS %0d AND ADDRESS IS %0d",unalignedAmount,read_pkt.arsize,addr),UVM_HIGH)
 
-         end
+        end
           
         if(j != 0)
           unalignedAmount =0;

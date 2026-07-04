@@ -299,6 +299,7 @@ function  void axi4_slave_seq_item_converter::tx_write_packet(input axi4_slave_t
   packet_h.awaddr=input_addr_h.awaddr;
   packet_h.awid=input_addr_h.awid;
   packet_h.awlen=input_addr_h.awlen;
+  $display("PACKET INPUT SIZE IS %d",input_addr_h.awsize);
   packet_h.awsize=input_addr_h.awsize;
   packet_h.awburst=input_addr_h.awburst;
   packet_h.awqos=input_addr_h.awqos;

@@ -43,6 +43,7 @@ task axi4_back_to_back_outstanding_256b_fixed_burst_write_read_test::run_phase(u
 
   axi4_virtual_nbk_256b_fixed_write_read_seq_h=axi4_virtual_back_to_back_write_read_seq::type_id::create("axi4_virtual_nbk_256b_fixed_write_read_seq_h");
   `uvm_info(get_type_name(),$sformatf("axi4_back_to_back_outstanding_256b_fixed_burst_write_read_test"),UVM_LOW);
+  axi4_env_cfg_h.axi4_slave_agent_cfg_h[0].slave_response_mode = RESP_OUT_OF_ORDER;
   axi4_virtual_nbk_256b_fixed_write_read_seq_h.writeTranSize = WRITE_32_BYTES;
   axi4_virtual_nbk_256b_fixed_write_read_seq_h.writeTransferType = OUTSTANDING_WRITE;
   axi4_virtual_nbk_256b_fixed_write_read_seq_h.writeBurstType = WRITE_FIXED;

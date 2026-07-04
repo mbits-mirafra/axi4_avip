@@ -26,10 +26,9 @@ package axi4_globals_pkg;
   //Used to set number of slaves required
   parameter int NO_OF_SLAVES = 1;
 
+  parameter int MASTER_TRANSACTION_WRITE_ISSUE_COUNT =20;
 
-  parameter int MASTER_TRANSACTION_WRITE_ISSUE_COUNT =25;
-
-  parameter int MASTER_TRANSACTION_READ_ISSUE_COUNT = 25;
+  parameter int MASTER_TRANSACTION_READ_ISSUE_COUNT = 20;
 
 
 
@@ -70,7 +69,7 @@ package axi4_globals_pkg;
   parameter int OUTSTANDING_FIFO_DEPTH = 16;
   parameter outstanding = 1; 
   parameter writeReadOrdering = 1;
-  parameter activeTransactionCapacity = 1;
+  parameter activeTransactionCapacity = 3;
  
   //-------------------------------------------------------
   // Enums used in axi4_avip are given below

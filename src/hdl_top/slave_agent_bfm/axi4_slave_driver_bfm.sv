@@ -209,6 +209,7 @@ data_write_packet.awqos = axiSlaveCb.awqos;
 
       data_write_packet.wdata[i] = axiSlaveCb.wdata;
       data_write_packet.wstrb[i] = axiSlaveCb.wstrb;
+      $display("CAPTURED DATA AND STRB AS %h and %h in slave bfm",data_write_packet.wdata[i],data_write_packet.wstrb[i]);
       if(axiSlaveCb.wlast === 1'b1)begin
         i=0;
         break;

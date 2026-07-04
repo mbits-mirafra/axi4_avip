@@ -594,6 +594,7 @@
                 end
                 if(masterArrayDataQueue[index][i].strobe[k]==1)begin
                   `uvm_info(get_type_name(),$sformatf("Data pushed into reference FIFO = %h",masterArrayDataQueue[index][i].data[8*k +:8]),UVM_HIGH)
+                  $display("BYTE %h is pushed into reference fifo",masterArrayDataQueue[index][i].data[8*k +:8]);
                   referenceFifo.put(masterArrayDataQueue[index][i].data[8*k +:8]); 
                 end
                 tempAddress++;

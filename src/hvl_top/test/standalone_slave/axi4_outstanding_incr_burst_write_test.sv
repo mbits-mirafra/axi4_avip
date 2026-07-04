@@ -56,6 +56,7 @@ task axi4_outstanding_incr_burst_write_test::run_phase(uvm_phase phase);
   axi4_virtual_nbk_32b_write_data_seq_h.writeTranSize = WRITE_4_BYTES;
   axi4_virtual_nbk_32b_write_data_seq_h.writeTransferType = OUTSTANDING_WRITE;
   axi4_virtual_nbk_32b_write_data_seq_h.writeBurstType = WRITE_INCR;
+  axi4_env_cfg_h.axi4_slave_agent_cfg_h[0].slave_response_mode = RESP_OUT_OF_ORDER;
   phase.raise_objection(this);
   axi4_virtual_nbk_32b_write_data_seq_h.start(axi4_env_h.axi4_virtual_seqr_h);
   phase.drop_objection(this);

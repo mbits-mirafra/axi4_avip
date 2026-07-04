@@ -36,6 +36,7 @@ task axi4_outstanding_slave_write_test::run_phase(uvm_phase phase);
   axi4_virtual_slave_write_h = axi4_virtual_slave_write::type_id::create("axi4_virtual_slave_write_h");
   axi4_virtual_slave_write_h.writeTransferType = OUTSTANDING_WRITE;
   `uvm_info(get_type_name(),$sformatf("axi4_outstanding_slave_write_test"),UVM_LOW);
+  axi4_env_cfg_h.axi4_slave_agent_cfg_h[0].slave_response_mode = RESP_OUT_OF_ORDER;
   phase.raise_objection(this);
   axi4_virtual_slave_write_h.start(axi4_env_h.axi4_virtual_seqr_h);
   phase.drop_objection(this);

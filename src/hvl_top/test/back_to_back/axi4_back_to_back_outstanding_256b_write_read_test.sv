@@ -51,6 +51,7 @@ task axi4_back_to_back_outstanding_256b_write_read_test::run_phase(uvm_phase pha
   axi4_virtual_nbk_256b_write_read_seq_h.readTransferType = OUTSTANDING_READ;
   axi4_virtual_nbk_256b_write_read_seq_h.readBurstType = READ_INCR;
 
+  axi4_env_cfg_h.axi4_slave_agent_cfg_h[0].slave_response_mode = RESP_OUT_OF_ORDER;
   phase.raise_objection(this);
   axi4_virtual_nbk_256b_write_read_seq_h.start(axi4_env_h.axi4_virtual_seqr_h);
   phase.drop_objection(this);

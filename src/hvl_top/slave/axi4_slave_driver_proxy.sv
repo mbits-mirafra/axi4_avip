@@ -489,9 +489,9 @@
   //--------------------------------------------------------------------------------------------
 
   task axi4_slave_driver_proxy::task_memory_write(input axi4_slave_tx struct_write_packet);
-    int lower_addr,end_addr,k_t;
-    automatic int addr=struct_write_packet.awaddr;
-    struct_write_packet.print(); 
+    bit[ADDRESS_WIDTH-1:0] lower_addr,end_addr,k_t;
+    automatic bit[ADDRESS_WIDTH-1:0] addr=struct_write_packet.awaddr;
+    struct_write_packet.print();
     if(struct_write_packet.awburst == WRITE_FIXED) begin
       int unalignedAmount;
       if(addr % (2**struct_write_packet.awsize) != 0) begin
@@ -569,9 +569,9 @@
   endtask : task_memory_write
 
   task axi4_slave_driver_proxy::task_memory_read(input axi4_slave_tx read_pkt,ref axi4_read_transfer_char_s struct_read_packet);
-    int lower_addr,end_addr,k_t;
+    bit[ADDRESS_WIDTH-1:0] lower_addr,end_addr,k_t;
     automatic int flag =0;
-    int addr;
+    bit[ADDRESS_WIDTH-1:0] addr;
     addr = read_pkt.araddr;
     struct_read_packet.araddr = addr;
     struct_read_packet.arsize = read_pkt.arsize;
@@ -588,8 +588,6 @@
           
         if(j != 0)
           unalignedAmount =0;
-
-        `uvm_info("DEBUG_MEMORY_WRITE",$sformatf("memory_task_arlen=%d",read_pkt.arlen),UVM_HIGH)
         for(int strb=0;strb<((2**(read_pkt.arsize))-unalignedAmount);strb++) begin
           k = addr % (DATA_WIDTH/8);
           axi4_slave_mem_h.fifo_read(struct_read_packet.rdata[0][8*k +: 8]);

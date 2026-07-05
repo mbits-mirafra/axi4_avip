@@ -369,8 +369,9 @@
         // this thread so the write loop can no longer clobber arburst etc.
         int index;
         int indextemp[$];
-        int tempAddress, alignAmount;
-        int wrapStartAddress, wrapEndAddress;
+        bit[ADDRESS_WIDTH-1:0]tempAddress; 
+        int alignAmount;
+        bit[ADDRESS_WIDTH-1:0] wrapStartAddress, wrapEndAddress;
         bit flag;
         axi4_master_tx axi_master_address_tx;
         axi4_slave_tx  axi_slave_address_tx;
@@ -531,8 +532,9 @@
         // (e.g. the read burst type read as 0 after a write completed).
         int index;
         int indextemp[$];
-        int tempAddress, alignAmount;
-        int wrapStartAddress, wrapEndAddress;
+        bit[ADDRESS_WIDTH-1:0]tempAddress; 
+        int alignAmount;
+        bit[ADDRESS_WIDTH-1:0] wrapStartAddress, wrapEndAddress;
         axi4_master_tx axi_master_address_tx;
         axi4_slave_tx  axi_slave_address_tx;
        forever begin
@@ -594,7 +596,6 @@
                 end
                 if(masterArrayDataQueue[index][i].strobe[k]==1)begin
                   `uvm_info(get_type_name(),$sformatf("Data pushed into reference FIFO = %h",masterArrayDataQueue[index][i].data[8*k +:8]),UVM_HIGH)
-                  $display("BYTE %h is pushed into reference fifo",masterArrayDataQueue[index][i].data[8*k +:8]);
                   referenceFifo.put(masterArrayDataQueue[index][i].data[8*k +:8]); 
                 end
                 tempAddress++;
@@ -940,8 +941,7 @@
     //-------------------------------------------------------
     // Write_Address_Channel comparision
     //-------------------------------------------------------
-    if(axi4_env_cfg_h.write_read_mode_h == ONLY_WRITE_DATA || axi4_env_cfg_h.write_read_mode_h == WRITE_READ_DATA) begin
-      if ((byte_data_cmp_verified_awid_count != 0) && (byte_data_cmp_failed_awid_count == 0)) begin
+      if ((byte_data_cmp_failed_awid_count == 0)) begin
         `uvm_info (get_type_name(), $sformatf ("awid count comparisons are successful"),UVM_HIGH);
       end
       else begin
@@ -952,7 +952,7 @@
         `uvm_error (get_type_name(), $sformatf ("awid count comparisons are failed"));
       end
 
-      if ((byte_data_cmp_verified_awaddr_count != 0) && (byte_data_cmp_failed_awaddr_count == 0)) begin
+      if ( (byte_data_cmp_failed_awaddr_count == 0)) begin
         `uvm_info (get_type_name(), $sformatf ("awaddr count comparisons are successful"),UVM_HIGH);
       end
       else begin
@@ -963,7 +963,7 @@
         `uvm_error (get_type_name(), $sformatf ("awaddr count comparisons are failed"));
       end
 
-      if ((byte_data_cmp_verified_awsize_count != 0) && (byte_data_cmp_failed_awsize_count == 0)) begin
+      if ((byte_data_cmp_failed_awsize_count == 0)) begin
         `uvm_info (get_type_name(), $sformatf ("awsize count comparisons are successful"),UVM_HIGH);
       end
       else begin
@@ -974,7 +974,7 @@
         `uvm_error (get_type_name(), $sformatf ("awsize count comparisons are failed"));
       end
 
-      if ((byte_data_cmp_verified_awlen_count != 0) && (byte_data_cmp_failed_awlen_count == 0)) begin
+      if ((byte_data_cmp_failed_awlen_count == 0)) begin
         `uvm_info (get_type_name(), $sformatf ("awlen count comparisons are successful"),UVM_HIGH);
       end
       else begin
@@ -985,7 +985,7 @@
         `uvm_error (get_type_name(), $sformatf ("awlen count comparisons are failed"));
       end
 
-      if ((byte_data_cmp_verified_awburst_count != 0) && (byte_data_cmp_failed_awburst_count == 0)) begin
+      if ((byte_data_cmp_failed_awburst_count == 0)) begin
         `uvm_info (get_type_name(), $sformatf ("awburst count comparisons are successful"),UVM_HIGH);
       end
       else begin
@@ -996,7 +996,7 @@
         `uvm_error (get_type_name(), $sformatf ("awburst count comparisons are failed"));
       end
 
-      if ((byte_data_cmp_verified_awcache_count != 0) && (byte_data_cmp_failed_awcache_count == 0)) begin
+      if ((byte_data_cmp_failed_awcache_count == 0)) begin
         `uvm_info (get_type_name(), $sformatf ("awcache count comparisons are successful"),UVM_HIGH);
       end
       else begin
@@ -1007,7 +1007,7 @@
         `uvm_error (get_type_name(), $sformatf ("awcache count comparisons are failed"));
       end
 
-      if ((byte_data_cmp_verified_awlock_count != 0) && (byte_data_cmp_failed_awlock_count == 0)) begin
+      if ((byte_data_cmp_failed_awlock_count == 0)) begin
         `uvm_info (get_type_name(), $sformatf ("awlock count comparisons are successful"),UVM_HIGH);
       end
       else begin
@@ -1018,7 +1018,7 @@
         `uvm_error (get_type_name(), $sformatf ("awlock count comparisons are failed"));
       end
 
-      if ((byte_data_cmp_verified_awprot_count != 0) && (byte_data_cmp_failed_awprot_count == 0)) begin
+      if ((byte_data_cmp_failed_awprot_count == 0)) begin
         `uvm_info (get_type_name(), $sformatf ("awprot count comparisons are successful"),UVM_HIGH);
       end
       else begin
@@ -1033,7 +1033,7 @@
       // Write_Data_Channel comparision
       //-------------------------------------------------------
 
-      if ((byte_data_cmp_verified_wdata_count != 0) && (byte_data_cmp_failed_wdata_count == 0)) begin
+      if ((byte_data_cmp_failed_wdata_count == 0)) begin
         `uvm_info (get_type_name(), $sformatf ("wdata count comparisons are successful"),UVM_HIGH);
       end
       else begin
@@ -1045,7 +1045,7 @@
       end 
 
 
-      if ((byte_data_cmp_verified_wstrb_count != 0) && (byte_data_cmp_failed_wstrb_count == 0)) begin
+      if ((byte_data_cmp_failed_wstrb_count == 0)) begin
         `uvm_info (get_type_name(), $sformatf ("wstrb count comparisons are successful"),UVM_HIGH);
       end
       else begin
@@ -1063,7 +1063,7 @@
       //-------------------------------------------------------
 
 
-      if ((byte_data_cmp_verified_bid_count != 0) && (byte_data_cmp_failed_bid_count == 0)) begin
+      if ((byte_data_cmp_failed_bid_count == 0)) begin
         `uvm_info (get_type_name(), $sformatf ("bid count comparisons are successful"),UVM_HIGH);
       end
       else begin
@@ -1075,7 +1075,7 @@
       end 
 
 
-      if ((byte_data_cmp_verified_bresp_count != 0) && (byte_data_cmp_failed_bresp_count == 0)) begin
+      if ((byte_data_cmp_failed_bresp_count == 0)) begin
         `uvm_info (get_type_name(), $sformatf ("bresp count comparisons are successful"),UVM_HIGH);
       end
       else begin
@@ -1087,7 +1087,7 @@
       end 
 
 
-      if ((byte_data_cmp_verified_buser_count != 0) && (byte_data_cmp_failed_buser_count == 0)) begin
+      if ((byte_data_cmp_failed_buser_count == 0)) begin
         `uvm_info (get_type_name(), $sformatf ("buser count comparisons are successful"),UVM_HIGH);
       end
       else begin
@@ -1097,13 +1097,11 @@
           byte_data_cmp_failed_buser_count),UVM_HIGH);
         `uvm_error (get_type_name(), $sformatf ("buser count comparisons are failed"));
       end 
-    end
 
     //-------------------------------------------------------
     // Read_Address_Channel comparision
     //-------------------------------------------------------
-    if(axi4_env_cfg_h.write_read_mode_h == ONLY_READ_DATA || axi4_env_cfg_h.write_read_mode_h == WRITE_READ_DATA) begin
-      if ((byte_data_cmp_verified_arid_count != 0) && (byte_data_cmp_failed_arid_count == 0)) begin
+      if ((byte_data_cmp_failed_arid_count == 0)) begin
         `uvm_info (get_type_name(), $sformatf ("arid count comparisons are successful"),UVM_HIGH);
       end
       else begin
@@ -1114,7 +1112,7 @@
         `uvm_error (get_type_name(), $sformatf ("arid count comparisons are failed"));
       end
 
-      if ((byte_data_cmp_verified_araddr_count != 0) && (byte_data_cmp_failed_araddr_count == 0)) begin
+      if ((byte_data_cmp_failed_araddr_count == 0)) begin
         `uvm_info (get_type_name(), $sformatf ("araddr count comparisons are successful"),UVM_HIGH);
       end
       else begin
@@ -1125,7 +1123,7 @@
         `uvm_error (get_type_name(), $sformatf ("araddr count comparisons are failed"));
       end
 
-      if ((byte_data_cmp_verified_arsize_count != 0) && (byte_data_cmp_failed_arsize_count == 0)) begin
+      if ((byte_data_cmp_failed_arsize_count == 0)) begin
         `uvm_info (get_type_name(), $sformatf ("arsize count comparisons are successful"),UVM_HIGH);
       end
       else begin
@@ -1136,7 +1134,7 @@
         `uvm_error (get_type_name(), $sformatf ("arsize count comparisons are failed"));
       end
 
-      if ((byte_data_cmp_verified_arlen_count != 0) && (byte_data_cmp_failed_arlen_count == 0)) begin
+      if ((byte_data_cmp_failed_arlen_count == 0)) begin
         `uvm_info (get_type_name(), $sformatf ("arlen count comparisons are successful"),UVM_HIGH);
       end
       else begin
@@ -1147,7 +1145,7 @@
         `uvm_error (get_type_name(), $sformatf ("arlen count comparisons are failed"));
       end
 
-      if ((byte_data_cmp_verified_arburst_count != 0) && (byte_data_cmp_failed_arburst_count == 0)) begin
+      if ((byte_data_cmp_failed_arburst_count == 0)) begin
         `uvm_info (get_type_name(), $sformatf ("arburst count comparisons are successful"),UVM_HIGH);
       end
       else begin
@@ -1158,7 +1156,7 @@
         `uvm_error (get_type_name(), $sformatf ("arburst count comparisons are failed"));
       end
 
-      if ((byte_data_cmp_verified_arcache_count != 0) && (byte_data_cmp_failed_arcache_count == 0)) begin
+      if ((byte_data_cmp_failed_arcache_count == 0)) begin
         `uvm_info (get_type_name(), $sformatf ("arcache count comparisons are successful"),UVM_HIGH);
       end
       else begin
@@ -1169,7 +1167,7 @@
         `uvm_error (get_type_name(), $sformatf ("arcache count comparisons are failed"));
       end
 
-      if ((byte_data_cmp_verified_arlock_count != 0) && (byte_data_cmp_failed_arlock_count == 0)) begin
+      if ((byte_data_cmp_failed_arlock_count == 0)) begin
         `uvm_info (get_type_name(), $sformatf ("arlock count comparisons are successful"),UVM_HIGH);
       end
       else begin
@@ -1180,7 +1178,7 @@
         `uvm_error (get_type_name(), $sformatf ("arlock count comparisons are failed"));
       end
 
-      if ((byte_data_cmp_verified_arprot_count != 0) && (byte_data_cmp_failed_arprot_count == 0)) begin
+      if ((byte_data_cmp_failed_arprot_count == 0)) begin
         `uvm_info (get_type_name(), $sformatf ("arprot count comparisons are successful"),UVM_HIGH);
       end
       else begin
@@ -1191,7 +1189,7 @@
         `uvm_error (get_type_name(), $sformatf ("arprot count comparisons are failed"));
       end
 
-      if ((byte_data_cmp_verified_arregion_count != 0) && (byte_data_cmp_failed_arregion_count == 0)) begin
+      if ((byte_data_cmp_failed_arregion_count == 0)) begin
         `uvm_info (get_type_name(), $sformatf ("arregion count comparisons are successful"),UVM_HIGH);
       end
       else begin
@@ -1202,7 +1200,7 @@
         `uvm_error (get_type_name(), $sformatf ("arregion count comparisons are failed"));
       end
 
-      if ((byte_data_cmp_verified_arqos_count != 0) && (byte_data_cmp_failed_arqos_count == 0)) begin
+      if ((byte_data_cmp_failed_arqos_count == 0)) begin
         `uvm_info (get_type_name(), $sformatf ("arqos count comparisons are successful"),UVM_HIGH);
       end
       else begin
@@ -1216,7 +1214,7 @@
       //-------------------------------------------------------
       // Read_Data_Channel comparision
       //-------------------------------------------------------
-      if ((byte_data_cmp_verified_rid_count != 0) && (byte_data_cmp_failed_rid_count == 0)) begin
+      if ((byte_data_cmp_failed_rid_count == 0)) begin
         `uvm_info (get_type_name(), $sformatf ("rid count comparisons are successful"),UVM_HIGH);
       end
       else begin
@@ -1227,7 +1225,7 @@
         `uvm_error (get_type_name(), $sformatf ("rid count comparisons are failed"));
       end
 
-      if ((byte_data_cmp_verified_rdata_count != 0) && (byte_data_cmp_failed_rdata_count == 0)) begin
+      if ((byte_data_cmp_failed_rdata_count == 0)) begin
         `uvm_info (get_type_name(), $sformatf ("rdata count comparisons are successful"),UVM_HIGH);
       end
       else begin
@@ -1239,7 +1237,7 @@
       end
 
 
-      if ((byte_data_cmp_verified_rresp_count != 0) && (byte_data_cmp_failed_rresp_count == 0)) begin
+      if ((byte_data_cmp_failed_rresp_count == 0)) begin
         `uvm_info (get_type_name(), $sformatf ("rresp count comparisons are successful"),UVM_HIGH);
       end
       else begin
@@ -1250,18 +1248,8 @@
         `uvm_error (get_type_name(), $sformatf ("rresp count comparisons are failed"));
       end
 
-    end
 
 
-    //--------------------------------------------------------------------------------------------
-    // 2.Check if master packets received are same as slave packets received
-    //   To Make sure that we have equal number of master and slave packets
-    //--------------------------------------------------------------------------------------------
-
-    //--------------------------------------------------------------------------------------------
-    // 3.Analysis fifos must be zero - This will indicate that all the packets have been compared
-    //   This is to make sure that we have taken all packets from both FIFOs and made the comparisons
-    //--------------------------------------------------------------------------------------------
   endfunction : check_phase
 
   //--------------------------------------------------------------------------------------------

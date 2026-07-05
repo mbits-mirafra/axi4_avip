@@ -65,6 +65,7 @@ endfunction : mem_read
 //data          - bit [DATA_WIDTH-1:0]
 //--------------------------------------------------------------------------------------------
 function void axi4_slave_memory::fifo_write(input bit [DATA_WIDTH-1:0]data);
+  $display("BYTE %h is pushed into fifo",data[7:0]);
   fifo_memory.push_front(data);
 endfunction : fifo_write
 
@@ -76,6 +77,7 @@ endfunction : fifo_write
 //--------------------------------------------------------------------------------------------
 function void axi4_slave_memory::fifo_read(output bit [DATA_WIDTH-1:0]data);
   data = fifo_memory.pop_back();
+  $display("DATA %h is popped from the fifo",data);
 endfunction : fifo_read
 
 //--------------------------------------------------------------------------------------------

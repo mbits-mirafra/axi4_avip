@@ -100,6 +100,8 @@ package axi4_standalone_slave_test_pkg;
   `include "axi4_outstanding_128b_fixed_burst_write_read_test.sv"
   `include "axi4_outstanding_256b_fixed_burst_write_read_test.sv"
   `include "axi4_outstanding_512b_fixed_burst_write_read_test.sv"
+   `include "axi4_outstanding_8b_fixed_burst_write_read_test.sv"
+  `include "axi4_outstanding_16b_fixed_burst_write_read_test.sv"
   // wrap burst
   `include "axi4_non_outstanding_128b_wrap_burst_write_read_test.sv"
   `include "axi4_non_outstanding_256b_wrap_burst_write_read_test.sv"
@@ -107,7 +109,10 @@ package axi4_standalone_slave_test_pkg;
   `include "axi4_outstanding_128b_wrap_burst_write_read_test.sv"
   `include "axi4_outstanding_256b_wrap_burst_write_read_test.sv"
   `include "axi4_outstanding_512b_wrap_burst_write_read_test.sv"
-
+  `include "axi4_outstanding_8b_wrap_burst_write_read_test.sv"
+  `include "axi4_outstanding_16b_wrap_burst_write_read_test.sv"
+  `include "axi4_outstanding_64b_wrap_burst_write_read_test.sv"
+  `include "axi4_outstanding_64b_fixed_burst_write_read_test.sv"
 
 endpackage : axi4_standalone_slave_test_pkg
 

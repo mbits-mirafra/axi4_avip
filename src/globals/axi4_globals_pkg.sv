@@ -13,13 +13,13 @@ package axi4_globals_pkg;
   //Parameter: MASTER_AGENT_ACTIVE / SLAVE_AGENT_ACTIVE
   //Used to set the master and slave agents either active or passive.
   //Selected from the compile MODE via +define+AXI_MODE_<mode> (set by the makefile):
-  //  master : master drives, slave passive        -> 1, 0
-  //  slave  : slave responds, master passive       -> 0, 1
+  //  slave : master drives, slave passive        -> 1, 0
+  //  master  : slave responds, master passive       -> 0, 1
   //  b2b    : back-to-back, both agents active      -> 1, 1 (default)
-`ifdef AXI_MODE_master
+`ifdef AXI_MODE_slave
   parameter bit MASTER_AGENT_ACTIVE = 1;
   parameter bit SLAVE_AGENT_ACTIVE  = 0;
-`elsif AXI_MODE_slave
+`elsif AXI_MODE_master
   parameter bit MASTER_AGENT_ACTIVE = 0;
   parameter bit SLAVE_AGENT_ACTIVE  = 1;
 `else

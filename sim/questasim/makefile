@@ -225,7 +225,7 @@ clean_compile:
 regression:
 	# Run compilation
 	make clean_simulate
-	make compile
+	make compile MODE=$(MODE)
 	# Run simualtion - regression 
 	python regression_handling.py $(testlist_name)
 	#	# Get the tests from regression list

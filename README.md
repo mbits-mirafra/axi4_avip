@@ -83,7 +83,7 @@ vsim -view <test_name>/waveform.wlf &
 ex: vsim -view axi4_back_to_back_write_read_test/waveform.wlf &
 
 # Regression:
-make regression testlist_name=<regression_testlist_name.list>
+make regression testlist_name=<regression_testlist_name.list> MODE=<b2b|slave|master>
 ex: make regression testlist_name=axi4_back_to_back_regression.list MODE=b2b
 
 # Coverage: 

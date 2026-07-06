@@ -103,8 +103,13 @@ function void axi4_base_test::setup_axi4_master_agent_cfg();
   foreach(axi4_env_cfg_h.axi4_master_agent_cfg_h[i])begin
     axi4_env_cfg_h.axi4_master_agent_cfg_h[i] =
     axi4_master_agent_config::type_id::create($sformatf("axi4_master_agent_cfg_h[%0d]",i));
-    axi4_env_cfg_h.axi4_master_agent_cfg_h[i].is_active   = uvm_active_passive_enum'(UVM_ACTIVE);
-    axi4_env_cfg_h.axi4_master_agent_cfg_h[i].has_coverage = 1; 
+    if(MASTER_AGENT_ACTIVE === 1) begin
+      axi4_env_cfg_h.axi4_master_agent_cfg_h[i].is_active = uvm_active_passive_enum'(UVM_ACTIVE);
+    end
+    else begin
+      axi4_env_cfg_h.axi4_master_agent_cfg_h[i].is_active = uvm_active_passive_enum'(UVM_PASSIVE);
+    end
+    axi4_env_cfg_h.axi4_master_agent_cfg_h[i].has_coverage = 1;
   end
 
   for(int i =0; i<NO_OF_SLAVES; i++) begin

@@ -115,6 +115,7 @@ compile:
 	+acc \
 	+cover \
 	+fcover \
+	+define+AXI_MODE_$(MODE) \
 	+define$(args) \
 	-l axi4_compile.log \
 	-f ../axi4_compile.f 

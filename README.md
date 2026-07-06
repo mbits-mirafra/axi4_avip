@@ -42,8 +42,8 @@ The testbench is organised into three independent **test-package families** that
 | MODE | Test package | DUT / role | When to use |
 |------|--------------|-----------|-------------|
 | `b2b` (default) | `axi4_back_to_back_test_pkg` | Active master &harr; active slave VIP | Full protocol verification with both agents active — write/read, non-outstanding & outstanding, in-order & out-of-order responses, across all data widths and burst types |
-| `slave` | `axi4_standalone_slave_test_pkg` | Slave RTL as DUT (master passive) | Verifying a **slave** DUT: the AVIP slave generates responses across all widths, burst and response types while the master drives stimulus |
-| `master` | `axi4_standalone_master_test_pkg` | Master RTL as DUT (slave passive) | Verifying a **master** DUT: the AVIP master drives the transfers while the slave stays passive |
+| `slave` | `axi4_standalone_slave_test_pkg` | Slave RTL as DUT (master active) | Verifying a **slave** DUT: the AVIP master generates transaction across all widths, burst and response types while the slave rtl respondes |
+| `master` | `axi4_standalone_master_test_pkg` | Master RTL as DUT (slave active) | Verifying a **master** DUT: the dut master drives the transfers while the slave avip stays active |
 
 Each family has its own regression testlist under `src/hvl_top/testlists/`:
 

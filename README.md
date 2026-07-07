@@ -13,10 +13,9 @@ The idea of using Accelerated VIP is to push the synthesizable part of the testb
 7. Support different types of Burst based transactions (fixed, incr, wrap)
 8. Support okay and slave error response
 9. Support for Out-of-order transaction
-10. Support for Quality of service(QOS)
-11. Support for Unaligned address transfers
-12. Support for Custom Slave memory 
-13. Support for Narrow transfers 
+10. Support for Unaligned address transfers
+11. Support for Custom Slave memory 
+12. Support for Narrow transfers 
 
 # Architecture Diagram  
 ![AXI4](https://user-images.githubusercontent.com/15922511/183240262-b28b57cd-bda3-4cd8-ae2b-620d07f7a92b.jpg)

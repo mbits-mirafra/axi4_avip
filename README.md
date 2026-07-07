@@ -6,7 +6,7 @@ The idea of using Accelerated VIP is to push the synthesizable part of the testb
 # Features:
 1. Support read and write Independent channels
 2. Separate address/control and data phases
-3. Blocking and Non Blocking Transfers
+3. outstanding and Non outstanding Transfers
 4. Parallel write and read transfer
 5. Support outstanding transfer
 6. No strict timing relationship between address and data operations

@@ -168,7 +168,7 @@ class axi4_slave_tx extends uvm_sequence_item;
   
   //Variable : transfer_type
   //Used to determine the tranfer type
-  transfer_type_e transfer_type;
+   rand transfer_type_e transfer_type;
 
   //Variable: wait_count_write_address_channel
   //Used to determine wait count for write address channel

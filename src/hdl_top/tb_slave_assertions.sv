@@ -22,7 +22,7 @@ module tb_slave_assertions;
   //Write Address Channel Signals
   logic               [3:0] awid;
   logic [ADDRESS_WIDTH-1:0] awaddr;
-  logic               [3:0] awlen;
+  logic               [7:0] awlen;
   logic               [2:0] awsize;
   logic               [1:0] awburst;
   logic               [1:0] awlock;
@@ -56,7 +56,7 @@ module tb_slave_assertions;
   logic               [3:0] arregion;
   logic               [3:0] aruser;
   logic                     arvalid;
-  logic	                    arready;
+  logic                     arready;
   //Read Data Channel Signals
   logic            [3:0] rid;
   logic [DATA_WIDTH-1:0] rdata;

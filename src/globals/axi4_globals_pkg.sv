@@ -10,13 +10,22 @@ package axi4_globals_pkg;
   //-------------------------------------------------------
   // Parameters used in axi4_avip are given below
   //-------------------------------------------------------
-  //Parameter: MASTER_AGENT_ACTIVE
-  //Used to set the master agent either active or passive
+  //Parameter: MASTER_AGENT_ACTIVE / SLAVE_AGENT_ACTIVE
+  //Used to set the master and slave agents either active or passive.
+  //Selected from the compile MODE via +define+AXI_MODE_<mode> (set by the makefile):
+  //  slave : master drives, slave passive        -> 1, 0
+  //  master  : slave responds, master passive       -> 0, 1
+  //  b2b    : back-to-back, both agents active      -> 1, 1 (default)
+`ifdef AXI_MODE_slave
   parameter bit MASTER_AGENT_ACTIVE = 1;
-
-  //Parameter: SLAVE_AGENT_ACTIVE
-  //Used to set the slave agent either active or passive
-  parameter bit SLAVE_AGENT_ACTIVE = 1;
+  parameter bit SLAVE_AGENT_ACTIVE  = 0;
+`elsif AXI_MODE_master
+  parameter bit MASTER_AGENT_ACTIVE = 0;
+  parameter bit SLAVE_AGENT_ACTIVE  = 1;
+`else
+  parameter bit MASTER_AGENT_ACTIVE = 1;
+  parameter bit SLAVE_AGENT_ACTIVE  = 1;
+`endif
 
   //Parameter: NO_OF_MASTERS
   //Used to set number of masters required
@@ -26,14 +35,19 @@ package axi4_globals_pkg;
   //Used to set number of slaves required
   parameter int NO_OF_SLAVES = 1;
 
+  parameter int MASTER_TRANSACTION_WRITE_ISSUE_COUNT =65;
+
+  parameter int MASTER_TRANSACTION_READ_ISSUE_COUNT = 65;
+
+
+
   //Parameter: ADDRESS_WIDTH
   //Used to set the address width to the address bus
   parameter int ADDRESS_WIDTH = 32;
 
-  `define DATA_WIDTH 32
   //Parameter: DATA_WIDTH
-  //Used to set the data width 
-  parameter int DATA_WIDTH = 64;
+  //Used to set the data width
+  parameter int DATA_WIDTH =512;
 
   //Parameter: SLAVE_MEMORY_SIZE
   //Sets the memory size of the slave in KB
@@ -62,9 +76,12 @@ package axi4_globals_pkg;
   //Variable: OUTSTANDING_FIFO_DEPTH
   //Indicates the fifo depth of outstanding transaction
   parameter int OUTSTANDING_FIFO_DEPTH = 16;
+ 
+  parameter int FIFO_SIZE = 32;
+
   parameter outstanding = 1; 
   parameter writeReadOrdering = 1;
-  parameter activeTransactionCapacity = 2;
+  parameter activeTransactionCapacity = 3;
  
   //-------------------------------------------------------
   // Enums used in axi4_avip are given below
@@ -297,15 +314,6 @@ package axi4_globals_pkg;
     NON_OUTSTANDING_READ   = 2'b11 
   }transfer_type_e;
 
-  //Enum : read_data_type_mode_e
-  //Used to the determine the type of the read data
-  typedef enum bit[1:0] {
-    RANDOM_DATA_MODE = 2'b00,
-    SLAVE_MEM_MODE   = 2'b01,
-    USER_DATA_MODE   = 2'b10,
-    SLAVE_ERR_RESP_MODE = 2'b11
-  } read_data_type_mode_e;
-
   //Enum : transfer_type_e  
   //Used to determine the mode for score board check 
   typedef enum bit[1:0] {
@@ -318,21 +326,10 @@ package axi4_globals_pkg;
   //Used to determine the mode of response to send
   typedef enum bit[1:0] {
     RESP_IN_ORDER                 = 2'b00,
-    ONLY_READ_RESP_OUT_OF_ORDER   = 2'b01,
-    WRITE_READ_RESP_OUT_OF_ORDER  = 2'b10,
-    ONLY_WRITE_RESP_OUT_OF_ORDER  = 2'b11
+    RESP_OUT_OF_ORDER  = 2'b11
   } response_mode_e;
 
-  //Enum : QoS_mode_e
-  typedef enum bit[1:0] {
-    QOS_MODE_DISABLE            = 2'b00,
-    ONLY_READ_QOS_MODE_ENABLE   = 2'b01,
-    WRITE_READ_QOS_MODE_ENABLE  = 2'b10,
-    ONLY_WRITE_QOS_MODE_ENABLE  = 2'b11
-  } qos_mode_e;
-
   //Used to store the awid for Qos mode
-  awid_e awid_queue_for_qos[$];
 
   //-------------------------------------------------------
   // Structs used in axi_avip are given below
@@ -354,7 +351,7 @@ package axi4_globals_pkg;
     bit                     awuser;
     bit [2:0]               awprot;
     bit                     awvalid;
-    bit	                    awready;
+    bit                     awready;
     //Write Data Channel Signals
     bit     [2**LENGTH:0][DATA_WIDTH-1:0] wdata;
     bit [2**LENGTH:0][(DATA_WIDTH/8)-1:0] wstrb;
@@ -414,8 +411,6 @@ package axi4_globals_pkg;
     int                     wait_count_read_data_channel;
     int                     outstanding_write_tx;
     int                     outstanding_read_tx;
-    response_mode_e         slave_response_mode;
-    qos_mode_e              qos_mode_type;
   } axi4_transfer_cfg_s;
 
 endpackage : axi4_globals_pkg

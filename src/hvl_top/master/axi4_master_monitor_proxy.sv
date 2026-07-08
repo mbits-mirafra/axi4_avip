@@ -146,12 +146,14 @@ task axi4_master_monitor_proxy::axi4_write_address();
     axi4_write_transfer_char_s struct_write_packet;
     axi4_transfer_cfg_s        struct_cfg;
     axi4_master_tx             req_wr_clone_packet;
+    axi4_master_tx  req_wr;
+
+    req_wr = axi4_master_tx :: type_id :: create("tx");
 
     axi4_master_cfg_converter::from_class(axi4_master_agent_cfg_h, struct_cfg);
     axi4_master_mon_bfm_h.axi4_write_address_sampling(struct_write_packet,struct_cfg);
     axi4_master_seq_item_converter::to_write_class(struct_write_packet,req_wr);
     
-    axi4_master_write_address_fifo_h.write(req_wr);
 
     // Clone and publish the cloned item to the subscribers
     $cast(req_wr_clone_packet,req_wr.clone());
@@ -172,7 +174,11 @@ task axi4_master_monitor_proxy::axi4_write_data();
     axi4_transfer_cfg_s        struct_cfg;
     axi4_master_tx             req_wr_clone_packet;
     axi4_master_tx             local_write_addr_packet;
-    
+    axi4_master_tx  req_wr;
+
+    req_wr = axi4_master_tx :: type_id :: create("tx");
+
+ 
     axi4_master_cfg_converter::from_class(axi4_master_agent_cfg_h, struct_cfg);
     axi4_master_mon_bfm_h.axi4_write_data_sampling(struct_write_packet,struct_cfg);
    axi4_master_seq_item_converter::to_write_class(struct_write_packet,req_wr);
@@ -183,8 +189,6 @@ task axi4_master_monitor_proxy::axi4_write_data();
     //Combining write address and write data packets
     axi4_master_seq_item_converter::to_write_addr_data_class(local_write_addr_packet,struct_write_packet,req_wr);
 */
-    axi4_master_write_data_fifo_h.write(req_wr);
-
     // Clone and publish the cloned item to the subscribers
     $cast(req_wr_clone_packet,req_wr.clone());
     `uvm_info(get_type_name(),$sformatf("Packet received from axi4_write_data clone packet is \n %s",req_wr_clone_packet.sprint()),UVM_HIGH) 
@@ -203,6 +207,10 @@ task axi4_master_monitor_proxy::axi4_write_response();
     axi4_transfer_cfg_s        struct_cfg;
     axi4_master_tx             master_tx_clone_packet;
     axi4_master_tx             local_write_addr_data_packet;
+    axi4_master_tx  req_wr;
+
+    req_wr = axi4_master_tx :: type_id :: create("tx");
+
 
     axi4_master_cfg_converter::from_class(axi4_master_agent_cfg_h, struct_cfg);
     axi4_master_mon_bfm_h.axi4_write_response_sampling(struct_write_packet,struct_cfg);
@@ -232,14 +240,19 @@ task axi4_master_monitor_proxy::axi4_read_address();
     axi4_read_transfer_char_s struct_read_packet;
     axi4_transfer_cfg_s        struct_cfg;
     axi4_master_tx             req_rd_clone_packet;
+    
+    axi4_master_tx  req_rd;
+
+    req_rd = axi4_master_tx :: type_id :: create("tx");
+
 
     axi4_master_cfg_converter::from_class(axi4_master_agent_cfg_h, struct_cfg);
     axi4_master_mon_bfm_h.axi4_read_address_sampling(struct_read_packet,struct_cfg);
     axi4_master_seq_item_converter::to_read_class(struct_read_packet,req_rd);
-    axi4_master_read_fifo_h.write(req_rd);
 
     //clone and publish the clone to the analysis port 
     $cast(req_rd_clone_packet,req_rd.clone());
+    `uvm_info(get_type_name(),$sformatf("Read address channel: publishing clone packet, arburst = %0d",req_rd_clone_packet.arburst),UVM_MEDIUM)
     `uvm_info(get_type_name(),$sformatf("Packet received from axi4_read_address clone packet is \n %s",req_rd_clone_packet.sprint()),UVM_HIGH)
     axi4_master_read_address_analysis_port.write(req_rd_clone_packet);
   end
@@ -256,6 +269,11 @@ task axi4_master_monitor_proxy::axi4_read_data();
     axi4_transfer_cfg_s       struct_cfg;
     axi4_master_tx            req_rd_clone_packet; 
     axi4_master_tx            local_read_addr_packet;
+    axi4_master_tx  req_rd;
+
+    req_rd = axi4_master_tx :: type_id :: create("tx");
+
+
 
     axi4_master_cfg_converter::from_class(axi4_master_agent_cfg_h, struct_cfg);
     axi4_master_mon_bfm_h.axi4_read_data_sampling(struct_read_packet,struct_cfg);

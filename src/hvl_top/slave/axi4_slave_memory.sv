@@ -14,7 +14,7 @@ class axi4_slave_memory extends uvm_object;
 
   //Variable : fifo_memory
   //Declaration of fifo_memory to store the data from master of type fixed
-  protected bit [7:0] fifo_memory [$];
+  bit [7:0] fifo_memory [$:FIFO_SIZE-1];
 
   extern function new(string name = "axi4_slave_memory");  
   extern virtual function void mem_write(input bit [ADDRESS_WIDTH-1:0]slave_address, bit [DATA_WIDTH-1:0]data);
@@ -65,7 +65,9 @@ endfunction : mem_read
 //data          - bit [DATA_WIDTH-1:0]
 //--------------------------------------------------------------------------------------------
 function void axi4_slave_memory::fifo_write(input bit [DATA_WIDTH-1:0]data);
-  fifo_memory.push_front(data);
+  if(fifo_memory.size()!=FIFO_SIZE)begin
+    fifo_memory.push_front(data);
+  end
 endfunction : fifo_write
 
 //--------------------------------------------------------------------------------------------

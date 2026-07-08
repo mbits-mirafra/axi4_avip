@@ -117,7 +117,6 @@ axi4_master_driver_bfm axi4_master_drv_bfm_h (.aclk(intf.aclk),
     uvm_config_db#(virtual axi4_master_driver_bfm)::set(null,"*", "axi4_master_driver_bfm", axi4_master_drv_bfm_h); 
     uvm_config_db#(virtual axi4_master_monitor_bfm)::set(null,"*", "axi4_master_monitor_bfm", axi4_master_mon_bfm_h);
   end
-/*
   bind axi4_master_monitor_bfm master_assertions M_A (.aclk(aclk),
                                                       .aresetn(aresetn),
                                                       .awid(awid),
@@ -163,7 +162,6 @@ axi4_master_driver_bfm axi4_master_drv_bfm_h (.aclk(intf.aclk),
                                                       .rready(rready)
                                                     );
 
-*/
   //Printing axi4 master agent bfm
   initial begin
     `uvm_info("axi4 master agent bfm",$sformatf("AXI4 MASTER AGENT BFM"),UVM_LOW);

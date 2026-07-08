@@ -15,7 +15,7 @@ interface slave_assertions (input                     aclk,
                              //Write Address Channel Signals
                              input               [3:0] awid,
                              input [ADDRESS_WIDTH-1:0] awaddr,
-                             input               [3:0] awlen,
+                            input               [7:0] awlen,
                              input               [2:0] awsize,
                              input               [1:0] awburst,
                              input               [1:0] awlock,
@@ -49,7 +49,7 @@ interface slave_assertions (input                     aclk,
                              input               [3:0] arregion,   
                              input               [3:0] aruser,     
                              input                     arvalid,
-                             input	                   arready,
+                             input                    arready,
                              //Read Data Channel Signals
                              input            [3:0] rid,
                              input [DATA_WIDTH-1:0] rdata,
@@ -99,7 +99,9 @@ interface slave_assertions (input                     aclk,
     @(posedge aclk) disable iff (!aresetn)
     $rose(awvalid) |-> awvalid s_until_with awready;
   endproperty : axi_write_address_channel_valid_stable_check
-  AXI_WA_VALID_STABLE_CHECK : assert property (axi_write_address_channel_valid_stable_check);
+  AXI_WA_VALID_STABLE_CHECK : assert property (axi_write_address_channel_valid_stable_check) begin
+    `uvm_info("AXI4_SLAVE_ASSERTIONS",$sformatf("AXI_WA_VALID_STABLE_CHECK assertion PASSED @%0t",$time),UVM_MEDIUM)
+  end
 
 
   //--------------------------------------------------------------------------------------------

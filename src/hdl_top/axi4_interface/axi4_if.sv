@@ -13,7 +13,7 @@ interface axi4_if(input aclk, input aresetn);
   //Write_address_channel
   logic     [3: 0] awid     ;
   logic     [ADDRESS_WIDTH-1: 0] awaddr ;
-  logic     [3: 0] awlen     ;
+  logic     [7: 0] awlen     ;
   logic     [2: 0] awsize    ;
   logic     [1: 0] awburst   ;
   logic     [1: 0] awlock    ;
@@ -23,14 +23,14 @@ interface axi4_if(input aclk, input aresetn);
   logic     [3:0] awregion   ;
   logic           awuser     ;
   logic            awvalid   ;
-  logic		         awready   ;
+  logic           awready   ;
   //Write_data_channel
   logic     [DATA_WIDTH-1: 0] wdata     ;
   logic     [(DATA_WIDTH/8)-1: 0] wstrb ;
   logic            wlast     ;
   logic      [3:0] wuser     ;
   logic            wvalid    ;
- 	logic            wready    ;
+   logic            wready    ;
   //Write Response Channel
   logic     [3: 0] bid       ;
   logic     [1: 0] bresp     ;
@@ -50,7 +50,7 @@ interface axi4_if(input aclk, input aresetn);
   logic     [3:0] arregion   ;
   logic     [3:0] aruser     ;
   logic           arvalid    ;
- 	logic	          arready    ;
+   logic           arready    ;
   //Read Data Channel
   logic     [3: 0] rid      ;
   logic     [DATA_WIDTH-1: 0] rdata     ;
@@ -58,7 +58,7 @@ interface axi4_if(input aclk, input aresetn);
   logic           rlast      ;
   logic     [3:0] ruser      ;
   logic           rvalid     ;
-  logic  	        rready     ;
+  logic           rready     ;
   
 
 endinterface: axi4_if 

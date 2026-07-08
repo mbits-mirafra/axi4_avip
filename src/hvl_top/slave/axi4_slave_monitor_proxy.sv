@@ -128,6 +128,9 @@ task axi4_slave_monitor_proxy::axi4_slave_write_address();
     axi4_transfer_cfg_s        struct_cfg;
     axi4_slave_tx              req_wr_clone_packet;
 
+    axi4_slave_tx  req_wr;
+
+    req_wr = axi4_slave_tx :: type_id :: create("tx");
 
     axi4_slave_cfg_converter::from_class(axi4_slave_agent_cfg_h, struct_cfg);
     axi4_slave_mon_bfm_h.axi4_slave_write_address_sampling(struct_write_packet,struct_cfg);
@@ -153,7 +156,12 @@ task axi4_slave_monitor_proxy::axi4_slave_write_data();
     axi4_transfer_cfg_s        struct_cfg;
     axi4_slave_tx             req_wr_clone_packet;
     axi4_slave_tx             local_write_addr_packet;
-    
+   
+      axi4_slave_tx  req_wr;
+
+    req_wr = axi4_slave_tx :: type_id :: create("tx");
+
+
     axi4_slave_cfg_converter::from_class(axi4_slave_agent_cfg_h, struct_cfg);
     axi4_slave_mon_bfm_h.axi4_slave_write_data_sampling(struct_write_packet,struct_cfg);
     axi4_slave_seq_item_converter::to_write_class(struct_write_packet,req_wr);
@@ -175,12 +183,17 @@ task axi4_slave_monitor_proxy::axi4_slave_write_response();
     axi4_slave_tx             axi4_slave_tx_clone_packet;
     axi4_slave_tx             local_write_addr_data_packet;
 
+      axi4_slave_tx  req_wr;
+
+    req_wr = axi4_slave_tx :: type_id :: create("tx");
+
+
     axi4_slave_cfg_converter::from_class(axi4_slave_agent_cfg_h, struct_cfg);
     axi4_slave_mon_bfm_h.axi4_write_response_sampling(struct_write_packet,struct_cfg);
     axi4_slave_seq_item_converter::to_write_class(struct_write_packet,req_wr);
     
-
-    //clone and publish the clone to the analysis port 
+    `uvm_info(get_type_name(),$sformatf("Sending out write response, bid = %0d",req_wr.bid),UVM_MEDIUM)
+    //clone and publish the clone to the analysis port
     $cast(axi4_slave_tx_clone_packet,req_wr.clone());
     `uvm_info(get_type_name(),$sformatf("Packet received from axi4_slave_write_response is \n %s",axi4_slave_tx_clone_packet.sprint()),UVM_HIGH);
     
@@ -198,6 +211,11 @@ task axi4_slave_monitor_proxy::axi4_slave_read_address();
     axi4_read_transfer_char_s struct_read_packet;
     axi4_transfer_cfg_s        struct_cfg;
     axi4_slave_tx             req_rd_clone_packet;
+
+    axi4_slave_tx  req_rd;
+
+    req_rd = axi4_slave_tx :: type_id :: create("tx");
+
 
     axi4_slave_cfg_converter::from_class(axi4_slave_agent_cfg_h, struct_cfg);
     axi4_slave_mon_bfm_h.axi4_read_address_sampling(struct_read_packet,struct_cfg);
@@ -223,13 +241,18 @@ task axi4_slave_monitor_proxy::axi4_slave_read_data();
     axi4_slave_tx             req_rd_clone_packet; 
     axi4_slave_tx             local_read_addr_packet; 
 
+      axi4_slave_tx  req_rd;
+
+    req_rd = axi4_slave_tx :: type_id :: create("tx");
+
+
     axi4_slave_cfg_converter::from_class(axi4_slave_agent_cfg_h, struct_cfg);
     axi4_slave_mon_bfm_h.axi4_read_data_sampling(struct_read_packet,struct_cfg);
     axi4_slave_seq_item_converter::to_read_class(struct_read_packet,req_rd);
     
     
     $cast(req_rd_clone_packet,req_rd.clone());
-    `uvm_info(get_type_name(),$sformatf("Packet received from axi4_slave_read_data is \n %s",req_rd_clone_packet.sprint()),UVM_HIGH)
+    `uvm_info(get_type_name(),$sformatf("Packet received from axi4_slave_read_data is \n %s",req_rd_clone_packet.sprint()),UVM_NONE)
 
     axi4_slave_read_data_analysis_port.write(req_rd_clone_packet);
   end

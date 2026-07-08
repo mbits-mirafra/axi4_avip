@@ -16,8 +16,8 @@ class axi4_master_seq_item_converter extends uvm_object;
   extern function new(string name = "axi4_master_seq_item_converter");
   extern static function void from_write_class(input axi4_master_tx input_conv_h,output axi4_write_transfer_char_s output_conv_h);
   extern static function void from_read_class(input axi4_master_tx input_conv_h,output axi4_read_transfer_char_s output_conv_h);
-  extern static function void to_write_class(input axi4_write_transfer_char_s input_conv_h,output axi4_master_tx output_conv_h);
-  extern static function void to_read_class(input axi4_read_transfer_char_s input_conv_h,output axi4_master_tx output_conv_h);
+  extern static function void to_write_class(input axi4_write_transfer_char_s input_conv_h,inout axi4_master_tx output_conv_h);
+  extern static function void to_read_class(input axi4_read_transfer_char_s input_conv_h,inout axi4_master_tx output_conv_h);
   extern static function void to_write_addr_data_class(input axi4_master_tx waddr_packet, input axi4_write_transfer_char_s input_conv_h,output axi4_master_tx output_conv_h);
   extern static function void to_write_addr_data_resp_class(input axi4_master_tx waddr_data_packet, input axi4_write_transfer_char_s input_conv_h,output axi4_master_tx output_conv_h);
   extern static function void to_read_addr_data_class(input axi4_master_tx raddr_packet, input axi4_read_transfer_char_s input_conv_h,output axi4_master_tx output_conv_h);
@@ -188,8 +188,7 @@ endfunction : from_read_class
 // name - axi4_master_tx, axi4_write_transfer_char_s
 //--------------------------------------------------------------------------------------------
 function void axi4_master_seq_item_converter::to_write_class( input axi4_write_transfer_char_s
-  input_conv_h, output axi4_master_tx output_conv_h);
-  output_conv_h = new();
+  input_conv_h, inout axi4_master_tx output_conv_h);
 
   `uvm_info("axi4_master_seq_item_conv_class",$sformatf("----------------------------------------------------------------------"),UVM_FULL);
  
@@ -268,9 +267,8 @@ endfunction : to_write_class
 // name - axi4_master_tx, axi4_read_transfer_char_s
 //--------------------------------------------------------------------------------------------
 function void axi4_master_seq_item_converter::to_read_class( input axi4_read_transfer_char_s
-  input_conv_h, output axi4_master_tx output_conv_h);
+  input_conv_h, inout axi4_master_tx output_conv_h);
 
-  output_conv_h = new();
 
   $cast(output_conv_h.arid,input_conv_h.arid);
   `uvm_info("axi4_master_seq_item_conv_class",$sformatf("After converting arid =  %b",output_conv_h.arid),UVM_FULL);

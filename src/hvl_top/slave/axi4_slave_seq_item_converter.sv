@@ -15,8 +15,8 @@ class axi4_slave_seq_item_converter extends uvm_object;
   extern function new(string name = "axi4_slave_seq_item_converter");
   extern static function void from_write_class(input axi4_slave_tx input_conv_h, output axi4_write_transfer_char_s output_conv);
   extern static function void from_read_class(input axi4_slave_tx input_conv_h, output axi4_read_transfer_char_s output_conv);
-  extern static function void to_write_class(input axi4_write_transfer_char_s input_conv_h, output axi4_slave_tx output_conv_h);
-  extern static function void to_read_class(input axi4_read_transfer_char_s input_conv_h, output axi4_slave_tx output_conv_h);
+  extern static function void to_write_class(input axi4_write_transfer_char_s input_conv_h, inout axi4_slave_tx output_conv_h);
+  extern static function void to_read_class(input axi4_read_transfer_char_s input_conv_h, inout axi4_slave_tx output_conv_h);
   
   extern static function void tx_write_packet(input axi4_slave_tx input_addr_h, input axi4_slave_tx input_data_h,input axi4_slave_tx input_resp_h,output axi4_slave_tx packet_h);
   extern static function void tx_read_packet(input axi4_slave_tx input_addr_h, input axi4_slave_tx input_data_h,output axi4_slave_tx packet_h);
@@ -166,10 +166,9 @@ endfunction : from_read_class
 //--------------------------------------------------------------------------------------------      
 
 
-function void axi4_slave_seq_item_converter::to_write_class(input axi4_write_transfer_char_s input_conv_h, output axi4_slave_tx output_conv_h);
+function void axi4_slave_seq_item_converter::to_write_class(input axi4_write_transfer_char_s input_conv_h, inout axi4_slave_tx output_conv_h);
 
   int i;
-  output_conv_h = new();
 
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("----------------------------------------------------------------------"),UVM_FULL);
   
@@ -196,6 +195,7 @@ function void axi4_slave_seq_item_converter::to_write_class(input axi4_write_tra
   $cast(output_conv_h.awprot,input_conv_h.awprot);
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("After randomizing awprot =  %b",output_conv_h.awprot),UVM_FULL);
 
+  `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("Converting write response: input bid = %0d",input_conv_h.bid),UVM_MEDIUM)
   $cast(output_conv_h.bid,input_conv_h.bid);
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("After randomize bid =  %b",output_conv_h.bid),UVM_FULL);
 
@@ -209,12 +209,12 @@ function void axi4_slave_seq_item_converter::to_write_class(input axi4_write_tra
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("after writnig awqos =  %0h",output_conv_h.awqos),UVM_FULL);
 
   
-  for(int i=0;i<input_conv_h.wdata[i];i++) begin
+  for(int i=0;i<$size(input_conv_h.wdata);i++) begin
       output_conv_h.wdata[i] = input_conv_h.wdata[i];
   end
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("after writnig wdata to class = \n %0s",output_conv_h.sprint()),UVM_FULL);
 
-  for(int i=0;i<input_conv_h.wdata[i];i++) begin
+  for(int i=0;i<$size(input_conv_h.wdata);i++) begin
       output_conv_h.wstrb[i] = input_conv_h.wstrb[i];
   end
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("after writnig wstrb to class = \n %0s",output_conv_h.sprint()),UVM_FULL);
@@ -230,9 +230,8 @@ endfunction : to_write_class
 // Parameters:                                                                                      
 // name - axi4_slave_tx, axi4_read_transfer_char_s                                                      
 //--------------------------------------------------------------------------------------------      
-function void axi4_slave_seq_item_converter::to_read_class( input axi4_read_transfer_char_s input_conv_h, output axi4_slave_tx output_conv_h);
+function void axi4_slave_seq_item_converter::to_read_class( input axi4_read_transfer_char_s input_conv_h, inout axi4_slave_tx output_conv_h);
  int i;
-  output_conv_h = new();
 
   $cast(output_conv_h.arid,input_conv_h.arid);
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("After randomize arid =  %b",output_conv_h.arid),UVM_FULL);
@@ -258,9 +257,7 @@ function void axi4_slave_seq_item_converter::to_read_class( input axi4_read_tran
   $cast(output_conv_h.arprot,input_conv_h.arprot);
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("After randomize arprot =  %b",output_conv_h.arprot),UVM_FULL);
 
-  foreach(input_conv_h.rresp[i]) begin
-    $cast(output_conv_h.rresp,input_conv_h.rresp[i]);
-  end
+    $cast(output_conv_h.rresp,input_conv_h.rresp[0]);
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("After randomize rresp =  %b",output_conv_h.rresp),UVM_FULL);
 
   output_conv_h.araddr = input_conv_h.araddr;
@@ -282,7 +279,7 @@ function void axi4_slave_seq_item_converter::to_read_class( input axi4_read_tran
 
 
  output_conv_h.rlast = input_conv_h.rlast; 
-
+ `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("Converting read data: rlast = %0d",output_conv_h.rlast),UVM_MEDIUM)
   `uvm_info("axi4_slave_seq_item_conv_class",$sformatf("----------------------------------------------------------------------"),UVM_FULL);
 endfunction : to_read_class
 
@@ -302,6 +299,7 @@ function  void axi4_slave_seq_item_converter::tx_write_packet(input axi4_slave_t
   packet_h.awaddr=input_addr_h.awaddr;
   packet_h.awid=input_addr_h.awid;
   packet_h.awlen=input_addr_h.awlen;
+  $display("PACKET INPUT SIZE IS %d",input_addr_h.awsize);
   packet_h.awsize=input_addr_h.awsize;
   packet_h.awburst=input_addr_h.awburst;
   packet_h.awqos=input_addr_h.awqos;

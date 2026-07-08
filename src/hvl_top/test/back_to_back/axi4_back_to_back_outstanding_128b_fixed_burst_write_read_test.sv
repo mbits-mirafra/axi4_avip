@@ -1,0 +1,61 @@
+`ifndef AXI4_BACK_TO_BACK_OUTSTANDING_128B_FIXED_BURST_WRITE_READ_TEST_INCLUDED_
+`define AXI4_BACK_TO_BACK_OUTSTANDING_128B_FIXED_BURST_WRITE_READ_TEST_INCLUDED_
+
+//--------------------------------------------------------------------------------------------
+// Class: axi4_back_to_back_outstanding_128b_fixed_burst_write_read_test
+// Extends the base test and starts the virtual sequence of 128b fixed burst write and read sequences
+//--------------------------------------------------------------------------------------------
+class axi4_back_to_back_outstanding_128b_fixed_burst_write_read_test extends axi4_base_test;
+  `uvm_component_utils(axi4_back_to_back_outstanding_128b_fixed_burst_write_read_test)
+
+  //Variable : axi4_virtual_nbk_128b_fixed_write_read_seq_h
+  //Instatiation of axi4_virtual_nbk_128b_fixed_write_read_seq
+  axi4_virtual_back_to_back_write_read_seq axi4_virtual_nbk_128b_fixed_write_read_seq_h;
+
+  //-------------------------------------------------------
+  // Externally defined Tasks and Functions
+  //-------------------------------------------------------
+  extern function new(string name = "axi4_back_to_back_outstanding_128b_fixed_burst_write_read_test", uvm_component parent = null);
+  extern virtual task run_phase(uvm_phase phase);
+
+endclass : axi4_back_to_back_outstanding_128b_fixed_burst_write_read_test
+
+//--------------------------------------------------------------------------------------------
+// Construct: new
+//
+// Parameters:
+//  name - axi4_back_to_back_outstanding_128b_fixed_burst_write_read_test
+//  parent - parent under which this component is created
+//--------------------------------------------------------------------------------------------
+function axi4_back_to_back_outstanding_128b_fixed_burst_write_read_test::new(string name = "axi4_back_to_back_outstanding_128b_fixed_burst_write_read_test",
+                                 uvm_component parent = null);
+  super.new(name, parent);
+endfunction : new
+
+//--------------------------------------------------------------------------------------------
+// Task: run_phase
+// Creates the axi4_virtual_128b_fixed_write_read_seq sequence and starts the write and read  virtual sequences
+//
+// Parameters:
+//  phase - uvm phase
+//--------------------------------------------------------------------------------------------
+task axi4_back_to_back_outstanding_128b_fixed_burst_write_read_test::run_phase(uvm_phase phase);
+
+  axi4_virtual_nbk_128b_fixed_write_read_seq_h=axi4_virtual_back_to_back_write_read_seq::type_id::create("axi4_virtual_nbk_128b_fixed_write_read_seq_h");
+  `uvm_info(get_type_name(),$sformatf("axi4_back_to_back_outstanding_128b_fixed_burst_write_read_test"),UVM_LOW);
+  axi4_virtual_nbk_128b_fixed_write_read_seq_h.writeTranSize = WRITE_16_BYTES;
+  axi4_virtual_nbk_128b_fixed_write_read_seq_h.writeTransferType = OUTSTANDING_WRITE;
+  axi4_virtual_nbk_128b_fixed_write_read_seq_h.writeBurstType = WRITE_FIXED;
+
+  axi4_virtual_nbk_128b_fixed_write_read_seq_h.readTranSize = READ_16_BYTES;
+  axi4_virtual_nbk_128b_fixed_write_read_seq_h.readTransferType = OUTSTANDING_READ;
+  axi4_virtual_nbk_128b_fixed_write_read_seq_h.readBurstType = READ_FIXED;
+
+  axi4_env_cfg_h.axi4_slave_agent_cfg_h[0].slave_response_mode = RESP_OUT_OF_ORDER;
+  phase.raise_objection(this);
+  axi4_virtual_nbk_128b_fixed_write_read_seq_h.start(axi4_env_h.axi4_virtual_seqr_h);
+  phase.drop_objection(this);
+
+endtask : run_phase
+
+`endif

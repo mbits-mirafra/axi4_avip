@@ -76,9 +76,6 @@ function void axi4_master_agent::build_phase(uvm_phase phase);
    axi4_master_cov_h = axi4_master_coverage ::type_id::create("axi4_master_cov_h",this);
   end
 
-  if(!uvm_config_db#(read_data_type_mode_e)::get(this,"","read_data_mode",axi4_master_agent_cfg_h.read_data_mode)) begin
-    `uvm_fatal("FATAL_MA_AGENT_CONFIG", $sformatf("Couldn't get the read_data_mode from config_db"))
-  end
 endfunction : build_phase
 
 //--------------------------------------------------------------------------------------------

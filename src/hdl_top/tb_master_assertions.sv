@@ -56,7 +56,7 @@ module tb_master_assertions;
   logic               [3:0] arregion;
   logic               [3:0] aruser;
   logic                     arvalid;
-  logic	                    arready;
+  logic                     arready;
   //Read Data Channel Signals
   logic            [3:0] rid;
   logic [DATA_WIDTH-1:0] rdata;

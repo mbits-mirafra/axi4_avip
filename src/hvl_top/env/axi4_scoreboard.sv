@@ -294,7 +294,7 @@
     axi4_slave_read_address_analysis_fifo = new("axi4_slave_read_address_analysis_fifo",this);
     axi4_slave_read_data_analysis_fifo = new("axi4_slave_read_data_analysis_fifo",this);
 
-    referenceFifo = new("referenceFifo",this,1600000);
+    referenceFifo = new("referenceFifo",this,FIFO_SIZE);
     write_address_key = new(1);
     write_data_key = new(1);
     write_response_key = new(1);
@@ -539,6 +539,7 @@
         axi4_slave_tx  axi_slave_address_tx;
        forever begin
         axi4_master_write_response_analysis_fifo.get(temp);
+        temp.bresp=WRITE_OKAY;
         axi4_master_tx_bresp_count++;
         write_txn_failed = 0;
         `uvm_info("CHECK","ENTERED FOR WRITE CHECK ",UVM_NONE)
@@ -596,7 +597,12 @@
                 end
                 if(masterArrayDataQueue[index][i].strobe[k]==1)begin
                   `uvm_info(get_type_name(),$sformatf("Data pushed into reference FIFO = %h",masterArrayDataQueue[index][i].data[8*k +:8]),UVM_HIGH)
-                  referenceFifo.put(masterArrayDataQueue[index][i].data[8*k +:8]); 
+                  if(referenceFifo.used()==FIFO_SIZE) begin 
+                    temp.bresp=WRITE_SLVERR;
+                  end 
+                  else begin 
+                    referenceFifo.put(masterArrayDataQueue[index][i].data[8*k +:8]); 
+                  end 
                 end
                 tempAddress++;
               end  
@@ -791,6 +797,7 @@
       byte_data_cmp_verified_bresp_count++;
     end
     else begin
+      byte_data_cmp_failed_bresp_count++;
       `uvm_info(get_type_name(),$sformatf("axi4_bresp from master and slave is  not equal"),UVM_HIGH);
       `uvm_info("SB_bresp_NOT_MATCHED", $sformatf("Master bresp = %0p and Slave bresp = %0p",axi4_master_tx_h3.bresp,axi4_slave_tx_h3.bresp), UVM_HIGH);             
     end

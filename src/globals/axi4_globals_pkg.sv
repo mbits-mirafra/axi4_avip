@@ -35,9 +35,9 @@ package axi4_globals_pkg;
   //Used to set number of slaves required
   parameter int NO_OF_SLAVES = 1;
 
-  parameter int MASTER_TRANSACTION_WRITE_ISSUE_COUNT =20;
+  parameter int MASTER_TRANSACTION_WRITE_ISSUE_COUNT =65;
 
-  parameter int MASTER_TRANSACTION_READ_ISSUE_COUNT = 20;
+  parameter int MASTER_TRANSACTION_READ_ISSUE_COUNT = 65;
 
 
 
@@ -76,6 +76,9 @@ package axi4_globals_pkg;
   //Variable: OUTSTANDING_FIFO_DEPTH
   //Indicates the fifo depth of outstanding transaction
   parameter int OUTSTANDING_FIFO_DEPTH = 16;
+ 
+  parameter int FIFO_SIZE = 32;
+
   parameter outstanding = 1; 
   parameter writeReadOrdering = 1;
   parameter activeTransactionCapacity = 3;

@@ -1,4 +1,4 @@
-`ifndef XI4_MASTER_TX_INCLUDED_
+`ifndef AXI4_MASTER_TX_INCLUDED_
 `define AXI4_MASTER_TX_INCLUDED_
 
 //--------------------------------------------------------------------------------------------

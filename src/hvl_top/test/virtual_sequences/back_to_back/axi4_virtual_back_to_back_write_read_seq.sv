@@ -82,7 +82,7 @@ task axi4_virtual_back_to_back_write_read_seq::body();
     //begin : T2_READ
       axi4_master_read_seq_h.start(p_sequencer.axi4_master_read_seqr_h);
     //end
-  //join
+  //join //parallel write read may cause data hazard
 
 endtask : body
 

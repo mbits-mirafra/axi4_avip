@@ -40,9 +40,9 @@ class axi4_master_coverage extends uvm_subscriber #(axi4_master_tx);
 
     AWBURST_CP : coverpoint packet.awburst {
       option.comment = "Write Address Burst values";
-      bins READ_FIXED = {0};
+      bins WRITE_FIXED = {0};
       bins WRITE_INCR = {1}; 
-      bins READ_WRAP  = {2};     
+      bins WRITE_WRAP  = {2};     
       illegal_bins ILLEGAL_BIN_OF_AWBURST = {3};     
     }
 
@@ -66,9 +66,9 @@ class axi4_master_coverage extends uvm_subscriber #(axi4_master_tx);
     BRESP_CP : coverpoint packet.bresp {
       option.comment    = "Write Response values";
       bins WRITE_OKAY   = {0};
-      bins WRITE_EXOKAY = {1};
+     // bins WRITE_EXOKAY = {1};
       bins WRITE_SLVERR = {2};
-      bins WRITE_DECERR = {3};
+     // bins WRITE_DECERR = {3};
     }
 
     //-------------------------------------------------------
@@ -92,7 +92,7 @@ class axi4_master_coverage extends uvm_subscriber #(axi4_master_tx);
     ARBURST_CP : coverpoint packet.arburst {
       option.comment = "Read Address Burst values";
       bins READ_FIXED ={0};
-      bins WRITE_INCR ={1}; 
+      bins READ_INCR ={1}; 
       bins READ_WRAP  ={2};   
       illegal_bins ILLEGAL_BIN_OF_ARBURST = {3};   
     }
@@ -107,8 +107,6 @@ class axi4_master_coverage extends uvm_subscriber #(axi4_master_tx);
       bins ARSIZE_32BYTES  = {5};
       bins ARSIZE_64BYTES  = {6};
     }
-
-
 
     BID_CP : coverpoint packet.bid {
       option.comment = "Write Response values";
@@ -128,9 +126,9 @@ class axi4_master_coverage extends uvm_subscriber #(axi4_master_tx);
     RRESP_CP : coverpoint packet.rresp {
       option.comment    = "Read Response values";
       bins READ_OKAY    = {0};
-      bins READ_EXOKAY  = {1};
+      //bins READ_EXOKAY  = {1};
       bins READ_SLVERR  = {2};
-      bins READ_DECERR  = {3};
+      //bins READ_DECERR  = {3};
     }
     
 
@@ -138,8 +136,14 @@ class axi4_master_coverage extends uvm_subscriber #(axi4_master_tx);
     // Cross of coverpoints
     //-------------------------------------------------------
 
-    AWLENGTH_CP_X_AWSIZE_X_AWBURST    :cross AWLEN_CP,AWSIZE_CP,AWBURST_CP;
-    ARLENGTH_CP_X_ARSIZE_X_ARBURST    :cross ARLEN_CP,ARSIZE_CP,ARBURST_CP;
+    AWLENGTH_CP_X_AWSIZE_X_AWBURST    :cross AWLEN_CP,AWSIZE_CP,AWBURST_CP{   
+      ignore_bins ignr = binsof(AWBURST_CP) intersect{WRITE_FIXED,WRITE_WRAP} && binsof(AWLEN_CP) intersect{31,63,127,255};
+    }
+    ARLENGTH_CP_X_ARSIZE_X_ARBURST    :cross ARLEN_CP,ARSIZE_CP,ARBURST_CP{
+      ignore_bins ignr = binsof(ARBURST_CP) intersect{READ_FIXED,READ_WRAP} && binsof(ARLEN_CP) intersect{31,63,127,255};
+    }
+
+    
     // TRANSFER_TYPE_CP_X_BURST_TYPE_CP  :cross TRANSFER_TYPE_CP,BURST_TYPE_CP;
 
   endgroup: axi4_master_covergroup

@@ -226,7 +226,6 @@
           axi4_slave_seq_item_converter::to_write_class(struct_write_packet,local_slave_data_tx);
           `uvm_info(get_type_name(), $sformatf("W data sampled | beats=%0d wlast=%0b",
                     local_slave_data_tx.wdata.size(), local_slave_data_tx.wlast), UVM_MEDIUM)
-          `uvm_info(get_type_name(), $sformatf("Write data packet:\n%s", local_slave_data_tx.sprint()), UVM_HIGH)
           axiSlaveDataQueue.push_back(local_slave_data_tx);
           numberOfDataTransaction++;
           semaphore_write_key.put(1);
@@ -300,6 +299,32 @@
             if(!((local_slave_addr_tx.awaddr inside {[axi4_slave_agent_cfg_h.min_address :axi4_slave_agent_cfg_h.max_address]}) && (end_wrap_addr inside{[axi4_slave_agent_cfg_h.min_address : axi4_slave_agent_cfg_h.max_address]}) && (start_wrap_addr inside{[axi4_slave_agent_cfg_h.min_address : axi4_slave_agent_cfg_h.max_address]}))) begin
               struct_write_packet.bresp = WRITE_SLVERR;
             end 
+            if(local_slave_addr_tx.awburst == WRITE_FIXED )begin //check fifo overrun
+              bit[ADDRESS_WIDTH-1:0]addr = local_slave_addr_tx.awaddr;
+              int size = (2**(local_slave_addr_tx.awsize));
+              int unalignedAmount = addr - ((addr/(2**local_slave_addr_tx.awsize))*(2**local_slave_addr_tx.awsize));
+              int strbLine = addr %(DATA_WIDTH/8);
+              int sizeOfFifo = axi4_slave_mem_h.fifo_memory.size();
+              bit[(DATA_WIDTH/8)-1:0]strb = local_slave_data_tx.wstrb[0];
+              int counts;
+              for(int i=0;i<(local_slave_addr_tx.awlen+1);i++) begin 
+                if(i!=0)begin 
+                  unalignedAmount=0;
+                end 
+                strb = local_slave_data_tx.wstrb[i];
+
+                for(int j=0;j<(size-unalignedAmount);j++)begin 
+                  strbLine = addr %(DATA_WIDTH/8);
+                  if(strb[strbLine]==1)begin 
+                    counts++;
+                  end
+                  addr++;
+                end 
+              end 
+              if((sizeOfFifo+counts) > FIFO_SIZE)begin 
+                struct_write_packet.bresp = WRITE_SLVERR;
+              end 
+            end  
             // write response_task
             axi4_slave_drv_bfm_h.axi4_write_response_phase(struct_write_packet,struct_cfg,bid_local);
           end 
@@ -324,6 +349,32 @@
               struct_write_packet.bresp = WRITE_SLVERR;
 
             end
+            if(local_slave_addr_tx.awburst == WRITE_FIXED )begin //check fifo overrun
+              bit[ADDRESS_WIDTH-1:0]addr = local_slave_addr_tx.awaddr;
+              int size = (2**(local_slave_addr_tx.awsize));
+              int unalignedAmount = addr - ((addr/(2**local_slave_addr_tx.awsize))*(2**local_slave_addr_tx.awsize));
+              int strbLine = addr %(DATA_WIDTH/8);
+              int sizeOfFifo = axi4_slave_mem_h.fifo_memory.size();
+              bit[(DATA_WIDTH/8)-1:0]strb = local_slave_data_tx.wstrb[0];
+              int counts;
+              for(int i=0;i<(local_slave_addr_tx.awlen+1);i++) begin 
+                if(i!=0)begin 
+                  unalignedAmount=0;
+                end 
+                strb = local_slave_data_tx.wstrb[i];
+                for(int j=0;j<(size-unalignedAmount);j++)begin 
+                  strbLine = addr %(DATA_WIDTH/8);
+                  if(strb[strbLine]==1)begin 
+                    counts++;
+                  end
+                  addr++;
+                end 
+              end
+              if((sizeOfFifo+counts) > FIFO_SIZE)begin 
+                struct_write_packet.bresp = WRITE_SLVERR;
+              end 
+            end 
+
             axi4_slave_drv_bfm_h.axi4_write_response_phase(struct_write_packet,struct_cfg,bid_local);
           end 
           axi4_slave_seq_item_converter::to_write_class(struct_write_packet,local_slave_response_tx);

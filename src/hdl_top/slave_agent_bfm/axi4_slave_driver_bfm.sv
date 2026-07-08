@@ -229,7 +229,7 @@ data_write_packet.awqos = axiSlaveCb.awqos;
   //-------------------------------------------------------
   
   task axi4_write_response_phase(inout axi4_write_transfer_char_s data_write_packet,
-    axi4_transfer_cfg_s struct_cfg,bit[3:0] bid_local);
+    axi4_transfer_cfg_s struct_cfg,input bit[3:0] bid_local);
     
     int j;
     @(axiSlaveCb);

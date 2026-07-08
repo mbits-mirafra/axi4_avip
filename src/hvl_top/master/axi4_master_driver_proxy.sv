@@ -184,7 +184,6 @@ task axi4_master_driver_proxy::axi4_write_task();
     axi4_write_transfer_char_s struct_write_packet;
 
     axi_write_seq_item_port.get_next_item(req_wr);
-    `uvm_info(get_type_name(),$sformatf("WRITE_TASK::Before Sending_req_write_packet = \n%s",req_wr.sprint()),UVM_HIGH); 
 
     //Converting configurations into struct config type
     axi4_master_cfg_converter::from_class(axi4_master_agent_cfg_h,struct_cfg);
@@ -198,11 +197,9 @@ task axi4_master_driver_proxy::axi4_write_task();
       axi4_master_tx local_master_write_tx; 
       axi4_master_seq_item_converter::from_write_class(req_wr,struct_write_packet);
      `uvm_info("MASTER DRIVER PROXY","MASTER INITIATES A NON OUTSTANDING TRANSACTION",UVM_HIGH)
-       `uvm_info(get_type_name(),$sformatf("WRITE_TASK::Checking transfer type = %s",req_wr.transfer_type),UVM_MEDIUM); 
       
       //Calling 3 write tasks from axi4_master_drv_bfm in HDL side
      
-          `uvm_info(get_type_name(),$sformatf("WRITE_ADDRESS_THREAD::Received_req_write_packet = \n %s",req_wr.sprint()),UVM_NONE);
 
       axi4_master_drv_bfm_h.axi4_write_address_channel_task(struct_write_packet,struct_cfg);
       axi4_master_drv_bfm_h.axi4_write_data_channel_task(struct_write_packet,struct_cfg);
@@ -212,8 +209,6 @@ task axi4_master_driver_proxy::axi4_write_task();
       axi_write_seq_item_port.put_response(rsp_wr); 
       //Converts the struct packet to req packet
       axi4_master_seq_item_converter::to_write_class(struct_write_packet,req_wr);
-      `uvm_info(get_type_name(),$sformatf("WRITE_TASK::Response Received_req_write_packet = \n %s",
-                                           local_master_write_tx.sprint()),UVM_MEDIUM);
     end
 
     //Checking if the tranfer type is non outstanding write 
@@ -234,7 +229,6 @@ task axi4_master_driver_proxy::axi4_write_task();
 
       `uvm_info("MASTER DRIVER PROXY","MASTER INIATES A OUTSTANDING TRANSACTION",UVM_HIGH)
 
-      `uvm_info(get_type_name(),$sformatf("WRITE_ADDRESS_THREAD::Received_req_write_packet = \n %s",req_wr.sprint()),UVM_NONE);
 
       //Keeping the req packet into the write fifo 
       //This fifo is used if the transfer_type is NON_OUTSTANDING_WRITE
@@ -314,16 +308,6 @@ task axi4_master_driver_proxy::axi4_write_task();
 
           //Calling the write data channel in bfm to drive all the write data signals
           axi4_master_drv_bfm_h.axi4_write_data_channel_task(struct_write_data_packet,struct_cfg);
-         
-          //Converting the write data struct packet to req packet
-         
-         // axi4_master_seq_item_converter::to_write_class(struct_write_data_packet,local_master_data_tx);
-          `uvm_info(get_type_name(),$sformatf("WRITE_DATA_THREAD::Received_req_write_packet = \n %s",local_master_data_tx.sprint()),UVM_MEDIUM);  
-          
-          //Returns the number of packets written into fifo
-          `uvm_info(get_type_name(),$sformatf("WRITE_DATA_THREAD::Checking fifo size used= %0d",
-  axi4_master_write_fifo_h.used()),UVM_FULL);
-
           //Keeps the key back in the semaphore as the current transaction is completed
           //and the next transacion can be started.
           write_data_channel_key.put(1);
@@ -365,7 +349,6 @@ task axi4_master_driver_proxy::axi4_write_task();
 
           //Converting the write data struct packet to req packet
           axi4_master_seq_item_converter::to_write_class(struct_write_response_packet,local_master_response_tx);
-          `uvm_info(get_type_name(),$sformatf("WRITE_RESPONSE_THREAD::Received_req_write_packet = \n %s",local_master_response_tx.sprint()),UVM_MEDIUM);
 
           axi4_master_seq_item_converter::to_write_class(struct_write_response_packet,local_master_response_tx);
  
@@ -373,11 +356,6 @@ task axi4_master_driver_proxy::axi4_write_task();
            rsp_wr = RSP :: type_id :: create("RSP OBJECT"); 
            rsp_wr.set_id_info(local_master_response_tx);
            axi_write_seq_item_port.put_response(local_master_response_tx);
-          `uvm_info(get_type_name(),$sformatf("WRITE_RESPONSE_THREAD::Sending response from master for transaction id = %0d",local_master_response_tx.get_transaction_id()),UVM_MEDIUM)
-          `uvm_info(get_type_name(),$sformatf("WRITE_RESPONSE_THREAD::Received_req_write_packet = \n %s",local_master_response_tx.sprint()),UVM_MEDIUM);
-
-          `uvm_info(get_type_name(),$sformatf("WRITE_RESPONSE_THREAD::Checking fifo size used= %0d",axi4_master_write_resp_fifo_h.used()),UVM_FULL); 
-
           `uvm_info(get_type_name(), $sformatf("WRITE_RESPONSE_THREAD :: Out of response task"), UVM_FULL); 
           //Getting the key from the write_response_channel so that 
           //the other transaction should start after completion of the previous transaction
@@ -416,7 +394,6 @@ task axi4_master_driver_proxy::axi4_read_task();
 
     axi_read_seq_item_port.get_next_item(req_rd);
     `uvm_info(get_type_name(),$sformatf("READ_TASK::Starting read data task, req_rd transfer_type = %s",req_rd.transfer_type),UVM_MEDIUM)
-    `uvm_info(get_type_name(),$sformatf("READ_TASK:: Before Sending_req_read_packet = \n %s",req_rd.sprint()),UVM_FULL); 
 
     //Converting configurations into struct config type
     axi4_master_cfg_converter::from_class(axi4_master_agent_cfg_h,struct_cfg);
@@ -446,7 +423,6 @@ task axi4_master_driver_proxy::axi4_read_task();
       rsp_rd.set_id_info(req_rd);
       axi_read_seq_item_port.put_response(rsp_rd); 
 
-      `uvm_info(get_type_name(),$sformatf("READ_TASK::Response_received_req_read_packet = \n %s",req_rd.sprint()),UVM_MEDIUM);
     end
 
     else if(req_rd.transfer_type==OUTSTANDING_READ) begin
@@ -480,7 +456,6 @@ task axi4_master_driver_proxy::axi4_read_task();
 
           `uvm_info(get_type_name(),$sformatf("READ_ADDRESS_THREAD::Checking transfer type inside fork = %s",req_rd.transfer_type),UVM_FULL); 
 
-          `uvm_info(get_type_name(),$sformatf("READ_ADDRESS_THREAD::Checking req_rd = %s",req_rd.sprint()),UVM_FULL); 
           
           //Converts the read req packet to struct packet
           axi4_master_seq_item_converter::from_read_class(req_rd,struct_read_address_packet);
@@ -492,7 +467,6 @@ struct_read_address_packet),UVM_MEDIUM);
 
           //Converting transactions into struct data type
           axi4_master_seq_item_converter::to_read_class(struct_read_packet,req_rd);
-          `uvm_info(get_type_name(),$sformatf("READ_ADDRESS_THREAD::Checking struct packet = %p",req_rd.sprint()),UVM_MEDIUM); 
         end
 
         begin : READ_DATA_CHANNEL
@@ -536,7 +510,6 @@ struct_read_data_packet),UVM_MEDIUM);
           //Converting transactions into struct data type
           axi4_master_seq_item_converter::to_read_class(struct_read_data_packet,local_master_read_data_tx);
 
-          `uvm_info(get_type_name(),$sformatf("READ_DATA_THREAD::Response_received_req_read_packet = \n %s",req_rd.sprint()),UVM_MEDIUM);
         end
       join_any
 
